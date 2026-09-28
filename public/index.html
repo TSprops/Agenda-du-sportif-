@@ -16,10 +16,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="styles.css?v=10">
+<link rel="stylesheet" href="styles.css?v=11">
 <script>
   // Version de la page : doit correspondre à APP_VERSION dans app.js.
-  window.APP_PAGE_VERSION = "10";
+  window.APP_PAGE_VERSION = "11";
   // Filet de sécurité : si l'app n'a pas démarré après 8 s, on propose de la réparer.
   (function () {
     function repair() {
@@ -43,7 +43,7 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=10"></script>
+<script type="module" src="app.js?v=11"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->
@@ -111,8 +111,18 @@
     </button>
     <button class="toc-item" data-go="types">
       <span class="toc-top"><span class="toc-name">Séances types</span><span class="arrow" aria-hidden="true">›</span></span>
-      <span class="toc-sub">Idées de séances et records : musculation, CrossFit, callisthénie, course</span>
+      <span class="toc-sub">Idées de séances à essayer : musculation, CrossFit, callisthénie, course</span>
       <span class="pills" id="homeCf"></span>
+    </button>
+    <button class="toc-item" data-go="records">
+      <span class="toc-top"><span class="toc-name">Mes records</span><span class="arrow" aria-hidden="true">›</span></span>
+      <span class="toc-sub">Tes meilleures performances dans chaque catégorie</span>
+      <span class="pills" id="homeRec"></span>
+    </button>
+    <button class="toc-item" data-go="progress">
+      <span class="toc-top"><span class="toc-name">Ma progression</span><span class="arrow" aria-hidden="true">›</span></span>
+      <span class="toc-sub">Tes courbes séance après séance</span>
+      <span class="pills" id="homeProg"></span>
     </button>
   </nav>
   <button class="contact-link" data-go="contact">Contact</button>
@@ -191,7 +201,7 @@
 <main class="app view" id="v-types" hidden>
   <button class="back" data-go="home">‹ Accueil</button>
   <h1 class="vtitle">Séances types</h1>
-  <p class="hint" style="margin-top:-8px">Choisis une activité pour voir tes records et des idées de séances à essayer.</p>
+  <p class="hint" style="margin-top:-8px">Choisis une activité pour voir des idées de séances à essayer.</p>
   <div class="disc-grid" id="typesGrid"></div>
 </main>
 <main class="app view" id="v-hub" hidden>
@@ -200,17 +210,43 @@
   <div id="hubBody" style="display:flex;flex-direction:column;gap:22px"></div>
 </main>
 
+<!-- ============ MES RECORDS ============ -->
+<main class="app view" id="v-records" hidden>
+  <button class="back" data-go="home">‹ Accueil</button>
+  <h1 class="vtitle">Mes records</h1>
+  <p class="hint" style="margin-top:-8px">Choisis une catégorie pour voir et ajouter tes records.</p>
+  <div class="disc-grid" id="recGrid"></div>
+</main>
+<main class="app view" id="v-rec" hidden>
+  <button class="back" data-go="records">‹ Mes records</button>
+  <h1 class="vtitle" id="recTitle"></h1>
+  <div id="recBody" style="display:flex;flex-direction:column;gap:18px"></div>
+</main>
+
+<!-- ============ MA PROGRESSION ============ -->
+<main class="app view" id="v-progress" hidden>
+  <button class="back" data-go="home">‹ Accueil</button>
+  <h1 class="vtitle">Ma progression</h1>
+  <p class="hint" style="margin-top:-8px">Choisis une catégorie pour voir tes courbes, séance après séance.</p>
+  <div class="disc-grid" id="progGrid"></div>
+</main>
+<main class="app view" id="v-prog" hidden>
+  <button class="back" data-go="progress">‹ Ma progression</button>
+  <h1 class="vtitle" id="progTitle"></h1>
+  <div id="progBody" style="display:flex;flex-direction:column;gap:18px"></div>
+</main>
+
 <main class="app view" id="v-crossfit" hidden>
-  <button class="back" data-go="types">‹ Séances types</button>
-  <h1 class="vtitle">CrossFit</h1>
+  <button class="back" id="cfBack" data-go="types">‹ Séances types</button>
+  <h1 class="vtitle" id="cfTitle">CrossFit</h1>
   <button class="btn primary cf-btn" id="cfToday">Noter mon WOD du jour</button>
   <div class="stats" id="cfStats"></div>
-  <section>
+  <section id="cfPrSec">
     <h2 class="h2">Mes records (1RM)</h2>
     <div class="card" id="cfPrs" style="gap:0;padding-block:4px"></div>
   </section>
   <section>
-    <h2 class="h2">WOD de référence</h2>
+    <h2 class="h2" id="cfBenchTitle">WOD de référence</h2>
     <p class="hint" style="margin:-4px 0 12px">Les « Girls » et les « Hero WODs » : refais-les régulièrement pour mesurer tes progrès. Charges homme / femme.</p>
     <div class="list" id="cfBench"></div>
   </section>
