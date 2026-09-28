@@ -422,3 +422,31 @@ body.sheet-open .help-hint{display:none}
 #rescue p{margin:0;font-weight:600}
 #rescue button{height:48px;border-radius:14px;background:var(--red);color:var(--on-red);font-weight:700}
 #rescue small{color:var(--muted)}
+
+/* Série en cours */
+.set-now{font-size:13px;color:var(--muted);margin-top:-6px;padding-left:22px;display:flex;align-items:center;gap:6px}
+.set-now b{color:var(--red-hi);font-size:15px}
+.set-now .ok{color:#2FBF71;font-weight:600}
+.dot-live{width:8px;height:8px;border-radius:50%;background:var(--red-hi);box-shadow:0 0 8px var(--red-hi);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+.sets tr.cur td.n{color:var(--red-hi)}
+.sets .num::placeholder{color:color-mix(in srgb,var(--muted) 70%,transparent)}
+.sets tr.cur .num{border-color:var(--red);box-shadow:0 0 0 1px var(--red),0 0 14px color-mix(in srgb,var(--red) 30%,transparent);background:color-mix(in srgb,var(--red) 10%,var(--surface-2))}
+.sets tr.done td.n{color:#2FBF71}
+.sets tr.done .num{border-color:color-mix(in srgb,#2FBF71 55%,var(--line));background:color-mix(in srgb,#2FBF71 10%,var(--surface-2))}
+@media (prefers-reduced-motion: reduce){.dot-live{animation:none}}
+
+/* Idées de séances */
+.idea{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--tc);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:8px}
+.idea-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.idea-top b{font-family:var(--display);font-weight:800;font-size:22px;line-height:1.05;text-transform:uppercase}
+.idea-top .tag{flex:none}
+.idea-meta{font-size:13px;color:var(--muted)}
+.idea ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px;font-size:14px}
+.idea ul li::marker{color:var(--tc)}
+.idea-go{height:44px;margin-top:4px}
+
+/* Son du minuteur */
+#sndVol{width:100%;accent-color:var(--red);height:32px}
+#v-hub .pr-kg,#v-hub .pr-row .arrow{color:var(--tc)}
+:root[data-bg="clair"] #v-hub .pr-kg,:root[data-bg="clair"] #v-hub .pr-row .arrow{color:color-mix(in srgb,var(--tc) 70%,#000)}

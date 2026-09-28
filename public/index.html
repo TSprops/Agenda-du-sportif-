@@ -16,10 +16,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="styles.css?v=7">
+<link rel="stylesheet" href="styles.css?v=8">
 <script>
   // Version de la page : doit correspondre à APP_VERSION dans app.js.
-  window.APP_PAGE_VERSION = "7";
+  window.APP_PAGE_VERSION = "8";
   // Filet de sécurité : si l'app n'a pas démarré après 8 s, on propose de la réparer.
   (function () {
     function repair() {
@@ -43,7 +43,7 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=7"></script>
+<script type="module" src="app.js?v=8"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->
@@ -109,9 +109,9 @@
       <span class="toc-sub">Compléments et créatine</span>
       <span class="pills" id="homeNut"></span>
     </button>
-    <button class="toc-item" data-go="crossfit">
-      <span class="toc-top"><span class="toc-name">CrossFit</span><span class="arrow" aria-hidden="true">›</span></span>
-      <span class="toc-sub">Records, WOD de référence et chronos</span>
+    <button class="toc-item" data-go="types">
+      <span class="toc-top"><span class="toc-name">Séances types</span><span class="arrow" aria-hidden="true">›</span></span>
+      <span class="toc-sub">Idées de séances et records : musculation, CrossFit, callisthénie, course</span>
       <span class="pills" id="homeCf"></span>
     </button>
   </nav>
@@ -187,8 +187,21 @@
 </main>
 
 <!-- ============ CROSSFIT ============ -->
-<main class="app view" id="v-crossfit" hidden>
+<!-- ============ SÉANCES TYPES ============ -->
+<main class="app view" id="v-types" hidden>
   <button class="back" data-go="home">‹ Accueil</button>
+  <h1 class="vtitle">Séances types</h1>
+  <p class="hint" style="margin-top:-8px">Choisis une activité pour voir tes records et des idées de séances à essayer.</p>
+  <div class="disc-grid" id="typesGrid"></div>
+</main>
+<main class="app view" id="v-hub" hidden>
+  <button class="back" data-go="types">‹ Séances types</button>
+  <h1 class="vtitle" id="hubTitle"></h1>
+  <div id="hubBody" style="display:flex;flex-direction:column;gap:22px"></div>
+</main>
+
+<main class="app view" id="v-crossfit" hidden>
+  <button class="back" data-go="types">‹ Séances types</button>
   <h1 class="vtitle">CrossFit</h1>
   <button class="btn primary cf-btn" id="cfToday">Noter mon WOD du jour</button>
   <div class="stats" id="cfStats"></div>
@@ -248,6 +261,14 @@
     <div class="lbl">Apparence</div>
     <div class="field"><span>Couleur principale</span><div class="swatches" id="accentList" role="group" aria-label="Couleur principale"></div></div>
     <div class="field"><span>Mode</span><div class="modes" id="bgList" role="group" aria-label="Mode d’affichage"></div></div>
+  </section>
+  <section class="card" id="soundCard">
+    <div class="lbl">Son du minuteur</div>
+    <div class="field"><span>Volume <b id="sndVolTxt" style="color:var(--ink)"></b></span><input type="range" id="sndVol" min="0" max="100" step="5" aria-label="Volume du minuteur"></div>
+    <div class="field"><span>Type de son</span><div class="chips" id="sndTypes"></div></div>
+    <button type="button" class="chip" id="sndCount" style="--tc:var(--red);align-self:flex-start" aria-pressed="true">Bips 3-2-1 avant la fin</button>
+    <button type="button" class="btn" id="sndTest">🔊 Tester le son</button>
+    <p class="hint">Sur iPhone, le son est coupé si le bouton silencieux (sur le côté du téléphone) est activé. Monte aussi le volume du téléphone.</p>
   </section>
   <button class="btn" id="adminBtn" data-go="admin" hidden>Administration</button>
   <section class="card">

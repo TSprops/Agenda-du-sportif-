@@ -7,7 +7,7 @@ import {
 import { firebaseConfig } from "./firebase-config.js";
 
 /* Version : si la page et le code ne correspondent pas (ancien fichier en cache), on recharge proprement. */
-const APP_VERSION = "7";
+const APP_VERSION = "8";
 if (window.APP_PAGE_VERSION !== APP_VERSION) {
   let tried = false; try { tried = sessionStorage.getItem("reload-v" + APP_VERSION) === "1"; sessionStorage.setItem("reload-v" + APP_VERSION, "1"); } catch (e) { /* stockage bloqué */ }
   if (!tried && window.__repairApp) { window.__repairApp(); throw new Error("Mise à jour en cours"); }
@@ -312,7 +312,7 @@ function syncStats() {
    ============================================================ */
 const RENDER = {
   home: renderHome, seances: renderMain, nutrition: renderNutrition, complements: renderNutrition, creatine: renderNutrition,
-  contact: renderContact, profile: renderProfile, admin: renderAdmin, onboard: renderOnboard, crossfit: renderCrossfit
+  contact: renderContact, profile: renderProfile, admin: renderAdmin, onboard: renderOnboard, crossfit: renderCrossfit, types: renderTypesHub, hub: renderHub
 };
 function go(v) {
   if (v === "complements" && !S.cpDay) S.cpDay = todayK();
@@ -453,7 +453,7 @@ function renderPfView(msg) {
 }
 $("pfCancel").onclick = () => renderPfView();
 function renderProfile() {
-  renderPfView(); refreshInstallBtn(); renderTheme();
+  renderPfView(); refreshInstallBtn(); renderTheme(); renderSound();
   $("pfEmail").textContent = "Connecté avec " + (S.email || "ton e-mail");
   $("pwMsg").hidden = true; $("delForm").hidden = true; $("delAccount").hidden = false; $("delErr").hidden = true;
   $("adminBtn").hidden = !S.admin; renderPfStats();
@@ -566,14 +566,28 @@ function lastComparable(c, before) {
   if (disc === "muscu" && !c.typeId) return null;
   return Object.keys(S.days).filter(k => k < before && discOf(S.days[k]) === disc && (disc === "calis" || S.days[k].typeId === c.typeId) && (S.days[k].exercises || []).length).sort().pop();
 }
+// Série en cours : la première série sans répétitions ; les séries remplies sont « faites ».
+function curSet(ex) { const i = (ex.sets || []).findIndex(s => s.reps === "" || s.reps == null); return i; }
+function setState(ex, j) { const s = ex.sets[j], c = curSet(ex); return s.reps !== "" && s.reps != null ? "done" : j === c ? "cur" : ""; }
+function setNowText(ex) {
+  const n = (ex.sets || []).length, c = curSet(ex);
+  if (!n) return "";
+  return c === -1 ? `<span class="ok">✓ Toutes les séries sont faites</span>` : `<span class="dot-live"></span>Série en cours : <b>${c + 1}</b> / ${n}`;
+}
+function refreshSets(i) {
+  const ex = S.cur.exercises[i]; if (!ex) return;
+  ex.sets.forEach((_, j) => { const r = $("row-" + i + "-" + j); if (r) r.className = setState(ex, j); });
+  const sn = $("sn-" + i); if (sn) sn.innerHTML = setNowText(ex);
+}
 function exHTML(ex, i, disc) {
   const r = ex.rpe || 0, calis = disc === "calis";
   const col1 = calis ? (ex.hold ? "Tenue (s)" : "Reps") : "Reps", col2 = calis ? "Lest (kg)" : "Poids (kg)";
   return `<article class="ex">
   <div class="ex-head"><span class="ex-num">${pad(i + 1)}</span><input id="exn-${i}" class="ex-name" data-f="ex-name" data-ex="${i}" placeholder="${calis ? "ex. Tractions" : "Nom de l’exercice"}" value="${esc(ex.name)}" autocomplete="off">${calis ? `<button class="icon-btn" data-a="hold" data-ex="${i}" aria-label="Changer répétitions ou tenue">${ex.hold ? "Tenue" : "Reps"} ⇄</button>` : ""}<button class="icon-btn" data-a="del-ex" data-ex="${i}" aria-label="Supprimer l’exercice">Retirer</button></div>
   <div class="ex-stats" id="st-${i}">${exStats(ex, disc)}</div>
+  <div class="set-now" id="sn-${i}">${setNowText(ex)}</div>
   <table class="sets"><thead><tr><th style="text-align:center">Série</th><th>${col1}</th><th>${col2}</th><th></th></tr></thead><tbody>
-  ${(ex.sets || []).map((s, j) => `<tr><td class="n">${j + 1}</td><td><input id="r-${i}-${j}" class="num" inputmode="numeric" data-f="reps" data-ex="${i}" data-s="${j}" value="${esc(s.reps)}" placeholder="–" aria-label="${col1} série ${j + 1}"></td><td><input id="k-${i}-${j}" class="num" inputmode="decimal" data-f="kg" data-ex="${i}" data-s="${j}" value="${esc(s.kg)}" placeholder="${calis ? "0" : "–"}" aria-label="${col2} série ${j + 1}"></td><td class="x"><button class="icon-btn" data-a="del-set" data-ex="${i}" data-s="${j}" aria-label="Supprimer la série ${j + 1}">−</button></td></tr>`).join("")}
+  ${(ex.sets || []).map((s, j) => `<tr id="row-${i}-${j}" class="${setState(ex, j)}"><td class="n">${j + 1}</td><td><input id="r-${i}-${j}" class="num" inputmode="numeric" data-f="reps" data-ex="${i}" data-s="${j}" value="${esc(s.reps)}" placeholder="${s.target !== undefined && s.target !== "" ? esc(s.target) : "–"}" aria-label="${col1} série ${j + 1}"></td><td><input id="k-${i}-${j}" class="num" inputmode="decimal" data-f="kg" data-ex="${i}" data-s="${j}" value="${esc(s.kg)}" placeholder="${calis ? "0" : "–"}" aria-label="${col2} série ${j + 1}"></td><td class="x"><button class="icon-btn" data-a="del-set" data-ex="${i}" data-s="${j}" aria-label="Supprimer la série ${j + 1}">−</button></td></tr>`).join("")}
   </tbody></table>
   <button class="add-set" data-a="add-set" data-ex="${i}">+ Ajouter une série</button>
   <div class="rest-row"><div class="lbl">Repos entre les séries</div><div class="rest-ctl"><button class="step" data-a="rest-dec" data-ex="${i}" aria-label="Moins de repos">−</button><span class="rest-val" id="rv-${i}">${fmtRest(restOf(ex))}</span><button class="step" data-a="rest-inc" data-ex="${i}" aria-label="Plus de repos">+</button><button class="rest-go" data-a="rest-go" data-ex="${i}">⏱ Lancer</button></div></div>
@@ -734,7 +748,7 @@ $("sheet").addEventListener("input", e => {
   const c = S.cur, i = +e.target.dataset.ex, j = +e.target.dataset.s, v = e.target.value, t = v.trim();
   if (f === "title") c.title = v; else if (f === "note") c.note = v;
   else if (f === "ex-name") c.exercises[i].name = v; else if (f === "ex-note") c.exercises[i].note = v;
-  else if (f === "reps" || f === "kg") { c.exercises[i].sets[j][f] = t === "" ? "" : numOr(v); $("st-" + i).textContent = exStats(c.exercises[i], c.disc); }
+  else if (f === "reps" || f === "kg") { c.exercises[i].sets[j][f] = t === "" ? "" : numOr(v); $("st-" + i).textContent = exStats(c.exercises[i], c.disc); refreshSets(i); }
   else if (f.startsWith("run-")) {
     const r = c.run = c.run || { blocks: [] }, fld = f.slice(4);
     r[fld] = t === "" ? "" : fld === "dist" ? numOr(v) : intOr(v);
@@ -778,7 +792,7 @@ $("sheet").addEventListener("click", e => {
   }
   else if (a === "hold") { c.exercises[i].hold = !c.exercises[i].hold; }
   else if (a === "del-ex") { if (!armed(b, "Confirmer")) return; c.exercises.splice(i, 1); }
-  else if (a === "add-set") { const s = c.exercises[i].sets, l = s[s.length - 1]; s.push(l ? { reps: l.reps, kg: l.kg } : { reps: "", kg: "" }); }
+  else if (a === "add-set") { const s = c.exercises[i].sets, l = s[s.length - 1]; s.push(l ? { reps: "", kg: l.kg, target: l.reps !== "" && l.reps != null ? l.reps : (l.target ?? "") } : { reps: "", kg: "" }); }
   else if (a === "del-set") { c.exercises[i].sets.splice(+b.dataset.s, 1); }
   else if (a === "photo") { openViewer(+b.dataset.i); return; }
   else if (a === "rest-inc" || a === "rest-dec") {
@@ -798,7 +812,7 @@ $("sheet").addEventListener("click", e => {
   else if (a === "rx") { const v = b.dataset.v === "rx"; c.wod.rx = c.wod.rx === v ? null : v; }
   else if (a === "copy") {
     const src = S.days[b.dataset.k];
-    c.exercises = clone(src.exercises || []).map(x => ({ name: x.name, hold: !!x.hold, sets: (x.sets || []).map(s => ({ reps: s.reps, kg: s.kg })), rpe: 0, note: "", rest: restOf(x) }));
+    c.exercises = clone(src.exercises || []).map(x => ({ name: x.name, hold: !!x.hold, sets: (x.sets || []).map(s => ({ reps: "", kg: s.kg, target: s.reps !== "" && s.reps != null ? s.reps : (s.target ?? "") })), rpe: 0, note: "", rest: restOf(x) }));
     if (!String(c.title).trim()) c.title = src.title || "";
   }
   else if (a === "del-session") {
@@ -1019,7 +1033,8 @@ function renderHome() {
   $("homeNut").innerHTML = `<span class="pill${n.creatine ? " ok" : ""}">${n.creatine ? "✓ Créatine prise" : "Créatine à prendre"}</span><span class="pill${c ? " ok" : ""}">${c} complément${c > 1 ? "s" : ""} aujourd’hui</span>`;
   const cfm = Object.keys(S.days).filter(k => k.startsWith(tk.slice(0, 7)) && discOf(S.days[k]) === "crossfit").length;
   const cfd = cfData(), prs = Object.values(cfd.prs).filter(l => l.length).length;
-  $("homeCf").innerHTML = `<span class="pill${cfm ? " ok cf" : ""}">${cfm} WOD ce mois</span><span class="pill${prs ? " ok cf" : ""}">${prs} record${prs > 1 ? "s" : ""}</span>`;
+  const pd = prsData(), allPr = prs + [pd.muscu, pd.course].reduce((a, o) => a + Object.values(o).filter(l => l.length).length, 0);
+  $("homeCf").innerHTML = `<span class="pill${allPr ? " ok" : ""}">${allPr} record${allPr > 1 ? "s" : ""}</span><span class="pill">${Object.values(MUSCU_IDEAS).flat().length + CALIS_IDEAS.length + Object.values(RUN_IDEAS).flat().length + BENCH.length} idées de séances</span>`;
   $("mode").textContent = navigator.onLine ? "" : "Hors connexion : tes modifications seront envoyées au retour du réseau.";
 }
 
@@ -1154,7 +1169,7 @@ function renderCrossfit() {
           <button class="btn primary" type="submit">Enregistrer mon résultat</button>
         </form>
         ${ents.length ? `<ul class="hist">${ents.slice(0, 8).map(e => `<li><span>${esc(shortDate(e.date))}</span><b>${esc(benchText(bm, e))}</b><small>${e.rx === false ? "Scaled" : e.rx ? "Rx" : ""}</small>${e.manual ? `<button class="icon-btn" data-bmdel="${bm.id}:${e.idx}">Retirer</button>` : `<small class="src">séance</small>`}</li>`).join("")}</ul>` : ""}
-        <button class="add-set" data-bmwod="${bm.id}">Faire ce WOD aujourd’hui ›</button>` : ""}
+        <button class="btn primary idea-go cf-btn" data-bmwod="${bm.id}" style="margin-bottom:14px">Essayer aujourd’hui</button>` : ""}
     </div>`;
   }).join("");
 }
@@ -1170,12 +1185,8 @@ $("v-crossfit").addEventListener("click", e => {
   if (bd) { if (!armed(bd, "Confirmer")) return; const [id, idx] = bd.dataset.bmdel.split(":"); const cf = cfData(); cf.bench[id].splice(+idx, 1); saveProfile({ cf }); renderCrossfit(); return; }
   const bw = e.target.closest("[data-bmwod]");
   if (bw) {
-    const bm = BENCH.find(x => x.id === bw.dataset.bmwod), k = todayK();
-    go("seances");
-    if (S.days[k]) { openDay(k); return; }
-    openDay(k, "crossfit");
-    Object.assign(S.cur.wod, { name: bm.name, format: bm.type === "amrap" ? "AMRAP" : "For Time", cap: bm.cap || "", moves: clone(bm.moves) });
-    changed(); renderSheet();
+    const bm = BENCH.find(x => x.id === bw.dataset.bmwod);
+    tryIdea(bw, "crossfit", c => { c.title = bm.name; Object.assign(c.wod, { name: bm.name, format: bm.type === "amrap" ? "AMRAP" : "For Time", cap: bm.cap || "", moves: clone(bm.moves) }); });
   }
 });
 $("v-crossfit").addEventListener("submit", e => {
@@ -1194,40 +1205,252 @@ $("v-crossfit").addEventListener("submit", e => {
 });
 
 /* ============================================================
+   Séances types : idées de séances et records par activité
+   ============================================================ */
+// Exercice d'une idée : [nom, séries, répétitions (nombre, texte ou liste par série), repos en s, tenue ?]
+const MUSCU_IDEAS = {
+  push: [
+    { name: "Push force", level: "Intermédiaire", dur: "60 min", ex: [["Développé couché", 5, 5, 180], ["Développé militaire", 4, 6, 150], ["Dips lestés", 3, 8, 120], ["Développé incliné haltères", 3, 10, 90], ["Extensions triceps poulie", 3, 12, 60]] },
+    { name: "Push volume", level: "Tous niveaux", dur: "55 min", ex: [["Développé incliné haltères", 4, 10, 90], ["Développé couché machine", 3, 12, 90], ["Écartés poulie", 3, 15, 60], ["Élévations latérales", 4, 15, 60], ["Barre au front", 3, 12, 60], ["Extensions triceps corde", 3, 15, 45]] }
+  ],
+  pull: [
+    { name: "Pull force", level: "Intermédiaire", dur: "60 min", ex: [["Soulevé de terre", 4, 5, 180], ["Tractions lestées", 4, 6, 150], ["Rowing barre", 4, 8, 120], ["Curl barre", 3, 10, 60]] },
+    { name: "Pull dos large", level: "Tous niveaux", dur: "55 min", ex: [["Tractions", 4, 8, 120], ["Tirage vertical", 3, 12, 90], ["Rowing haltère", 3, 10, 90], ["Face pull", 3, 15, 60], ["Curl incliné", 3, 12, 60], ["Curl marteau", 3, 12, 60]] }
+  ],
+  jambes: [
+    { name: "Jambes complètes", level: "Intermédiaire", dur: "65 min", ex: [["Squat", 5, 5, 180], ["Presse à cuisses", 4, 10, 120], ["Fentes marchées", 3, 12, 90], ["Leg curl", 3, 12, 60], ["Mollets debout", 4, 15, 45]] },
+    { name: "Quadriceps & fessiers", level: "Tous niveaux", dur: "55 min", ex: [["Front squat", 4, 8, 150], ["Hip thrust", 4, 10, 120], ["Leg extension", 3, 15, 60], ["Soulevé de terre roumain", 3, 10, 90], ["Mollets assis", 4, 15, 45]] }
+  ],
+  haut: [
+    { name: "Haut du corps complet", level: "Intermédiaire", dur: "60 min", ex: [["Développé couché", 4, 8, 120], ["Tractions", 4, 8, 120], ["Développé militaire", 3, 10, 90], ["Rowing haltère", 3, 10, 90], ["Curl barre", 3, 12, 60], ["Extensions triceps poulie", 3, 12, 60]] },
+    { name: "Haut du corps express", level: "Débutant", dur: "40 min", ex: [["Développé incliné haltères", 3, 10, 90], ["Tirage vertical", 3, 10, 90], ["Élévations latérales", 3, 15, 60], ["Dips", 3, 10, 90], ["Curl haltères", 3, 12, 60]] }
+  ],
+  bas: [
+    { name: "Bas du corps force", level: "Intermédiaire", dur: "60 min", ex: [["Squat", 4, 6, 180], ["Soulevé de terre roumain", 4, 8, 120], ["Fentes bulgares", 3, 10, 90], ["Leg curl", 3, 12, 60], ["Gainage", 3, "45 s", 45]] },
+    { name: "Fessiers & ischios", level: "Tous niveaux", dur: "50 min", ex: [["Hip thrust", 4, 10, 120], ["Soulevé de terre sumo", 4, 8, 150], ["Fentes arrière", 3, 12, 90], ["Abduction machine", 3, 15, 60], ["Kickback poulie", 3, 15, 45]] }
+  ]
+};
+const CALIS_IDEAS = [
+  { name: "Débutant full body", level: "Débutant", dur: "40 min", ex: [["Tractions australiennes", 3, 10, 90], ["Pompes", 3, 12, 90], ["Squats", 3, 20, 60], ["Dips", 3, 8, 90], ["Gainage", 3, 30, 60, 1]] },
+  { name: "Tirage & poussée", level: "Intermédiaire", dur: "50 min", ex: [["Tractions", 5, 6, 120], ["Dips", 5, 8, 120], ["Pompes pieds surélevés", 3, 12, 90], ["Tractions australiennes", 3, 12, 60], ["Handstand push-up", 3, 5, 120]] },
+  { name: "Skills : équilibres et leviers", level: "Avancé", dur: "45 min", ex: [["Handstand", 6, 20, 60, 1], ["Front lever", 5, 10, 90, 1], ["Planche", 5, 10, 90, 1], ["L-sit", 4, 15, 60, 1]] },
+  { name: "Pyramide d’endurance", level: "Tous niveaux", dur: "35 min", ex: [["Tractions", 9, [1, 2, 3, 4, 5, 4, 3, 2, 1], 45], ["Pompes", 9, [2, 4, 6, 8, 10, 8, 6, 4, 2], 45], ["Squats", 3, 25, 60]] },
+  { name: "Muscle-up : progression", level: "Avancé", dur: "45 min", ex: [["Tractions", 4, 5, 150], ["Muscle-up", 5, 2, 150], ["Dips", 4, 10, 90], ["L-sit", 3, 15, 60, 1]] }
+];
+// Course : [répétitions, effort, unité, allure, récup]
+const RUN_IDEAS = {
+  ef: [
+    { name: "Footing en endurance", level: "Tous niveaux", dur: "45 min", note: "Allure confortable : tu dois pouvoir parler.", m: 45 },
+    { name: "Sortie longue", level: "Intermédiaire", dur: "1 h 15", note: "Allure EF, régulière du début à la fin. Hydrate-toi.", h: 1, m: 15 },
+    { name: "EF + lignes droites", level: "Tous niveaux", dur: "45 min", note: "40 min en EF, puis 5 accélérations progressives de 100 m, retour en marchant.", m: 45 }
+  ],
+  seuil: [
+    { name: "Seuil 3 × 10 min", level: "Intermédiaire", dur: "55 min", note: "Échauffement 15 min EF, retour au calme 10 min.", blocks: [[3, 10, "min", "allure semi", "2:00"]] },
+    { name: "Seuil 2 × 15 min", level: "Confirmé", dur: "60 min", note: "Échauffement 15 min EF, retour au calme 10 min.", blocks: [[2, 15, "min", "allure semi", "3:00"]] },
+    { name: "Tempo 20 min", level: "Tous niveaux", dur: "45 min", note: "Échauffement 15 min, 20 min en continu à allure soutenue, 10 min au calme.", blocks: [[1, 20, "min", "allure 10 km +10 s", ""]] }
+  ],
+  frac: [
+    { name: "VMA 10 × 400 m", level: "Intermédiaire", dur: "50 min", note: "Échauffement 20 min EF + gammes. Récup en trottinant.", blocks: [[10, 400, "m", "VMA 95 %", "1:15"]] },
+    { name: "30/30 × 2 séries", level: "Tous niveaux", dur: "45 min", note: "2 séries de 10 × 30 s vite / 30 s lent, 3 min de récup entre les séries.", blocks: [[10, 30, "s", "VMA", "0:30"], [10, 30, "s", "VMA", "0:30"]] },
+    { name: "Pyramide 200 à 800 m", level: "Confirmé", dur: "55 min", note: "Récup = temps de l’effort, en trottinant.", blocks: [[1, 200, "m", "VMA", "0:45"], [1, 400, "m", "VMA", "1:30"], [1, 600, "m", "VMA 95 %", "2:15"], [1, 800, "m", "VMA 90 %", "3:00"], [1, 600, "m", "VMA 95 %", "2:15"], [1, 400, "m", "VMA", "1:30"], [1, 200, "m", "VMA", "0:45"]] },
+    { name: "Côtes 8 × 30 s", level: "Tous niveaux", dur: "45 min", note: "Pente moyenne, montée dynamique, récup en descendant au trot.", blocks: [[8, 30, "s", "fort en côte", "1:30"]] }
+  ]
+};
+const MUSCU_LIFTS = [["bench", "Développé couché"], ["squat", "Squat"], ["dl", "Soulevé de terre"], ["ohp", "Développé militaire"], ["pullw", "Traction lestée (lest)"], ["row", "Rowing barre"]];
+const RUN_PRS = [["5k", "5 km", 5], ["10k", "10 km", 10], ["semi", "Semi-marathon", 21.0975], ["marathon", "Marathon", 42.195]];
+
+function prsData() { const p = clone((S.profile && S.profile.prs) || {}); p.muscu = p.muscu || {}; p.course = p.course || {}; return p; }
+function fmtTime(t) { const h = Math.floor(t / 3600), m = Math.floor(t % 3600 / 60), s = t % 60; return h ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`; }
+function repsText(r, hold) { return Array.isArray(r) ? r.join("-") : (typeof r === "number" && hold ? r + " s" : String(r)); }
+function ideaExercises(ex) {
+  return ex.map(([name, sets, reps, rest, hold]) => ({
+    name, hold: !!hold, rpe: 0, note: "", rest,
+    sets: Array.from({ length: sets }, (_, j) => ({ reps: "", kg: "", target: Array.isArray(reps) ? reps[j] : typeof reps === "number" ? reps : "" })),
+    ...(typeof reps === "string" ? { note: "Objectif : " + reps } : {})
+  }));
+}
+function ideaCard(idea, disc, key, idx, extra) {
+  let lines;
+  if (disc === "course") {
+    lines = (idea.blocks || []).map(b => `${b[0]} × ${b[1]} ${b[2]}${b[3] ? " · " + b[3] : ""}${b[4] ? " · récup " + b[4] : ""}`);
+    if (!lines.length) lines = [idea.note];
+  } else lines = idea.ex.map(([n, s, r, rest, hold]) => `${n} — ${Array.isArray(r) ? repsText(r) : s + " × " + repsText(r, hold)} · repos ${fmtRest(rest)}`);
+  return `<article class="idea" style="--tc:${extra || "var(--red-hi)"}">
+    <div class="idea-top"><b>${esc(idea.name)}</b><span class="tag">${esc(idea.level)}</span></div>
+    <span class="idea-meta">⏱ ${esc(idea.dur)}${disc !== "course" ? " · " + idea.ex.length + " exercices" : ""}</span>
+    <ul>${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul>
+    ${disc === "course" && idea.blocks ? `<p class="hint">${esc(idea.note)}</p>` : ""}
+    <button class="btn primary idea-go" data-try="${disc}:${key}:${idx}">Essayer aujourd’hui</button>
+  </article>`;
+}
+// Ouvre la séance du jour dans la bonne activité, pré-remplie avec l'idée choisie.
+function tryIdea(btn, disc, fill) {
+  const k = todayK(), existing = S.days[k];
+  if (existing && !isEmpty(existing) && !armed(btn, "Remplacer ta séance du jour ?")) return;
+  go("seances"); const t = new Date(); S.view = new Date(t.getFullYear(), t.getMonth(), 1); renderMain();
+  openDay(k);
+  const keep = existing ? { photos: existing.photos || [], mood: existing.mood || null, note: existing.note || "" } : {};
+  S.cur = { ...EMPTY_DAY(), ...keep }; setDisc(S.cur, disc); fill(S.cur);
+  timer = 1; flush(); renderSheet(); $("sheet").scrollTop = 0;
+}
+function prRows(kind, items, data) {
+  return items.map(([id, name, km]) => {
+    const list = data[id] || [], open = S.hubOpen === id;
+    const best = kind === "kg" ? list.slice().sort((a, b) => b.kg - a.kg)[0] : list.slice().sort((a, b) => a.t - b.t)[0];
+    const bestTxt = !best ? "–" : kind === "kg" ? `${nf.format(best.kg)}<small> kg</small>` : fmtTime(best.t);
+    const sub = !best ? "Pas encore de record" : "le " + shortDate(best.date) + (kind === "time" ? " · " + runPace({ dist: km, s: best.t }) + " /km" : "");
+    return `<div class="pr${open ? " open" : ""}">
+      <button class="pr-row" data-hopen="${id}"><span class="main"><b>${esc(name)}</b><span>${esc(sub)}</span></span><span class="pr-kg">${bestTxt}</span><span class="arrow" aria-hidden="true">${open ? "−" : "+"}</span></button>
+      ${open ? `<form class="pr-form" data-hpr="${id}">
+          ${kind === "kg" ? `<label class="field"><span>Nouvelle charge (kg)</span><input id="hp-kg" inputmode="decimal" placeholder="ex. 100" required></label>`
+            : `<div class="field"><span>Ton temps (h : min : s)</span><div class="dur"><input id="hp-h" inputmode="numeric" placeholder="0" aria-label="Heures"><i>:</i><input id="hp-m" inputmode="numeric" placeholder="25" aria-label="Minutes" required><i>:</i><input id="hp-s" inputmode="numeric" placeholder="00" aria-label="Secondes"></div></div>`}
+          <button class="btn primary" type="submit">Ajouter</button></form>
+        ${list.length ? `<ul class="hist">${list.map((e, idx) => ({ ...e, idx })).sort((a, b) => a.date < b.date ? 1 : -1).map(e => `<li><span>${esc(shortDate(e.date))}</span><b>${kind === "kg" ? nf.format(e.kg) + " kg" : fmtTime(e.t)}</b><button class="icon-btn" data-hdel="${id}:${e.idx}">Retirer</button></li>`).join("")}</ul>` : ""}` : ""}
+    </div>`;
+  }).join("");
+}
+function renderTypesHub() {
+  $("typesGrid").innerHTML = Object.entries(DISC).map(([id, x]) => `<button class="disc-card" data-hub="${id}" style="--tc:${x.color}"><span class="disc-ico" aria-hidden="true"><svg viewBox="0 0 24 24">${x.icon}</svg></span><b>${x.name}</b><span>${HUB_DESC[id]}</span></button>`).join("");
+}
+const HUB_DESC = {
+  muscu: "Tes records et des idées de séances Push, Pull, Jambes…",
+  crossfit: "Tes records 1RM et les WOD de référence",
+  calis: "Des idées de séances, du débutant aux figures",
+  course: "Tes records 5 km à marathon et des idées de sorties"
+};
+function renderHub() {
+  const d = S.hub, x = DISC[d]; if (!x) return;
+  $("hubTitle").textContent = x.name; $("v-hub").style.setProperty("--tc", x.color);
+  const pr = prsData();
+  let h = "";
+  if (d === "muscu") {
+    const types = [["push", "Push"], ["pull", "Pull"], ["jambes", "Jambes"], ["haut", "Haut du corps"], ["bas", "Bas du corps"]];
+    const tab = S.hubTab && MUSCU_IDEAS[S.hubTab] ? S.hubTab : "push";
+    const col = id => (typeOf(id) || DEFAULT_TYPES.find(t => t.id === id) || {}).color || "#8A847E";
+    h += `<section><h2 class="h2">Mes records (PR)</h2><div class="card" style="gap:0;padding-block:4px">${prRows("kg", MUSCU_LIFTS, pr.muscu)}</div></section>
+      <section><h2 class="h2">Idées de séances</h2>
+      <div class="chips" style="margin-bottom:12px">${types.map(([id, n]) => `<button class="chip" data-tab="${id}" style="--tc:${col(id)}" aria-pressed="${id === tab}"><i class="dot"></i>${n}</button>`).join("")}</div>
+      <div class="list">${MUSCU_IDEAS[tab].map((idea, i) => ideaCard(idea, "muscu", tab, i, col(tab))).join("")}</div></section>`;
+  } else if (d === "course") {
+    const tab = S.hubTab && RUN_IDEAS[S.hubTab] ? S.hubTab : "ef", rt = RUN_TYPES.find(r => r.id === tab);
+    h += `<section><h2 class="h2">Mes records</h2><div class="card" style="gap:0;padding-block:4px">${prRows("time", RUN_PRS, pr.course)}</div></section>
+      <section><h2 class="h2">Idées de séances</h2>
+      <div class="chips" style="margin-bottom:8px">${RUN_TYPES.map(r => `<button class="chip" data-tab="${r.id}" style="--tc:${r.color}" aria-pressed="${r.id === tab}"><i class="dot"></i>${r.name}</button>`).join("")}</div>
+      <p class="hint" style="margin:0 0 12px">${esc(rt.hint)}</p>
+      <div class="list">${RUN_IDEAS[tab].map((idea, i) => ideaCard(idea, "course", tab, i, rt.color)).join("")}</div></section>`;
+  } else if (d === "calis") {
+    h += `<section><h2 class="h2">Idées de séances</h2><div class="list">${CALIS_IDEAS.map((idea, i) => ideaCard(idea, "calis", "all", i, DISC.calis.color)).join("")}</div></section>`;
+  }
+  $("hubBody").innerHTML = h;
+}
+$("typesGrid").addEventListener("click", e => {
+  const b = e.target.closest("[data-hub]"); if (!b) return;
+  if (b.dataset.hub === "crossfit") { go("crossfit"); return; }
+  S.hub = b.dataset.hub; S.hubTab = null; S.hubOpen = null; go("hub");
+});
+$("v-hub").addEventListener("click", e => {
+  const tb = e.target.closest("[data-tab]"); if (tb) { S.hubTab = tb.dataset.tab; renderHub(); return; }
+  const op = e.target.closest("[data-hopen]"); if (op) { S.hubOpen = S.hubOpen === op.dataset.hopen ? null : op.dataset.hopen; renderHub(); return; }
+  const del = e.target.closest("[data-hdel]");
+  if (del) { if (!armed(del, "Confirmer")) return; const [id, idx] = del.dataset.hdel.split(":"), pr = prsData(); pr[S.hub][id].splice(+idx, 1); saveProfile({ prs: pr }); renderHub(); return; }
+  const go2 = e.target.closest("[data-try]"); if (!go2) return;
+  const [disc, key, idx] = go2.dataset.try.split(":");
+  if (disc === "muscu") {
+    const idea = MUSCU_IDEAS[key][+idx];
+    tryIdea(go2, "muscu", c => { c.typeId = S.types.some(t => t.id === key) ? key : null; c.title = idea.name; c.exercises = ideaExercises(idea.ex); });
+  } else if (disc === "calis") {
+    const idea = CALIS_IDEAS[+idx];
+    tryIdea(go2, "calis", c => { c.title = idea.name; c.exercises = ideaExercises(idea.ex); });
+  } else if (disc === "course") {
+    const idea = RUN_IDEAS[key][+idx];
+    tryIdea(go2, "course", c => {
+      c.runType = key; c.title = idea.name; c.note = idea.note || "";
+      c.run = { blocks: (idea.blocks || []).map(([rep, eff, unit, pace, rec]) => ({ rep, eff, unit, pace, rec })), h: idea.h || "", m: idea.m || "", s: "" };
+    });
+  }
+});
+$("v-hub").addEventListener("submit", e => {
+  e.preventDefault();
+  const id = e.target.dataset.hpr, pr = prsData(), date = todayK(); if (!id) return;
+  if (S.hub === "muscu") { const kg = numOr($("hp-kg").value); if (kg === "" || kg <= 0) return; (pr.muscu[id] = pr.muscu[id] || []).push({ kg, date }); }
+  else { const t = (intOr($("hp-h").value) || 0) * 3600 + (intOr($("hp-m").value) || 0) * 60 + (intOr($("hp-s").value) || 0); if (!t) return; (pr.course[id] = pr.course[id] || []).push({ t, date }); }
+  saveProfile({ prs: pr }); renderHub();
+});
+
+/* ============================================================
    Minuteur de repos
    ============================================================ */
-const RT = { end: 0, total: 0, tick: null, ctx: null };
-function beep() {
+const RT = { end: 0, total: 0, tick: null, ctx: null, lastLeft: null };
+const SOUNDS = [["bip", "Bip"], ["alarme", "Alarme"], ["sifflet", "Sifflet"], ["gong", "Gong"]];
+function soundPrefs() { return { vol: 80, type: "bip", countdown: true, ...((S.prefs && S.prefs.sound) || {}) }; }
+function audioReady() {
+  try { RT.ctx = RT.ctx || new (window.AudioContext || window.webkitAudioContext)(); if (RT.ctx.state === "suspended") RT.ctx.resume(); } catch (e) { RT.ctx = null; }
+  return RT.ctx;
+}
+// Une note : fréquence (ou [début, fin] pour un glissement), début, durée, forme d'onde, volume relatif.
+function tone(ctx, master, f, t0, dur, wave, rel) {
+  const o = ctx.createOscillator(), g = ctx.createGain(), at = ctx.currentTime + t0;
+  o.type = wave;
+  if (Array.isArray(f)) { o.frequency.setValueAtTime(f[0], at); o.frequency.exponentialRampToValueAtTime(f[1], at + dur); } else o.frequency.setValueAtTime(f, at);
+  g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(Math.max(0.0002, master * rel), at + 0.015);
+  g.gain.setValueAtTime(Math.max(0.0002, master * rel), at + dur * 0.7); g.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+  o.connect(g); g.connect(ctx.destination); o.start(at); o.stop(at + dur + 0.02);
+}
+function playSound(kind) {
+  const ctx = audioReady(); if (!ctx) return;
+  const p = soundPrefs(), master = Math.min(1, Math.max(0, p.vol / 100));
+  if (!master) return;
   try {
-    const ctx = RT.ctx; if (!ctx) return;
-    [0, .25, .5].forEach(t => {
-      const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = 880; o.connect(g); g.connect(ctx.destination);
-      g.gain.setValueAtTime(.001, ctx.currentTime + t); g.gain.exponentialRampToValueAtTime(.3, ctx.currentTime + t + .02);
-      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + t + .18); o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + .2);
-    });
+    if (kind === "tick") { tone(ctx, master, 1046, 0, 0.09, "square", 0.45); return; }
+    const type = kind || p.type;
+    if (type === "alarme") for (let i = 0; i < 6; i++) tone(ctx, master, i % 2 ? 740 : 988, i * 0.18, 0.16, "sawtooth", 0.8);
+    else if (type === "sifflet") { tone(ctx, master, [1400, 2600], 0, 0.28, "sine", 1); tone(ctx, master, [1400, 2600], 0.36, 0.28, "sine", 1); tone(ctx, master, 2600, 0.72, 0.5, "sine", 1); }
+    else if (type === "gong") { tone(ctx, master, 196, 0, 1.6, "sine", 1); tone(ctx, master, 392, 0, 1.2, "triangle", 0.6); tone(ctx, master, 587, 0, 0.9, "sine", 0.35); }
+    else [0, 0.28, 0.56].forEach(t => tone(ctx, master, 880, t, 0.2, "square", 0.9));
   } catch (e) { /* son indisponible */ }
 }
 function startRest(seconds, name) {
   if (!seconds) seconds = 90;
-  try { RT.ctx = RT.ctx || new (window.AudioContext || window.webkitAudioContext)(); RT.ctx.resume && RT.ctx.resume(); } catch (e) { RT.ctx = null; }
-  RT.total = seconds; RT.end = Date.now() + seconds * 1000;
+  audioReady(); // débloque le son (il faut un toucher de l'utilisateur sur iPhone)
+  RT.total = seconds; RT.end = Date.now() + seconds * 1000; RT.lastLeft = null;
   $("rtLbl").textContent = name ? "Repos · " + name : "Repos";
   $("restTimer").classList.remove("done"); $("restTimer").hidden = false; $("rtSkip").textContent = "Passer";
-  clearInterval(RT.tick); RT.tick = setInterval(drawRest, 250); drawRest();
+  clearInterval(RT.tick); RT.tick = setInterval(drawRest, 200); drawRest();
 }
 function drawRest() {
-  const left = Math.max(0, Math.round((RT.end - Date.now()) / 1000));
+  const left = Math.max(0, Math.ceil((RT.end - Date.now()) / 1000));
   $("rtTime").textContent = Math.floor(left / 60) + ":" + pad(left % 60);
   $("rtFill").style.width = (RT.total ? left / RT.total * 100 : 0) + "%";
+  if (left !== RT.lastLeft && left > 0 && left <= 3 && soundPrefs().countdown) playSound("tick");
+  RT.lastLeft = left;
   if (left <= 0) {
     clearInterval(RT.tick); RT.tick = null;
     $("restTimer").classList.add("done"); $("rtLbl").textContent = "C’est reparti !"; $("rtTime").textContent = "0:00"; $("rtSkip").textContent = "OK";
-    beep(); if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+    playSound(); if (navigator.vibrate) navigator.vibrate([300, 120, 300, 120, 300]);
     setTimeout(() => { if (!RT.tick) $("restTimer").hidden = true; }, 6000);
   }
 }
 $("rtPlus").onclick = () => { if (RT.tick) { RT.end += 15000; RT.total += 15; drawRest(); } else startRest(15); };
 $("rtSkip").onclick = () => { clearInterval(RT.tick); RT.tick = null; $("restTimer").hidden = true; };
+
+// Réglages du son (page Profil)
+function renderSound() {
+  const p = soundPrefs();
+  $("sndVol").value = p.vol; $("sndVolTxt").textContent = p.vol + " %";
+  $("sndTypes").innerHTML = SOUNDS.map(([id, n]) => `<button type="button" class="chip" data-snd="${id}" style="--tc:var(--red)" aria-pressed="${p.type === id}">${n}</button>`).join("");
+  $("sndCount").setAttribute("aria-pressed", String(!!p.countdown));
+}
+let sndTimer = null;
+function saveSound(patch, silent) {
+  S.prefs.sound = { ...soundPrefs(), ...patch };
+  clearTimeout(sndTimer); sndTimer = setTimeout(savePrefs, 400);
+  renderSound(); if (!silent) playSound();
+}
+$("sndVol").addEventListener("input", e => { S.prefs.sound = { ...soundPrefs(), vol: +e.target.value }; $("sndVolTxt").textContent = e.target.value + " %"; });
+$("sndVol").addEventListener("change", e => saveSound({ vol: +e.target.value }));
+$("sndTypes").addEventListener("click", e => { const b = e.target.closest("[data-snd]"); if (b) saveSound({ type: b.dataset.snd }); });
+$("sndCount").onclick = () => saveSound({ countdown: !soundPrefs().countdown }, true);
+$("sndTest").onclick = () => playSound();
 
 /* ============================================================
    Installation sur l'écran d'accueil
@@ -1320,6 +1543,14 @@ const FAQ = [
     a: "Sur l’accueil, touche CrossFit : tu y notes tes records (1RM) en back squat, clean, snatch… et tes temps sur les WOD de référence comme Fran ou Murph." },
   { q: "Comment noter une séance de callisthénie ?", k: "callisthenie calisthenics street workout traction dips muscle front lever planche handstand poids corps",
     a: "Touche un jour › Callisthénie. Ajoute tes exercices en un toucher (Tractions, Dips, Front lever…). Pour les figures tenues, touche « Reps ⇄ » pour noter des secondes. La colonne Lest sert si tu t’alourdis." },
+  { q: "Où trouver des idées de séances ?", k: "idee idees seance type programme exemple inspiration essayer",
+    a: "Sur l’accueil, touche « Séances types » puis choisis ton activité : Musculation (Push, Pull, Jambes…), CrossFit, Callisthénie ou Course à pied.\nChaque idée a un bouton « Essayer aujourd’hui » qui remplit ta séance du jour." },
+  { q: "Où noter mes records (PR) ?", k: "record pr 5km 10km semi marathon developpe couche squat souleve",
+    a: "Accueil › Séances types › Musculation (développé couché, squat, soulevé de terre…) ou Course à pied (5 km, 10 km, semi, marathon). Touche + pour ajouter un record : ton meilleur s’affiche en gros." },
+  { q: "Comment régler le son du minuteur ?", k: "son volume minuteur chrono bip alarme entendre fort",
+    a: "Profil › « Son du minuteur » : règle le volume, choisis Bip, Alarme, Sifflet ou Gong, et touche « Tester le son ».\nSur iPhone, le son est coupé si le bouton silencieux (sur le côté) est activé." },
+  { q: "C’est quoi la série en couleur ?", k: "serie couleur cours surligne verte",
+    a: "Dans une séance, la série sur laquelle tu es est entourée de ta couleur principale (« Série en cours »). Dès que tu remplis ses répétitions, elle passe en vert et la suivante s’allume." },
   { q: "Comment contacter le créateur ?", k: "contact contacter createur probleme bug aide reclamation idee",
     a: "Touche « Contact » en bas de l’accueil, choisis un objet et écris ton message : il arrive directement chez moi." }
 ];
@@ -1468,7 +1699,7 @@ $("helpForm").addEventListener("submit", e => {
     }
   }, 300);
 });
-const FAB_SCREENS = ["home", "seances", "nutrition", "complements", "creatine", "contact", "profile", "crossfit"];
+const FAB_SCREENS = ["home", "seances", "nutrition", "complements", "creatine", "contact", "profile", "crossfit", "types", "hub"];
 let hintReady = false;
 setTimeout(() => { hintReady = true; updateFab(); }, 2500);
 function updateFab() {
