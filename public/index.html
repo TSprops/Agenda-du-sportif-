@@ -83,6 +83,11 @@
       <span class="toc-sub">Compléments et créatine</span>
       <span class="pills" id="homeNut"></span>
     </button>
+    <button class="toc-item" data-go="crossfit">
+      <span class="toc-top"><span class="toc-name">CrossFit</span><span class="arrow" aria-hidden="true">›</span></span>
+      <span class="toc-sub">Records, WOD de référence et chronos</span>
+      <span class="pills" id="homeCf"></span>
+    </button>
   </nav>
   <button class="contact-link" data-go="contact">Contact</button>
   <p class="note-mode" id="mode"></p>
@@ -153,6 +158,23 @@
     <p class="hint" style="padding:10px 4px 0">Oublié un autre jour ? Touche la date pour la cocher ou la décocher.</p>
   </section>
   <label class="card dose" for="creaDose"><span><b>Dose quotidienne</b><br><span class="hint">en grammes</span></span><input id="creaDose" inputmode="decimal" value="5"></label>
+</main>
+
+<!-- ============ CROSSFIT ============ -->
+<main class="app view" id="v-crossfit" hidden>
+  <button class="back" data-go="home">‹ Accueil</button>
+  <h1 class="vtitle">CrossFit</h1>
+  <button class="btn primary cf-btn" id="cfToday">Noter mon WOD du jour</button>
+  <div class="stats" id="cfStats"></div>
+  <section>
+    <h2 class="h2">Mes records (1RM)</h2>
+    <div class="card" id="cfPrs" style="gap:0;padding-block:4px"></div>
+  </section>
+  <section>
+    <h2 class="h2">WOD de référence</h2>
+    <p class="hint" style="margin:-4px 0 12px">Les « Girls » et les « Hero WODs » : refais-les régulièrement pour mesurer tes progrès. Charges homme / femme.</p>
+    <div class="list" id="cfBench"></div>
+  </section>
 </main>
 
 <!-- ============ CONTACT ============ -->

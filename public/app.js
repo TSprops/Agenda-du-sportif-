@@ -22,7 +22,7 @@ const DEFAULT_TYPES = [
 ];
 const PALETTE = ["#FF3B30", "#3D8BFF", "#2FBF71", "#A56BFF", "#FF9F0A", "#19C3C3", "#FF5FA2", "#8A847E", "#C9D63A"];
 const MOODS = ["En forme", "Normal", "Fatigué", "Douleur"];
-const OBJECTIFS = ["Prise de masse", "Sèche", "Force", "Remise en forme", "Endurance"];
+const OBJECTIFS = ["Prise de masse", "Sèche", "Force", "Maintien de force", "Remise en forme", "Endurance"];
 const OBJETS = ["Aide", "Réclamation", "Amélioration à suggérer", "Problème sur l’application"];
 const MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
 const DAYS = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
@@ -76,10 +76,115 @@ function ago(ts) {
   const days = Math.floor((new Date(todayK()) - new Date(key(new Date(ts)))) / 864e5);
   return days <= 0 ? "aujourd’hui" : days === 1 ? "hier" : days < 30 ? "il y a " + days + " jours" : fmtDate(ts);
 }
+/* Activités proposées quand on touche un jour du calendrier */
+const DISC = {
+  muscu: { name: "Musculation", color: "#FF2B34", desc: "Push, pull, jambes… séries, reps et charges",
+    icon: '<path d="M6 7v10M18 7v10M3 9.5v5M21 9.5v5M6 12h12"/>' },
+  crossfit: { name: "CrossFit", color: "#FFD60A", desc: "WOD, AMRAP, EMOM, For Time, records",
+    icon: '<path d="M9 8a3 3 0 1 1 6 0"/><path d="M7 10h10l1.4 8.2A2 2 0 0 1 16.4 20.5H7.6a2 2 0 0 1-2-2.3z"/>' },
+  calis: { name: "Callisthénie", color: "#C9D63A", desc: "Poids du corps : tractions, dips, figures…",
+    icon: '<path d="M3 4h18M8 4v3M16 4v3"/><circle cx="12" cy="10" r="2"/><path d="M8 7l4 4.5L16 7M12 12v4.5M9 21l3-4.5 3 4.5"/>' },
+  course: { name: "Course à pied", color: "#5AC8FA", desc: "Endurance fondamentale, seuil, fractionné",
+    icon: '<circle cx="14.5" cy="4.5" r="2"/><path d="M7 21l3.5-6 3 2.5V22M5.5 11.5l3.5-3 4 1 2.5 3.5h3.5M10.5 15l-1.5-4.5"/>' }
+};
+const RUN_TYPES = [
+  { id: "ef", name: "Endurance fondamentale", short: "EF", color: "#5AC8FA", hint: "Allure facile : tu dois pouvoir parler en courant (60 à 75 % de ta FC max)." },
+  { id: "seuil", name: "Seuil", short: "Seuil", color: "#FF7A45", hint: "Allure soutenue mais contrôlée, tenable 30 à 60 min en course (85 à 90 % de ta FC max)." },
+  { id: "frac", name: "Fractionné", short: "Fract.", color: "#E040FB", hint: "Efforts courts et rapides entrecoupés de récupérations (VMA, côtes, 30/30…)." }
+];
+const WOD_FORMATS = ["For Time", "AMRAP", "EMOM", "Tabata", "Chipper", "Force"];
+const WOD_HINTS = {
+  "For Time": "Termine le travail le plus vite possible. Ton score = ton temps.",
+  "AMRAP": "« As Many Rounds As Possible » : un maximum de tours dans le temps donné.",
+  "EMOM": "« Every Minute On the Minute » : un bloc au début de chaque minute, repos le reste de la minute.",
+  "Tabata": "8 tours de 20 s d’effort / 10 s de repos par mouvement.",
+  "Chipper": "Une longue liste de mouvements à « grignoter » une seule fois, pour le temps.",
+  "Force": "Travail de charge lourde (ex. 5×5, 1RM). Ton score = ta charge max."
+};
+const CALIS_MOVES = [["Tractions"], ["Dips"], ["Pompes"], ["Muscle-up"], ["Squats"], ["Pistol squat"], ["Tractions australiennes"], ["Handstand push-up"],
+  ["Front lever", 1], ["Back lever", 1], ["Planche", 1], ["Handstand", 1], ["L-sit", 1], ["Human flag", 1], ["Gainage", 1]];
+const CF_MOVES = ["Thrusters", "Tractions", "Burpees", "Wall balls", "Kettlebell swings", "Box jumps", "Double unders", "Toes to bar", "Muscle-ups",
+  "Handstand push-ups", "Clean", "Power clean", "Snatch", "Power snatch", "Clean & jerk", "Soulevé de terre", "Front squat", "Back squat",
+  "Overhead squat", "Push press", "Rameur (m)", "Course (m)", "Air bike (cal)", "Sit-ups", "Pompes", "Air squats", "Lunges", "Rope climb"];
+// WOD de référence (« Girls » et « Hero WODs ») : charges homme / femme.
+const BENCH = [
+  { id: "fran", name: "Fran", type: "time", desc: "21-15-9 : Thrusters (43/29 kg), Tractions",
+    moves: [{ reps: "21-15-9", name: "Thrusters", kg: 43 }, { reps: "21-15-9", name: "Tractions", kg: "" }] },
+  { id: "grace", name: "Grace", type: "time", desc: "30 Clean & jerks (61/43 kg)", moves: [{ reps: "30", name: "Clean & jerk", kg: 61 }] },
+  { id: "isabel", name: "Isabel", type: "time", desc: "30 Snatchs (61/43 kg)", moves: [{ reps: "30", name: "Snatch", kg: 61 }] },
+  { id: "diane", name: "Diane", type: "time", desc: "21-15-9 : Soulevé de terre (102/70 kg), Handstand push-ups",
+    moves: [{ reps: "21-15-9", name: "Soulevé de terre", kg: 102 }, { reps: "21-15-9", name: "Handstand push-ups", kg: "" }] },
+  { id: "elizabeth", name: "Elizabeth", type: "time", desc: "21-15-9 : Squat cleans (61/43 kg), Dips aux anneaux",
+    moves: [{ reps: "21-15-9", name: "Squat clean", kg: 61 }, { reps: "21-15-9", name: "Dips aux anneaux", kg: "" }] },
+  { id: "helen", name: "Helen", type: "time", desc: "3 tours : 400 m course, 21 KB swings (24/16 kg), 12 tractions",
+    moves: [{ reps: "3 tours", name: "Course (m) 400", kg: "" }, { reps: "21", name: "Kettlebell swings", kg: 24 }, { reps: "12", name: "Tractions", kg: "" }] },
+  { id: "karen", name: "Karen", type: "time", desc: "150 Wall balls (9/6 kg)", moves: [{ reps: "150", name: "Wall balls", kg: 9 }] },
+  { id: "annie", name: "Annie", type: "time", desc: "50-40-30-20-10 : Double unders, Sit-ups",
+    moves: [{ reps: "50-40-30-20-10", name: "Double unders", kg: "" }, { reps: "50-40-30-20-10", name: "Sit-ups", kg: "" }] },
+  { id: "jackie", name: "Jackie", type: "time", desc: "1000 m rameur, 50 Thrusters (20/15 kg), 30 Tractions",
+    moves: [{ reps: "1000 m", name: "Rameur (m)", kg: "" }, { reps: "50", name: "Thrusters", kg: 20 }, { reps: "30", name: "Tractions", kg: "" }] },
+  { id: "cindy", name: "Cindy", type: "amrap", cap: 20, desc: "AMRAP 20 min : 5 Tractions, 10 Pompes, 15 Air squats",
+    moves: [{ reps: "5", name: "Tractions", kg: "" }, { reps: "10", name: "Pompes", kg: "" }, { reps: "15", name: "Air squats", kg: "" }] },
+  { id: "murph", name: "Murph", type: "time", desc: "1,6 km course, 100 tractions, 200 pompes, 300 squats, 1,6 km course (gilet 9/6 kg)",
+    moves: [{ reps: "1600 m", name: "Course (m)", kg: 9 }, { reps: "100", name: "Tractions", kg: 9 }, { reps: "200", name: "Pompes", kg: 9 }, { reps: "300", name: "Air squats", kg: 9 }, { reps: "1600 m", name: "Course (m)", kg: 9 }] }
+];
+const LIFTS = [["bsquat", "Back squat"], ["fsquat", "Front squat"], ["dl", "Soulevé de terre"], ["clean", "Clean"], ["cj", "Clean & jerk"],
+  ["snatch", "Snatch"], ["spress", "Strict press"], ["ppress", "Push press"], ["bench", "Développé couché"]];
+
+function discOf(d) { return d && d.disc ? d.disc : "muscu"; }
+function dayMeta(d, types) {
+  const disc = discOf(d);
+  if (disc === "course") { const r = RUN_TYPES.find(x => x.id === d.runType); return { disc, name: r ? r.name : "Course à pied", short: r ? r.short : "Course", color: r ? r.color : DISC.course.color }; }
+  if (disc === "crossfit") return { disc, name: "CrossFit", short: "CrossFit", color: DISC.crossfit.color };
+  if (disc === "calis") return { disc, name: "Callisthénie", short: "Calis", color: DISC.calis.color };
+  const t = (types || S.types).find(x => x.id === d.typeId);
+  return { disc, name: t ? t.name : "Musculation", short: t ? t.name : "Muscu", color: t ? t.color : "#8A847E" };
+}
+function nameColor(n) {
+  const all = [...DEFAULT_TYPES.map(t => [t.name, t.color]), ...RUN_TYPES.map(r => [r.name, r.color]), ["CrossFit", DISC.crossfit.color], ["Callisthénie", DISC.calis.color]];
+  const f = all.find(x => x[0] === n); return f ? f[1] : "#8A847E";
+}
 function exVolume(ex) { return (ex.sets || []).reduce((a, s) => a + ((+s.reps || 0) * (+s.kg || 0)), 0); }
-function dayVolume(d) { return (d.exercises || []).reduce((a, e) => a + exVolume(e), 0); }
-function isEmpty(d) { return !d || (!String(d.title || "").trim() && !d.typeId && !(d.exercises || []).length && !d.mood && !String(d.note || "").trim() && !(d.photos || []).length); }
-function titleOf(d, types) { const t = (types || S.types).find(x => x.id === d.typeId); return String(d.title || "").trim() || (t ? t.name : "Séance"); }
+function dayVolume(d) { return discOf(d) !== "muscu" ? 0 : (d.exercises || []).reduce((a, e) => a + exVolume(e), 0); }
+function runSecs(r) { return r ? (+r.h || 0) * 3600 + (+r.m || 0) * 60 + (+r.s || 0) : 0; }
+function runKm(d) { return discOf(d) === "course" && d.run ? (+d.run.dist || 0) : 0; }
+function fmtDur(sec) { const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = Math.round(sec % 60); return h ? `${h} h ${pad(m)}` : `${m}:${pad(s)}`; }
+function runPace(r) { const t = runSecs(r), dist = +r.dist || 0; if (!t || !dist) return ""; const p = t / dist; return Math.floor(p / 60) + ":" + pad(Math.round(p % 60)); }
+function runCalcHTML(r) {
+  const t = runSecs(r), dist = +(r && r.dist) || 0;
+  if (!t || !dist) return `<span class="hint">Entre la distance et la durée : ton allure et ta vitesse se calculent toutes seules.</span>`;
+  return `<span><b>${runPace(r)}</b> /km</span><span><b>${nf.format(dist / (t / 3600))}</b> km/h</span><span><b>${fmtDur(t)}</b> au total</span>`;
+}
+// "1:30" -> 90, "90" -> 90, "2 min" -> 120
+function parseClock(v) {
+  const s = String(v || "").trim(); if (!s) return 0;
+  const m = s.match(/^(\d+)\s*[:']\s*(\d{1,2})/); if (m) return +m[1] * 60 + +m[2];
+  const n = parseFloat(s.replace(",", ".")); if (!isFinite(n)) return 0;
+  return /min/i.test(s) ? Math.round(n * 60) : Math.round(n);
+}
+function wodScore(w) {
+  if (!w) return "";
+  const f = w.format;
+  if (f === "AMRAP") return w.rounds !== "" && w.rounds != null ? `${w.rounds} tours${w.reps ? " + " + w.reps : ""}` : "";
+  if (f === "EMOM") return w.rounds ? `${w.rounds} min réussies` : "";
+  if (f === "Tabata") return w.rounds ? `${w.rounds} reps` : "";
+  if (f === "Force") return w.kg ? `${nf.format(w.kg)} kg` : "";
+  return (w.sMin !== "" && w.sMin != null) || w.sSec ? `${+w.sMin || 0}:${pad(+w.sSec || 0)}` : "";
+}
+function isEmpty(d) {
+  if (!d) return true;
+  const w = d.wod || {}, r = d.run || {};
+  return !String(d.title || "").trim() && !d.typeId && !d.runType && !(d.exercises || []).length && !d.mood && !String(d.note || "").trim()
+    && !(d.photos || []).length && !d.rpe
+    && !r.dist && !runSecs(r) && !r.fc && !r.dplus && !(r.blocks || []).some(b => b.rep || b.eff || b.pace || b.rec)
+    && !w.format && !String(w.name || "").trim() && !w.cap && !(w.moves || []).some(m => m.name || m.reps) && !String(w.strength || "").trim()
+    && !wodScore({ ...w, format: w.format || "For Time" }) && !w.rounds && !w.kg && w.rx == null;
+}
+function titleOf(d, types) {
+  const t = String(d.title || "").trim(); if (t) return t;
+  if (discOf(d) === "crossfit" && d.wod && String(d.wod.name || "").trim()) return d.wod.name.trim();
+  return dayMeta(d, types).name;
+}
 function avatarHTML(p, size) {
   const s = size || 40, ph = p && p.photo;
   const ini = ((p && (p.pseudo || p.prenom)) || "?").trim().charAt(0) || "?";
@@ -133,12 +238,13 @@ function syncStats() {
     const ks = Object.keys(S.days).sort(), byType = {};
     let ex = 0, vol = 0, photos = 0;
     ks.forEach(k => {
-      const d = S.days[k], t = typeOf(d.typeId), n = t ? t.name : "Sans type";
+      const d = S.days[k], n = dayMeta(d).name;
       byType[n] = (byType[n] || 0) + 1; ex += (d.exercises || []).length; vol += dayVolume(d); photos += (d.photos || []).length;
     });
     const nk = Object.keys(S.nut);
     const stats = {
       seances: ks.length, lastSeance: ks[ks.length - 1] || null, exercices: ex, volume: Math.round(vol), photos, byType,
+      km: Math.round(ks.reduce((a, k) => a + runKm(S.days[k]), 0) * 10) / 10,
       creatineDays: nk.filter(k => S.nut[k].creatine).length,
       complements: nk.reduce((a, k) => a + (S.nut[k].complements || []).length, 0)
     };
@@ -151,7 +257,7 @@ function syncStats() {
    ============================================================ */
 const RENDER = {
   home: renderHome, seances: renderMain, nutrition: renderNutrition, complements: renderNutrition, creatine: renderNutrition,
-  contact: renderContact, profile: renderProfile, admin: renderAdmin, onboard: renderOnboard
+  contact: renderContact, profile: renderProfile, admin: renderAdmin, onboard: renderOnboard, crossfit: renderCrossfit
 };
 function go(v) {
   if (v === "complements" && !S.cpDay) S.cpDay = todayK();
@@ -341,20 +447,42 @@ function renderMain() {
   let h = "";
   for (let i = 0; i < first; i++) h += '<span class="day pad" aria-hidden="true"></span>';
   for (let d = 1; d <= count; d++) {
-    const k = key(new Date(y, m, d)), s = S.days[k], t = s && typeOf(s.typeId);
-    h += `<button class="day${s ? " has" : ""}${k === tk ? " today" : ""}" data-k="${k}" style="--tc:${t ? t.color : "#8A847E"}" aria-label="${d} ${MONTHS[m]}${s ? ", " + esc(titleOf(s)) : ""}"><span class="n">${d}</span>${s ? `<span class="t">${esc(t ? t.name : titleOf(s))}</span>` : ""}</button>`;
+    const k = key(new Date(y, m, d)), s = S.days[k], mt = s && dayMeta(s);
+    h += `<button class="day${s ? " has" : ""}${k === tk ? " today" : ""}" data-k="${k}" style="--tc:${mt ? mt.color : "#8A847E"}" aria-label="${d} ${MONTHS[m]}${s ? ", " + esc(titleOf(s)) : ""}"><span class="n">${d}</span>${s ? `<span class="t">${esc(mt.short)}</span>` : ""}</button>`;
   }
   $("grid").innerHTML = h;
-  $("legend").innerHTML = S.types.map(t => `<span style="--tc:${t.color}"><i class="dot"></i>${esc(t.name)}</span>`).join("");
+  $("legend").innerHTML = S.types.map(t => `<span style="--tc:${t.color}"><i class="dot"></i>${esc(t.name)}</span>`).join("")
+    + `<span class="legend-sep">Autres activités</span>`
+    + [["CrossFit", DISC.crossfit.color], ["Callisthénie", DISC.calis.color], ...RUN_TYPES.map(r => [r.name, r.color])]
+      .map(([n, c]) => `<span style="--tc:${c}"><i class="dot"></i>${esc(n)}</span>`).join("");
   const ks = Object.keys(S.days).filter(k => k.startsWith(y + "-" + pad(m + 1))).sort().reverse();
   const vol = ks.reduce((a, k) => a + dayVolume(S.days[k]), 0);
-  const sets = ks.reduce((a, k) => a + (S.days[k].exercises || []).reduce((b, e) => b + (e.sets || []).length, 0), 0);
+  const km = ks.reduce((a, k) => a + runKm(S.days[k]), 0);
   $("sumTitle").textContent = cap(MONTHS[m]) + " en chiffres";
-  $("stats").innerHTML = `<div class="stat"><b>${ks.length}</b><span>séance${ks.length > 1 ? "s" : ""}</span></div><div class="stat"><b>${sets}</b><span>séries</span></div><div class="stat"><b>${vol >= 10000 ? nf.format(vol / 1000) + " t" : nf.format(vol)}</b><span>${vol >= 10000 ? "soulevées" : "kg soulevés"}</span></div>`;
+  $("stats").innerHTML = `<div class="stat"><b>${ks.length}</b><span>séance${ks.length > 1 ? "s" : ""}</span></div><div class="stat"><b>${vol >= 10000 ? nf.format(vol / 1000) + " t" : nf.format(vol)}</b><span>${vol >= 10000 ? "soulevées" : "kg soulevés"}</span></div><div class="stat"><b>${nf.format(km)}</b><span>km courus</span></div>`;
   $("list").innerHTML = ks.length ? ks.map(k => {
-    const s = S.days[k], t = typeOf(s.typeId), d = parse(k), n = (s.exercises || []).length, ph = (s.photos || []).length;
-    return `<button class="row" data-k="${k}" style="--tc:${t ? t.color : "#8A847E"}"><i class="bar"></i><span class="d">${DAYS[d.getDay()].slice(0, 3)}<b>${d.getDate()}</b></span><span class="main"><div class="ti">${esc(titleOf(s))}</div><div class="me">${t ? esc(t.name) + " · " : ""}${n} exercice${n > 1 ? "s" : ""}${dayVolume(s) ? " · " + nf.format(dayVolume(s)) + " kg" : ""}${ph ? " · " + ph + " photo" + (ph > 1 ? "s" : "") : ""}</div></span><span aria-hidden="true" style="color:var(--red-hi)">›</span></button>`;
+    const s = S.days[k], mt = dayMeta(s), d = parse(k), ph = (s.photos || []).length;
+    return `<button class="row" data-k="${k}" style="--tc:${mt.color}"><i class="bar"></i><span class="d">${DAYS[d.getDay()].slice(0, 3)}<b>${d.getDate()}</b></span><span class="main"><div class="ti">${esc(titleOf(s))}</div><div class="me">${esc(sessionSummary(s))}${ph ? " · " + ph + " photo" + (ph > 1 ? "s" : "") : ""}</div></span><span aria-hidden="true" style="color:var(--red-hi)">›</span></button>`;
   }).join("") : `<div class="empty">Aucune séance en ${MONTHS[m]}. Touche un jour du calendrier pour noter ton entraînement.</div>`;
+}
+// Résumé d'une séance sur une ligne (liste du mois, administration).
+function sessionSummary(s, types) {
+  const mt = dayMeta(s, types), disc = mt.disc;
+  if (disc === "course") {
+    const r = s.run || {}, parts = [mt.name];
+    if (r.dist) parts.push(nf.format(r.dist) + " km");
+    if (runSecs(r)) parts.push(fmtDur(runSecs(r)));
+    if (runPace(r)) parts.push(runPace(r) + " /km");
+    return parts.join(" · ");
+  }
+  if (disc === "crossfit") {
+    const w = s.wod || {}, parts = ["CrossFit"];
+    if (w.format) parts.push(w.format);
+    const sc = wodScore(w); if (sc) parts.push(sc + (w.rx === false ? " (Scaled)" : w.rx ? " (Rx)" : ""));
+    return parts.join(" · ");
+  }
+  const n = (s.exercises || []).length;
+  return `${disc === "calis" ? "Callisthénie" : mt.name} · ${n} exercice${n > 1 ? "s" : ""}${dayVolume(s) ? " · " + nf.format(dayVolume(s)) + " kg" : ""}`;
 }
 
 /* ============================================================
@@ -362,22 +490,35 @@ function renderMain() {
    ============================================================ */
 function rpeColor(v) { return v <= 6 ? "#2FBF71" : v <= 8 ? "#FF9F0A" : "#FF3B30"; }
 function rpeLabel(v) { return !v ? "Non notée" : v <= 5 ? "Facile" : v === 6 ? "Modérée" : v === 7 ? "3 reps en réserve" : v === 8 ? "2 reps en réserve" : v === 9 ? "1 rep en réserve" : "Échec"; }
+function effortLabel(v) { return !v ? "Non noté" : v <= 3 ? "Très facile" : v <= 5 ? "Facile" : v <= 7 ? "Soutenu" : v <= 9 ? "Très dur" : "Maximal"; }
 function restOf(ex) { return typeof ex.rest === "number" ? ex.rest : 90; }
 function fmtRest(v) { if (!v) return "Aucun"; const m = Math.floor(v / 60), sec = v % 60; return m ? m + " min" + (sec ? " " + pad(sec) : "") : sec + " s"; }
-function exStats(ex) {
+function exStats(ex, disc) {
   const s = (ex.sets || []).filter(x => x.reps !== "" || x.kg !== "");
   if (!s.length) return "Aucune série remplie";
-  const best = Math.max(0, ...s.map(x => +x.kg || 0)), v = exVolume(ex);
+  const best = Math.max(0, ...s.map(x => +x.kg || 0));
+  if (disc === "calis") {
+    const tot = s.reduce((a, x) => a + (+x.reps || 0), 0);
+    return `${s.length} série${s.length > 1 ? "s" : ""} · ${ex.hold ? "total " + tot + " s de tenue" : "total " + tot + " reps"}${best ? " · lest max " + nf.format(best) + " kg" : ""}`;
+  }
+  const v = exVolume(ex);
   return `${s.length} série${s.length > 1 ? "s" : ""}${best ? " · max " + nf.format(best) + " kg" : ""}${v ? " · volume " + nf.format(v) + " kg" : ""}`;
 }
-function lastOfType(typeId, before) { return Object.keys(S.days).filter(k => k < before && S.days[k].typeId === typeId && (S.days[k].exercises || []).length).sort().pop(); }
-function exHTML(ex, i) {
-  const r = ex.rpe || 0;
+// Dernière séance comparable, pour la reprendre (musculation : même type ; callisthénie : n'importe laquelle).
+function lastComparable(c, before) {
+  const disc = c.disc;
+  if (disc !== "muscu" && disc !== "calis") return null;
+  if (disc === "muscu" && !c.typeId) return null;
+  return Object.keys(S.days).filter(k => k < before && discOf(S.days[k]) === disc && (disc === "calis" || S.days[k].typeId === c.typeId) && (S.days[k].exercises || []).length).sort().pop();
+}
+function exHTML(ex, i, disc) {
+  const r = ex.rpe || 0, calis = disc === "calis";
+  const col1 = calis ? (ex.hold ? "Tenue (s)" : "Reps") : "Reps", col2 = calis ? "Lest (kg)" : "Poids (kg)";
   return `<article class="ex">
-  <div class="ex-head"><span class="ex-num">${pad(i + 1)}</span><input id="exn-${i}" class="ex-name" data-f="ex-name" data-ex="${i}" placeholder="Nom de l’exercice" value="${esc(ex.name)}" autocomplete="off"><button class="icon-btn" data-a="del-ex" data-ex="${i}" aria-label="Supprimer l’exercice">Retirer</button></div>
-  <div class="ex-stats" id="st-${i}">${exStats(ex)}</div>
-  <table class="sets"><thead><tr><th style="text-align:center">Série</th><th>Reps</th><th>Poids (kg)</th><th></th></tr></thead><tbody>
-  ${(ex.sets || []).map((s, j) => `<tr><td class="n">${j + 1}</td><td><input id="r-${i}-${j}" class="num" inputmode="numeric" data-f="reps" data-ex="${i}" data-s="${j}" value="${esc(s.reps)}" placeholder="–" aria-label="Répétitions série ${j + 1}"></td><td><input id="k-${i}-${j}" class="num" inputmode="decimal" data-f="kg" data-ex="${i}" data-s="${j}" value="${esc(s.kg)}" placeholder="–" aria-label="Poids série ${j + 1}"></td><td class="x"><button class="icon-btn" data-a="del-set" data-ex="${i}" data-s="${j}" aria-label="Supprimer la série ${j + 1}">−</button></td></tr>`).join("")}
+  <div class="ex-head"><span class="ex-num">${pad(i + 1)}</span><input id="exn-${i}" class="ex-name" data-f="ex-name" data-ex="${i}" placeholder="${calis ? "ex. Tractions" : "Nom de l’exercice"}" value="${esc(ex.name)}" autocomplete="off">${calis ? `<button class="icon-btn" data-a="hold" data-ex="${i}" aria-label="Changer répétitions ou tenue">${ex.hold ? "Tenue" : "Reps"} ⇄</button>` : ""}<button class="icon-btn" data-a="del-ex" data-ex="${i}" aria-label="Supprimer l’exercice">Retirer</button></div>
+  <div class="ex-stats" id="st-${i}">${exStats(ex, disc)}</div>
+  <table class="sets"><thead><tr><th style="text-align:center">Série</th><th>${col1}</th><th>${col2}</th><th></th></tr></thead><tbody>
+  ${(ex.sets || []).map((s, j) => `<tr><td class="n">${j + 1}</td><td><input id="r-${i}-${j}" class="num" inputmode="numeric" data-f="reps" data-ex="${i}" data-s="${j}" value="${esc(s.reps)}" placeholder="–" aria-label="${col1} série ${j + 1}"></td><td><input id="k-${i}-${j}" class="num" inputmode="decimal" data-f="kg" data-ex="${i}" data-s="${j}" value="${esc(s.kg)}" placeholder="${calis ? "0" : "–"}" aria-label="${col2} série ${j + 1}"></td><td class="x"><button class="icon-btn" data-a="del-set" data-ex="${i}" data-s="${j}" aria-label="Supprimer la série ${j + 1}">−</button></td></tr>`).join("")}
   </tbody></table>
   <button class="add-set" data-a="add-set" data-ex="${i}">+ Ajouter une série</button>
   <div class="rest-row"><div class="lbl">Repos entre les séries</div><div class="rest-ctl"><button class="step" data-a="rest-dec" data-ex="${i}" aria-label="Moins de repos">−</button><span class="rest-val" id="rv-${i}">${fmtRest(restOf(ex))}</span><button class="step" data-a="rest-inc" data-ex="${i}" aria-label="Plus de repos">+</button><button class="rest-go" data-a="rest-go" data-ex="${i}">⏱ Lancer</button></div></div>
@@ -392,18 +533,102 @@ function photoTile(p, i) {
     ? `<button class="ph" data-a="photo" data-i="${i}" aria-label="Voir la photo ${i + 1}"><img src="${esc(src)}" alt="" loading="lazy"></button>`
     : `<div class="ph wait">…</div>`;
 }
-function renderSheet() {
-  const c = S.cur, k = S.open, d = parse(k), t = typeOf(c.typeId);
-  const last = t && !(c.exercises || []).length ? lastOfType(t.id, k) : null;
-  const el = $("sheet"), y = el.scrollTop;
-  el.innerHTML = `<div class="bar-top"><button class="link" data-a="close">‹ Calendrier</button><span class="save" id="saveState">${esc(S.saveMsg || "")}</span></div>
-  <div class="sheet-body" style="--tc:${t ? t.color : "#FF2B34"}">
-    <p class="eyebrow">${cap(DAYS[d.getDay()])} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}</p>
-    <input id="f-title" class="title-in" data-f="title" placeholder="${t ? esc(t.name) : "Titre de la séance"}" value="${esc(c.title)}" autocomplete="off" aria-label="Titre de la séance">
-    <div class="chips" role="group" aria-label="Type de séance">${S.types.map(x => `<button class="chip" data-a="type" data-id="${x.id}" style="--tc:${x.color}" aria-pressed="${x.id === c.typeId}"><i class="dot"></i>${esc(x.name)}</button>`).join("")}</div>
+function effortCard(c, label) {
+  const r = c.rpe || 0;
+  return `<section class="card"><div class="lbl">${label} <em>${r ? r + "/10 · " : ""}${effortLabel(r)}</em></div>
+  <div class="rpe-row" role="group" aria-label="Effort de 1 à 10">${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(v => `<button data-a="srpe" data-v="${v}" class="${r && v < r ? "lit" : ""}" style="--rc:${rpeColor(r || v)}" aria-pressed="${v === r}">${v}</button>`).join("")}</div></section>`;
+}
+function choiceHTML() {
+  return `<h2 class="title-in" style="margin:0">Quelle activité ?</h2>
+  <p class="hint" style="margin-top:-8px">Choisis ton sport du jour : chaque activité a sa propre fiche.</p>
+  <div class="disc-grid">${Object.entries(DISC).map(([id, x]) => `<button class="disc-card" data-a="disc" data-id="${id}" style="--tc:${x.color}"><span class="disc-ico" aria-hidden="true"><svg viewBox="0 0 24 24">${x.icon}</svg></span><b>${x.name}</b><span>${x.desc}</span></button>`).join("")}</div>`;
+}
+function muscuHTML(c, k) {
+  const t = typeOf(c.typeId), last = !(c.exercises || []).length ? lastComparable(c, k) : null;
+  return `<div class="chips" role="group" aria-label="Type de séance">${S.types.map(x => `<button class="chip" data-a="type" data-id="${x.id}" style="--tc:${x.color}" aria-pressed="${x.id === c.typeId}"><i class="dot"></i>${esc(x.name)}</button>`).join("")}</div>
     ${last ? `<button class="suggest" data-a="copy" data-k="${last}"><span style="flex:1"><b>Reprendre la dernière séance ${esc(t.name)}</b><span>${parse(last).getDate()} ${MONTHS[parse(last).getMonth()]} · ${(S.days[last].exercises || []).length} exercices, poids pré-remplis</span></span><span aria-hidden="true">›</span></button>` : ""}
-    ${(c.exercises || []).map(exHTML).join("")}
-    <button class="add-ex" data-a="add-ex">+ Ajouter un exercice</button>
+    ${(c.exercises || []).map((ex, i) => exHTML(ex, i, "muscu")).join("")}
+    <button class="add-ex" data-a="add-ex">+ Ajouter un exercice</button>`;
+}
+function calisHTML(c, k) {
+  const last = !(c.exercises || []).length ? lastComparable(c, k) : null;
+  return `<section><div class="lbl" style="margin-bottom:8px">Ajout rapide</div>
+    <div class="chips">${CALIS_MOVES.map(([n, hold]) => `<button class="chip" data-a="calis-add" data-name="${esc(n)}" data-hold="${hold ? 1 : ""}">+ ${esc(n)}</button>`).join("")}</div></section>
+    ${last ? `<button class="suggest" data-a="copy" data-k="${last}"><span style="flex:1"><b>Reprendre ta dernière séance</b><span>${parse(last).getDate()} ${MONTHS[parse(last).getMonth()]} · ${(S.days[last].exercises || []).length} exercices</span></span><span aria-hidden="true">›</span></button>` : ""}
+    ${(c.exercises || []).map((ex, i) => exHTML(ex, i, "calis")).join("")}
+    <button class="add-ex" data-a="add-ex">+ Ajouter un exercice libre</button>`;
+}
+function courseHTML(c) {
+  const r = c.run || {}, rt = RUN_TYPES.find(x => x.id === c.runType), blocks = r.blocks || [];
+  const val = v => v === undefined || v === null ? "" : esc(v);
+  return `<div class="chips" role="group" aria-label="Type de sortie">${RUN_TYPES.map(x => `<button class="chip" data-a="runtype" data-id="${x.id}" style="--tc:${x.color}" aria-pressed="${x.id === c.runType}"><i class="dot"></i>${esc(x.name)}</button>`).join("")}</div>
+    ${rt ? `<p class="hint" style="margin-top:-6px">${esc(rt.hint)}</p>` : ""}
+    <section class="card"><div class="lbl">Ma sortie</div>
+      <div class="grid2">
+        <label class="field"><span>Distance (km)</span><input id="rn-dist" data-f="run-dist" inputmode="decimal" placeholder="ex. 8,5" value="${val(r.dist)}"></label>
+        <div class="field"><span>Durée (h : min : s)</span><div class="dur"><input id="rn-h" data-f="run-h" inputmode="numeric" placeholder="0" value="${val(r.h)}" aria-label="Heures"><i>:</i><input id="rn-m" data-f="run-m" inputmode="numeric" placeholder="45" value="${val(r.m)}" aria-label="Minutes"><i>:</i><input id="rn-s" data-f="run-s" inputmode="numeric" placeholder="00" value="${val(r.s)}" aria-label="Secondes"></div></div>
+      </div>
+      <div class="run-calc" id="runCalc">${runCalcHTML(r)}</div>
+      <div class="grid2">
+        <label class="field"><span>FC moyenne (bpm)</span><input id="rn-fc" data-f="run-fc" inputmode="numeric" placeholder="ex. 145" value="${val(r.fc)}"></label>
+        <label class="field"><span>Dénivelé + (m)</span><input id="rn-dplus" data-f="run-dplus" inputmode="numeric" placeholder="ex. 120" value="${val(r.dplus)}"></label>
+      </div>
+    </section>
+    ${rt && rt.id !== "ef" ? `<section class="card"><div class="lbl">${rt.id === "seuil" ? "Blocs au seuil" : "Fractions"}</div>
+      <p class="hint" style="margin-top:-4px">Ex. : ${rt.id === "seuil" ? "3 × 10 min à allure seuil, récup 2:00" : "10 × 400 m à 3:45 /km, récup 1:00"}</p>
+      ${blocks.map((b, j) => `<div class="bloc">
+        <div class="bloc-top"><span class="ex-num">${pad(j + 1)}</span>
+          <input class="num bl-rep" id="bl-rep-${j}" data-f="bl-rep" data-b="${j}" inputmode="numeric" placeholder="10" value="${val(b.rep)}" aria-label="Répétitions du bloc ${j + 1}"><span class="times">×</span>
+          <input class="num" id="bl-eff-${j}" data-f="bl-eff" data-b="${j}" inputmode="decimal" placeholder="${rt.id === "seuil" ? "10" : "400"}" value="${val(b.eff)}" aria-label="Effort du bloc ${j + 1}">
+          <button class="unit" data-a="bl-unit" data-b="${j}" aria-label="Changer l’unité">${esc(b.unit || (rt.id === "seuil" ? "min" : "m"))}</button>
+          <button class="icon-btn" data-a="bl-del" data-b="${j}" aria-label="Supprimer le bloc ${j + 1}">−</button></div>
+        <div class="grid2"><label class="field"><span>Allure cible</span><input id="bl-pace-${j}" data-f="bl-pace" data-b="${j}" placeholder="3:45 /km" value="${val(b.pace)}"></label><label class="field"><span>Récup</span><input id="bl-rec-${j}" data-f="bl-rec" data-b="${j}" placeholder="1:00" value="${val(b.rec)}"></label></div>
+        <button class="rest-go" data-a="bl-go" data-b="${j}" style="align-self:flex-start;margin-left:0">⏱ Lancer la récup</button>
+      </div>`).join("")}
+      <button class="add-set" data-a="bl-add">+ Ajouter un bloc</button></section>` : ""}
+    ${effortCard(c, "Effort ressenti")}`;
+}
+function crossfitHTML(c) {
+  const w = c.wod || {}, f = w.format, val = v => v === undefined || v === null ? "" : esc(v);
+  const capLbl = f === "AMRAP" || f === "EMOM" || f === "Tabata" ? "Durée (min)" : "Time cap (min)";
+  let score;
+  if (f === "AMRAP") score = `<div class="grid2"><label class="field"><span>Tours complets</span><input id="sc-rounds" data-f="sc-rounds" inputmode="numeric" placeholder="ex. 12" value="${val(w.rounds)}"></label><label class="field"><span>+ Reps</span><input id="sc-reps" data-f="sc-reps" inputmode="numeric" placeholder="ex. 5" value="${val(w.reps)}"></label></div>`;
+  else if (f === "EMOM" || f === "Tabata") score = `<label class="field"><span>${f === "EMOM" ? "Minutes réussies" : "Reps au total"}</span><input id="sc-rounds" data-f="sc-rounds" inputmode="numeric" value="${val(w.rounds)}"></label>`;
+  else if (f === "Force") score = `<label class="field"><span>Charge max (kg)</span><input id="sc-kg" data-f="sc-kg" inputmode="decimal" placeholder="ex. 100" value="${val(w.kg)}"></label>`;
+  else score = `<div class="field"><span>Temps final (min : s)</span><div class="dur dur2"><input id="sc-min" data-f="sc-min" inputmode="numeric" placeholder="8" value="${val(w.sMin)}" aria-label="Minutes"><i>:</i><input id="sc-sec" data-f="sc-sec" inputmode="numeric" placeholder="32" value="${val(w.sSec)}" aria-label="Secondes"></div></div>`;
+  return `<div class="chips" role="group" aria-label="Format du WOD">${WOD_FORMATS.map(x => `<button class="chip" data-a="wf" data-v="${x}" style="--tc:${DISC.crossfit.color}" aria-pressed="${x === f}">${x}</button>`).join("")}</div>
+    ${f ? `<p class="hint" style="margin-top:-6px">${esc(WOD_HINTS[f])}</p>` : ""}
+    <section class="card"><div class="lbl">Le WOD</div>
+      <label class="field"><span>Nom du WOD (facultatif)</span><input id="wd-name" data-f="wod-name" list="benchList" placeholder="ex. Fran, Murph, WOD du jour" value="${val(w.name)}" autocomplete="off"></label>
+      <datalist id="benchList">${BENCH.map(b => `<option value="${esc(b.name)}">`).join("")}</datalist>
+      <label class="field"><span>${capLbl}</span><input id="wd-cap" data-f="wod-cap" inputmode="numeric" placeholder="ex. 12" value="${val(w.cap)}"></label>
+      <div class="lbl">Mouvements</div>
+      ${(w.moves || []).map((m, j) => `<div class="move"><input class="num mv-reps" id="mv-reps-${j}" data-f="mv-reps" data-m="${j}" placeholder="21" value="${val(m.reps)}" aria-label="Répétitions"><input class="mv-name" id="mv-name-${j}" data-f="mv-name" data-m="${j}" list="moveList" placeholder="ex. Thrusters" value="${val(m.name)}" aria-label="Mouvement"><input class="num mv-kg" id="mv-kg-${j}" data-f="mv-kg" data-m="${j}" inputmode="decimal" placeholder="kg" value="${val(m.kg)}" aria-label="Charge en kg"><button class="icon-btn" data-a="mv-del" data-m="${j}" aria-label="Supprimer le mouvement">−</button></div>`).join("")}
+      <datalist id="moveList">${CF_MOVES.map(m => `<option value="${esc(m)}">`).join("")}</datalist>
+      <button class="add-set" data-a="mv-add">+ Ajouter un mouvement</button>
+    </section>
+    <section class="card"><div class="lbl">Mon score</div>
+      ${score}
+      <div class="chips"><button class="chip" data-a="rx" data-v="rx" style="--tc:${DISC.crossfit.color}" aria-pressed="${w.rx === true}">Rx (charges officielles)</button><button class="chip" data-a="rx" data-v="scaled" style="--tc:${DISC.crossfit.color}" aria-pressed="${w.rx === false}">Scaled (adapté)</button></div>
+    </section>
+    <section class="card"><div class="lbl">Force / technique (facultatif)</div>
+      <textarea id="wd-strength" data-f="wod-strength" rows="2" placeholder="ex. Back squat 5×5 à 100 kg">${esc(w.strength)}</textarea>
+    </section>
+    ${effortCard(c, "Intensité ressentie")}`;
+}
+function renderSheet() {
+  const c = S.cur, k = S.open, d = parse(k), disc = c.disc;
+  const mt = disc ? dayMeta(c) : null;
+  const el = $("sheet"), y = el.scrollTop;
+  const dateTxt = `${cap(DAYS[d.getDay()])} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+  let body;
+  if (!disc) body = `<p class="eyebrow">${dateTxt}</p>${choiceHTML()}`;
+  else {
+    const specific = disc === "muscu" ? muscuHTML(c, k) : disc === "calis" ? calisHTML(c, k) : disc === "course" ? courseHTML(c) : crossfitHTML(c);
+    const ph = disc === "muscu" && mt && typeOf(c.typeId) ? mt.name : disc === "course" && c.runType ? mt.name : disc === "crossfit" ? "WOD du jour" : DISC[disc].name;
+    body = `<div class="disc-line"><p class="eyebrow">${dateTxt} · ${DISC[disc].name}</p><button class="linkish" data-a="change-disc">Changer d’activité</button></div>
+    <input id="f-title" class="title-in" data-f="title" placeholder="${esc(ph)}" value="${esc(c.title)}" autocomplete="off" aria-label="Titre de la séance">
+    ${specific}
     <section class="card"><div class="lbl">Ressenti général</div>
       <div class="chips">${MOODS.map(m => `<button class="chip" data-a="mood" data-v="${m}" style="--tc:var(--red)" aria-pressed="${c.mood === m}">${m}</button>`).join("")}</div>
       <textarea id="f-note" data-f="note" placeholder="Sommeil, énergie, ce qu’il faut changer la prochaine fois…" rows="3">${esc(c.note)}</textarea>
@@ -413,18 +638,31 @@ function renderSheet() {
       <label class="ph-add" for="phIn"><span class="plus">+</span>Prendre une photo<input id="phIn" type="file" accept="image/*" multiple data-f="photo"></label></div>
       ${S.photoErr ? `<p class="err">${esc(S.photoErr)}</p>` : ""}
     </section>
-    ${isEmpty(c) ? "" : `<button class="danger" data-a="del-session">Supprimer la séance</button>`}
-  </div>`;
+    ${isEmpty(c) ? "" : `<button class="danger" data-a="del-session">Supprimer la séance</button>`}`;
+  }
+  el.innerHTML = `<div class="bar-top"><button class="link" data-a="close">‹ Calendrier</button><span class="save" id="saveState">${esc(S.saveMsg || "")}</span></div>
+  <div class="sheet-body" style="--tc:${mt ? mt.color : "#FF2B34"}">${body}</div>`;
   el.scrollTop = y;
-  loadPhotos(c.photos || []);
+  if (disc) loadPhotos(c.photos || []);
 }
-function openDay(k) {
-  S.open = k; S.cur = clone(S.days[k] || { title: "", typeId: null, exercises: [], mood: null, note: "", photos: [] });
+const EMPTY_DAY = () => ({ disc: null, title: "", typeId: null, exercises: [], mood: null, note: "", photos: [] });
+function setDisc(c, disc) {
+  c.disc = disc;
+  if (disc === "course") c.run = c.run || { blocks: [] };
+  if (disc === "crossfit") c.wod = c.wod || { moves: [] };
+  if (!c.exercises) c.exercises = [];
+}
+function openDay(k, preset) {
+  S.open = k;
+  const existing = S.days[k];
+  S.cur = existing ? clone(existing) : EMPTY_DAY();
+  if (existing && !S.cur.disc) S.cur.disc = "muscu"; // anciennes séances = musculation
+  if (!existing && preset) setDisc(S.cur, preset);
   if (!S.cur.photos) S.cur.photos = [];
   S.saveMsg = ""; S.photoErr = "";
   renderSheet(); $("sheet").scrollTop = 0; $("sheet").classList.add("open"); document.body.style.overflow = "hidden"; document.body.classList.add("sheet-open");
 }
-function closeSheet() { flush(); $("sheet").classList.remove("open"); document.body.style.overflow = ""; document.body.classList.remove("sheet-open"); S.open = null; S.cur = null; S.photoErr = ""; renderMain(); }
+function closeSheet() { flush(); $("sheet").classList.remove("open"); document.body.style.overflow = ""; document.body.classList.remove("sheet-open"); S.open = null; S.cur = null; S.photoErr = ""; renderMain(); if (S.screen === "crossfit") renderCrossfit(); }
 function setSave(m) { S.saveMsg = m; const e = $("saveState"); if (e) e.textContent = m; }
 let timer = null;
 function changed() { clearTimeout(timer); timer = setTimeout(flush, 700); }
@@ -432,27 +670,58 @@ function flush() {
   if (!S.open || timer === null) return;
   clearTimeout(timer); timer = null;
   const k = S.open, c = S.cur;
-  if (isEmpty(c)) { delete S.days[k]; persistDay(k, null); }
+  if (isEmpty(c)) { if (S.days[k]) { delete S.days[k]; persistDay(k, null); } }
   else { const data = { ...clone(c), updatedAt: Date.now() }; S.days[k] = data; persistDay(k, data); }
 }
+const intOr = v => { const n = parseInt(String(v), 10); return isFinite(n) ? n : ""; };
 $("sheet").addEventListener("input", e => {
   const f = e.target.dataset.f; if (!f || !S.cur || f === "photo") return;
-  const c = S.cur, i = +e.target.dataset.ex, j = +e.target.dataset.s, v = e.target.value;
+  const c = S.cur, i = +e.target.dataset.ex, j = +e.target.dataset.s, v = e.target.value, t = v.trim();
   if (f === "title") c.title = v; else if (f === "note") c.note = v;
   else if (f === "ex-name") c.exercises[i].name = v; else if (f === "ex-note") c.exercises[i].note = v;
-  else if (f === "reps" || f === "kg") { c.exercises[i].sets[j][f] = v.trim() === "" ? "" : numOr(v); $("st-" + i).textContent = exStats(c.exercises[i]); }
+  else if (f === "reps" || f === "kg") { c.exercises[i].sets[j][f] = t === "" ? "" : numOr(v); $("st-" + i).textContent = exStats(c.exercises[i], c.disc); }
+  else if (f.startsWith("run-")) {
+    const r = c.run = c.run || { blocks: [] }, fld = f.slice(4);
+    r[fld] = t === "" ? "" : fld === "dist" ? numOr(v) : intOr(v);
+    $("runCalc").innerHTML = runCalcHTML(r);
+  }
+  else if (f.startsWith("bl-")) {
+    const b = c.run.blocks[+e.target.dataset.b], fld = f.slice(3);
+    b[fld] = fld === "rep" ? (t === "" ? "" : intOr(v)) : fld === "eff" ? (t === "" ? "" : numOr(v)) : v;
+  }
+  else if (f.startsWith("wod-")) { c.wod[f.slice(4)] = f === "wod-cap" ? (t === "" ? "" : intOr(v)) : v; }
+  else if (f.startsWith("mv-")) { const m = c.wod.moves[+e.target.dataset.m], fld = f.slice(3); m[fld] = fld === "kg" ? (t === "" ? "" : numOr(v)) : v; }
+  else if (f.startsWith("sc-")) {
+    const map = { "sc-min": "sMin", "sc-sec": "sSec", "sc-rounds": "rounds", "sc-reps": "reps", "sc-kg": "kg" };
+    c.wod[map[f]] = t === "" ? "" : f === "sc-kg" ? numOr(v) : intOr(v);
+  }
   changed();
 });
 $("sheet").addEventListener("click", e => {
   const b = e.target.closest("[data-a]"); if (!b) return;
   const a = b.dataset.a, c = S.cur, i = +b.dataset.ex;
   if (a === "close") return closeSheet();
+  if (a === "disc") { setDisc(c, b.dataset.id); renderSheet(); $("sheet").scrollTop = 0; return; }
+  if (a === "change-disc") {
+    if (!isEmpty(c) && !armed(b, "Toucher à nouveau : le contenu sera effacé")) return;
+    const keep = { title: c.title, mood: c.mood, note: c.note, photos: c.photos };
+    S.cur = { ...EMPTY_DAY(), ...keep }; changed(); renderSheet(); $("sheet").scrollTop = 0; return;
+  }
   if (a === "type") { c.typeId = c.typeId === b.dataset.id ? null : b.dataset.id; }
+  else if (a === "runtype") {
+    c.runType = c.runType === b.dataset.id ? null : b.dataset.id;
+    const r = c.run = c.run || { blocks: [] }; r.blocks = r.blocks || [];
+    if (c.runType && c.runType !== "ef" && !r.blocks.length) r.blocks.push({ rep: "", eff: "", unit: c.runType === "seuil" ? "min" : "m", pace: "", rec: "" });
+  }
   else if (a === "mood") { c.mood = c.mood === b.dataset.v ? null : b.dataset.v; }
   else if (a === "add-ex") {
     c.exercises.push({ name: "", sets: [{ reps: "", kg: "" }, { reps: "", kg: "" }, { reps: "", kg: "" }], rpe: 0, note: "", rest: 90 });
     changed(); renderSheet(); const n = $("exn-" + (c.exercises.length - 1)); n && n.focus(); return;
   }
+  else if (a === "calis-add") {
+    c.exercises.push({ name: b.dataset.name, hold: !!b.dataset.hold, sets: [{ reps: "", kg: "" }, { reps: "", kg: "" }, { reps: "", kg: "" }], rpe: 0, note: "", rest: 90 });
+  }
+  else if (a === "hold") { c.exercises[i].hold = !c.exercises[i].hold; }
   else if (a === "del-ex") { if (!armed(b, "Confirmer")) return; c.exercises.splice(i, 1); }
   else if (a === "add-set") { const s = c.exercises[i].sets, l = s[s.length - 1]; s.push(l ? { reps: l.reps, kg: l.kg } : { reps: "", kg: "" }); }
   else if (a === "del-set") { c.exercises[i].sets.splice(+b.dataset.s, 1); }
@@ -463,19 +732,38 @@ $("sheet").addEventListener("click", e => {
   }
   else if (a === "rest-go") { startRest(restOf(c.exercises[i]), c.exercises[i].name); return; }
   else if (a === "rpe") { const v = +b.dataset.v; c.exercises[i].rpe = c.exercises[i].rpe === v ? 0 : v; }
+  else if (a === "srpe") { const v = +b.dataset.v; c.rpe = c.rpe === v ? 0 : v; }
+  else if (a === "bl-add") { const bl = c.run.blocks, l = bl[bl.length - 1]; bl.push(l ? { ...l } : { rep: "", eff: "", unit: c.runType === "seuil" ? "min" : "m", pace: "", rec: "" }); }
+  else if (a === "bl-del") { c.run.blocks.splice(+b.dataset.b, 1); }
+  else if (a === "bl-unit") { const bl = c.run.blocks[+b.dataset.b], u = ["m", "km", "min", "s"]; bl.unit = u[(u.indexOf(bl.unit || "m") + 1) % u.length]; }
+  else if (a === "bl-go") { const bl = c.run.blocks[+b.dataset.b]; startRest(parseClock(bl.rec) || 60, "Récup"); return; }
+  else if (a === "wf") { c.wod.format = c.wod.format === b.dataset.v ? "" : b.dataset.v; }
+  else if (a === "mv-add") { (c.wod.moves = c.wod.moves || []).push({ reps: "", name: "", kg: "" }); changed(); renderSheet(); const n = $("mv-name-" + (c.wod.moves.length - 1)); n && n.focus(); return; }
+  else if (a === "mv-del") { c.wod.moves.splice(+b.dataset.m, 1); }
+  else if (a === "rx") { const v = b.dataset.v === "rx"; c.wod.rx = c.wod.rx === v ? null : v; }
   else if (a === "copy") {
     const src = S.days[b.dataset.k];
-    c.exercises = clone(src.exercises || []).map(x => ({ name: x.name, sets: (x.sets || []).map(s => ({ reps: s.reps, kg: s.kg })), rpe: 0, note: "", rest: restOf(x) }));
+    c.exercises = clone(src.exercises || []).map(x => ({ name: x.name, hold: !!x.hold, sets: (x.sets || []).map(s => ({ reps: s.reps, kg: s.kg })), rpe: 0, note: "", rest: restOf(x) }));
     if (!String(c.title).trim()) c.title = src.title || "";
   }
   else if (a === "del-session") {
     if (!armed(b, "Toucher à nouveau pour supprimer")) return;
     const gone = (c.photos || []).map(p => p.pid).filter(Boolean);
-    S.cur = { title: "", typeId: null, exercises: [], mood: null, note: "", photos: [] };
+    S.cur = EMPTY_DAY();
     timer = 1; flush(); gone.forEach(dropPhoto); return closeSheet();
   }
   else return;
   changed(); renderSheet();
+});
+// Choisir un WOD de référence dans la liste pré-remplit le format et les mouvements.
+$("sheet").addEventListener("change", e => {
+  if (e.target.dataset.f !== "wod-name" || !S.cur || !S.cur.wod) return;
+  const bm = BENCH.find(x => norm(x.name).trim() === norm(e.target.value).trim()); if (!bm) return;
+  const w = S.cur.wod;
+  if (!(w.moves || []).some(m => m.name)) w.moves = clone(bm.moves);
+  if (!w.format) w.format = bm.type === "amrap" ? "AMRAP" : "For Time";
+  if (!w.cap && bm.cap) w.cap = bm.cap;
+  w.name = bm.name; changed(); renderSheet();
 });
 
 /* ============================================================
@@ -666,7 +954,7 @@ function renderHome() {
   const mon = new Date(t.getFullYear(), t.getMonth(), t.getDate() - ((t.getDay() + 6) % 7));
   let h = "", cnt = 0;
   for (let i = 0; i < 7; i++) {
-    const d = new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + i), k = key(d), s = S.days[k], ty = s && typeOf(s.typeId);
+    const d = new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + i), k = key(d), s = S.days[k], ty = s && dayMeta(s);
     if (s) cnt++;
     h += `<span class="${s ? "on" : ""}${k === tk ? " now" : ""}" style="--tc:${ty ? ty.color : "#8A847E"}">${"LMMJVSD"[i]}</span>`;
   }
@@ -674,6 +962,9 @@ function renderHome() {
   $("homeSeancesSub").textContent = cnt ? `${cnt} séance${cnt > 1 ? "s" : ""} cette semaine` : "Aucune séance cette semaine pour l’instant";
   const n = nutOf(tk), c = (n.complements || []).length;
   $("homeNut").innerHTML = `<span class="pill${n.creatine ? " ok" : ""}">${n.creatine ? "✓ Créatine prise" : "Créatine à prendre"}</span><span class="pill${c ? " ok" : ""}">${c} complément${c > 1 ? "s" : ""} aujourd’hui</span>`;
+  const cfm = Object.keys(S.days).filter(k => k.startsWith(tk.slice(0, 7)) && discOf(S.days[k]) === "crossfit").length;
+  const cfd = cfData(), prs = Object.values(cfd.prs).filter(l => l.length).length;
+  $("homeCf").innerHTML = `<span class="pill${cfm ? " ok cf" : ""}">${cfm} WOD ce mois</span><span class="pill${prs ? " ok cf" : ""}">${prs} record${prs > 1 ? "s" : ""}</span>`;
   $("mode").textContent = navigator.onLine ? "" : "Hors connexion : tes modifications seront envoyées au retour du réseau.";
 }
 
@@ -720,7 +1011,7 @@ function renderAdmin() {
   const totalS = M.reduce((a, m) => a + ((m.stats && m.stats.seances) || 0), 0), totalV = M.reduce((a, m) => a + (m.visits || 0), 0);
   const byType = {}; M.forEach(m => Object.entries((m.stats && m.stats.byType) || {}).forEach(([k, v]) => { byType[k] = (byType[k] || 0) + v; }));
   const maxT = Math.max(1, ...Object.values(byType));
-  const colorOf = n => (DEFAULT_TYPES.find(t => t.name === n) || { color: "#8A847E" }).color;
+  const colorOf = nameColor;
   const msgs = S.messages, unread = msgs.filter(m => !m.lu).length;
   $("adminBody").innerHTML = `<div style="display:flex;flex-direction:column;gap:22px">
   <div class="stats" style="grid-template-columns:repeat(2,1fr)">
@@ -750,18 +1041,102 @@ async function openUser(uid) {
     seances = ss.docs.map(d => ({ k: d.id, ...d.data() })).sort((a, b) => a.k < b.k ? 1 : -1); nut = ns.size;
   } catch (x) { /* affichage partiel */ }
   const types = (m.typesV === TYPES_V && Array.isArray(m.types)) ? m.types : DEFAULT_TYPES, st = m.stats || {};
-  const kv = [["Pseudo", m.pseudo], ["E-mail", m.email], ["Prénom", m.prenom], ["Nom", m.nom], ["Âge", m.age ? m.age + " ans" : ""], ["Taille", m.taille ? m.taille + " cm" : ""], ["Poids", m.poids ? m.poids + " kg" : ""], ["Objectif", m.objectif], ["Inscrit le", m.createdAt ? fmtDate(m.createdAt) : ""], ["Dernière visite", ago(m.lastSeen)], ["Visites", m.visits], ["Volume total", st.volume ? nf.format(st.volume) + " kg" : ""], ["Photos", st.photos]].filter(x => x[1] !== undefined && x[1] !== "" && x[1] !== null);
+  const kv = [["Pseudo", m.pseudo], ["E-mail", m.email], ["Prénom", m.prenom], ["Nom", m.nom], ["Âge", m.age ? m.age + " ans" : ""], ["Taille", m.taille ? m.taille + " cm" : ""], ["Poids", m.poids ? m.poids + " kg" : ""], ["Objectif", m.objectif], ["Inscrit le", m.createdAt ? fmtDate(m.createdAt) : ""], ["Dernière visite", ago(m.lastSeen)], ["Visites", m.visits], ["Volume total", st.volume ? nf.format(st.volume) + " kg" : ""], ["Distance courue", st.km ? nf.format(st.km) + " km" : ""], ["Photos", st.photos]].filter(x => x[1] !== undefined && x[1] !== "" && x[1] !== null);
   $("auserBody").innerHTML = `<div style="display:flex;flex-direction:column;gap:20px">
    <div style="display:flex;align-items:center;gap:14px">${avatarHTML(m, 64)}<h1 class="vtitle" style="margin:0;font-size:34px">${esc(m.pseudo || "Utilisateur")}</h1></div>
    <div class="stats"><div class="stat"><b>${seances.length}</b><span>séance${seances.length > 1 ? "s" : ""}</span></div><div class="stat"><b>${st.creatineDays || 0}</b><span>jours créatine</span></div><div class="stat"><b>${st.complements || 0}</b><span>compléments notés</span></div></div>
    <section class="card"><div class="lbl">Informations</div><dl class="kv">${kv.map(([a, b]) => `<dt>${esc(a)}</dt><dd>${esc(b)}</dd>`).join("")}</dl></section>
    <section><h2 class="h2">Dernières séances</h2><div class="list">${seances.length ? seances.slice(0, 30).map(s => {
-     const t = types.find(x => x.id === s.typeId), d = parse(s.k), n = (s.exercises || []).length;
-     return `<div class="row" style="--tc:${t ? t.color : "#8A847E"}"><i class="bar"></i><span class="d">${DAYS[d.getDay()].slice(0, 3)}<b>${d.getDate()}</b></span><span class="main"><div class="ti">${esc(titleOf(s, types))}</div><div class="me">${esc(MONTHS[d.getMonth()])} ${d.getFullYear()} · ${n} exercice${n > 1 ? "s" : ""}${dayVolume(s) ? " · " + nf.format(dayVolume(s)) + " kg" : ""}</div></span></div>`;
+     const mt = dayMeta(s, types), d = parse(s.k);
+     return `<div class="row" style="--tc:${mt.color}"><i class="bar"></i><span class="d">${DAYS[d.getDay()].slice(0, 3)}<b>${d.getDate()}</b></span><span class="main"><div class="ti">${esc(titleOf(s, types))}</div><div class="me">${esc(MONTHS_S[d.getMonth()])} ${d.getFullYear()} · ${esc(sessionSummary(s, types))}</div></span></div>`;
    }).join("") : `<div class="empty">Aucune séance enregistrée.</div>`}</div></section>
    <p class="hint">${nut} jour${nut > 1 ? "s" : ""} de nutrition renseigné${nut > 1 ? "s" : ""}.</p>
   </div>`;
 }
+
+/* ============================================================
+   CrossFit : records (1RM) et WOD de référence
+   ============================================================ */
+function cfData() { const cf = clone((S.profile && S.profile.cf) || {}); cf.prs = cf.prs || {}; cf.bench = cf.bench || {}; return cf; }
+const MONTHS_S = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+function shortDate(k) { const d = parse(k); return d.getDate() + " " + MONTHS_S[d.getMonth()] + (d.getFullYear() !== new Date().getFullYear() ? " " + d.getFullYear() : ""); }
+// Résultats d'un WOD de référence : ceux notés ici + ceux des séances du calendrier portant le même nom.
+function benchEntries(bm) {
+  const manual = (cfData().bench[bm.id] || []).map((e, idx) => ({ ...e, idx, manual: true }));
+  const fromDays = Object.keys(S.days).filter(k => discOf(S.days[k]) === "crossfit" && S.days[k].wod && norm(S.days[k].wod.name || "").trim() === norm(bm.name).trim())
+    .map(k => {
+      const w = S.days[k].wod;
+      if (bm.type === "amrap") return w.rounds !== "" && w.rounds != null ? { date: k, r: +w.rounds || 0, reps: +w.reps || 0, rx: w.rx } : null;
+      const t = (+w.sMin || 0) * 60 + (+w.sSec || 0); return t ? { date: k, t, rx: w.rx } : null;
+    }).filter(Boolean);
+  return [...manual, ...fromDays].sort((a, b) => a.date < b.date ? 1 : -1);
+}
+function benchValue(bm, e) { return bm.type === "amrap" ? e.r * 1000 + (e.reps || 0) : -e.t; }
+function benchText(bm, e) { return bm.type === "amrap" ? `${e.r} tours${e.reps ? " + " + e.reps : ""}` : fmtDur(e.t); }
+function renderCrossfit() {
+  const cf = cfData(), tk = todayK(), ym = tk.slice(0, 7);
+  const cfDays = Object.keys(S.days).filter(k => discOf(S.days[k]) === "crossfit");
+  const nPr = Object.values(cf.prs).filter(l => l.length).length;
+  $("cfStats").innerHTML = `<div class="stat"><b>${cfDays.filter(k => k.startsWith(ym)).length}</b><span>WOD ce mois</span></div><div class="stat"><b>${cfDays.length}</b><span>WOD au total</span></div><div class="stat"><b>${nPr}</b><span>record${nPr > 1 ? "s" : ""}</span></div>`;
+  $("cfPrs").innerHTML = LIFTS.map(([id, name]) => {
+    const list = (cf.prs[id] || []).slice().sort((a, b) => b.kg - a.kg), best = list[0], open = S.cfOpen === "pr:" + id;
+    return `<div class="pr${open ? " open" : ""}">
+      <button class="pr-row" data-cf="pr:${id}"><span class="main"><b>${esc(name)}</b><span>${best ? "le " + esc(shortDate(best.date)) : "Pas encore de record"}</span></span><span class="pr-kg">${best ? nf.format(best.kg) + "<small> kg</small>" : "–"}</span><span class="arrow" aria-hidden="true">${open ? "−" : "+"}</span></button>
+      ${open ? `<form class="pr-form" data-pr="${id}"><label class="field"><span>Nouvelle charge (kg)</span><input id="pr-kg" inputmode="decimal" placeholder="ex. 100" required></label><button class="btn primary" type="submit">Ajouter</button></form>
+        ${list.length ? `<ul class="hist">${(cf.prs[id] || []).map((e, idx) => ({ ...e, idx })).sort((a, b) => a.date < b.date ? 1 : -1).map(e => `<li><span>${esc(shortDate(e.date))}</span><b>${nf.format(e.kg)} kg</b><button class="icon-btn" data-prdel="${id}:${e.idx}">Retirer</button></li>`).join("")}</ul>` : ""}` : ""}
+    </div>`;
+  }).join("");
+  $("cfBench").innerHTML = BENCH.map(bm => {
+    const ents = benchEntries(bm), best = ents.slice().sort((a, b) => benchValue(bm, b) - benchValue(bm, a))[0], open = S.cfOpen === "bm:" + bm.id;
+    return `<div class="bench${open ? " open" : ""}">
+      <button class="bench-top" data-cf="bm:${bm.id}"><span class="main"><b>${esc(bm.name)}</b><span class="tag cf">${bm.type === "amrap" ? "AMRAP " + bm.cap + " min" : "For Time"}</span><span class="desc">${esc(bm.desc)}</span></span>
+        <span class="bench-best">${best ? `<b>${esc(benchText(bm, best))}</b><small>${best.rx === false ? "Scaled" : best.rx ? "Rx" : "record"}</small>` : `<small>À tenter</small>`}</span></button>
+      ${open ? `<form class="pr-form" data-bm="${bm.id}">
+          ${bm.type === "amrap"
+            ? `<div class="grid2"><label class="field"><span>Tours</span><input id="bm-r" inputmode="numeric" required></label><label class="field"><span>+ Reps</span><input id="bm-reps" inputmode="numeric"></label></div>`
+            : `<div class="field"><span>Ton temps (min : s)</span><div class="dur dur2"><input id="bm-m" inputmode="numeric" placeholder="4" required aria-label="Minutes"><i>:</i><input id="bm-s" inputmode="numeric" placeholder="35" aria-label="Secondes"></div></div>`}
+          <div class="chips"><button type="button" class="chip" data-bmrx="1" aria-pressed="${S.bmRx !== false}" style="--tc:${DISC.crossfit.color}">Rx</button><button type="button" class="chip" data-bmrx="0" aria-pressed="${S.bmRx === false}" style="--tc:${DISC.crossfit.color}">Scaled</button></div>
+          <button class="btn primary" type="submit">Enregistrer mon résultat</button>
+        </form>
+        ${ents.length ? `<ul class="hist">${ents.slice(0, 8).map(e => `<li><span>${esc(shortDate(e.date))}</span><b>${esc(benchText(bm, e))}</b><small>${e.rx === false ? "Scaled" : e.rx ? "Rx" : ""}</small>${e.manual ? `<button class="icon-btn" data-bmdel="${bm.id}:${e.idx}">Retirer</button>` : `<small class="src">séance</small>`}</li>`).join("")}</ul>` : ""}
+        <button class="add-set" data-bmwod="${bm.id}">Faire ce WOD aujourd’hui ›</button>` : ""}
+    </div>`;
+  }).join("");
+}
+$("cfToday").onclick = () => { go("seances"); openDay(todayK(), "crossfit"); };
+$("v-crossfit").addEventListener("click", e => {
+  const t = e.target.closest("[data-cf]");
+  if (t) { S.cfOpen = S.cfOpen === t.dataset.cf ? null : t.dataset.cf; S.bmRx = true; renderCrossfit(); return; }
+  const rx = e.target.closest("[data-bmrx]");
+  if (rx) { S.bmRx = rx.dataset.bmrx === "1"; rx.parentElement.querySelectorAll("[data-bmrx]").forEach(x => x.setAttribute("aria-pressed", String(x === rx))); return; }
+  const pd = e.target.closest("[data-prdel]");
+  if (pd) { if (!armed(pd, "Confirmer")) return; const [id, idx] = pd.dataset.prdel.split(":"); const cf = cfData(); cf.prs[id].splice(+idx, 1); saveProfile({ cf }); renderCrossfit(); return; }
+  const bd = e.target.closest("[data-bmdel]");
+  if (bd) { if (!armed(bd, "Confirmer")) return; const [id, idx] = bd.dataset.bmdel.split(":"); const cf = cfData(); cf.bench[id].splice(+idx, 1); saveProfile({ cf }); renderCrossfit(); return; }
+  const bw = e.target.closest("[data-bmwod]");
+  if (bw) {
+    const bm = BENCH.find(x => x.id === bw.dataset.bmwod), k = todayK();
+    go("seances");
+    if (S.days[k]) { openDay(k); return; }
+    openDay(k, "crossfit");
+    Object.assign(S.cur.wod, { name: bm.name, format: bm.type === "amrap" ? "AMRAP" : "For Time", cap: bm.cap || "", moves: clone(bm.moves) });
+    changed(); renderSheet();
+  }
+});
+$("v-crossfit").addEventListener("submit", e => {
+  e.preventDefault();
+  const f = e.target, cf = cfData(), date = todayK();
+  if (f.dataset.pr) {
+    const kg = numOr($("pr-kg").value); if (kg === "" || kg <= 0) return;
+    (cf.prs[f.dataset.pr] = cf.prs[f.dataset.pr] || []).push({ kg, date });
+  } else if (f.dataset.bm) {
+    const bm = BENCH.find(x => x.id === f.dataset.bm), entry = { date, rx: S.bmRx !== false };
+    if (bm.type === "amrap") { const r = intOr($("bm-r").value); if (r === "") return; entry.r = r; entry.reps = intOr($("bm-reps").value) || 0; }
+    else { const t = (intOr($("bm-m").value) || 0) * 60 + (intOr($("bm-s").value) || 0); if (!t) return; entry.t = t; }
+    (cf.bench[bm.id] = cf.bench[bm.id] || []).push(entry);
+  }
+  saveProfile({ cf }); renderCrossfit();
+});
 
 /* ============================================================
    Minuteur de repos
@@ -851,7 +1226,7 @@ function maybeInvite() {
    ============================================================ */
 const FAQ = [
   { q: "Comment noter une séance ?", k: "noter seance ajouter entrainement jour calendrier creer",
-    a: "Va dans Séances, puis touche le jour voulu dans le calendrier (ou « Noter la séance du jour »).\nDonne un titre, choisis le type (Push, Pull, Jambes…), puis ajoute tes exercices." },
+    a: "Va dans Séances, puis touche le jour voulu dans le calendrier (ou « Noter la séance du jour »).\nChoisis ton activité : Musculation, CrossFit, Callisthénie ou Course à pied. Chaque activité a sa fiche adaptée." },
   { q: "Comment ajouter des séries ?", k: "serie series repetition reps poids kg exercice ajouter",
     a: "Dans ta séance, touche « + Ajouter un exercice », écris son nom, puis remplis Reps et Poids pour chaque série.\n« + Ajouter une série » recopie la série précédente pour aller plus vite." },
   { q: "Comment marche le temps de repos ?", k: "repos minuteur timer chrono temps pause recuperation",
@@ -882,6 +1257,14 @@ const FAQ = [
     a: "Oui, l’app s’ouvre sans réseau et garde tes modifications. Elles sont envoyées dès que la connexion revient." },
   { q: "Comment supprimer mon compte ?", k: "supprimer compte effacer desinscrire",
     a: "Profil › « Supprimer mon compte et mes données », puis confirme avec ton mot de passe. Tout est effacé définitivement." },
+  { q: "Comment noter une course à pied ?", k: "course courir running footing endurance fondamentale seuil fractionne vma allure distance km",
+    a: "Touche un jour › Course à pied, puis choisis Endurance fondamentale, Seuil ou Fractionné.\nEntre la distance et la durée : ton allure (min/km) et ta vitesse se calculent seules. Pour le seuil et le fractionné, ajoute tes blocs (ex. 10 × 400 m, récup 1:00) et lance le minuteur de récup." },
+  { q: "Comment noter un WOD de CrossFit ?", k: "crossfit wod amrap emom tabata time chipper rx scaled",
+    a: "Touche un jour › CrossFit. Choisis le format (For Time, AMRAP, EMOM…), écris les mouvements, puis ton score et Rx ou Scaled.\nÉcris « Fran », « Murph »… dans le nom du WOD : les mouvements se remplissent tout seuls." },
+  { q: "Où voir mes records de CrossFit ?", k: "record 1rm pr charge max benchmark girls fran murph cindy",
+    a: "Sur l’accueil, touche CrossFit : tu y notes tes records (1RM) en back squat, clean, snatch… et tes temps sur les WOD de référence comme Fran ou Murph." },
+  { q: "Comment noter une séance de callisthénie ?", k: "callisthenie calisthenics street workout traction dips muscle front lever planche handstand poids corps",
+    a: "Touche un jour › Callisthénie. Ajoute tes exercices en un toucher (Tractions, Dips, Front lever…). Pour les figures tenues, touche « Reps ⇄ » pour noter des secondes. La colonne Lest sert si tu t’alourdis." },
   { q: "Comment contacter le créateur ?", k: "contact contacter createur probleme bug aide reclamation idee",
     a: "Touche « Contact » en bas de l’accueil, choisis un objet et écris ton message : il arrive directement chez moi." }
 ];
@@ -903,7 +1286,7 @@ function helpOpen() {
   if (!$("helpMsgs").children.length) {
     const who = S.profile && S.profile.pseudo ? " " + S.profile.pseudo : "";
     helpAdd("Salut" + who + " 👋 Je réponds aux questions fréquentes sur l’app. Choisis une question ou écris la tienne.", "bot");
-    helpSuggest([0, 2, 3, 5, 8, 10], false);
+    helpSuggest([0, 16, 17, 2, 5, 8], false);
   }
 }
 function helpClose() { $("helpPanel").hidden = true; updateFab(); }
@@ -934,7 +1317,7 @@ $("helpForm").addEventListener("submit", e => {
     }
   }, 300);
 });
-const FAB_SCREENS = ["home", "seances", "nutrition", "complements", "creatine", "contact", "profile"];
+const FAB_SCREENS = ["home", "seances", "nutrition", "complements", "creatine", "contact", "profile", "crossfit"];
 function updateFab() { $("helpFab").hidden = !FAB_SCREENS.includes(S.screen) || !$("helpPanel").hidden; }
 
 /* ============================================================
