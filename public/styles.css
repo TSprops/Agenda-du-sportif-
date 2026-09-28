@@ -450,3 +450,15 @@ body.sheet-open .help-hint{display:none}
 #sndVol{width:100%;accent-color:var(--red);height:32px}
 #v-hub .pr-kg,#v-hub .pr-row .arrow{color:var(--tc)}
 :root[data-bg="clair"] #v-hub .pr-kg,:root[data-bg="clair"] #v-hub .pr-row .arrow{color:color-mix(in srgb,var(--tc) 70%,#000)}
+
+/* Progression automatique des séries */
+.set-n{width:34px;height:34px;border-radius:50%;font-family:var(--display);font-weight:800;font-size:18px;color:inherit;background:transparent}
+.sets tr.done .set-n{background:color-mix(in srgb,#2FBF71 18%,transparent)}
+.sets tr.cur .set-n{background:var(--red);color:var(--on-red);box-shadow:0 0 12px color-mix(in srgb,var(--red) 50%,transparent)}
+.sets tr.next .num{border-style:dashed;border-color:color-mix(in srgb,var(--red) 60%,var(--line))}
+.sets tr.next td.n{color:var(--red-hi)}
+.sets tr.flash .num{animation:setFlash 1.5s ease-out}
+@keyframes setFlash{0%{box-shadow:0 0 0 1px var(--red),0 0 28px var(--red)}100%{box-shadow:0 0 0 1px var(--red),0 0 14px color-mix(in srgb,var(--red) 30%,transparent)}}
+.set-go{height:46px;font-size:14.5px;margin-top:-2px}
+.set-go:disabled{opacity:.55;box-shadow:none}
+@media (prefers-reduced-motion: reduce){.sets tr.flash .num{animation:none}}

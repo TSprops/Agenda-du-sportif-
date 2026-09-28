@@ -7,7 +7,7 @@ import {
 import { firebaseConfig } from "./firebase-config.js";
 
 /* Version : si la page et le code ne correspondent pas (ancien fichier en cache), on recharge proprement. */
-const APP_VERSION = "8";
+const APP_VERSION = "9";
 if (window.APP_PAGE_VERSION !== APP_VERSION) {
   let tried = false; try { tried = sessionStorage.getItem("reload-v" + APP_VERSION) === "1"; sessionStorage.setItem("reload-v" + APP_VERSION, "1"); } catch (e) { /* stockage bloqué */ }
   if (!tried && window.__repairApp) { window.__repairApp(); throw new Error("Mise à jour en cours"); }
@@ -566,18 +566,57 @@ function lastComparable(c, before) {
   if (disc === "muscu" && !c.typeId) return null;
   return Object.keys(S.days).filter(k => k < before && discOf(S.days[k]) === disc && (disc === "calis" || S.days[k].typeId === c.typeId) && (S.days[k].exercises || []).length).sort().pop();
 }
-// Série en cours : la première série sans répétitions ; les séries remplies sont « faites ».
-function curSet(ex) { const i = (ex.sets || []).findIndex(s => s.reps === "" || s.reps == null); return i; }
-function setState(ex, j) { const s = ex.sets[j], c = curSet(ex); return s.reps !== "" && s.reps != null ? "done" : j === c ? "cur" : ""; }
-function setNowText(ex) {
-  const n = (ex.sets || []).length, c = curSet(ex);
-  if (!n) return "";
-  return c === -1 ? `<span class="ok">✓ Toutes les séries sont faites</span>` : `<span class="dot-live"></span>Série en cours : <b>${c + 1}</b> / ${n}`;
+// Progression des séries : une série est « faite » si elle est cochée ou si ses répétitions sont remplies.
+function isDone(st) { return st.done === true || (st.done !== false && st.reps !== "" && st.reps != null); }
+const resting = i => !!(RT.tick && RT.ex === i && RT.day === S.open);
+function activeSet(ex, i) {
+  if (resting(i)) return -1;
+  const sets = ex.sets || [];
+  if (typeof ex.cur === "number" && sets[ex.cur] && !isDone(sets[ex.cur])) return ex.cur;
+  return sets.findIndex(st => !isDone(st));
 }
+// Exercice en cours : celui choisi en dernier s'il reste des séries, sinon le premier non terminé.
+function focusEx() {
+  const L = (S.cur && S.cur.exercises) || [];
+  if (RT.tick && RT.day === S.open && RT.ex != null && L[RT.ex]) return RT.ex;
+  if (typeof S.cur.focus === "number" && L[S.cur.focus] && (L[S.cur.focus].sets || []).some(st => !isDone(st))) return S.cur.focus;
+  return L.findIndex(ex => (ex.sets || []).some(st => !isDone(st)));
+}
+function setState(ex, j, i) {
+  if (isDone(ex.sets[j])) return "done";
+  if (j === activeSet(ex, i) && i === focusEx()) return "cur";
+  if (resting(i) && j === (ex.sets || []).findIndex(st => !isDone(st))) return "next";
+  return "";
+}
+function setNowText(ex, i) {
+  const sets = ex.sets || [], n = sets.length; if (!n) return "";
+  if (resting(i)) { const nx = sets.findIndex(st => !isDone(st)); return nx === -1 ? `<span class="ok">✓ Dernière série faite · repos</span>` : `⏸ Repos · série <b>${nx + 1}</b> ensuite`; }
+  const a = activeSet(ex, i);
+  if (a === -1) return `<span class="ok">✓ Toutes les séries sont faites</span>`;
+  return i === focusEx() ? `<span class="dot-live"></span>Série en cours : <b>${a + 1}</b> / ${n}` : `À faire · ${sets.filter(isDone).length} / ${n} séries`;
+}
+function goLabel(ex, i) {
+  const a = activeSet(ex, i);
+  if (resting(i)) return "⏸ Repos en cours…";
+  return a === -1 ? "⏱ Lancer un repos" : `✓ Série ${a + 1} finie · repos ${fmtRest(restOf(ex))}`;
+}
+function refreshAllSets() { ((S.cur && S.cur.exercises) || []).forEach((_, k) => refreshSets(k)); }
 function refreshSets(i) {
-  const ex = S.cur.exercises[i]; if (!ex) return;
-  ex.sets.forEach((_, j) => { const r = $("row-" + i + "-" + j); if (r) r.className = setState(ex, j); });
-  const sn = $("sn-" + i); if (sn) sn.innerHTML = setNowText(ex);
+  const ex = S.cur && S.cur.exercises && S.cur.exercises[i]; if (!ex) return;
+  ex.sets.forEach((_, j) => { const r = $("row-" + i + "-" + j); if (r) r.className = setState(ex, j, i); });
+  const sn = $("sn-" + i); if (sn) sn.innerHTML = setNowText(ex, i);
+  const g = $("go-" + i); if (g) { g.textContent = goLabel(ex, i); g.disabled = resting(i); }
+}
+// Fin du repos : la série suivante s'allume et l'écran défile jusqu'à elle (ou jusqu'à l'exercice suivant).
+function advanceAfterRest(i) {
+  if (!S.cur || !S.cur.exercises || i == null) return;
+  let ei = i, a = activeSet(S.cur.exercises[i], i);
+  if (a === -1) { ei = S.cur.exercises.findIndex((ex, k) => k > i && activeSet(ex, k) !== -1); if (ei === -1) ei = S.cur.exercises.findIndex((ex, k) => activeSet(ex, k) !== -1); }
+  S.cur.focus = ei === -1 ? null : ei; changed(); refreshAllSets();
+  if (ei === -1) return;
+  a = activeSet(S.cur.exercises[ei], ei);
+  const row = $("row-" + ei + "-" + a);
+  if (row) { row.classList.add("flash"); row.scrollIntoView({ block: "center", behavior: "smooth" }); setTimeout(() => row.classList.remove("flash"), 1600); }
 }
 function exHTML(ex, i, disc) {
   const r = ex.rpe || 0, calis = disc === "calis";
@@ -585,12 +624,13 @@ function exHTML(ex, i, disc) {
   return `<article class="ex">
   <div class="ex-head"><span class="ex-num">${pad(i + 1)}</span><input id="exn-${i}" class="ex-name" data-f="ex-name" data-ex="${i}" placeholder="${calis ? "ex. Tractions" : "Nom de l’exercice"}" value="${esc(ex.name)}" autocomplete="off">${calis ? `<button class="icon-btn" data-a="hold" data-ex="${i}" aria-label="Changer répétitions ou tenue">${ex.hold ? "Tenue" : "Reps"} ⇄</button>` : ""}<button class="icon-btn" data-a="del-ex" data-ex="${i}" aria-label="Supprimer l’exercice">Retirer</button></div>
   <div class="ex-stats" id="st-${i}">${exStats(ex, disc)}</div>
-  <div class="set-now" id="sn-${i}">${setNowText(ex)}</div>
+  <div class="set-now" id="sn-${i}">${setNowText(ex, i)}</div>
   <table class="sets"><thead><tr><th style="text-align:center">Série</th><th>${col1}</th><th>${col2}</th><th></th></tr></thead><tbody>
-  ${(ex.sets || []).map((s, j) => `<tr id="row-${i}-${j}" class="${setState(ex, j)}"><td class="n">${j + 1}</td><td><input id="r-${i}-${j}" class="num" inputmode="numeric" data-f="reps" data-ex="${i}" data-s="${j}" value="${esc(s.reps)}" placeholder="${s.target !== undefined && s.target !== "" ? esc(s.target) : "–"}" aria-label="${col1} série ${j + 1}"></td><td><input id="k-${i}-${j}" class="num" inputmode="decimal" data-f="kg" data-ex="${i}" data-s="${j}" value="${esc(s.kg)}" placeholder="${calis ? "0" : "–"}" aria-label="${col2} série ${j + 1}"></td><td class="x"><button class="icon-btn" data-a="del-set" data-ex="${i}" data-s="${j}" aria-label="Supprimer la série ${j + 1}">−</button></td></tr>`).join("")}
+  ${(ex.sets || []).map((s, j) => `<tr id="row-${i}-${j}" class="${setState(ex, j, i)}"><td class="n"><button class="set-n" data-a="set-toggle" data-ex="${i}" data-s="${j}" aria-label="Cocher ou décocher la série ${j + 1}">${j + 1}</button></td><td><input id="r-${i}-${j}" class="num" inputmode="numeric" data-f="reps" data-ex="${i}" data-s="${j}" value="${esc(s.reps)}" placeholder="${s.target !== undefined && s.target !== "" ? esc(s.target) : "–"}" aria-label="${col1} série ${j + 1}"></td><td><input id="k-${i}-${j}" class="num" inputmode="decimal" data-f="kg" data-ex="${i}" data-s="${j}" value="${esc(s.kg)}" placeholder="${calis ? "0" : "–"}" aria-label="${col2} série ${j + 1}"></td><td class="x"><button class="icon-btn" data-a="del-set" data-ex="${i}" data-s="${j}" aria-label="Supprimer la série ${j + 1}">−</button></td></tr>`).join("")}
   </tbody></table>
+  <button class="btn primary set-go" id="go-${i}" data-a="set-go" data-ex="${i}"${resting(i) ? " disabled" : ""}>${goLabel(ex, i)}</button>
   <button class="add-set" data-a="add-set" data-ex="${i}">+ Ajouter une série</button>
-  <div class="rest-row"><div class="lbl">Repos entre les séries</div><div class="rest-ctl"><button class="step" data-a="rest-dec" data-ex="${i}" aria-label="Moins de repos">−</button><span class="rest-val" id="rv-${i}">${fmtRest(restOf(ex))}</span><button class="step" data-a="rest-inc" data-ex="${i}" aria-label="Plus de repos">+</button><button class="rest-go" data-a="rest-go" data-ex="${i}">⏱ Lancer</button></div></div>
+  <div class="rest-row"><div class="lbl">Repos entre les séries</div><div class="rest-ctl"><button class="step" data-a="rest-dec" data-ex="${i}" aria-label="Moins de repos">−</button><span class="rest-val" id="rv-${i}">${fmtRest(restOf(ex))}</span><button class="step" data-a="rest-inc" data-ex="${i}" aria-label="Plus de repos">+</button></div></div>
   <div><div class="lbl">Difficulté (RPE) <em>${r ? r + "/10 · " : ""}${rpeLabel(r)}</em></div>
   <div class="rpe-row" role="group" aria-label="Difficulté de 1 à 10">${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(v => `<button data-a="rpe" data-ex="${i}" data-v="${v}" class="${r && v < r ? "lit" : ""}" style="--rc:${rpeColor(r || v)}" aria-pressed="${v === r}">${v}</button>`).join("")}</div></div>
   <textarea id="exr-${i}" data-f="ex-note" data-ex="${i}" placeholder="Ressenti : technique, sensations, douleurs…" rows="2">${esc(ex.note)}</textarea>
@@ -748,7 +788,7 @@ $("sheet").addEventListener("input", e => {
   const c = S.cur, i = +e.target.dataset.ex, j = +e.target.dataset.s, v = e.target.value, t = v.trim();
   if (f === "title") c.title = v; else if (f === "note") c.note = v;
   else if (f === "ex-name") c.exercises[i].name = v; else if (f === "ex-note") c.exercises[i].note = v;
-  else if (f === "reps" || f === "kg") { c.exercises[i].sets[j][f] = t === "" ? "" : numOr(v); $("st-" + i).textContent = exStats(c.exercises[i], c.disc); refreshSets(i); }
+  else if (f === "reps" || f === "kg") { c.exercises[i].sets[j][f] = t === "" ? "" : numOr(v); $("st-" + i).textContent = exStats(c.exercises[i], c.disc); refreshAllSets(); }
   else if (f.startsWith("run-")) {
     const r = c.run = c.run || { blocks: [] }, fld = f.slice(4);
     r[fld] = t === "" ? "" : fld === "dist" ? numOr(v) : intOr(v);
@@ -797,9 +837,24 @@ $("sheet").addEventListener("click", e => {
   else if (a === "photo") { openViewer(+b.dataset.i); return; }
   else if (a === "rest-inc" || a === "rest-dec") {
     const ex = c.exercises[i], v = Math.min(600, Math.max(0, restOf(ex) + (a === "rest-inc" ? 15 : -15)));
-    ex.rest = v; $("rv-" + i).textContent = fmtRest(v); changed(); return;
+    ex.rest = v; $("rv-" + i).textContent = fmtRest(v); refreshSets(i); changed(); return;
   }
-  else if (a === "rest-go") { startRest(restOf(c.exercises[i]), c.exercises[i].name); return; }
+  else if (a === "rest-go" || a === "set-go") {
+    const ex = c.exercises[i], cur = activeSet(ex, i);
+    if (a === "set-go" && cur !== -1) {
+      const st = ex.sets[cur]; st.done = true;
+      if ((st.reps === "" || st.reps == null) && st.target !== undefined && st.target !== "") st.reps = st.target;
+      const nx = ex.sets.findIndex(x => !isDone(x)); ex.cur = nx === -1 ? null : nx;
+      const rIn = $("r-" + i + "-" + cur); if (rIn) rIn.value = st.reps ?? "";
+      $("st-" + i).textContent = exStats(ex, c.disc); changed();
+    }
+    c.focus = i; startRest(restOf(ex), ex.name, { day: S.open, ex: i }); refreshAllSets(); return;
+  }
+  else if (a === "set-toggle") {
+    const ex = c.exercises[i], j = +b.dataset.s, st = ex.sets[j];
+    st.done = !isDone(st); if (!st.done) { ex.cur = j; c.focus = i; }
+    $("st-" + i).textContent = exStats(ex, c.disc); refreshAllSets(); changed(); return;
+  }
   else if (a === "rpe") { const v = +b.dataset.v; c.exercises[i].rpe = c.exercises[i].rpe === v ? 0 : v; }
   else if (a === "srpe") { const v = +b.dataset.v; c.rpe = c.rpe === v ? 0 : v; }
   else if (a === "bl-add") { const bl = c.run.blocks, l = bl[bl.length - 1]; bl.push(l ? { ...l } : { rep: "", eff: "", unit: c.runType === "seuil" ? "min" : "m", pace: "", rec: "" }); }
@@ -1409,8 +1464,10 @@ function playSound(kind) {
     else [0, 0.28, 0.56].forEach(t => tone(ctx, master, 880, t, 0.2, "square", 0.9));
   } catch (e) { /* son indisponible */ }
 }
-function startRest(seconds, name) {
+function startRest(seconds, name, ctx) {
   if (!seconds) seconds = 90;
+  if (RT.tick && RT.ex != null) { const prev = RT.ex; RT.tick = (clearInterval(RT.tick), null); RT.ex = null; advanceAfterRest(prev); }
+  RT.day = ctx ? ctx.day : null; RT.ex = ctx ? ctx.ex : null;
   audioReady(); // débloque le son (il faut un toucher de l'utilisateur sur iPhone)
   RT.total = seconds; RT.end = Date.now() + seconds * 1000; RT.lastLeft = null;
   $("rtLbl").textContent = name ? "Repos · " + name : "Repos";
@@ -1427,11 +1484,15 @@ function drawRest() {
     clearInterval(RT.tick); RT.tick = null;
     $("restTimer").classList.add("done"); $("rtLbl").textContent = "C’est reparti !"; $("rtTime").textContent = "0:00"; $("rtSkip").textContent = "OK";
     playSound(); if (navigator.vibrate) navigator.vibrate([300, 120, 300, 120, 300]);
+    const ei = RT.ex; RT.ex = null; if (S.open && S.open === RT.day) advanceAfterRest(ei);
     setTimeout(() => { if (!RT.tick) $("restTimer").hidden = true; }, 6000);
   }
 }
 $("rtPlus").onclick = () => { if (RT.tick) { RT.end += 15000; RT.total += 15; drawRest(); } else startRest(15); };
-$("rtSkip").onclick = () => { clearInterval(RT.tick); RT.tick = null; $("restTimer").hidden = true; };
+$("rtSkip").onclick = () => {
+  const running = !!RT.tick; clearInterval(RT.tick); RT.tick = null; $("restTimer").hidden = true;
+  if (running) { const ei = RT.ex; RT.ex = null; if (S.open && S.open === RT.day) advanceAfterRest(ei); }
+};
 
 // Réglages du son (page Profil)
 function renderSound() {
@@ -1508,7 +1569,7 @@ const FAQ = [
   { q: "Comment ajouter des séries ?", k: "serie series repetition reps poids kg exercice ajouter",
     a: "Dans ta séance, touche « + Ajouter un exercice », écris son nom, puis remplis Reps et Poids pour chaque série.\n« + Ajouter une série » recopie la série précédente pour aller plus vite." },
   { q: "Comment marche le temps de repos ?", k: "repos minuteur timer chrono temps pause recuperation",
-    a: "Sous chaque exercice, règle ton temps de repos avec − et + (par pas de 15 s).\nTouche « ⏱ Lancer » après une série : un minuteur s’affiche en bas et sonne à la fin. « +15 s » ajoute du temps, « Passer » l’arrête." },
+    a: "Sous chaque exercice, règle ton temps de repos avec − et + (par pas de 15 s).\nAprès ta série, touche « ✓ Série 1 finie · repos » : la série passe en vert et le minuteur démarre. À la fin du repos, la série suivante s’allume toute seule. « +15 s » ajoute du temps, « Passer » passe directement à la série suivante." },
   { q: "Est-ce que ma séance s’enregistre ?", k: "enregistrer sauvegarder sauvegarde perdu perdre bouton valider",
     a: "Oui, tout s’enregistre tout seul pendant que tu écris, pas besoin de bouton.\nUn message rouge s’affiche en haut seulement s’il y a un problème de connexion." },
   { q: "C’est quoi le RPE ?", k: "rpe difficulte dur effort note",
