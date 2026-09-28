@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>L’agenda du sportif</title>
+<meta name="description" content="Note tes séances de musculation, ta nutrition et suis tes progrès.">
+<meta name="theme-color" content="#0A0A0B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Agenda sportif">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<!-- ============ CONFIGURATION MANQUANTE ============ -->
+<div class="setup" id="v-setup" hidden>
+  <span class="onair" style="align-self:flex-start"><i></i>Configuration</span>
+  <h1 class="vtitle" style="margin:0">Firebase n’est pas encore configuré</h1>
+  <p>Colle le bloc <code>firebaseConfig</code> de ta console Firebase dans <code>public/firebase-config.js</code>, puis redéploie. Le fichier README.md explique chaque étape.</p>
+</div>
+<!-- ============ CHARGEMENT ============ -->
+<main class="app view splash" id="v-splash">
+  <div class="home-head"><span class="onair"><i></i>Chargement</span><h1 class="brand-title">L’agenda <span>du sportif</span></h1></div>
+</main>
+
+<!-- ============ CONNEXION ============ -->
+<main class="app view login" id="v-login" hidden>
+  <div class="home-head">
+    <span class="onair"><i></i>Bienvenue</span>
+    <h1 class="brand-title">L’agenda <span>du sportif</span></h1>
+    <p class="hint">Séances, nutrition et progrès, au même endroit.</p>
+  </div>
+  <section class="card">
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" id="tabIn" aria-selected="true">Connexion</button>
+      <button type="button" role="tab" id="tabUp" aria-selected="false">Créer un compte</button>
+    </div>
+    <form id="authForm" autocomplete="on" style="display:flex;flex-direction:column;gap:12px">
+      <label class="field"><span>E-mail</span><input id="auEmail" type="email" inputmode="email" autocomplete="email" required placeholder="prenom@exemple.fr"></label>
+      <label class="field"><span>Mot de passe</span><input id="auPass" type="password" autocomplete="current-password" required minlength="6" placeholder="6 caractères minimum"></label>
+      <p class="err" id="auErr" hidden></p>
+      <p class="ok-msg" id="auOk" hidden></p>
+      <button class="btn primary" type="submit" id="auSubmit">Se connecter</button>
+      <button class="linkish" type="button" id="auForgot">Mot de passe oublié ?</button>
+    </form>
+  </section>
+</main>
+
+<!-- ============ PROFIL À COMPLÉTER (1re connexion) ============ -->
+<main class="app view login" id="v-onboard" hidden>
+  <div class="home-head"><span class="onair"><i></i>Dernière étape</span><h1 class="brand-title">Ton <span>profil</span></h1></div>
+  <form class="card" id="signup" autocomplete="off">
+    <div style="display:flex;flex-direction:column;gap:8px"><h2 class="vtitle" style="font-size:30px;margin:0">Présente-toi</h2><p class="hint">Ton compte t’est attribué personnellement : tu retrouves toutes tes données à chaque connexion, sur tous tes appareils.</p></div>
+    <div id="suFields"></div>
+    <p class="err" id="suErr" hidden></p>
+    <button class="btn primary" type="submit">Terminer mon inscription</button>
+  </form>
+</main>
+
+<!-- ============ ACCUEIL ============ -->
+<main class="app home view" id="v-home" hidden>
+  <div class="home-bar"><button class="profile-btn" data-go="profile" aria-label="Mon profil"><span id="homeAvatar"></span><span>Profil</span></button></div>
+  <header class="home-head">
+    <p class="home-date" id="homeDate"></p>
+    <h1 class="brand-title">L’agenda <span>du sportif</span></h1>
+  </header>
+  <nav class="toc" aria-label="Sommaire">
+    <button class="toc-item" data-go="seances">
+      <span class="toc-top"><span class="toc-name">Séances</span><span class="arrow" aria-hidden="true">›</span></span>
+      <span class="toc-sub" id="homeSeancesSub"></span>
+      <span class="week" id="homeWeek" aria-label="Séances de la semaine"></span>
+    </button>
+    <button class="toc-item" data-go="nutrition">
+      <span class="toc-top"><span class="toc-name">Nutrition</span><span class="arrow" aria-hidden="true">›</span></span>
+      <span class="toc-sub">Compléments et créatine</span>
+      <span class="pills" id="homeNut"></span>
+    </button>
+  </nav>
+  <button class="contact-link" data-go="contact">Contact</button>
+  <p class="note-mode" id="mode"></p>
+</main>
+
+<!-- ============ SÉANCES ============ -->
+<main class="app view" id="v-seances" hidden>
+  <button class="back" data-go="home">‹ Accueil</button>
+  <header class="top" style="margin-top:-14px">
+    <div><div class="eyebrow-s">Séances</div><h1 class="month" id="monthTitle"></h1></div>
+    <div class="nav"><button id="prev" aria-label="Mois précédent">‹</button><button id="next" aria-label="Mois suivant">›</button></div>
+  </header>
+  <section class="cal" id="seancesCal" aria-label="Calendrier">
+    <div class="dow"><span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span></div>
+    <div class="grid" id="grid"></div>
+    <div class="legend" id="legend"></div>
+  </section>
+  <div class="cta">
+    <button class="btn primary" id="today">Noter la séance du jour</button>
+    <button class="btn" id="types">Types</button>
+  </div>
+  <section>
+    <h2 class="h2" id="sumTitle"></h2>
+    <div class="stats" id="stats" style="margin-bottom:12px"></div>
+    <div class="list" id="list"></div>
+  </section>
+</main>
+
+<!-- ============ NUTRITION ============ -->
+<main class="app view" id="v-nutrition" hidden>
+  <button class="back" data-go="home">‹ Accueil</button>
+  <h1 class="vtitle">Nutrition</h1>
+  <div class="menu">
+    <button class="menu-card" data-go="complements"><span class="mark" id="nutCpMark">0</span><span class="mc"><b>Compléments</b><span class="s" id="nutCpSub"></span></span><span class="arrow" aria-hidden="true">›</span></button>
+    <button class="menu-card" data-go="creatine"><span class="mark" id="nutCrMark">–</span><span class="mc"><b>Créatine</b><span class="s" id="nutCrSub"></span></span><span class="arrow" aria-hidden="true">›</span></button>
+  </div>
+</main>
+
+<main class="app view" id="v-complements" hidden>
+  <button class="back" data-go="nutrition">‹ Nutrition</button>
+  <h1 class="vtitle">Compléments</h1>
+  <div class="daynav"><button id="cpPrev" aria-label="Jour précédent">‹</button><span id="cpDate"></span><button id="cpNext" aria-label="Jour suivant">›</button></div>
+  <section><h2 class="h2">Ajout rapide</h2><div class="chips" id="cpChips"></div></section>
+  <form class="card" id="cpForm" autocomplete="off">
+    <div class="lbl">Autre complément</div>
+    <div class="two">
+      <label class="field"><span>Nom</span><input id="cpName" list="cpList" placeholder="ex. Whey" required></label>
+      <label class="field"><span>Dose</span><input id="cpDose" placeholder="ex. 30 g"></label>
+    </div>
+    <datalist id="cpList"></datalist>
+    <button class="btn primary" type="submit">Ajouter</button>
+  </form>
+  <section><h2 class="h2" id="cpListTitle">Pris ce jour</h2><div class="card" id="cpItems" style="gap:0"></div></section>
+</main>
+
+<main class="app view" id="v-creatine" hidden>
+  <button class="back" data-go="nutrition">‹ Nutrition</button>
+  <h1 class="vtitle">Créatine</h1>
+  <div class="crea-wrap"><button class="crea-btn" id="creaBtn"></button><p class="hint" id="creaHint" style="text-align:center"></p></div>
+  <div class="stats" id="creaStats"></div>
+  <section class="cal" aria-label="Calendrier créatine">
+    <div class="top" style="padding:0 4px 10px;align-items:center">
+      <b id="creaMonth" style="font-family:var(--display);font-size:22px;text-transform:uppercase;white-space:nowrap"></b>
+      <div class="nav"><button id="crPrev" aria-label="Mois précédent">‹</button><button id="crNext" aria-label="Mois suivant">›</button></div>
+    </div>
+    <div class="dow"><span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span></div>
+    <div class="grid" id="creaGrid"></div>
+    <p class="hint" style="padding:10px 4px 0">Oublié un autre jour ? Touche la date pour la cocher ou la décocher.</p>
+  </section>
+  <label class="card dose" for="creaDose"><span><b>Dose quotidienne</b><br><span class="hint">en grammes</span></span><input id="creaDose" inputmode="decimal" value="5"></label>
+</main>
+
+<!-- ============ CONTACT ============ -->
+<main class="app view" id="v-contact" hidden>
+  <button class="back" data-go="home">‹ Accueil</button>
+  <h1 class="vtitle">Contact</h1>
+  <div class="menu">
+    <button class="menu-card" data-go="contactform"><span class="mark ok">@</span><span class="mc"><b>Contactez-moi</b><span class="s">Aide, réclamation, idée ou problème : ton message arrive directement chez moi.</span></span><span class="arrow" aria-hidden="true">›</span></button>
+  </div>
+  <section id="myMsgsWrap" hidden><h2 class="h2">Mes messages envoyés</h2><div class="card" id="myMsgs" style="gap:0"></div></section>
+</main>
+
+<main class="app view" id="v-contactform" hidden>
+  <button class="back" data-go="contact">‹ Contact</button>
+  <h1 class="vtitle">Contactez-moi</h1>
+  <form class="card" id="ctForm" autocomplete="off">
+    <div class="lbl">Objet</div>
+    <div class="chips" id="ctObjets" role="group" aria-label="Objet du message"></div>
+    <label class="field"><span>Ton message</span><textarea id="ctText" rows="7" placeholder="Explique-moi en quelques lignes…" style="min-height:150px;height:auto;padding-block:10px"></textarea></label>
+    <label class="field"><span>Ton e-mail pour la réponse (facultatif)</span><input id="ctMail" type="email" inputmode="email" placeholder="prenom@exemple.fr"></label>
+    <p class="err" id="ctErr" hidden></p>
+    <button class="btn primary" type="submit" id="ctSend">Envoyer</button>
+  </form>
+  <section class="card" id="ctDone" hidden style="text-align:center;align-items:center">
+    <span class="onair"><i></i>Envoyé</span>
+    <b style="font-size:18px">Message envoyé, merci !</b>
+    <p class="hint">Je le lis au plus vite. Tu retrouves tes messages et leur statut dans la page Contact.</p>
+    <button class="btn" data-go="home" style="align-self:stretch">Retour à l’accueil</button>
+  </section>
+</main>
+
+<!-- ============ PROFIL ============ -->
+<main class="app view" id="v-profile" hidden>
+  <button class="back" data-go="home">‹ Accueil</button>
+  <h1 class="vtitle">Mon profil</h1>
+  <div class="stats" id="pfStats"></div>
+  <form class="card" id="pfForm" autocomplete="off">
+    <div id="pfFields"></div>
+    <p class="hint" id="pfMsg" hidden></p>
+    <button class="btn primary" type="submit">Enregistrer</button>
+  </form>
+  <button class="btn" id="adminBtn" data-go="admin" hidden>Administration</button>
+  <section class="card">
+    <div class="lbl">Mon compte</div>
+    <p class="hint" id="pfEmail"></p>
+    <button class="btn" id="pwReset">Changer mon mot de passe</button>
+    <p class="ok-msg" id="pwMsg" hidden></p>
+    <button class="btn" id="logout">Se déconnecter</button>
+  </section>
+  <section class="card">
+    <div class="lbl">Zone sensible</div>
+    <button class="btn ghost-danger" id="delAccount">Supprimer mon compte et mes données</button>
+    <form id="delForm" hidden style="display:flex;flex-direction:column;gap:10px">
+      <p class="hint">Cette action efface définitivement ton compte, tes séances, ta nutrition, tes photos et tes messages. Entre ton mot de passe pour confirmer.</p>
+      <label class="field"><span>Mot de passe</span><input id="delPass" type="password" autocomplete="current-password" required></label>
+      <p class="err" id="delErr" hidden></p>
+      <button class="btn ghost-danger armed" type="submit" id="delGo">Supprimer définitivement</button>
+    </form>
+  </section>
+</main>
+
+<!-- ============ ADMIN ============ -->
+<main class="app view" id="v-admin" hidden>
+  <button class="back" data-go="profile">‹ Profil</button>
+  <div><span class="onair"><i></i>Accès administrateur</span></div>
+  <h1 class="vtitle" style="margin-top:-8px">Administration</h1>
+  <div id="adminBody"></div>
+</main>
+<main class="app view" id="v-auser" hidden>
+  <button class="back" data-go="admin">‹ Administration</button>
+  <div id="auserBody"></div>
+</main>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Séance"></div>
+<div class="sheet" id="typesSheet" role="dialog" aria-modal="true" aria-label="Types de séance"></div>
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="Photo">
+  <div class="vbar"><button data-a="vclose">Fermer</button><button data-a="vdel">Supprimer la photo</button></div>
+  <img id="viewerImg" alt="Photo de la séance">
+</div>
+</body>
+</html>

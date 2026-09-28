@@ -1,0 +1,16 @@
+{
+  "name": "agenda-du-sportif",
+  "version": "1.0.0",
+  "private": true,
+  "description": "L'agenda du sportif : séances, nutrition, comptes et administration (Firebase).",
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/firebase-entry.js --bundle --format=esm --minify --target=es2020 --outfile=public/vendor/firebase.js",
+    "emulators": "npx firebase-tools emulators:start --only auth,firestore,hosting --project demo-agenda",
+    "deploy": "npx firebase-tools deploy --only hosting,firestore"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "firebase": "^12.3.0"
+  }
+}

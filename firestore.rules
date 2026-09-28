@@ -1,0 +1,57 @@
+rules_version = '2';
+
+// Règles de sécurité de L'agenda du sportif.
+// - Chaque utilisateur lit et écrit uniquement ses propres données (users/{uid}/...).
+// - Les administrateurs (un document dans admins/{uid}, créé à la main dans la console)
+//   lisent toutes les données et gèrent les messages.
+// - Personne ne peut se nommer administrateur depuis l'application.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+    function isAdmin() {
+      return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    function isSelf(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    match /admins/{uid} {
+      allow get: if isSelf(uid);
+      allow list: if isAdmin();
+      allow write: if false;
+    }
+
+    match /users/{uid} {
+      allow read: if isSelf(uid) || isAdmin();
+      allow create, update: if isSelf(uid) && request.resource.data.pseudo is string
+                            && request.resource.data.pseudo.size() > 0
+                            && request.resource.data.pseudo.size() <= 30;
+      allow delete: if isSelf(uid);
+
+      // séances, nutrition, photos
+      match /{collectionName}/{docId} {
+        allow read: if isSelf(uid) || isAdmin();
+        allow write: if isSelf(uid)
+                     && collectionName in ['seances', 'nutrition', 'photos'];
+      }
+    }
+
+    match /messages/{messageId} {
+      allow create: if signedIn()
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.lu == false
+                    && request.resource.data.objet is string
+                    && request.resource.data.objet.size() > 0
+                    && request.resource.data.objet.size() <= 40
+                    && request.resource.data.texte is string
+                    && request.resource.data.texte.size() > 0
+                    && request.resource.data.texte.size() <= 3000;
+      allow read: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow update: if isAdmin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lu']);
+      allow delete: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+    }
+  }
+}
