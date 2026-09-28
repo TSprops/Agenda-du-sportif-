@@ -497,3 +497,10 @@ body.sheet-open .help-hint{display:none}
    (en dessous, l'iPhone zoome tout seul quand on touche un champ). */
 html{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .trow input,.help-form input,.dose input,.field input,.field textarea{font-size:16px}
+
+/* Bandeau discret « Installe l'app » sur l'accueil */
+.install-banner{display:flex;align-items:center;gap:6px;background:var(--red-soft);border:1px solid color-mix(in srgb,var(--red) 40%,transparent);border-radius:14px;padding:8px 6px 8px 12px;margin-top:-12px}
+.ib-open{flex:1;display:flex;align-items:center;gap:10px;text-align:left;font-size:20px}
+.ib-open b{display:block;font-size:14px}
+.ib-open small{display:block;font-size:12px;color:var(--muted);font-weight:500}
+.ib-x{flex:none;width:30px;height:30px;border-radius:50%;color:var(--muted);font-size:12px}

@@ -16,10 +16,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="styles.css?v=12">
+<link rel="stylesheet" href="styles.css?v=13">
 <script>
   // Version de la page : doit correspondre à APP_VERSION dans app.js.
-  window.APP_PAGE_VERSION = "12";
+  window.APP_PAGE_VERSION = "13";
   // Comme une vraie application : pas de zoom avec deux doigts ni en tapant deux fois (Safari ignore parfois la balise viewport).
   ["gesturestart", "gesturechange", "gestureend"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
   document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -46,7 +46,7 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=12"></script>
+<script type="module" src="app.js?v=13"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->
@@ -97,6 +97,10 @@
 <!-- ============ ACCUEIL ============ -->
 <main class="app home view" id="v-home" hidden>
   <div class="home-bar"><button class="profile-btn" data-go="profile" aria-label="Mon profil"><span id="homeAvatar"></span><span>Profil</span></button></div>
+  <div class="install-banner" id="installBanner" hidden>
+    <button type="button" class="ib-open" id="installBannerOpen"><span aria-hidden="true">📲</span><span><b>Installe l’app sur ton téléphone</b><small>Accès en 1 toucher, en plein écran</small></span></button>
+    <button type="button" class="ib-x" id="installBannerClose" aria-label="Masquer ce message">✕</button>
+  </div>
   <header class="home-head">
     <p class="home-date" id="homeDate"></p>
     <h1 class="brand-title">L’agenda <span>du sportif</span></h1>

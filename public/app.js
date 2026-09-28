@@ -7,7 +7,7 @@ import {
 import { firebaseConfig } from "./firebase-config.js";
 
 /* Version : si la page et le code ne correspondent pas (ancien fichier en cache), on recharge proprement. */
-const APP_VERSION = "12";
+const APP_VERSION = "13";
 if (window.APP_PAGE_VERSION !== APP_VERSION) {
   let tried = false; try { tried = sessionStorage.getItem("reload-v" + APP_VERSION) === "1"; sessionStorage.setItem("reload-v" + APP_VERSION, "1"); } catch (e) { /* stockage bloqué */ }
   if (!tried && window.__repairApp) { window.__repairApp(); throw new Error("Mise à jour en cours"); }
@@ -1078,6 +1078,7 @@ function renderNutrition() {
    Accueil
    ============================================================ */
 function renderHome() {
+  refreshInstallBtn();
   const t = new Date(), tk = key(t);
   $("homeDate").innerHTML = `<span>${cap(DAYS[t.getDay()])}</span>${t.getDate()} ${MONTHS[t.getMonth()]} ${t.getFullYear()}`;
   $("homeAvatar").innerHTML = avatarHTML(S.profile, 34);
@@ -1702,6 +1703,8 @@ $("sndTest").onclick = () => playSound();
 const UA = navigator.userAgent;
 const IS_IOS = /iphone|ipad|ipod/i.test(UA) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 const IS_ANDROID = /android/i.test(UA);
+// Navigateur intégré à une autre app (lien ouvert depuis Snapchat, Instagram, Messenger…) : l'installation y est impossible.
+const IN_APP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|Snapchat|musical_ly|TikTok|Twitter|LinkedInApp|Line\//i.test(UA);
 const standalone = () => window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
 let deferredInstall = null;
 window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferredInstall = e; refreshInstallBtn(); });
@@ -1709,12 +1712,22 @@ window.addEventListener("appinstalled", () => { lsSet("install-done", 1); closeI
 function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
 function lsSet(k, v) { try { localStorage.setItem(k, String(v)); } catch (e) { /* stockage bloqué */ } }
 const canInstall = () => !standalone() && !lsGet("install-done") && (IS_IOS || IS_ANDROID || !!deferredInstall);
-function refreshInstallBtn() { const b = $("installBtn"); if (b) b.hidden = !canInstall(); }
+function refreshInstallBtn() {
+  const b = $("installBtn"); if (b) b.hidden = !canInstall();
+  const bn = $("installBanner"); if (bn) bn.hidden = !canInstall() || !!lsGet("install-banner-off");
+}
 const ICON_SHARE = '<svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
 const ICON_PLUS = '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/></svg>';
 function openInstall() {
   if (!canInstall()) return;
-  $("installBody").innerHTML = deferredInstall
+  const link = location.origin + location.pathname;
+  $("installBody").innerHTML = IN_APP
+    ? `<ol class="steps"><li><span class="n">1</span><span>Tu as ouvert le lien depuis une autre app (Snapchat, Instagram…). Il faut l’ouvrir dans <b>${IS_IOS ? "Safari" : "Chrome"}</b>.</span></li>
+         <li><span class="n">2</span><span>Touche <b>•••</b> ou l’icône <b>${IS_IOS ? "boussole" : "navigateur"}</b>, puis <b>Ouvrir dans ${IS_IOS ? "Safari" : "le navigateur"}</b>.</span></li>
+         <li><span class="n">3</span><span>Tu ne trouves pas ? Copie le lien et colle-le dans ${IS_IOS ? "Safari" : "Chrome"}.</span></li></ol>
+       <button type="button" class="btn primary" id="installCopy" style="width:100%">Copier le lien</button>
+       <p class="hint" id="installLink" style="text-align:center;user-select:all;word-break:break-all">${esc(link)}</p>`
+    : deferredInstall
     ? `<button type="button" class="btn primary" id="installGo" style="width:100%">Installer l’application</button>`
     : IS_IOS
       ? `<ol class="steps"><li><span class="n">1</span><span>Touche <b>Partager</b> en bas de Safari</span><span class="ico">${ICON_SHARE}</span></li>
@@ -1724,6 +1737,11 @@ function openInstall() {
       : `<ol class="steps"><li><span class="n">1</span><span>Touche le menu <b>⋮</b> en haut à droite</span></li>
          <li><span class="n">2</span><span>Choisis <b>Installer l’application</b> ou <b>Ajouter à l’écran d’accueil</b></span><span class="ico">${ICON_PLUS}</span></li></ol>`;
   $("installBackdrop").hidden = false; $("installSheet").hidden = false;
+  const cp = $("installCopy");
+  if (cp) cp.onclick = async () => {
+    try { await navigator.clipboard.writeText(link); cp.textContent = "Lien copié ✓"; }
+    catch (e) { const r = document.createRange(); r.selectNodeContents($("installLink")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); cp.textContent = "Lien sélectionné : copie-le"; }
+  };
   const go = $("installGo");
   if (go) go.onclick = async () => {
     const p = deferredInstall; deferredInstall = null; closeInstall();
@@ -1735,6 +1753,8 @@ function closeInstall() { $("installBackdrop").hidden = true; $("installSheet").
 $("installLater").onclick = () => { lsSet("install-later", Date.now()); closeInstall(); };
 $("installBackdrop").onclick = () => { lsSet("install-later", Date.now()); closeInstall(); };
 $("installBtn").onclick = () => openInstall();
+$("installBannerOpen").onclick = () => openInstall();
+$("installBannerClose").onclick = () => { lsSet("install-banner-off", 1); refreshInstallBtn(); };
 let installTimer = null;
 function maybeInvite() {
   clearTimeout(installTimer);
