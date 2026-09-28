@@ -7,7 +7,7 @@ import {
 import { firebaseConfig } from "./firebase-config.js";
 
 /* Version : si la page et le code ne correspondent pas (ancien fichier en cache), on recharge proprement. */
-const APP_VERSION = "9";
+const APP_VERSION = "10";
 if (window.APP_PAGE_VERSION !== APP_VERSION) {
   let tried = false; try { tried = sessionStorage.getItem("reload-v" + APP_VERSION) === "1"; sessionStorage.setItem("reload-v" + APP_VERSION, "1"); } catch (e) { /* stockage bloqué */ }
   if (!tried && window.__repairApp) { window.__repairApp(); throw new Error("Mise à jour en cours"); }
@@ -567,7 +567,13 @@ function lastComparable(c, before) {
   return Object.keys(S.days).filter(k => k < before && discOf(S.days[k]) === disc && (disc === "calis" || S.days[k].typeId === c.typeId) && (S.days[k].exercises || []).length).sort().pop();
 }
 // Progression des séries : une série est « faite » si elle est cochée ou si ses répétitions sont remplies.
-function isDone(st) { return st.done === true || (st.done !== false && st.reps !== "" && st.reps != null); }
+// Une série n'est « faite » que si on la valide (bouton « Série finie » ou toucher sur son numéro).
+// Pour les séances des jours passés notées avant cette règle, une série remplie compte comme faite.
+function isDone(st) {
+  if (st.done === true) return true;
+  if (st.done === false) return false;
+  return !!(S.open && S.open < todayK() && st.reps !== "" && st.reps != null);
+}
 const resting = i => !!(RT.tick && RT.ex === i && RT.day === S.open);
 function activeSet(ex, i) {
   if (resting(i)) return -1;
@@ -1611,7 +1617,7 @@ const FAQ = [
   { q: "Comment régler le son du minuteur ?", k: "son volume minuteur chrono bip alarme entendre fort",
     a: "Profil › « Son du minuteur » : règle le volume, choisis Bip, Alarme, Sifflet ou Gong, et touche « Tester le son ».\nSur iPhone, le son est coupé si le bouton silencieux (sur le côté) est activé." },
   { q: "C’est quoi la série en couleur ?", k: "serie couleur cours surligne verte",
-    a: "Dans une séance, la série sur laquelle tu es est entourée de ta couleur principale (« Série en cours »). Dès que tu remplis ses répétitions, elle passe en vert et la suivante s’allume." },
+    a: "Dans une séance, la série sur laquelle tu es est entourée de ta couleur principale (« Série en cours »). Remplis tes reps et ton poids, puis touche « ✓ Série finie » : elle passe en vert, le repos démarre, et la suivante s’allume à la fin du chrono." },
   { q: "Comment contacter le créateur ?", k: "contact contacter createur probleme bug aide reclamation idee",
     a: "Touche « Contact » en bas de l’accueil, choisis un objet et écris ton message : il arrive directement chez moi." }
 ];
