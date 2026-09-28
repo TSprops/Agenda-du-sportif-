@@ -1361,7 +1361,7 @@ function helpSuggest(list, withContact) {
 }
 function helpAnswer(i) { helpAdd(FAQ[i].q, "me"); setTimeout(() => helpAdd(FAQ[i].a, "bot"), 250); }
 function helpOpen() {
-  $("helpPanel").hidden = false; $("helpFab").hidden = true;
+  $("helpPanel").hidden = false; $("helpFab").hidden = true; $("helpHint").hidden = true;
   if (!$("helpMsgs").children.length) {
     const who = S.profile && S.profile.pseudo ? " " + S.profile.pseudo : "";
     helpAdd("Salut" + who + " 👋 Je réponds aux questions fréquentes sur l’app. Choisis une question ou écris la tienne.", "bot");
@@ -1377,7 +1377,7 @@ function helpLexButtons() {
   $("helpMsgs").appendChild(w); $("helpMsgs").scrollTop = $("helpMsgs").scrollHeight;
 }
 function helpClose() { $("helpPanel").hidden = true; updateFab(); }
-$("helpFab").onclick = helpOpen;
+$("helpFab").onclick = () => { lsSet("help-hint-off", 1); helpOpen(); };
 $("helpClose").onclick = helpClose;
 $("helpMsgs").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
@@ -1414,7 +1414,15 @@ $("helpForm").addEventListener("submit", e => {
   }, 300);
 });
 const FAB_SCREENS = ["home", "seances", "nutrition", "complements", "creatine", "contact", "profile", "crossfit"];
-function updateFab() { $("helpFab").hidden = !FAB_SCREENS.includes(S.screen) || !$("helpPanel").hidden; }
+let hintReady = false;
+setTimeout(() => { hintReady = true; updateFab(); }, 2500);
+function updateFab() {
+  $("helpFab").hidden = !FAB_SCREENS.includes(S.screen) || !$("helpPanel").hidden;
+  $("helpHint").hidden = $("helpFab").hidden || !hintReady || !!lsGet("help-hint-off");
+}
+function hideHint() { lsSet("help-hint-off", 1); $("helpHint").hidden = true; }
+$("helpHintClose").onclick = hideHint;
+$("helpHintOpen").onclick = () => { hideHint(); helpOpen(); };
 
 /* ============================================================
    Abonnements temps réel et démarrage

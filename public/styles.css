@@ -380,3 +380,13 @@ body.sheet-open .help-fab,body.sheet-open .help-panel{display:none}
 .bench-best small{font-size:12px;color:var(--muted)}
 .bench .add-set{color:#FFD60A;margin-bottom:12px}
 .help-sugg button.lex{background:var(--surface-2);border-color:var(--line);color:var(--ink)}
+
+/* Bulle discrète à côté de l'assistant */
+.help-hint{position:fixed;right:84px;bottom:calc(env(safe-area-inset-bottom,0px) + 26px);z-index:20;max-width:min(250px,calc(100vw - 110px));display:flex;align-items:flex-start;gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:14px 14px 4px 14px;padding:8px 6px 8px 12px;box-shadow:0 8px 24px rgba(0,0,0,.5);animation:hintIn .35s cubic-bezier(.2,.8,.2,1)}
+.help-hint::after{content:"";position:absolute;right:-6px;bottom:10px;width:10px;height:10px;background:var(--surface);border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:rotate(-45deg)}
+.hh-text{text-align:left;font-size:13px;line-height:1.35;color:var(--ink);font-weight:500}
+.hh-x{flex:none;width:24px;height:24px;border-radius:50%;color:var(--muted);font-size:11px;display:grid;place-items:center;margin-top:-2px}
+.hh-x:hover,.hh-x:focus-visible{background:var(--surface-2)}
+body.sheet-open .help-hint{display:none}
+@keyframes hintIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.help-hint{animation:none}}
