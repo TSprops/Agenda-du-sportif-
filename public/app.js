@@ -1259,7 +1259,7 @@ const FAQ = [
     a: "Profil › « Supprimer mon compte et mes données », puis confirme avec ton mot de passe. Tout est effacé définitivement." },
   { q: "Comment noter une course à pied ?", k: "course courir running footing endurance fondamentale seuil fractionne vma allure distance km",
     a: "Touche un jour › Course à pied, puis choisis Endurance fondamentale, Seuil ou Fractionné.\nEntre la distance et la durée : ton allure (min/km) et ta vitesse se calculent seules. Pour le seuil et le fractionné, ajoute tes blocs (ex. 10 × 400 m, récup 1:00) et lance le minuteur de récup." },
-  { q: "Comment noter un WOD de CrossFit ?", k: "crossfit wod amrap emom tabata time chipper rx scaled",
+  { q: "Comment noter un WOD de CrossFit ?", k: "crossfit wod noter enregistrer score",
     a: "Touche un jour › CrossFit. Choisis le format (For Time, AMRAP, EMOM…), écris les mouvements, puis ton score et Rx ou Scaled.\nÉcris « Fran », « Murph »… dans le nom du WOD : les mouvements se remplissent tout seuls." },
   { q: "Où voir mes records de CrossFit ?", k: "record 1rm pr charge max benchmark girls fran murph cindy",
     a: "Sur l’accueil, touche CrossFit : tu y notes tes records (1RM) en back squat, clean, snatch… et tes temps sur les WOD de référence comme Fran ou Murph." },
@@ -1268,8 +1268,87 @@ const FAQ = [
   { q: "Comment contacter le créateur ?", k: "contact contacter createur probleme bug aide reclamation idee",
     a: "Touche « Contact » en bas de l’accueil, choisis un objet et écris ton message : il arrive directement chez moi." }
 ];
-const STOP = new Set("comment pour avec dans une des les est que qui quoi quel quelle quels mon mes ton tes son ses faire fait fais peux peut puis sur pas par plus moins tout tous toute cette ces aux the and elle ils nous vous etre avoir suis sont veux voudrais savoir aide aider app application".split(" "));
 const norm = t => String(t).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, " ");
+// Lexique : t = termes exacts (bonus de pertinence), lex = rubrique du lexique.
+const GLOSS = [
+  { lex: "cf", t: ["wod"], q: "C’est quoi un WOD ?", k: "wod workout day seance jour",
+    a: "WOD = « Workout Of the Day », l’entraînement du jour.\nEn CrossFit, c’est la partie principale de la séance : souvent courte (5 à 20 min) et intense, elle mélange cardio, gymnastique et haltérophilie." },
+  { lex: "cf", t: ["rx", "scaled", "scale"], q: "C’est quoi Rx et Scaled ?", k: "rx scaled prescribed adapte niveau",
+    a: "Rx (« as prescribed ») = tu fais le WOD exactement comme il est écrit : charges, mouvements et répétitions officiels.\nScaled = version adaptée à ton niveau : charge plus légère, tractions avec élastique, pompes sur les genoux…\nFaire en Scaled n’a rien de honteux : c’est comme ça qu’on progresse sans se blesser." },
+  { lex: "cf", t: ["fortime"], q: "C’est quoi un For Time ?", k: "for time chrono vite possible temps",
+    a: "For Time = tu fais tout le travail demandé le plus vite possible. Ton score, c’est ton temps.\nIl y a souvent un « time cap » (temps maximum)." },
+  { lex: "cf", t: ["cap", "timecap"], q: "C’est quoi un time cap ?", k: "time cap limite maximum",
+    a: "Le time cap est le temps maximum autorisé pour un WOD.\nSi tu n’as pas fini à temps, ton score = le nombre de répétitions faites (on note par exemple « CAP + 12 »)." },
+  { lex: "cf", t: ["amrap"], q: "C’est quoi un AMRAP ?", k: "amrap many rounds possible tours maximum",
+    a: "AMRAP = « As Many Rounds As Possible » : un maximum de tours dans un temps donné.\nEx. : AMRAP 12 min de 5 tractions, 10 pompes, 15 squats. Tu enchaînes les tours jusqu’au bip.\nScore = tours complets + répétitions du tour en cours (ex. 8 tours + 7)." },
+  { lex: "cf", t: ["emom", "e2mom"], q: "C’est quoi un EMOM ?", k: "emom every minute chaque minute",
+    a: "EMOM = « Every Minute On the Minute » : au début de chaque minute, tu fais le travail demandé, puis tu te reposes le reste de la minute.\nEx. : EMOM 10 min : 3 power cleans. Plus tu vas vite, plus tu te reposes.\nUn « E2MOM » = toutes les 2 minutes." },
+  { lex: "cf", t: ["tabata"], q: "C’est quoi un Tabata ?", k: "tabata 20 10 secondes intervalle",
+    a: "Tabata = 8 tours de 20 secondes d’effort maximal / 10 secondes de repos, soit 4 minutes.\nScore : le total de répétitions, ou le tour le plus faible selon la consigne." },
+  { lex: "cf", t: ["chipper"], q: "C’est quoi un Chipper ?", k: "chipper liste longue",
+    a: "Un Chipper est une longue liste de mouvements avec beaucoup de répétitions, à faire une seule fois dans l’ordre.\nOn les « grignote » (to chip) petit à petit. Ex. : 50 box jumps, 50 wall balls, 50 burpees…" },
+  { lex: "cf", t: ["21159"], q: "Que veut dire 21-15-9 ?", k: "21 15 9 schema repetitions",
+    a: "C’est un schéma de répétitions : 21 de chaque mouvement, puis 15, puis 9.\nEx. Fran : 21 thrusters, 21 tractions, 15 thrusters, 15 tractions, 9 thrusters, 9 tractions." },
+  { lex: "cf", t: ["1rm", "rm", "pr"], q: "C’est quoi un 1RM et un PR ?", k: "1rm rm pr record personnel charge max repetition",
+    a: "1RM = « 1 Repetition Max » : la charge la plus lourde que tu peux soulever une seule fois.\nPR = « Personal Record », ton record personnel. Note-les dans l’onglet CrossFit pour suivre tes progrès." },
+  { lex: "cf", t: ["girls", "girl", "hero", "heroes", "benchmark"], q: "C’est quoi les Girls et les Hero WODs ?", k: "girls hero benchmark reference fran murph grace cindy",
+    a: "Ce sont des WOD de référence (« benchmarks »), toujours identiques, pour mesurer tes progrès.\nLes « Girls » portent des prénoms féminins (Fran, Grace, Cindy…). Les « Hero WODs » rendent hommage à des militaires ou pompiers morts en service (Murph…).\nTu les retrouves tous dans l’onglet CrossFit." },
+  { lex: "cf", t: ["kg"], q: "Que veut dire 43/29 kg ?", k: "charge homme femme slash deux poids",
+    a: "Deux charges séparées par « / » = charge homme / charge femme.\nEx. Thrusters 43/29 kg : 43 kg pour les hommes, 29 kg pour les femmes (version Rx)." },
+  { lex: "cf", t: ["metcon"], q: "C’est quoi un Metcon ?", k: "metcon metabolic conditioning cardio",
+    a: "Metcon = « metabolic conditioning » : la partie intense et cardio du WOD, qui fait monter le cœur (souvent un For Time ou un AMRAP)." },
+  { lex: "cf", t: ["box"], q: "C’est quoi une box ?", k: "box salle crossfit",
+    a: "Une « box » est une salle de CrossFit." },
+  { lex: "cf", t: ["kipping", "strict", "butterfly"], q: "Kipping ou strict, c’est quoi ?", k: "kipping strict balancement elan traction",
+    a: "Strict = mouvement sans élan (ex. traction stricte).\nKipping = on utilise un balancement du corps pour enchaîner plus vite (tractions, toes to bar, HSPU). Le « butterfly » est un kipping encore plus rapide." },
+  { lex: "cf", t: ["unbroken"], q: "Que veut dire Unbroken ?", k: "unbroken sans pause lacher",
+    a: "Unbroken = toutes les répétitions d’une série sans t’arrêter ni lâcher la barre." },
+  { lex: "cf", t: ["thruster", "thrusters"], q: "C’est quoi un thruster ?", k: "thruster squat developpe",
+    a: "Un thruster = un front squat enchaîné avec un développé au-dessus de la tête, en un seul mouvement fluide : tu utilises l’élan de la remontée du squat pour pousser la barre." },
+  { lex: "cf", t: ["wall", "wallball", "wallballs"], q: "C’est quoi un wall ball ?", k: "wall ball medecine ballon mur cible",
+    a: "Wall ball = un squat avec un médecine-ball contre la poitrine, puis tu lances le ballon vers une cible au mur (3 m pour les hommes, 2,70 m pour les femmes) et tu le rattrapes." },
+  { lex: "cf", t: ["double", "unders", "du"], q: "C’est quoi un double under ?", k: "double under corde sauter",
+    a: "Double under = à la corde à sauter, la corde passe 2 fois sous tes pieds pendant un seul saut." },
+  { lex: "cf", t: ["t2b", "toes"], q: "C’est quoi un toes to bar ?", k: "toes to bar pieds barre suspendu abdos",
+    a: "Toes to bar = suspendu à la barre, tu montes les pieds jusqu’à toucher la barre." },
+  { lex: "cf", t: ["muscleup", "muscle"], q: "C’est quoi un muscle-up ?", k: "muscle up anneaux barre traction dips",
+    a: "Muscle-up = une traction enchaînée avec un dips pour passer le buste au-dessus de la barre ou des anneaux. C’est un mouvement avancé." },
+  { lex: "cf", t: ["hspu"], q: "C’est quoi un HSPU ?", k: "hspu handstand push up pompe equilibre",
+    a: "HSPU = « Handstand Push-Up » : une pompe en équilibre sur les mains, les pieds contre le mur." },
+  { lex: "cf", t: ["clean", "snatch", "jerk", "epaule", "arrache"], q: "Clean, snatch, jerk : c’est quoi ?", k: "clean snatch jerk epaule arrache jete halterophilie",
+    a: "Ce sont les mouvements d’haltérophilie :\n• Clean (épaulé) : la barre passe du sol aux épaules.\n• Jerk (jeté) : des épaules au-dessus de la tête.\n• Clean & jerk : les deux enchaînés.\n• Snatch (arraché) : du sol au-dessus de la tête en un seul mouvement.\n« Power » = réception en demi-squat au lieu du squat complet." },
+  { lex: "cf", t: ["kb", "kettlebell", "swing", "swings"], q: "C’est quoi un KB swing ?", k: "kb kettlebell swing balancier",
+    a: "KB swing = tu balances une kettlebell entre les jambes puis jusqu’à hauteur des yeux (swing russe) ou au-dessus de la tête (swing américain), grâce à la poussée des hanches." },
+  { lex: "cf", t: ["burpee", "burpees"], q: "C’est quoi un burpee ?", k: "burpee",
+    a: "Burpee = tu poses la poitrine au sol, tu te relèves et tu sautes en tapant des mains au-dessus de la tête." },
+  { lex: "run", t: ["ef", "endurance", "fondamentale"], q: "C’est quoi l’endurance fondamentale ?", k: "endurance fondamentale ef lent footing zone 2",
+    a: "L’endurance fondamentale (EF) est une allure lente et confortable : tu peux parler en courant. Environ 60 à 75 % de ta fréquence cardiaque max.\nElle représente la majorité de l’entraînement d’un coureur : elle développe le « moteur » sans fatiguer." },
+  { lex: "run", t: ["seuil"], q: "C’est quoi le seuil ?", k: "seuil lactique allure tempo",
+    a: "Le seuil est une allure soutenue mais contrôlée, que tu pourrais tenir environ 45 min à 1 h en course. Environ 85 à 90 % de ta FC max.\nEn séance, on le travaille par blocs (ex. 3 × 10 min au seuil, 2 min de récup)." },
+  { lex: "run", t: ["fractionne", "fractionnee", "intervalle", "interval"], q: "C’est quoi le fractionné ?", k: "fractionne intervalle vitesse repetition",
+    a: "Le fractionné alterne des efforts rapides et des récupérations.\nEx. : 10 × 400 m vite avec 1 min de récup, ou 30/30. C’est ce qui fait progresser ta vitesse et ta VMA." },
+  { lex: "run", t: ["vma"], q: "C’est quoi la VMA ?", k: "vma vitesse maximale aerobie",
+    a: "VMA = Vitesse Maximale Aérobie : la vitesse à laquelle tu consommes le maximum d’oxygène. Tu peux la tenir environ 4 à 7 minutes.\nOn s’en sert pour régler les allures du fractionné (ex. 30/30 à 100 % de VMA)." },
+  { lex: "run", t: ["allure", "pace"], q: "C’est quoi l’allure ?", k: "allure pace min km vitesse",
+    a: "L’allure est le temps pour parcourir 1 km (ex. 5:00 /km).\n5:00 /km = 12 km/h, 6:00 /km = 10 km/h, 4:00 /km = 15 km/h. L’app la calcule toute seule à partir de ta distance et de ta durée." },
+  { lex: "run", t: ["3030"], q: "C’est quoi un 30/30 ?", k: "30 30 trente fractionne court",
+    a: "30/30 = 30 secondes vite (autour de ta VMA) puis 30 secondes lentement, à répéter (ex. 2 × 10 fois). C’est un fractionné court classique." },
+  { lex: "run", t: ["fc", "bpm", "cardiaque", "frequence"], q: "C’est quoi la FC max ?", k: "fc frequence cardiaque max bpm coeur",
+    a: "La FC max est ta fréquence cardiaque maximale (en battements par minute). Une estimation simple : 220 − ton âge, mais elle varie beaucoup d’une personne à l’autre.\nLa FC moyenne de ta sortie se lit sur ta montre." }
+];
+const BENCH_NOTES = {
+  murph: "Tu peux découper les tractions, pompes et squats comme tu veux (ex. 20 tours de 5-10-15), mais la course se fait au début et à la fin.",
+  cindy: "Enchaîne les tours sans t’arrêter pendant 20 minutes : ton score = tours + reps.",
+  fran: "C’est l’un des WOD les plus connus : très court (souvent 3 à 10 min) mais très intense.",
+  helen: "Enchaîne 3 fois : la course, les swings puis les tractions.",
+  annie: "50 double unders et 50 sit-ups, puis 40 et 40, etc. jusqu’à 10."
+};
+GLOSS.forEach(g => FAQ.push(g));
+BENCH.forEach(bm => FAQ.push({
+  lex: "wod", t: [norm(bm.name).trim()], q: `C’est quoi le WOD ${bm.name} ?`, k: norm(bm.name) + " wod benchmark",
+  a: `${bm.name} : ${bm.desc}.\n${bm.type === "amrap" ? `C’est un AMRAP de ${bm.cap} min : ton score est ton nombre de tours + reps.` : "C’est un For Time : ton score est ton temps."}${BENCH_NOTES[bm.id] ? "\n" + BENCH_NOTES[bm.id] : ""}\nNote ton résultat dans l’onglet CrossFit.`
+}));
+const STOP = new Set("je tu il le la les de du un en et ou ce ca sa ma ta se ne on au comment pour avec dans une des est que qui quoi quel quelle quels mon mes ton tes son ses faire fait fais peux peut puis sur pas par plus moins tout tous toute cette ces aux the and elle ils nous vous etre avoir suis sont veux voudrais savoir aide aider app application veut dire signifie explique expliquer ".split(" "));
 function helpAdd(text, who) {
   const d = document.createElement("div"); d.className = "bubble " + who; d.textContent = text;
   $("helpMsgs").appendChild(d); $("helpMsgs").scrollTop = $("helpMsgs").scrollHeight;
@@ -1287,7 +1366,15 @@ function helpOpen() {
     const who = S.profile && S.profile.pseudo ? " " + S.profile.pseudo : "";
     helpAdd("Salut" + who + " 👋 Je réponds aux questions fréquentes sur l’app. Choisis une question ou écris la tienne.", "bot");
     helpSuggest([0, 16, 17, 2, 5, 8], false);
+    helpLexButtons();
   }
+}
+function helpLexButtons() {
+  const w = document.createElement("div"); w.className = "help-sugg";
+  [["cf", "📖 Lexique CrossFit"], ["wod", "📖 Explication des WOD"], ["run", "📖 Lexique course à pied"]].forEach(([id, label]) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "lex"; b.textContent = label; b.dataset.lex = id; w.appendChild(b);
+  });
+  $("helpMsgs").appendChild(w); $("helpMsgs").scrollTop = $("helpMsgs").scrollHeight;
 }
 function helpClose() { $("helpPanel").hidden = true; updateFab(); }
 $("helpFab").onclick = helpOpen;
@@ -1295,16 +1382,25 @@ $("helpClose").onclick = helpClose;
 $("helpMsgs").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   if (b.dataset.contact) { helpClose(); go("contactform"); return; }
+  if (b.dataset.lex) {
+    const titles = { cf: "Lexique CrossFit", wod: "Explication des WOD", run: "Lexique course à pied" };
+    helpAdd(titles[b.dataset.lex], "me");
+    setTimeout(() => { helpAdd("Choisis le mot ou le WOD que tu veux comprendre :", "bot"); helpSuggest(FAQ.map((f, i) => f.lex === b.dataset.lex ? i : -1).filter(i => i >= 0), false); }, 250);
+    return;
+  }
   if (b.dataset.faq != null) helpAnswer(+b.dataset.faq);
 });
 $("helpForm").addEventListener("submit", e => {
   e.preventDefault();
   const text = $("helpInput").value.trim(); if (!text) return;
   $("helpInput").value = ""; helpAdd(text, "me");
-  const words = norm(text).split(" ").filter(w => w.length > 2 && !STOP.has(w));
+  const raw = norm(text), words = raw.split(" ").filter(w => w.length > 1 && !STOP.has(w));
+  const joined = raw.replace(/\s+/g, "");
   const scored = FAQ.map((f, i) => {
     const hay = norm(f.k + " " + f.q);
-    return { i, score: words.reduce((a, w) => a + (hay.includes(w) || hay.includes(w.replace(/s$/, "")) ? 1 : 0), 0) };
+    let score = words.reduce((a, w) => a + (w.length > 2 && (hay.includes(w) || hay.includes(w.replace(/s$/, ""))) ? 1 : 0) + ((f.t || []).includes(w) ? 3 : 0), 0);
+    (f.t || []).forEach(t => { if (t.length > 3 && !words.includes(t) && joined.includes(t)) score += 3; });
+    return { i, score };
   }).filter(x => x.score > 0).sort((a, b) => b.score - a.score);
   setTimeout(() => {
     if (scored.length) {

@@ -379,3 +379,4 @@ body.sheet-open .help-fab,body.sheet-open .help-panel{display:none}
 .bench-best b{font-family:var(--display);font-weight:800;font-size:22px;color:#FFD60A;font-variant-numeric:tabular-nums;text-transform:none}
 .bench-best small{font-size:12px;color:var(--muted)}
 .bench .add-set{color:#FFD60A;margin-bottom:12px}
+.help-sugg button.lex{background:var(--surface-2);border-color:var(--line);color:var(--ink)}
