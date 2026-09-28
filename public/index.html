@@ -189,15 +189,18 @@
   <button class="back" data-go="home">‹ Accueil</button>
   <h1 class="vtitle">Mon profil</h1>
   <div class="stats" id="pfStats"></div>
-  <form class="card" id="pfForm" autocomplete="off">
+  <section class="card" id="pfView"></section>
+  <form class="card" id="pfForm" autocomplete="off" hidden>
+    <div class="lbl">Modifier mes informations</div>
     <div id="pfFields"></div>
-    <p class="hint" id="pfMsg" hidden></p>
-    <button class="btn primary" type="submit">Enregistrer</button>
+    <p class="err" id="pfMsg" hidden></p>
+    <div class="grid2"><button class="btn" type="button" id="pfCancel">Annuler</button><button class="btn primary" type="submit">Enregistrer</button></div>
   </form>
   <button class="btn" id="adminBtn" data-go="admin" hidden>Administration</button>
   <section class="card">
     <div class="lbl">Mon compte</div>
     <p class="hint" id="pfEmail"></p>
+    <button class="btn" id="installBtn" hidden>Installer l’app sur mon téléphone</button>
     <button class="btn" id="pwReset">Changer mon mot de passe</button>
     <p class="ok-msg" id="pwMsg" hidden></p>
     <button class="btn" id="logout">Se déconnecter</button>
@@ -232,5 +235,42 @@
   <div class="vbar"><button data-a="vclose">Fermer</button><button data-a="vdel">Supprimer la photo</button></div>
   <img id="viewerImg" alt="Photo de la séance">
 </div>
+<!-- ============ MINUTEUR DE REPOS ============ -->
+<div class="rest-timer" id="restTimer" hidden role="timer" aria-live="polite">
+  <div class="rt-bar"><i id="rtFill"></i></div>
+  <div class="rt-row">
+    <div class="rt-txt"><span class="rt-lbl" id="rtLbl">Repos</span><b id="rtTime">1:30</b></div>
+    <button type="button" class="rt-btn" id="rtPlus">+15 s</button>
+    <button type="button" class="rt-btn primary" id="rtSkip">Passer</button>
+  </div>
+</div>
+
+<!-- ============ INSTALLATION ============ -->
+<div class="install-backdrop" id="installBackdrop" hidden></div>
+<div class="install" id="installSheet" hidden role="dialog" aria-modal="true" aria-labelledby="installTitle">
+  <i class="grab" aria-hidden="true"></i>
+  <div class="install-head"><img src="icons/icon-192.png" alt=""><div><b id="installTitle">Installe l’app</b><span>L’agenda du sportif · gratuit</span></div></div>
+  <p class="lead">Ajoute l’app à ton écran d’accueil : elle s’ouvre en plein écran, en un toucher, comme une vraie application.</p>
+  <div class="perks"><span>Plein écran</span><span>Accès en 1 toucher</span><span>Marche hors connexion</span></div>
+  <div id="installBody"></div>
+  <button type="button" class="later" id="installLater">Plus tard</button>
+</div>
+
+<!-- ============ ASSISTANT (FAQ) ============ -->
+<button type="button" class="help-fab" id="helpFab" hidden aria-label="Ouvrir l’assistant">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M9 10h.01M12 10h.01M15 10h.01"/></svg>
+</button>
+<section class="help-panel" id="helpPanel" hidden role="dialog" aria-label="Assistant">
+  <header class="help-head">
+    <span class="help-avatar">AS</span>
+    <div><b>Assistant</b><span>Réponses aux questions fréquentes</span></div>
+    <button type="button" class="help-x" id="helpClose" aria-label="Fermer">✕</button>
+  </header>
+  <div class="help-msgs" id="helpMsgs"></div>
+  <form class="help-form" id="helpForm" autocomplete="off">
+    <input id="helpInput" placeholder="Pose ta question…" maxlength="200" aria-label="Ta question">
+    <button class="btn primary" type="submit" aria-label="Envoyer">➤</button>
+  </form>
+</section>
 </body>
 </html>

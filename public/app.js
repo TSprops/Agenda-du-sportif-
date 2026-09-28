@@ -117,8 +117,8 @@ function saveProfile(patch) {
 function persistDay(k, data) {
   const ref = subDoc("seances", k);
   dChain = dChain.then(() => data ? setDoc(ref, data) : deleteDoc(ref))
-    .then(() => setSave("Enregistré"))
-    .catch(() => setSave("Échec de l’enregistrement, réessaie"));
+    .then(() => setSave(""))
+    .catch(() => setSave("Non enregistré : vérifie ta connexion"));
   syncStats();
 }
 function persistTypes() { saveProfile({ types: clone(S.types), typesV: TYPES_V }); }
@@ -161,6 +161,9 @@ function go(v) {
   document.querySelectorAll(".view").forEach(el => { el.hidden = el.id !== "v-" + v; });
   RENDER[v] && RENDER[v]();
   window.scrollTo(0, 0);
+  if (!$("helpPanel").hidden && !FAB_SCREENS.includes(v)) $("helpPanel").hidden = true;
+  updateFab();
+  if (v === "home") maybeInvite();
 }
 function refresh() {
   if (S.screen === "profile") renderPfStats();
@@ -272,10 +275,24 @@ $("signup").addEventListener("submit", async e => {
    ============================================================ */
 function renderPfStats() {
   const p = S.profile || {}, ks = Object.keys(S.days);
-  $("pfStats").innerHTML = `<div class="stat"><b>${ks.length}</b><span>séances</span></div><div class="stat"><b>${Object.keys(S.nut).filter(k => S.nut[k].creatine).length}</b><span>jours créatine</span></div><div class="stat"><b style="font-size:17px;line-height:1.6">${p.createdAt ? esc(fmtDate(p.createdAt)) : "–"}</b><span>membre depuis</span></div>`;
+  const cd = Object.keys(S.nut).filter(k => S.nut[k].creatine).length;
+  $("pfStats").innerHTML = `<div class="stat"><b>${ks.length}</b><span>séance${ks.length > 1 ? "s" : ""}</span></div><div class="stat"><b>${cd}</b><span>jour${cd > 1 ? "s" : ""} de créatine</span></div><div class="stat"><b style="font-size:17px;line-height:1.6">${p.createdAt ? esc(fmtDate(p.createdAt)) : "–"}</b><span>membre depuis</span></div>`;
 }
+function renderPfView(msg) {
+  const p = S.profile || {}, dash = v => (v === "" || v == null) ? `<dd class="none">Non renseigné</dd>` : `<dd>${esc(v)}</dd>`;
+  $("pfView").innerHTML = `<div class="pf-top">${avatarHTML(p, 72)}<div><b>${esc(p.pseudo || "")}</b>${p.objectif ? `<span class="tag">${esc(p.objectif)}</span>` : ""}</div></div>
+    <dl class="kv"><dt>Prénom</dt>${dash(p.prenom)}<dt>Nom</dt>${dash(p.nom)}<dt>Âge</dt>${dash(p.age ? p.age + " ans" : "")}<dt>Taille</dt>${dash(p.taille ? p.taille + " cm" : "")}<dt>Poids</dt>${dash(p.poids ? nf.format(p.poids) + " kg" : "")}<dt>Objectif</dt>${dash(p.objectif)}</dl>
+    ${msg ? `<p class="ok-msg">${esc(msg)}</p>` : ""}
+    <button type="button" class="btn" id="pfEdit">Modifier</button>`;
+  $("pfView").hidden = false; $("pfForm").hidden = true;
+  $("pfEdit").onclick = () => {
+    S.formPhoto.pf = undefined; $("pfFields").innerHTML = fieldsHTML("pf", S.profile); $("pfMsg").hidden = true;
+    $("pfView").hidden = true; $("pfForm").hidden = false; $("pfForm").scrollIntoView({ block: "start", behavior: "smooth" });
+  };
+}
+$("pfCancel").onclick = () => renderPfView();
 function renderProfile() {
-  S.formPhoto.pf = undefined; $("pfFields").innerHTML = fieldsHTML("pf", S.profile); $("pfMsg").hidden = true;
+  renderPfView(); refreshInstallBtn();
   $("pfEmail").textContent = "Connecté avec " + (S.email || "ton e-mail");
   $("pwMsg").hidden = true; $("delForm").hidden = true; $("delAccount").hidden = false; $("delErr").hidden = true;
   $("adminBtn").hidden = !S.admin; renderPfStats();
@@ -284,8 +301,10 @@ $("pfForm").addEventListener("submit", e => {
   e.preventDefault();
   const f = readFields("pf");
   if (!f.pseudo) { show($("pfMsg"), "Le pseudo ne peut pas être vide."); return; }
-  show($("pfMsg"), "Enregistrement…");
-  saveProfile(f).then(() => show($("pfMsg"), "Profil enregistré.")).catch(() => show($("pfMsg"), "Échec de l’enregistrement, réessaie."));
+  $("pfMsg").hidden = true;
+  const btn = e.submitter || $("pfForm").querySelector("[type=submit]"); btn.disabled = true;
+  saveProfile(f).then(() => renderPfView("Profil enregistré.")).catch(() => show($("pfMsg"), "Échec de l’enregistrement. Vérifie ta connexion et réessaie."))
+    .finally(() => { btn.disabled = false; });
 });
 $("pwReset").onclick = async () => {
   try { await sendPasswordResetEmail(auth, S.email); show($("pwMsg"), "E-mail envoyé à " + S.email + ". Suis le lien pour choisir un nouveau mot de passe."); }
@@ -343,6 +362,8 @@ function renderMain() {
    ============================================================ */
 function rpeColor(v) { return v <= 6 ? "#2FBF71" : v <= 8 ? "#FF9F0A" : "#FF3B30"; }
 function rpeLabel(v) { return !v ? "Non notée" : v <= 5 ? "Facile" : v === 6 ? "Modérée" : v === 7 ? "3 reps en réserve" : v === 8 ? "2 reps en réserve" : v === 9 ? "1 rep en réserve" : "Échec"; }
+function restOf(ex) { return typeof ex.rest === "number" ? ex.rest : 90; }
+function fmtRest(v) { if (!v) return "Aucun"; const m = Math.floor(v / 60), sec = v % 60; return m ? m + " min" + (sec ? " " + pad(sec) : "") : sec + " s"; }
 function exStats(ex) {
   const s = (ex.sets || []).filter(x => x.reps !== "" || x.kg !== "");
   if (!s.length) return "Aucune série remplie";
@@ -359,6 +380,7 @@ function exHTML(ex, i) {
   ${(ex.sets || []).map((s, j) => `<tr><td class="n">${j + 1}</td><td><input id="r-${i}-${j}" class="num" inputmode="numeric" data-f="reps" data-ex="${i}" data-s="${j}" value="${esc(s.reps)}" placeholder="–" aria-label="Répétitions série ${j + 1}"></td><td><input id="k-${i}-${j}" class="num" inputmode="decimal" data-f="kg" data-ex="${i}" data-s="${j}" value="${esc(s.kg)}" placeholder="–" aria-label="Poids série ${j + 1}"></td><td class="x"><button class="icon-btn" data-a="del-set" data-ex="${i}" data-s="${j}" aria-label="Supprimer la série ${j + 1}">−</button></td></tr>`).join("")}
   </tbody></table>
   <button class="add-set" data-a="add-set" data-ex="${i}">+ Ajouter une série</button>
+  <div class="rest-row"><div class="lbl">Repos entre les séries</div><div class="rest-ctl"><button class="step" data-a="rest-dec" data-ex="${i}" aria-label="Moins de repos">−</button><span class="rest-val" id="rv-${i}">${fmtRest(restOf(ex))}</span><button class="step" data-a="rest-inc" data-ex="${i}" aria-label="Plus de repos">+</button><button class="rest-go" data-a="rest-go" data-ex="${i}">⏱ Lancer</button></div></div>
   <div><div class="lbl">Difficulté (RPE) <em>${r ? r + "/10 · " : ""}${rpeLabel(r)}</em></div>
   <div class="rpe-row" role="group" aria-label="Difficulté de 1 à 10">${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(v => `<button data-a="rpe" data-ex="${i}" data-v="${v}" class="${r && v < r ? "lit" : ""}" style="--rc:${rpeColor(r || v)}" aria-pressed="${v === r}">${v}</button>`).join("")}</div></div>
   <textarea id="exr-${i}" data-f="ex-note" data-ex="${i}" placeholder="Ressenti : technique, sensations, douleurs…" rows="2">${esc(ex.note)}</textarea>
@@ -400,12 +422,12 @@ function openDay(k) {
   S.open = k; S.cur = clone(S.days[k] || { title: "", typeId: null, exercises: [], mood: null, note: "", photos: [] });
   if (!S.cur.photos) S.cur.photos = [];
   S.saveMsg = ""; S.photoErr = "";
-  renderSheet(); $("sheet").scrollTop = 0; $("sheet").classList.add("open"); document.body.style.overflow = "hidden";
+  renderSheet(); $("sheet").scrollTop = 0; $("sheet").classList.add("open"); document.body.style.overflow = "hidden"; document.body.classList.add("sheet-open");
 }
-function closeSheet() { flush(); $("sheet").classList.remove("open"); document.body.style.overflow = ""; S.open = null; S.cur = null; S.photoErr = ""; renderMain(); }
+function closeSheet() { flush(); $("sheet").classList.remove("open"); document.body.style.overflow = ""; document.body.classList.remove("sheet-open"); S.open = null; S.cur = null; S.photoErr = ""; renderMain(); }
 function setSave(m) { S.saveMsg = m; const e = $("saveState"); if (e) e.textContent = m; }
 let timer = null;
-function changed() { setSave("…"); clearTimeout(timer); timer = setTimeout(flush, 700); }
+function changed() { clearTimeout(timer); timer = setTimeout(flush, 700); }
 function flush() {
   if (!S.open || timer === null) return;
   clearTimeout(timer); timer = null;
@@ -428,17 +450,22 @@ $("sheet").addEventListener("click", e => {
   if (a === "type") { c.typeId = c.typeId === b.dataset.id ? null : b.dataset.id; }
   else if (a === "mood") { c.mood = c.mood === b.dataset.v ? null : b.dataset.v; }
   else if (a === "add-ex") {
-    c.exercises.push({ name: "", sets: [{ reps: "", kg: "" }, { reps: "", kg: "" }, { reps: "", kg: "" }], rpe: 0, note: "" });
+    c.exercises.push({ name: "", sets: [{ reps: "", kg: "" }, { reps: "", kg: "" }, { reps: "", kg: "" }], rpe: 0, note: "", rest: 90 });
     changed(); renderSheet(); const n = $("exn-" + (c.exercises.length - 1)); n && n.focus(); return;
   }
   else if (a === "del-ex") { if (!armed(b, "Confirmer")) return; c.exercises.splice(i, 1); }
   else if (a === "add-set") { const s = c.exercises[i].sets, l = s[s.length - 1]; s.push(l ? { reps: l.reps, kg: l.kg } : { reps: "", kg: "" }); }
   else if (a === "del-set") { c.exercises[i].sets.splice(+b.dataset.s, 1); }
   else if (a === "photo") { openViewer(+b.dataset.i); return; }
+  else if (a === "rest-inc" || a === "rest-dec") {
+    const ex = c.exercises[i], v = Math.min(600, Math.max(0, restOf(ex) + (a === "rest-inc" ? 15 : -15)));
+    ex.rest = v; $("rv-" + i).textContent = fmtRest(v); changed(); return;
+  }
+  else if (a === "rest-go") { startRest(restOf(c.exercises[i]), c.exercises[i].name); return; }
   else if (a === "rpe") { const v = +b.dataset.v; c.exercises[i].rpe = c.exercises[i].rpe === v ? 0 : v; }
   else if (a === "copy") {
     const src = S.days[b.dataset.k];
-    c.exercises = clone(src.exercises || []).map(x => ({ name: x.name, sets: (x.sets || []).map(s => ({ reps: s.reps, kg: s.kg })), rpe: 0, note: "" }));
+    c.exercises = clone(src.exercises || []).map(x => ({ name: x.name, sets: (x.sets || []).map(s => ({ reps: s.reps, kg: s.kg })), rpe: 0, note: "", rest: restOf(x) }));
     if (!String(c.title).trim()) c.title = src.title || "";
   }
   else if (a === "del-session") {
@@ -527,7 +554,7 @@ $("typesSheet").addEventListener("input", e => {
 $("typesSheet").addEventListener("click", e => {
   const b = e.target.closest("[data-a]"); if (!b) return;
   const a = b.dataset.a, i = +b.dataset.i;
-  if (a === "close") { clearTimeout(tTimer); persistTypes(); $("typesSheet").classList.remove("open"); document.body.style.overflow = ""; renderMain(); return; }
+  if (a === "close") { clearTimeout(tTimer); persistTypes(); $("typesSheet").classList.remove("open"); document.body.style.overflow = ""; document.body.classList.remove("sheet-open"); renderMain(); return; }
   if (a === "color") { const t = S.types[i]; t.color = PALETTE[(PALETTE.indexOf(t.color) + 1) % PALETTE.length]; }
   else if (a === "del") { if (!armed(b, "Confirmer")) return; S.types.splice(i, 1); }
   else if (a === "add") { const used = S.types.map(t => t.color); S.types.push({ id: "t" + Date.now().toString(36), name: "Nouveau type", color: PALETTE.find(c => !used.includes(c)) || PALETTE[0] }); }
@@ -539,7 +566,7 @@ $("list").addEventListener("click", e => { const b = e.target.closest("[data-k]"
 $("prev").onclick = () => { S.view = new Date(S.view.getFullYear(), S.view.getMonth() - 1, 1); renderMain(); };
 $("next").onclick = () => { S.view = new Date(S.view.getFullYear(), S.view.getMonth() + 1, 1); renderMain(); };
 $("today").onclick = () => { const t = new Date(); S.view = new Date(t.getFullYear(), t.getMonth(), 1); renderMain(); openDay(key(t)); };
-$("types").onclick = () => { renderTypes(); $("typesSheet").scrollTop = 0; $("typesSheet").classList.add("open"); document.body.style.overflow = "hidden"; };
+$("types").onclick = () => { renderTypes(); $("typesSheet").scrollTop = 0; $("typesSheet").classList.add("open"); document.body.style.overflow = "hidden"; document.body.classList.add("sheet-open"); };
 let sx = null;
 $("seancesCal").addEventListener("touchstart", e => { sx = e.touches[0].clientX; }, { passive: true });
 $("seancesCal").addEventListener("touchend", e => {
@@ -737,6 +764,180 @@ async function openUser(uid) {
 }
 
 /* ============================================================
+   Minuteur de repos
+   ============================================================ */
+const RT = { end: 0, total: 0, tick: null, ctx: null };
+function beep() {
+  try {
+    const ctx = RT.ctx; if (!ctx) return;
+    [0, .25, .5].forEach(t => {
+      const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = 880; o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(.001, ctx.currentTime + t); g.gain.exponentialRampToValueAtTime(.3, ctx.currentTime + t + .02);
+      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + t + .18); o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + .2);
+    });
+  } catch (e) { /* son indisponible */ }
+}
+function startRest(seconds, name) {
+  if (!seconds) seconds = 90;
+  try { RT.ctx = RT.ctx || new (window.AudioContext || window.webkitAudioContext)(); RT.ctx.resume && RT.ctx.resume(); } catch (e) { RT.ctx = null; }
+  RT.total = seconds; RT.end = Date.now() + seconds * 1000;
+  $("rtLbl").textContent = name ? "Repos · " + name : "Repos";
+  $("restTimer").classList.remove("done"); $("restTimer").hidden = false; $("rtSkip").textContent = "Passer";
+  clearInterval(RT.tick); RT.tick = setInterval(drawRest, 250); drawRest();
+}
+function drawRest() {
+  const left = Math.max(0, Math.round((RT.end - Date.now()) / 1000));
+  $("rtTime").textContent = Math.floor(left / 60) + ":" + pad(left % 60);
+  $("rtFill").style.width = (RT.total ? left / RT.total * 100 : 0) + "%";
+  if (left <= 0) {
+    clearInterval(RT.tick); RT.tick = null;
+    $("restTimer").classList.add("done"); $("rtLbl").textContent = "C’est reparti !"; $("rtTime").textContent = "0:00"; $("rtSkip").textContent = "OK";
+    beep(); if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+    setTimeout(() => { if (!RT.tick) $("restTimer").hidden = true; }, 6000);
+  }
+}
+$("rtPlus").onclick = () => { if (RT.tick) { RT.end += 15000; RT.total += 15; drawRest(); } else startRest(15); };
+$("rtSkip").onclick = () => { clearInterval(RT.tick); RT.tick = null; $("restTimer").hidden = true; };
+
+/* ============================================================
+   Installation sur l'écran d'accueil
+   ============================================================ */
+const UA = navigator.userAgent;
+const IS_IOS = /iphone|ipad|ipod/i.test(UA) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+const IS_ANDROID = /android/i.test(UA);
+const standalone = () => window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+let deferredInstall = null;
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferredInstall = e; refreshInstallBtn(); });
+window.addEventListener("appinstalled", () => { lsSet("install-done", 1); closeInstall(); refreshInstallBtn(); });
+function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, String(v)); } catch (e) { /* stockage bloqué */ } }
+const canInstall = () => !standalone() && !lsGet("install-done") && (IS_IOS || IS_ANDROID || !!deferredInstall);
+function refreshInstallBtn() { const b = $("installBtn"); if (b) b.hidden = !canInstall(); }
+const ICON_SHARE = '<svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
+const ICON_PLUS = '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/></svg>';
+function openInstall() {
+  if (!canInstall()) return;
+  $("installBody").innerHTML = deferredInstall
+    ? `<button type="button" class="btn primary" id="installGo" style="width:100%">Installer l’application</button>`
+    : IS_IOS
+      ? `<ol class="steps"><li><span class="n">1</span><span>Touche <b>Partager</b> en bas de Safari</span><span class="ico">${ICON_SHARE}</span></li>
+         <li><span class="n">2</span><span>Choisis <b>Sur l’écran d’accueil</b></span><span class="ico">${ICON_PLUS}</span></li>
+         <li><span class="n">3</span><span>Touche <b>Ajouter</b>, c’est fait&nbsp;!</span></li></ol>
+         <p class="hint" style="margin-top:6px">Tu ne vois pas « Partager » ? Il est parfois dans le menu <b>•••</b>. Sur un autre navigateur que Safari, ouvre d’abord ce lien dans Safari.</p>`
+      : `<ol class="steps"><li><span class="n">1</span><span>Touche le menu <b>⋮</b> en haut à droite</span></li>
+         <li><span class="n">2</span><span>Choisis <b>Installer l’application</b> ou <b>Ajouter à l’écran d’accueil</b></span><span class="ico">${ICON_PLUS}</span></li></ol>`;
+  $("installBackdrop").hidden = false; $("installSheet").hidden = false;
+  const go = $("installGo");
+  if (go) go.onclick = async () => {
+    const p = deferredInstall; deferredInstall = null; closeInstall();
+    try { p.prompt(); const r = await p.userChoice; if (r && r.outcome === "accepted") lsSet("install-done", 1); } catch (e) { /* fenêtre système fermée */ }
+    refreshInstallBtn();
+  };
+}
+function closeInstall() { $("installBackdrop").hidden = true; $("installSheet").hidden = true; }
+$("installLater").onclick = () => { lsSet("install-later", Date.now()); closeInstall(); };
+$("installBackdrop").onclick = () => { lsSet("install-later", Date.now()); closeInstall(); };
+$("installBtn").onclick = () => openInstall();
+let installTimer = null;
+function maybeInvite() {
+  clearTimeout(installTimer);
+  const later = +(lsGet("install-later") || 0);
+  if (!canInstall() || Date.now() - later < 7 * 864e5) return;
+  installTimer = setTimeout(() => { if (S.screen === "home" && !document.body.classList.contains("sheet-open")) openInstall(); }, 3000);
+}
+
+/* ============================================================
+   Assistant (FAQ, sans IA)
+   ============================================================ */
+const FAQ = [
+  { q: "Comment noter une séance ?", k: "noter seance ajouter entrainement jour calendrier creer",
+    a: "Va dans Séances, puis touche le jour voulu dans le calendrier (ou « Noter la séance du jour »).\nDonne un titre, choisis le type (Push, Pull, Jambes…), puis ajoute tes exercices." },
+  { q: "Comment ajouter des séries ?", k: "serie series repetition reps poids kg exercice ajouter",
+    a: "Dans ta séance, touche « + Ajouter un exercice », écris son nom, puis remplis Reps et Poids pour chaque série.\n« + Ajouter une série » recopie la série précédente pour aller plus vite." },
+  { q: "Comment marche le temps de repos ?", k: "repos minuteur timer chrono temps pause recuperation",
+    a: "Sous chaque exercice, règle ton temps de repos avec − et + (par pas de 15 s).\nTouche « ⏱ Lancer » après une série : un minuteur s’affiche en bas et sonne à la fin. « +15 s » ajoute du temps, « Passer » l’arrête." },
+  { q: "Est-ce que ma séance s’enregistre ?", k: "enregistrer sauvegarder sauvegarde perdu perdre bouton valider",
+    a: "Oui, tout s’enregistre tout seul pendant que tu écris, pas besoin de bouton.\nUn message rouge s’affiche en haut seulement s’il y a un problème de connexion." },
+  { q: "C’est quoi le RPE ?", k: "rpe difficulte dur effort note",
+    a: "Le RPE note la difficulté de 1 à 10.\n8 = il te restait 2 répétitions en réserve, 9 = 1 répétition, 10 = échec. Ça t’aide à savoir quand augmenter les charges." },
+  { q: "Comment ajouter une photo ?", k: "photo image camera prendre physique",
+    a: "Ouvre ta séance et descends jusqu’à « Photos », puis touche « + Prendre une photo ».\nTouche une photo pour l’agrandir ou la supprimer." },
+  { q: "Comment reprendre ma dernière séance ?", k: "reprendre copier derniere precedente meme",
+    a: "Sur un jour vide, choisis le type de séance : un bouton « Reprendre la dernière séance » apparaît. Il recopie tes exercices et tes poids." },
+  { q: "Comment changer les types et les couleurs ?", k: "type couleur modifier push pull jambes cardio cordes repos",
+    a: "Dans Séances, touche le bouton « Types ». Tu peux renommer un type, changer sa couleur (touche la pastille), en ajouter ou en retirer." },
+  { q: "Comment noter ma créatine ?", k: "creatine prise dose",
+    a: "Nutrition › Créatine : touche le grand rond, il devient rouge = prise.\nTu as oublié un jour ? Touche la date dans le calendrier en dessous. La dose se règle en bas de la page." },
+  { q: "Comment ajouter un complément ?", k: "complement whey proteine omega vitamine magnesium supplement",
+    a: "Nutrition › Compléments : touche un complément dans « Ajout rapide », ou écris-en un nouveau avec sa dose. Les flèches en haut changent de jour." },
+  { q: "Comment installer l’app sur mon téléphone ?", k: "installer app application ecran accueil telecharger icone",
+    a: "Sur iPhone : dans Safari, touche Partager puis « Sur l’écran d’accueil ».\nSur Android : menu ⋮ puis « Installer l’application ».\nTu retrouves aussi un bouton dans Profil." },
+  { q: "Comment modifier mon profil ?", k: "profil modifier photo pseudo poids taille age objectif infos",
+    a: "Touche « Profil » en haut à droite de l’accueil, puis « Modifier ». Change ce que tu veux et touche « Enregistrer »." },
+  { q: "J’ai oublié mon mot de passe", k: "mot de passe oublie oubli reinitialiser connexion connecter",
+    a: "Sur l’écran de connexion, écris ton e-mail puis touche « Mot de passe oublié ? ». Tu reçois un lien par e-mail (regarde aussi dans les spams)." },
+  { q: "Mes données sont-elles privées ?", k: "prive privee donnees securite voir confidentialite",
+    a: "Les autres utilisateurs ne peuvent pas voir tes données.\nL’administrateur de l’application peut consulter les comptes pour gérer l’app et t’aider." },
+  { q: "Ça marche sans internet ?", k: "internet hors connexion reseau wifi offline",
+    a: "Oui, l’app s’ouvre sans réseau et garde tes modifications. Elles sont envoyées dès que la connexion revient." },
+  { q: "Comment supprimer mon compte ?", k: "supprimer compte effacer desinscrire",
+    a: "Profil › « Supprimer mon compte et mes données », puis confirme avec ton mot de passe. Tout est effacé définitivement." },
+  { q: "Comment contacter le créateur ?", k: "contact contacter createur probleme bug aide reclamation idee",
+    a: "Touche « Contact » en bas de l’accueil, choisis un objet et écris ton message : il arrive directement chez moi." }
+];
+const STOP = new Set("comment pour avec dans une des les est que qui quoi quel quelle quels mon mes ton tes son ses faire fait fais peux peut puis sur pas par plus moins tout tous toute cette ces aux the and elle ils nous vous etre avoir suis sont veux voudrais savoir aide aider app application".split(" "));
+const norm = t => String(t).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, " ");
+function helpAdd(text, who) {
+  const d = document.createElement("div"); d.className = "bubble " + who; d.textContent = text;
+  $("helpMsgs").appendChild(d); $("helpMsgs").scrollTop = $("helpMsgs").scrollHeight;
+}
+function helpSuggest(list, withContact) {
+  const w = document.createElement("div"); w.className = "help-sugg";
+  list.forEach(i => { const b = document.createElement("button"); b.type = "button"; b.textContent = FAQ[i].q; b.dataset.faq = i; w.appendChild(b); });
+  if (withContact) { const b = document.createElement("button"); b.type = "button"; b.textContent = "✉️ Écrire au créateur"; b.dataset.contact = "1"; w.appendChild(b); }
+  $("helpMsgs").appendChild(w); $("helpMsgs").scrollTop = $("helpMsgs").scrollHeight;
+}
+function helpAnswer(i) { helpAdd(FAQ[i].q, "me"); setTimeout(() => helpAdd(FAQ[i].a, "bot"), 250); }
+function helpOpen() {
+  $("helpPanel").hidden = false; $("helpFab").hidden = true;
+  if (!$("helpMsgs").children.length) {
+    const who = S.profile && S.profile.pseudo ? " " + S.profile.pseudo : "";
+    helpAdd("Salut" + who + " 👋 Je réponds aux questions fréquentes sur l’app. Choisis une question ou écris la tienne.", "bot");
+    helpSuggest([0, 2, 3, 5, 8, 10], false);
+  }
+}
+function helpClose() { $("helpPanel").hidden = true; updateFab(); }
+$("helpFab").onclick = helpOpen;
+$("helpClose").onclick = helpClose;
+$("helpMsgs").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.contact) { helpClose(); go("contactform"); return; }
+  if (b.dataset.faq != null) helpAnswer(+b.dataset.faq);
+});
+$("helpForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const text = $("helpInput").value.trim(); if (!text) return;
+  $("helpInput").value = ""; helpAdd(text, "me");
+  const words = norm(text).split(" ").filter(w => w.length > 2 && !STOP.has(w));
+  const scored = FAQ.map((f, i) => {
+    const hay = norm(f.k + " " + f.q);
+    return { i, score: words.reduce((a, w) => a + (hay.includes(w) || hay.includes(w.replace(/s$/, "")) ? 1 : 0), 0) };
+  }).filter(x => x.score > 0).sort((a, b) => b.score - a.score);
+  setTimeout(() => {
+    if (scored.length) {
+      helpAdd(FAQ[scored[0].i].a, "bot");
+      const more = scored.slice(1, 3).filter(x => x.score >= Math.max(2, scored[0].score));
+      if (more.length) { helpAdd("Ça peut aussi t’aider :", "bot"); helpSuggest(more.map(x => x.i), false); }
+    } else {
+      helpAdd("Je n’ai pas trouvé de réponse à ta question. Tu peux écrire directement au créateur de l’app, il te répondra.", "bot");
+      helpSuggest([0, 10, 12], true);
+    }
+  }, 300);
+});
+const FAB_SCREENS = ["home", "seances", "nutrition", "complements", "creatine", "contact", "profile"];
+function updateFab() { $("helpFab").hidden = !FAB_SCREENS.includes(S.screen) || !$("helpPanel").hidden; }
+
+/* ============================================================
    Abonnements temps réel et démarrage
    ============================================================ */
 function stopSubscriptions() { S.unsubs.forEach(u => { try { u(); } catch (e) { /* déjà arrêté */ } }); S.unsubs = []; S.dataSubscribed = false; }
@@ -788,6 +989,7 @@ onAuthStateChanged(auth, async user => {
       } else go("onboard");
     } else if (!S.profile && had) go("onboard");
     else if (S.screen === "home") renderHome();
+    else if (S.screen === "profile" && !$("pfView").hidden) renderPfView();
   }, err => {
     console.error("profil", err && err.code, err && err.message);
     go("login"); show($("auErr"), "Impossible de charger ton compte. Vérifie ta connexion puis réessaie.");
