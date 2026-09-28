@@ -49,6 +49,52 @@ if (LOCAL && !configured) {
 }
 
 /* ============================================================
+   Apparence (couleur principale et mode clair / sombre)
+   ============================================================ */
+const ACCENTS = [
+  { id: "rouge", name: "Rouge", c: "#E3161F", hi: "#FF2B34", on: "#FFFFFF" },
+  { id: "bleu", name: "Bleu", c: "#1F6FEB", hi: "#4C8DFF", on: "#FFFFFF" },
+  { id: "vert", name: "Vert", c: "#16A34A", hi: "#2FD073", on: "#FFFFFF" },
+  { id: "violet", name: "Violet", c: "#7C3AED", hi: "#A07BFF", on: "#FFFFFF" },
+  { id: "orange", name: "Orange", c: "#EA6A12", hi: "#FF8A3D", on: "#FFFFFF" },
+  { id: "rose", name: "Rose", c: "#DB2777", hi: "#FF5E9A", on: "#FFFFFF" },
+  { id: "or", name: "Or", c: "#D4A017", hi: "#F5C542", on: "#111111" },
+  { id: "argent", name: "Argent", c: "#D9D6D2", hi: "#FFFFFF", on: "#111111", light: "#3A3A40" }
+];
+const BGS = [
+  { id: "noir", name: "Sombre", ground: "#0A0A0B", ink: "#F4F1EE" },
+  { id: "anthracite", name: "Anthracite", ground: "#16171A", ink: "#F4F1EE" },
+  { id: "clair", name: "Clair", ground: "#F3F1EE", ink: "#171514" }
+];
+function applyTheme(t) {
+  t = t || {};
+  const a = ACCENTS.find(x => x.id === t.accent) || ACCENTS[0], bg = BGS.find(x => x.id === t.bg) || BGS[0], light = bg.id === "clair";
+  const r = document.documentElement, c = light && a.light ? a.light : a.c;
+  r.dataset.bg = bg.id;
+  r.style.setProperty("--red", c);
+  r.style.setProperty("--red-hi", light ? `color-mix(in srgb, ${c} 85%, #000)` : a.hi);
+  r.style.setProperty("--on-red", light && a.light ? "#FFFFFF" : a.on);
+  const m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute("content", bg.ground);
+  try { localStorage.setItem("theme", JSON.stringify({ accent: a.id, bg: bg.id })); } catch (e) { /* stockage bloqué */ }
+}
+try { applyTheme(JSON.parse(localStorage.getItem("theme") || "{}")); } catch (e) { applyTheme({}); }
+function currentTheme() { try { return JSON.parse(localStorage.getItem("theme") || "{}"); } catch (e) { return {}; } }
+function renderTheme() {
+  const t = currentTheme();
+  $("accentList").innerHTML = ACCENTS.map(a => `<button type="button" class="swatch-btn" data-accent="${a.id}" style="--sw:${t.bg === "clair" && a.light ? a.light : a.c}" aria-pressed="${(t.accent || "rouge") === a.id}"><i></i>${a.name}</button>`).join("");
+  $("bgList").innerHTML = BGS.map(b => `<button type="button" class="mode-btn" data-bg="${b.id}" aria-pressed="${(t.bg || "noir") === b.id}"><span class="mode-prev" style="--pg:${b.ground};--pi:${b.ink}"><b></b><u></u></span>${b.name}</button>`).join("");
+}
+function setTheme(patch) {
+  const t = { ...currentTheme(), ...patch };
+  applyTheme(t); renderTheme();
+  if (S.profile) saveProfile({ theme: { accent: t.accent || "rouge", bg: t.bg || "noir" } });
+}
+$("themeCard").addEventListener("click", e => {
+  const a = e.target.closest("[data-accent]"); if (a) { setTheme({ accent: a.dataset.accent }); return; }
+  const b = e.target.closest("[data-bg]"); if (b) setTheme({ bg: b.dataset.bg });
+});
+
+/* ============================================================
    État et utilitaires
    ============================================================ */
 const now = new Date();
@@ -78,7 +124,7 @@ function ago(ts) {
 }
 /* Activités proposées quand on touche un jour du calendrier */
 const DISC = {
-  muscu: { name: "Musculation", color: "#FF2B34", desc: "Push, pull, jambes… séries, reps et charges",
+  muscu: { name: "Musculation", color: "var(--red-hi)", desc: "Push, pull, jambes… séries, reps et charges",
     icon: '<path d="M6 7v10M18 7v10M3 9.5v5M21 9.5v5M6 12h12"/>' },
   crossfit: { name: "CrossFit", color: "#FFD60A", desc: "WOD, AMRAP, EMOM, For Time, records",
     icon: '<path d="M9 8a3 3 0 1 1 6 0"/><path d="M7 10h10l1.4 8.2A2 2 0 0 1 16.4 20.5H7.6a2 2 0 0 1-2-2.3z"/>' },
@@ -211,6 +257,7 @@ function applyProfile() {
   const p = S.profile; if (!p) return;
   S.types = (p.typesV === TYPES_V && Array.isArray(p.types) && p.types.length) ? clone(p.types) : DEFAULT_TYPES.map(t => ({ ...t }));
   S.prefs = { creaDose: 5, ...(p.prefs || {}) };
+  if (p.theme) { const cur = currentTheme(); if (cur.accent !== p.theme.accent || cur.bg !== p.theme.bg) applyTheme(p.theme); }
 }
 function saveProfile(patch) {
   S.profile = { ...(S.profile || {}), ...patch, updatedAt: Date.now() }; applyProfile();
@@ -398,7 +445,7 @@ function renderPfView(msg) {
 }
 $("pfCancel").onclick = () => renderPfView();
 function renderProfile() {
-  renderPfView(); refreshInstallBtn();
+  renderPfView(); refreshInstallBtn(); renderTheme();
   $("pfEmail").textContent = "Connecté avec " + (S.email || "ton e-mail");
   $("pwMsg").hidden = true; $("delForm").hidden = true; $("delAccount").hidden = false; $("delErr").hidden = true;
   $("adminBtn").hidden = !S.admin; renderPfStats();
@@ -641,7 +688,7 @@ function renderSheet() {
     ${isEmpty(c) ? "" : `<button class="danger" data-a="del-session">Supprimer la séance</button>`}`;
   }
   el.innerHTML = `<div class="bar-top"><button class="link" data-a="close">‹ Calendrier</button><span class="save" id="saveState">${esc(S.saveMsg || "")}</span></div>
-  <div class="sheet-body" style="--tc:${mt ? mt.color : "#FF2B34"}">${body}</div>`;
+  <div class="sheet-body" style="--tc:${mt ? mt.color : "var(--red-hi)"}">${body}</div>`;
   el.scrollTop = y;
   if (disc) loadPhotos(c.photos || []);
 }
