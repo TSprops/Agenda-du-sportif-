@@ -6,6 +6,14 @@ import {
 } from "./vendor/firebase.js";
 import { firebaseConfig } from "./firebase-config.js";
 
+/* Version : si la page et le code ne correspondent pas (ancien fichier en cache), on recharge proprement. */
+const APP_VERSION = "7";
+if (window.APP_PAGE_VERSION !== APP_VERSION) {
+  let tried = false; try { tried = sessionStorage.getItem("reload-v" + APP_VERSION) === "1"; sessionStorage.setItem("reload-v" + APP_VERSION, "1"); } catch (e) { /* stockage bloqué */ }
+  if (!tried && window.__repairApp) { window.__repairApp(); throw new Error("Mise à jour en cours"); }
+  if (!tried) { location.replace(location.pathname + "?r=" + Date.now()); throw new Error("Mise à jour en cours"); }
+}
+
 /* ============================================================
    Constantes
    ============================================================ */
@@ -1503,6 +1511,7 @@ function resetState() {
 }
 
 onAuthStateChanged(auth, async user => {
+  window.__appBooted = true; const rescue = document.getElementById("rescue"); if (rescue) rescue.remove();
   stopSubscriptions();
   if (!user) { resetState(); setAuthMode("in"); go("login"); return; }
   S.uid = user.uid; S.email = user.email || "";
