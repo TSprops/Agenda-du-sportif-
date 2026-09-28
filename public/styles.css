@@ -40,7 +40,7 @@ button{cursor:pointer;border:0;background:none;padding:0}
 .field input:focus,.field textarea:focus,textarea:focus{outline:none;border-color:var(--red)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-textarea{width:100%;min-height:64px;resize:vertical;border-radius:12px;border:1.5px solid var(--line);background:var(--surface-2);padding:10px 12px;font-size:15px}
+textarea{width:100%;min-height:64px;resize:vertical;border-radius:12px;border:1.5px solid var(--line);background:var(--surface-2);padding:10px 12px;font-size:16px}
 .err{color:var(--danger);font-size:13.5px;margin:0}
 .note-mode{font-size:12px;color:var(--muted);text-align:center;margin:0}
 
@@ -347,9 +347,9 @@ body.sheet-open .help-fab,body.sheet-open .help-panel{display:none}
 /* CrossFit */
 .move{display:flex;align-items:center;gap:6px}
 .move .num{height:42px}
-.move .mv-reps{width:78px;flex:none;font-size:15px}
-.move .mv-kg{width:62px;flex:none;font-size:15px}
-.mv-name{flex:1;min-width:0;height:42px;border-radius:11px;border:1.5px solid var(--line);background:var(--surface-2);padding-inline:10px;font-size:15px;font-weight:600}
+.move .mv-reps{width:78px;flex:none;font-size:16px}
+.move .mv-kg{width:62px;flex:none;font-size:16px}
+.mv-name{flex:1;min-width:0;height:42px;border-radius:11px;border:1.5px solid var(--line);background:var(--surface-2);padding-inline:10px;font-size:16px;font-weight:600}
 .mv-name:focus{outline:none;border-color:var(--tc)}
 .btn.primary.cf-btn{background:#FFD60A;border-color:#FFD60A;color:#0A0A0B;box-shadow:0 6px 22px rgba(255,214,10,.25)}
 .pill.ok.cf{background:#FFD60A;border-color:#FFD60A;color:#0A0A0B}
@@ -492,3 +492,8 @@ body.sheet-open .help-hint{display:none}
 #v-rec .pr-kg,#v-rec .pr-row .arrow{color:var(--tc)}
 :root[data-bg="clair"] #v-rec .pr-kg,:root[data-bg="clair"] #v-rec .pr-row .arrow{color:color-mix(in srgb,var(--tc) 70%,#000)}
 @media (prefers-reduced-motion: reduce){.c-xh{transition:none}}
+
+/* Comme une vraie application : pas de zoom au double toucher, et champs à 16 px minimum
+   (en dessous, l'iPhone zoome tout seul quand on touche un champ). */
+html{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.trow input,.help-form input,.dose input,.field input,.field textarea{font-size:16px}

@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>L’agenda du sportif</title>
 <meta name="description" content="Note tes séances de musculation, ta nutrition et suis tes progrès.">
 <meta name="theme-color" content="#0A0A0B">
@@ -16,10 +16,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="styles.css?v=11">
+<link rel="stylesheet" href="styles.css?v=12">
 <script>
   // Version de la page : doit correspondre à APP_VERSION dans app.js.
-  window.APP_PAGE_VERSION = "11";
+  window.APP_PAGE_VERSION = "12";
+  // Comme une vraie application : pas de zoom avec deux doigts ni en tapant deux fois (Safari ignore parfois la balise viewport).
+  ["gesturestart", "gesturechange", "gestureend"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
+  document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
   // Filet de sécurité : si l'app n'a pas démarré après 8 s, on propose de la réparer.
   (function () {
     function repair() {
@@ -43,7 +46,7 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=11"></script>
+<script type="module" src="app.js?v=12"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->
