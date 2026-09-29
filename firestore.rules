@@ -1,21 +1,28 @@
 rules_version = '2';
 
 // Règles de sécurité de L'agenda du sportif.
-// - Chaque utilisateur lit et écrit uniquement ses propres données (users/{uid}/...).
-// - Les administrateurs (un document dans admins/{uid}, créé à la main dans la console)
-//   lisent toutes les données et gèrent les messages.
-// - Personne ne peut se nommer administrateur depuis l'application.
+// - Chaque utilisateur lit et écrit ses propres données (users/{uid}/...).
+// - Les amis acceptés voient les séances de l'autre (s'il partage) et peuvent s'écrire.
+// - Les administrateurs (document admins/{uid}, créé à la main dans la console) lisent tout.
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    function signedIn() {
-      return request.auth != null;
+    function signedIn() { return request.auth != null; }
+    function me() { return request.auth.uid; }
+    function isAdmin() { return signedIn() && exists(/databases/$(database)/documents/admins/$(me())); }
+    function isSelf(uid) { return signedIn() && me() == uid; }
+    function pairKey(a, b) { return a < b ? a + '_' + b : b + '_' + a; }
+    function isFriend(uid) {
+      let path = /databases/$(database)/documents/friends/$(pairKey(me(), uid));
+      return signedIn() && me() != uid && exists(path) && get(path).data.status == 'accepted';
     }
-    function isAdmin() {
-      return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    function sharesSessions(uid) {
+      let path = /databases/$(database)/documents/share/$(uid);
+      return exists(path) && get(path).data.sessions == true;
     }
-    function isSelf(uid) {
-      return signedIn() && request.auth.uid == uid;
+    function chatOk(pid) {
+      let path = /databases/$(database)/documents/friends/$(pid);
+      return signedIn() && exists(path) && get(path).data.status == 'accepted' && me() in get(path).data.users;
     }
 
     match /admins/{uid} {
@@ -33,12 +40,87 @@ service cloud.firestore {
 
       // séances, nutrition, photos
       match /{collectionName}/{docId} {
-        allow read: if isSelf(uid) || isAdmin();
+        allow read: if isSelf(uid) || isAdmin()
+                    || (collectionName == 'seances' && isFriend(uid) && sharesSessions(uid));
         allow write: if isSelf(uid)
                      && collectionName in ['seances', 'nutrition', 'photos'];
       }
     }
 
+    // Annuaire : pseudo, code ami et photo, pour pouvoir se trouver.
+    match /directory/{uid} {
+      allow read: if signedIn();
+      allow write: if isSelf(uid) && request.resource.data.uid == uid
+                   && request.resource.data.pseudo is string && request.resource.data.pseudo.size() <= 30
+                   && request.resource.data.code is string && request.resource.data.code.size() <= 12;
+      allow delete: if isSelf(uid);
+    }
+
+    // Ce que les amis peuvent voir : records, statistiques, partage des séances.
+    match /share/{uid} {
+      allow read: if isSelf(uid) || isFriend(uid) || isAdmin();
+      allow write: if isSelf(uid);
+    }
+
+    // Demandes d'ami, amitiés et blocages. L'identifiant est « uidA_uidB » (ordre alphabétique).
+    match /friends/{pid} {
+      allow read: if signedIn() && me() in resource.data.users;
+      allow create: if signedIn()
+                    && request.resource.data.users.size() == 2
+                    && request.resource.data.users[0] < request.resource.data.users[1]
+                    && pid == request.resource.data.users[0] + '_' + request.resource.data.users[1]
+                    && me() in request.resource.data.users
+                    && request.resource.data.from == me()
+                    && request.resource.data.to in request.resource.data.users
+                    && request.resource.data.to != me()
+                    && (request.resource.data.status == 'pending'
+                        || (request.resource.data.status == 'blocked' && request.resource.data.blockedBy == me()));
+      allow update: if signedIn() && me() in resource.data.users && (
+                      // accepter une demande reçue
+                      (resource.data.status == 'pending' && resource.data.to == me()
+                        && request.resource.data.status == 'accepted'
+                        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'acceptedAt']))
+                      // bloquer quelqu'un
+                      || (resource.data.status != 'blocked' && request.resource.data.status == 'blocked'
+                        && request.resource.data.blockedBy == me()
+                        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'blockedBy', 'blockedAt'])));
+      allow delete: if signedIn() && me() in resource.data.users
+                    && (resource.data.status != 'blocked' || resource.data.blockedBy == me());
+    }
+
+    // Conversations privées entre amis.
+    match /chats/{pid} {
+      allow read: if chatOk(pid);
+      allow create, update: if chatOk(pid) && me() in request.resource.data.users;
+      match /messages/{mid} {
+        allow read: if chatOk(pid);
+        allow create: if chatOk(pid) && request.resource.data.from == me()
+                      && request.resource.data.text is string
+                      && request.resource.data.text.size() > 0
+                      && request.resource.data.text.size() <= 1000;
+        allow update, delete: if false;
+      }
+    }
+
+    // Réactions des amis sur les séances : reacts/{propriétaire}/items/{date__ami}
+    match /reacts/{owner}/items/{rid} {
+      allow read: if isSelf(owner) || isFriend(owner);
+      allow create: if isFriend(owner) && request.resource.data.from == me()
+                    && rid == request.resource.data.date + '__' + me()
+                    && request.resource.data.emoji in ['muscle', 'fire', 'clap'];
+      allow update: if isFriend(owner) && resource.data.from == me() && request.resource.data.from == me()
+                    && request.resource.data.emoji in ['muscle', 'fire', 'clap'];
+      allow delete: if signedIn() && (resource.data.from == me() || isSelf(owner));
+    }
+
+    // Signalements (lus par l'administrateur).
+    match /reports/{id} {
+      allow create: if signedIn() && request.resource.data.from == me()
+                    && request.resource.data.text is string && request.resource.data.text.size() <= 1200;
+      allow read, delete: if isAdmin();
+    }
+
+    // Messages de la page Contact.
     match /messages/{messageId} {
       allow create: if signedIn()
                     && request.resource.data.uid == request.auth.uid

@@ -16,10 +16,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="styles.css?v=13">
+<link rel="stylesheet" href="styles.css?v=14">
 <script>
   // Version de la page : doit correspondre à APP_VERSION dans app.js.
-  window.APP_PAGE_VERSION = "13";
+  window.APP_PAGE_VERSION = "14";
   // Comme une vraie application : pas de zoom avec deux doigts ni en tapant deux fois (Safari ignore parfois la balise viewport).
   ["gesturestart", "gesturechange", "gestureend"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
   document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -46,7 +46,7 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=13"></script>
+<script type="module" src="app.js?v=14"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->
@@ -115,6 +115,11 @@
       <span class="toc-top"><span class="toc-name">Nutrition</span><span class="arrow" aria-hidden="true">›</span></span>
       <span class="toc-sub">Compléments et créatine</span>
       <span class="pills" id="homeNut"></span>
+    </button>
+    <button class="toc-item" data-go="friends">
+      <span class="toc-top"><span class="toc-name">Amis <i class="dot-new big" id="friendsDot" hidden></i></span><span class="arrow" aria-hidden="true">›</span></span>
+      <span class="toc-sub">Ajoute tes potes, suis leurs séances et écris-leur</span>
+      <span class="pills" id="homeFriends"></span>
     </button>
     <button class="toc-item" data-go="types">
       <span class="toc-top"><span class="toc-name">Séances types</span><span class="arrow" aria-hidden="true">›</span></span>
@@ -215,6 +220,35 @@
   <button class="back" data-go="types">‹ Séances types</button>
   <h1 class="vtitle" id="hubTitle"></h1>
   <div id="hubBody" style="display:flex;flex-direction:column;gap:22px"></div>
+</main>
+
+<!-- ============ AMIS ============ -->
+<main class="app view" id="v-friends" hidden>
+  <button class="back" data-go="home">‹ Accueil</button>
+  <h1 class="vtitle">Amis</h1>
+  <div id="friendsBody" style="display:flex;flex-direction:column;gap:18px"></div>
+</main>
+<main class="app view" id="v-friend" hidden>
+  <button class="back" data-go="friends">‹ Amis</button>
+  <h1 class="vtitle" id="friendName"></h1>
+  <div id="friendBody" style="display:flex;flex-direction:column;gap:18px"></div>
+</main>
+<main class="view chat-view" id="v-chat" hidden>
+  <header class="chat-head">
+    <button class="back" data-go="friends" aria-label="Retour aux amis">‹</button>
+    <button type="button" class="chat-who" id="chatWho"></button>
+    <button type="button" class="icon-btn" id="chatMore" aria-label="Plus d’options">•••</button>
+  </header>
+  <div class="chat-menu card" id="chatMenu" hidden>
+    <button type="button" class="btn" data-cm="profile">Voir ses séances</button>
+    <button type="button" class="btn" data-cm="report">Signaler la conversation</button>
+    <button type="button" class="btn ghost-danger" data-cm="block">Bloquer</button>
+  </div>
+  <div class="chat-msgs" id="chatMsgs"></div>
+  <form class="chat-form" id="chatForm" autocomplete="off">
+    <input id="chatInput" placeholder="Écris un message…" maxlength="1000" aria-label="Ton message">
+    <button class="btn primary" type="submit" aria-label="Envoyer">➤</button>
+  </form>
 </main>
 
 <!-- ============ MES RECORDS ============ -->
@@ -371,6 +405,22 @@
   <div class="perks"><span>Plein écran</span><span>Accès en 1 toucher</span><span>Marche hors connexion</span></div>
   <div id="installBody"></div>
   <button type="button" class="later" id="installLater">Plus tard</button>
+</div>
+
+<!-- ============ ANNONCE DE NOUVEAUTÉ (une seule fois) ============ -->
+<div class="install-backdrop" id="newsBackdrop" hidden></div>
+<div class="install" id="newsSheet" hidden role="dialog" aria-modal="true" aria-labelledby="newsTitle">
+  <i class="grab" aria-hidden="true"></i>
+  <span class="onair" style="align-self:flex-start"><i></i>Nouveau</span>
+  <div class="install-head"><span class="news-ico" aria-hidden="true">👥</span><div><b id="newsTitle">Les Amis arrivent</b><span>Mise à jour de L’agenda du sportif</span></div></div>
+  <ol class="steps">
+    <li><span class="n">1</span><span><b>Ajoute tes potes</b> avec leur code ami ou leur pseudo.</span></li>
+    <li><span class="n">2</span><span><b>Suis leurs séances</b>, réagis 💪 🔥 👏 et <b>essaie-les</b> en un toucher.</span></li>
+    <li><span class="n">3</span><span><b>Écris-leur</b> directement dans l’app.</span></li>
+  </ol>
+  <p class="hint">Tes séances ne sont visibles que par tes amis acceptés. Tu peux couper le partage à tout moment.</p>
+  <button type="button" class="btn primary" id="newsGo">Découvrir les Amis</button>
+  <button type="button" class="later" id="newsLater">Plus tard</button>
 </div>
 
 <!-- ============ ASSISTANT (FAQ) ============ -->
