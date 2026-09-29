@@ -9,7 +9,7 @@ import { firebaseConfig } from "./firebase-config.js";
 import { MUSCLES, GROUPS, EQUIP, EXERCISES, KEYWORDS, PROGRAMS } from "./data.js";
 
 /* Version : si la page et le code ne correspondent pas (ancien fichier en cache), on recharge proprement. */
-const APP_VERSION = "16";
+const APP_VERSION = "17";
 if (window.APP_PAGE_VERSION !== APP_VERSION) {
   let tried = false; try { tried = sessionStorage.getItem("reload-v" + APP_VERSION) === "1"; sessionStorage.setItem("reload-v" + APP_VERSION, "1"); } catch (e) { /* stockage bloqué */ }
   if (!tried && window.__repairApp) { window.__repairApp(); throw new Error("Mise à jour en cours"); }
@@ -144,8 +144,12 @@ const DISC = {
   calis: { name: "Callisthénie", color: "#C9D63A", desc: "Poids du corps : tractions, dips, figures…",
     icon: '<path d="M3 4h18M8 4v3M16 4v3"/><circle cx="12" cy="10" r="2"/><path d="M8 7l4 4.5L16 7M12 12v4.5M9 21l3-4.5 3 4.5"/>' },
   course: { name: "Course à pied", color: "#5AC8FA", desc: "Endurance fondamentale, seuil, fractionné",
-    icon: '<circle cx="14.5" cy="4.5" r="2"/><path d="M7 21l3.5-6 3 2.5V22M5.5 11.5l3.5-3 4 1 2.5 3.5h3.5M10.5 15l-1.5-4.5"/>' }
+    icon: '<circle cx="14.5" cy="4.5" r="2"/><path d="M7 21l3.5-6 3 2.5V22M5.5 11.5l3.5-3 4 1 2.5 3.5h3.5M10.5 15l-1.5-4.5"/>' },
+  cordes: { name: "Cordes", color: "#FF5FA2", desc: "Montées de corde : nombre, départs, lest",
+    icon: '<path d="M8 2h8"/><path d="M12 2c-3 2.5 3 4.5 0 7s3 4.5 0 7 3 4.5 0 6"/>' }
 };
+// Activités qui ont leurs pages Idées, Records et Progression.
+const MAIN_DISC = ["muscu", "crossfit", "calis", "course"];
 const RUN_TYPES = [
   { id: "ef", name: "Endurance fondamentale", short: "EF", color: "#5AC8FA", hint: "Allure facile : tu dois pouvoir parler en courant (60 à 75 % de ta FC max)." },
   { id: "seuil", name: "Seuil", short: "Seuil", color: "#FF7A45", hint: "Allure soutenue mais contrôlée, tenable 30 à 60 min en course (85 à 90 % de ta FC max)." },
@@ -196,11 +200,12 @@ function dayMeta(d, types) {
   if (disc === "course") { const r = RUN_TYPES.find(x => x.id === d.runType); return { disc, name: r ? r.name : "Course à pied", short: r ? r.short : "Course", color: r ? r.color : DISC.course.color }; }
   if (disc === "crossfit") return { disc, name: "CrossFit", short: "CrossFit", color: DISC.crossfit.color };
   if (disc === "calis") return { disc, name: "Callisthénie", short: "Calis", color: DISC.calis.color };
+  if (disc === "cordes" || d.typeId === "cordes") return { disc: "cordes", name: "Cordes", short: "Cordes", color: DISC.cordes.color };
   const t = (types || S.types).find(x => x.id === d.typeId);
   return { disc, name: t ? t.name : "Musculation", short: t ? t.name : "Muscu", color: t ? t.color : "#8A847E" };
 }
 function nameColor(n) {
-  const all = [...DEFAULT_TYPES.map(t => [t.name, t.color]), ...RUN_TYPES.map(r => [r.name, r.color]), ["CrossFit", DISC.crossfit.color], ["Callisthénie", DISC.calis.color]];
+  const all = [...DEFAULT_TYPES.map(t => [t.name, t.color]), ...RUN_TYPES.map(r => [r.name, r.color]), ["CrossFit", DISC.crossfit.color], ["Callisthénie", DISC.calis.color], ["Cordes", DISC.cordes.color]];
   const f = all.find(x => x[0] === n); return f ? f[1] : "#8A847E";
 }
 function exVolume(ex) { return (ex.sets || []).reduce((a, s) => a + ((+s.reps || 0) * (+s.kg || 0)), 0); }
@@ -518,9 +523,9 @@ function renderMain() {
     h += `<button class="day${s ? " has" : ""}${k === tk ? " today" : ""}" data-k="${k}" style="--tc:${mt ? mt.color : "#8A847E"}" aria-label="${d} ${MONTHS[m]}${s ? ", " + esc(ks.map(x => titleOf(S.days[x])).join(" et ")) : ""}"><span class="n">${d}</span>${s ? `<span class="t">${esc(mt.short)}</span>` : ""}${ks.length > 1 ? `<span class="more">+${ks.length - 1}</span>` : ""}</button>`;
   }
   $("grid").innerHTML = h;
-  $("legend").innerHTML = S.types.map(t => `<span style="--tc:${t.color}"><i class="dot"></i>${esc(t.name)}</span>`).join("")
+  $("legend").innerHTML = S.types.filter(t => t.id !== "cordes").map(t => `<span style="--tc:${t.color}"><i class="dot"></i>${esc(t.name)}</span>`).join("")
     + `<span class="legend-sep">Autres activités</span>`
-    + [["CrossFit", DISC.crossfit.color], ["Callisthénie", DISC.calis.color], ...RUN_TYPES.map(r => [r.name, r.color])]
+    + [["CrossFit", DISC.crossfit.color], ["Callisthénie", DISC.calis.color], ["Cordes", DISC.cordes.color], ...RUN_TYPES.map(r => [r.name, r.color])]
       .map(([n, c]) => `<span style="--tc:${c}"><i class="dot"></i>${esc(n)}</span>`).join("");
   const ks = Object.keys(S.days).filter(k => k.startsWith(y + "-" + pad(m + 1))).sort().reverse();
   const vol = ks.reduce((a, k) => a + dayVolume(S.days[k]), 0);
@@ -574,9 +579,10 @@ function exStats(ex, disc) {
 // Dernière séance comparable, pour la reprendre (musculation : même type ; callisthénie : n'importe laquelle).
 function lastComparable(c, before) {
   const disc = c.disc;
-  if (disc !== "muscu" && disc !== "calis") return null;
+  if (disc !== "muscu" && disc !== "calis" && disc !== "cordes") return null;
   if (disc === "muscu" && !c.typeId) return null;
-  return Object.keys(S.days).filter(k => k < before && discOf(S.days[k]) === disc && (disc === "calis" || S.days[k].typeId === c.typeId) && (S.days[k].exercises || []).length).sort().pop();
+  const same = k => disc === "cordes" ? dayMeta(S.days[k]).disc === "cordes" : discOf(S.days[k]) === disc && (disc === "calis" || S.days[k].typeId === c.typeId);
+  return Object.keys(S.days).filter(k => k < before && same(k) && (S.days[k].exercises || []).length).sort().pop();
 }
 // Progression des séries : une série est « faite » si elle est cochée ou si ses répétitions sont remplies.
 // Une série n'est « faite » que si on la valide (bouton « Série finie » ou toucher sur son numéro).
@@ -673,10 +679,9 @@ function choiceHTML() {
 }
 function muscuHTML(c, k) {
   const t = typeOf(c.typeId), last = !(c.exercises || []).length ? lastComparable(c, k) : null;
-  return `<div class="chips" role="group" aria-label="Type de séance">${S.types.map(x => `<button class="chip" data-a="type" data-id="${x.id}" style="--tc:${x.color}" aria-pressed="${x.id === c.typeId}"><i class="dot"></i>${esc(x.name)}</button>`).join("")}</div>
+  return `<div class="chips" role="group" aria-label="Type de séance">${S.types.filter(x => x.id !== "cordes" || c.typeId === "cordes").map(x => `<button class="chip" data-a="type" data-id="${x.id}" style="--tc:${x.color}" aria-pressed="${x.id === c.typeId}"><i class="dot"></i>${esc(x.name)}</button>`).join("")}</div>
     ${last ? `<button class="suggest" data-a="copy" data-k="${last}"><span style="flex:1"><b>Reprendre la dernière séance ${esc(t.name)}</b><span>${parse(last).getDate()} ${MONTHS[parse(last).getMonth()]} · ${(S.days[last].exercises || []).length} exercices, poids pré-remplis</span></span><span aria-hidden="true">›</span></button>` : ""}
-    ${c.typeId === "cordes" ? `<p class="hint" style="margin-top:-6px">Pour chaque exercice : nombre de cordes, départ toutes les X secondes ou minutes, avec ou sans lest.</p>` : ""}
-    ${(c.exercises || []).map((ex, i) => c.typeId === "cordes" ? cordesExHTML(ex, i) : exHTML(ex, i, "muscu")).join("")}
+    ${(c.exercises || []).map((ex, i) => exHTML(ex, i, "muscu")).join("")}
     <button class="add-ex" data-a="add-ex">+ Ajouter un exercice</button>
     ${(c.exercises || []).some(x => String(x.name || "").trim()) ? `<button class="btn" data-a="save-routine">☆ Enregistrer comme routine</button>` : ""}`;
 }
@@ -686,6 +691,17 @@ function calisHTML(c, k) {
     <div class="chips">${CALIS_MOVES.map(([n, hold]) => `<button class="chip" data-a="calis-add" data-name="${esc(n)}" data-hold="${hold ? 1 : ""}">+ ${esc(n)}</button>`).join("")}</div></section>
     ${last ? `<button class="suggest" data-a="copy" data-k="${last}"><span style="flex:1"><b>Reprendre ta dernière séance</b><span>${parse(last).getDate()} ${MONTHS[parse(last).getMonth()]} · ${(S.days[last].exercises || []).length} exercices</span></span><span aria-hidden="true">›</span></button>` : ""}
     ${(c.exercises || []).map((ex, i) => exHTML(ex, i, "calis")).join("")}
+    <button class="add-ex" data-a="add-ex">+ Ajouter un exercice</button>
+    ${(c.exercises || []).some(x => String(x.name || "").trim()) ? `<button class="btn" data-a="save-routine">☆ Enregistrer comme routine</button>` : ""}`;
+}
+// Les anciennes séances « Musculation · Cordes » deviennent des séances Cordes.
+function normCordes(c) { if (c && c.disc === "muscu" && c.typeId === "cordes") { c.disc = "cordes"; c.typeId = null; } return c; }
+function cordesHTML(c, k) {
+  const last = !(c.exercises || []).length ? lastComparable(c, k) : null;
+  return `<p class="hint" style="margin-top:-6px">Pour chaque exercice : nombre de cordes, départ toutes les X secondes ou minutes, avec ou sans lest.</p>
+    ${last ? `<button class="suggest" data-a="copy" data-k="${last}"><span style="flex:1"><b>Reprendre ta dernière séance Cordes</b><span>${parse(last).getDate()} ${MONTHS[parse(last).getMonth()]} · ${(S.days[last].exercises || []).length} exercice${(S.days[last].exercises || []).length > 1 ? "s" : ""}</span></span><span aria-hidden="true">›</span></button>` : ""}
+    ${(c.exercises || []).length ? "" : `<div class="chips">${["Montée de corde", "Montée de corde sans jambes"].map(n => `<button class="chip" data-a="cd-add" data-name="${esc(n)}">+ ${esc(n)}</button>`).join("")}</div>`}
+    ${(c.exercises || []).map((ex, i) => cordesExHTML(ex, i)).join("")}
     <button class="add-ex" data-a="add-ex">+ Ajouter un exercice</button>
     ${(c.exercises || []).some(x => String(x.name || "").trim()) ? `<button class="btn" data-a="save-routine">☆ Enregistrer comme routine</button>` : ""}`;
 }
@@ -755,7 +771,7 @@ function renderSheet() {
   let body;
   if (!disc) body = `${sessTabsHTML(c, k)}<p class="eyebrow">${dateTxt}</p>${choiceHTML()}`;
   else {
-    const specific = disc === "muscu" ? muscuHTML(c, k) : disc === "calis" ? calisHTML(c, k) : disc === "course" ? courseHTML(c) : crossfitHTML(c);
+    const specific = disc === "muscu" ? muscuHTML(c, k) : disc === "calis" ? calisHTML(c, k) : disc === "cordes" ? cordesHTML(c, k) : disc === "course" ? courseHTML(c) : crossfitHTML(c);
     const ph = disc === "muscu" && mt && typeOf(c.typeId) ? mt.name : disc === "course" && c.runType ? mt.name : disc === "crossfit" ? "WOD du jour" : DISC[disc].name;
     body = `${sessTabsHTML(c, k)}<div class="disc-line"><p class="eyebrow">${dateTxt} · ${DISC[disc].name}</p><button class="linkish" data-a="change-disc">Changer d’activité</button></div>
     <div class="my-reacts" id="myReacts">${myReactsHTML(k)}</div>
@@ -790,6 +806,7 @@ function openDay(k, preset) {
   const existing = S.days[k];
   S.cur = existing ? clone(existing) : EMPTY_DAY();
   if (existing && !S.cur.disc) S.cur.disc = "muscu"; // anciennes séances = musculation
+  normCordes(S.cur);
   if (!existing && preset) setDisc(S.cur, preset);
   if (!S.cur.photos) S.cur.photos = [];
   S.saveMsg = ""; S.photoErr = "";
@@ -857,7 +874,7 @@ $("sheet").addEventListener("click", e => {
   }
   else if (a === "mood") { c.mood = c.mood === b.dataset.v ? null : b.dataset.v; }
   else if (a === "add-ex") { openLib(name => addExercise(name), c.disc); return; }
-  else if (a === "calis-add") { addExercise(b.dataset.name, !!b.dataset.hold); return; }
+  else if (a === "calis-add" || a === "cd-add") { addExercise(b.dataset.name, !!b.dataset.hold); return; }
   else if (a === "save-routine") { saveRoutineFromSession(c); b.textContent = "✓ Routine enregistrée"; b.disabled = true; return; }
   else if (a === "sess") { flush(); openDay(b.dataset.k); return; }
   else if (a === "sess-new") { flush(); openDay(freshKey(dayOf(S.open))); return; }
@@ -1369,7 +1386,7 @@ function tryIdea(btn, disc, fill) {
   const d = todayK(), k = freshKey(d), extra = sessionsOn(d).filter(x => x !== k && !isEmpty(S.days[x])).length;
   go("seances"); const t = new Date(); S.view = new Date(t.getFullYear(), t.getMonth(), 1); renderMain();
   openDay(k);
-  S.cur = EMPTY_DAY(); setDisc(S.cur, disc); fill(S.cur);
+  S.cur = EMPTY_DAY(); setDisc(S.cur, disc); fill(S.cur); normCordes(S.cur);
   if (S.cur.exercises) { S.cur.exercises.forEach(e => { if (String(e.name || "").trim()) e.lock = true; }); prefillKg(S.cur.exercises, k); }
   timer = 1; flush(); renderSheet(); $("sheet").scrollTop = 0;
   if (extra) toast(`Ajoutée comme ${extra + 1}<sup>e</sup> séance du jour`);
@@ -1407,7 +1424,7 @@ const HUB_DESC = {
   prog: { muscu: "Tes charges exercice par exercice", crossfit: "Tes WOD de référence et tes 1RM", calis: "Tes répétitions et tes tenues", course: "Ton allure et tes distances" }
 };
 function discGrid(mode) {
-  return Object.entries(DISC).map(([id, x]) => `<button class="disc-card" data-cat="${mode}:${id}" style="--tc:${x.color}"><span class="disc-ico" aria-hidden="true"><svg viewBox="0 0 24 24">${x.icon}</svg></span><b>${x.name}</b><span>${HUB_DESC[mode][id]}</span></button>`).join("");
+  return Object.entries(DISC).filter(([id]) => MAIN_DISC.includes(id)).map(([id, x]) => `<button class="disc-card" data-cat="${mode}:${id}" style="--tc:${x.color}"><span class="disc-ico" aria-hidden="true"><svg viewBox="0 0 24 24">${x.icon}</svg></span><b>${x.name}</b><span>${HUB_DESC[mode][id]}</span></button>`).join("");
 }
 function renderTypesHub() { $("typesGrid").innerHTML = discGrid("ideas"); }
 function renderRecordsHub() { $("recGrid").innerHTML = discGrid("rec"); }
@@ -1809,6 +1826,8 @@ const FAQ = [
     a: "Let’s go › Carte musculaire : les muscles travaillés sur 7 ou 30 jours s’allument, du plus clair au plus rouge. Touche un muscle pour voir son nombre de séries." },
   { q: "Comment partager mon bilan ?", k: "bilan mois story partager instagram image recap",
     a: "Let’s go › Bilan du mois, puis « 📲 Partager en story ». Une image est créée avec tes chiffres du mois : partage-la sur Insta, Snap ou WhatsApp." },
+  { q: "Comment noter une séance de cordes ?", k: "corde cordes montee rope climb depart lest",
+    a: "Touche un jour, puis choisis « Cordes ». Pour chaque exercice : nombre de cordes, départ toutes les X secondes ou minutes, avec ou sans lest.\n« ⏱ Lancer les départs » fait sonner le minuteur à chaque départ." },
   { q: "Comment lancer un défi ?", k: "defi challenge competition amis concours",
     a: "Social › Défis › « + Nouveau défi » : choisis ce qu’on compte (séances, jours actifs, km ou volume), la durée et les amis invités. Le classement se met à jour tout seul." },
   { q: "Comment commenter une séance ?", k: "commenter commentaire fil actu actualite feed",
@@ -2413,7 +2432,7 @@ const blankSets = n => Array.from({ length: n }, () => ({ reps: "", kg: "" }));
 function addExercise(name, hold) {
   const c = S.cur; if (!c) return;
   const lib = libFind(name), ex = { name, hold: !!(hold || (lib && lib.hold)), sets: blankSets(3), rpe: 0, note: "", rest: 90 };
-  if (c.disc === "muscu" && c.typeId === "cordes") {
+  if (c.disc === "cordes") {
     const h = lastCordes(name, S.open);
     Object.assign(ex, { kind: "cordes", sets: [], ropes: "", every: "", unit: "s", lest: false, kg: "" }, h ? cordesOf(h.ex) : {});
   } else prefillFromLast(ex, S.open);
@@ -2602,7 +2621,7 @@ function saveRoutineFromSession(c) {
     if (x.kind === "cordes") { const { kind, ...cd } = cordesOf(x); out.c = cd; out.s = 1; out.r = x.ropes || ""; }
     return out;
   });
-  const name = String(c.title || "").trim() || (c.disc === "calis" ? "Callisthénie" : dayMeta(c).name);
+  const name = String(c.title || "").trim() || (c.disc === "calis" || c.disc === "cordes" ? DISC[c.disc].name : dayMeta(c).name);
   const list = routines(); list.unshift({ id: "r" + Date.now().toString(36), name: name.slice(0, 40), disc: c.disc, typeId: c.typeId || null, ex });
   saveRoutines(list.slice(0, 40));
   toast("☆ Routine « " + esc(name) + " » enregistrée");
@@ -2622,6 +2641,7 @@ function startWorkout(w, extra) {
     prefillKg(S.cur.exercises, k);
   }
   if (extra) Object.assign(S.cur, extra);
+  normCordes(S.cur);
   timer = 1; flush(); renderSheet(); $("sheet").scrollTop = 0;
 }
 function renderRoutines() {
@@ -2629,9 +2649,9 @@ function renderRoutines() {
   $("routinesBody").innerHTML = `<button class="btn primary" data-rnew="1">+ Créer une routine</button>
     <p class="hint">Astuce : dans une séance, touche « ☆ Enregistrer comme routine » pour la refaire en un toucher.</p>
     ${list.length ? `<div class="list">${list.map(r => {
-      const col = r.disc === "calis" ? DISC.calis.color : (typeOf(r.typeId) || {}).color || "var(--red-hi)";
+      const col = r.disc === "calis" || r.disc === "cordes" ? DISC[r.disc].color : (typeOf(r.typeId) || {}).color || "var(--red-hi)";
       return `<article class="idea" style="--tc:${col}">
-        <div class="idea-top"><b>${esc(r.name)}</b><span class="tag">${r.disc === "calis" ? "Callisthénie" : esc((typeOf(r.typeId) || {}).name || "Musculation")}</span></div>
+        <div class="idea-top"><b>${esc(r.name)}</b><span class="tag">${r.disc === "calis" || r.disc === "cordes" ? DISC[r.disc].name : esc((typeOf(r.typeId) || {}).name || "Musculation")}</span></div>
         <ul>${(r.ex || []).map(e => `<li>${esc(e.n)} — ${e.c ? esc(cordesText(e.c)) : esc(e.s) + " × " + esc(repsText(e.r, e.h))}</li>`).join("")}</ul>
         <div class="grid2"><button class="btn" data-redit="${r.id}">Modifier</button><button class="btn primary" data-rgo="${r.id}">Lancer</button></div>
       </article>`; }).join("")}</div>` : `<div class="empty">Pas encore de routine. Crée ta première : tes exercices, tes séries et tes temps de repos, prêts à lancer.</div>`}`;
@@ -2646,8 +2666,8 @@ function renderRoutine() {
   const r = S.rEdit; if (!r) { go("routines"); return; }
   $("routineTitle").textContent = r.id ? "Modifier" : "Nouvelle routine";
   $("routineBody").innerHTML = `<label class="field"><span>Nom de la routine</span><input id="rtn-name" value="${esc(r.name)}" placeholder="ex. Push du lundi" maxlength="40"></label>
-    <div class="chips">${["muscu", "calis"].map(d => `<button type="button" class="chip" data-rdisc="${d}" style="--tc:${DISC[d].color}" aria-pressed="${r.disc === d}">${DISC[d].name}</button>`).join("")}</div>
-    ${r.disc === "muscu" ? `<div class="chips">${S.types.filter(t => t.id !== "repos").map(t => `<button type="button" class="chip" data-rtype="${t.id}" style="--tc:${t.color}" aria-pressed="${r.typeId === t.id}"><i class="dot"></i>${esc(t.name)}</button>`).join("")}</div>` : ""}
+    <div class="chips">${["muscu", "calis", "cordes"].map(d => `<button type="button" class="chip" data-rdisc="${d}" style="--tc:${DISC[d].color}" aria-pressed="${r.disc === d}">${DISC[d].name}</button>`).join("")}</div>
+    ${r.disc === "muscu" ? `<div class="chips">${S.types.filter(t => t.id !== "repos" && t.id !== "cordes").map(t => `<button type="button" class="chip" data-rtype="${t.id}" style="--tc:${t.color}" aria-pressed="${r.typeId === t.id}"><i class="dot"></i>${esc(t.name)}</button>`).join("")}</div>` : ""}
     <div class="list">${r.ex.map((e, i) => `<div class="rt-ex card">
       <div class="rt-ex-top"><b>${esc(e.n)}</b><button type="button" class="icon-btn" data-rdel="${i}">Retirer</button></div>
       ${e.c ? `<p class="hint">${esc(cordesText(e.c))}</p>` : `<div class="grid3">
@@ -3091,7 +3111,7 @@ function trySession(btn, uid, s, types) {
   const disc = discOf(s);
   tryIdea(btn, disc, c => {
     c.title = titleOf(s, types) + " · " + (SOC.dir[uid] || {}).pseudo;
-    if (disc === "muscu" || disc === "calis") {
+    if (disc === "muscu" || disc === "calis" || disc === "cordes") {
       if (disc === "muscu") c.typeId = S.types.some(x => x.id === s.typeId) ? s.typeId : null;
       c.exercises = (s.exercises || []).map(x => ({ name: x.name, hold: !!x.hold, rpe: 0, note: "", rest: restOf(x), ...cordesOf(x), sets: (x.sets || []).map(st => ({ reps: "", kg: "", target: st.reps !== "" && st.reps != null ? st.reps : (st.target ?? "") })) }));
     } else if (disc === "course") { c.runType = s.runType || null; c.run = { blocks: clone((s.run || {}).blocks || []) }; }
@@ -3257,7 +3277,7 @@ function muscleLoad(ks) {
   ks.forEach(k => {
     const s = S.days[k]; if (!s || isEmpty(s)) return;
     const disc = discOf(s);
-    if (disc === "muscu" || disc === "calis") (s.exercises || []).forEach(ex => {
+    if (disc === "muscu" || disc === "calis" || disc === "cordes") (s.exercises || []).forEach(ex => {
       const n = ex.kind === "cordes" ? Math.ceil((+ex.ropes || 0) / 2) : (ex.sets || []).filter(st => st.done === true || doneSet(st)).length; if (n) add(musclesOf(ex.name), n);
     });
     else if (disc === "crossfit") ((s.wod || {}).moves || []).forEach(m => { if (m.name) add(musclesOf(m.name), 2); });

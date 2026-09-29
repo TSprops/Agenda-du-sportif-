@@ -760,3 +760,7 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .cd-every{display:flex;gap:6px}
 .cd-every .num{flex:1;min-width:0;height:42px}
 .cordes .grid2 .field>span{font-size:12.5px}
+.disc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.disc-card{min-width:0}
+.disc-card b{font-size:clamp(17px,5vw,22px);overflow-wrap:normal;word-break:normal;hyphens:manual}
+.disc-grid>.disc-card:last-child:nth-child(odd){grid-column:1/-1;min-height:0}
