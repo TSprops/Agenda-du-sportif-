@@ -11,6 +11,8 @@ service cloud.firestore {
     function me() { return request.auth.uid; }
     function isAdmin() { return signedIn() && exists(/databases/$(database)/documents/admins/$(me())); }
     function isSelf(uid) { return signedIn() && me() == uid; }
+    // Utilisateur suspendu par l'administrateur : il ne peut plus rien publier côté social.
+    function banned() { return exists(/databases/$(database)/documents/bans/$(me())); }
     function pairKey(a, b) { return a < b ? a + '_' + b : b + '_' + a; }
     function isFriend(uid) {
       let path = /databases/$(database)/documents/friends/$(pairKey(me(), uid));
@@ -23,6 +25,11 @@ service cloud.firestore {
     function chatOk(pid) {
       let path = /databases/$(database)/documents/friends/$(pid);
       return signedIn() && exists(path) && get(path).data.status == 'accepted' && me() in get(path).data.users;
+    }
+
+    match /bans/{uid} {
+      allow get: if isSelf(uid) || isAdmin();
+      allow list, write: if isAdmin();
     }
 
     match /admins/{uid} {
@@ -49,8 +56,10 @@ service cloud.firestore {
 
     // Annuaire : pseudo, code ami et photo, pour pouvoir se trouver.
     match /directory/{uid} {
-      allow read: if signedIn();
-      allow write: if isSelf(uid) && request.resource.data.uid == uid
+      allow get: if signedIn();
+      allow list: if signedIn() && request.query.limit <= 10;
+      allow delete: if isAdmin();
+      allow write: if isSelf(uid) && !banned() && request.resource.data.uid == uid
                    && request.resource.data.pseudo is string && request.resource.data.pseudo.size() <= 30
                    && request.resource.data.code is string && request.resource.data.code.size() <= 12;
       allow delete: if isSelf(uid);
@@ -65,7 +74,7 @@ service cloud.firestore {
     // Demandes d'ami, amitiés et blocages. L'identifiant est « uidA_uidB » (ordre alphabétique).
     match /friends/{pid} {
       allow read: if signedIn() && me() in resource.data.users;
-      allow create: if signedIn()
+      allow create: if signedIn() && !banned()
                     && request.resource.data.users.size() == 2
                     && request.resource.data.users[0] < request.resource.data.users[1]
                     && pid == request.resource.data.users[0] + '_' + request.resource.data.users[1]
@@ -91,21 +100,22 @@ service cloud.firestore {
     // Conversations privées entre amis.
     match /chats/{pid} {
       allow read: if chatOk(pid);
-      allow create, update: if chatOk(pid) && me() in request.resource.data.users;
+      allow create, update: if chatOk(pid) && !banned() && me() in request.resource.data.users;
       match /messages/{mid} {
         allow read: if chatOk(pid);
-        allow create: if chatOk(pid) && request.resource.data.from == me()
+        allow create: if chatOk(pid) && !banned() && request.resource.data.from == me()
                       && request.resource.data.text is string
                       && request.resource.data.text.size() > 0
                       && request.resource.data.text.size() <= 1000;
-        allow update, delete: if false;
+        allow update: if false;
+        allow delete: if isAdmin();
       }
     }
 
     // Réactions des amis sur les séances : reacts/{propriétaire}/items/{date__ami}
     match /reacts/{owner}/items/{rid} {
       allow read: if isSelf(owner) || isFriend(owner);
-      allow create: if isFriend(owner) && request.resource.data.from == me()
+      allow create: if isFriend(owner) && !banned() && request.resource.data.from == me()
                     && rid == request.resource.data.date + '__' + me()
                     && request.resource.data.emoji in ['muscle', 'fire', 'clap'];
       allow update: if isFriend(owner) && resource.data.from == me() && request.resource.data.from == me()
@@ -116,18 +126,18 @@ service cloud.firestore {
     // Commentaires des amis sur les séances : comments/{propriétaire}/items/{id}
     match /comments/{owner}/items/{cid} {
       allow read: if isSelf(owner) || isFriend(owner);
-      allow create: if (isSelf(owner) || isFriend(owner)) && request.resource.data.from == me()
+      allow create: if (isSelf(owner) || isFriend(owner)) && !banned() && request.resource.data.from == me()
                     && request.resource.data.date is string && request.resource.data.date.size() <= 14
                     && request.resource.data.text is string
                     && request.resource.data.text.size() > 0 && request.resource.data.text.size() <= 500;
       allow update: if false;
-      allow delete: if signedIn() && (resource.data.from == me() || isSelf(owner));
+      allow delete: if signedIn() && (resource.data.from == me() || isSelf(owner) || isAdmin());
     }
 
     // Défis entre amis : chacun ne peut modifier que son propre score, ou quitter le défi.
     match /challenges/{cid} {
       allow read: if signedIn() && me() in resource.data.members;
-      allow create: if signedIn() && request.resource.data.owner == me()
+      allow create: if signedIn() && !banned() && request.resource.data.owner == me()
                     && me() in request.resource.data.members
                     && request.resource.data.members.size() <= 20
                     && request.resource.data.name is string && request.resource.data.name.size() <= 60
@@ -137,7 +147,7 @@ service cloud.firestore {
                         && request.resource.data.scores.diff(resource.data.scores).affectedKeys().hasOnly([me()]))
                       || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['members'])
                         && request.resource.data.members == resource.data.members.removeAll([me()])));
-      allow delete: if signedIn() && resource.data.owner == me();
+      allow delete: if signedIn() && (resource.data.owner == me() || isAdmin());
     }
 
     // Signalements (lus par l'administrateur).

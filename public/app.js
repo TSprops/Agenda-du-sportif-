@@ -3,13 +3,13 @@ import {
   signInWithEmailAndPassword, signOut, sendPasswordResetEmail, deleteUser, reauthenticateWithCredential, EmailAuthProvider,
   initializeFirestore, connectFirestoreEmulator, persistentLocalCache, persistentMultipleTabManager,
   doc, collection, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, onSnapshot, query, where, orderBy, limit, limitToLast, writeBatch,
-  arrayRemove
+  arrayRemove, documentId, getDocsFromCache
 } from "./vendor/firebase.js";
 import { firebaseConfig } from "./firebase-config.js";
 import { MUSCLES, GROUPS, EQUIP, EXERCISES, KEYWORDS, PROGRAMS } from "./data.js";
 
 /* Version : si la page et le code ne correspondent pas (ancien fichier en cache), on recharge proprement. */
-const APP_VERSION = "18";
+const APP_VERSION = "19";
 if (window.APP_PAGE_VERSION !== APP_VERSION) {
   let tried = false; try { tried = sessionStorage.getItem("reload-v" + APP_VERSION) === "1"; sessionStorage.setItem("reload-v" + APP_VERSION, "1"); } catch (e) { /* stockage bloqué */ }
   if (!tried && window.__repairApp) { window.__repairApp(); throw new Error("Mise à jour en cours"); }
@@ -20,6 +20,7 @@ if (window.APP_PAGE_VERSION !== APP_VERSION) {
    Constantes
    ============================================================ */
 const TYPES_V = 2;
+const TERMS_V = 1; // version des conditions d'utilisation acceptées
 const DEFAULT_TYPES = [
   { id: "push", name: "Push", color: "#FF3B30" },
   { id: "pull", name: "Pull", color: "#3D8BFF" },
@@ -50,10 +51,12 @@ if (!configured && !LOCAL) {
   $("v-setup").hidden = false;
   throw new Error("firebase-config.js est vide");
 }
-const fbApp = initializeApp(configured ? firebaseConfig : { apiKey: "demo-key", authDomain: "localhost", projectId: "demo-agenda" });
+// Tests en local : les émulateurs Firebase (port 5000) au lieu de la vraie base.
+const EMU = LOCAL && (!configured || location.port === "5000");
+const fbApp = initializeApp(EMU ? { apiKey: "demo-key", authDomain: "localhost", projectId: "demo-agenda" } : firebaseConfig);
 const auth = getAuth(fbApp);
-const db = initializeFirestore(fbApp, LOCAL && !configured ? {} : { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) });
-if (LOCAL && !configured) {
+const db = initializeFirestore(fbApp, EMU ? {} : { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) });
+if (EMU) {
   connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true });
   connectFirestoreEmulator(db, "127.0.0.1", 8080);
 }
@@ -285,6 +288,7 @@ function saveProfile(patch) {
   return pChain;
 }
 function persistDay(k, data) {
+  if (S.old && S.split && k < S.split) { if (data) S.old.seances[k] = data; else delete S.old.seances[k]; }
   const ref = subDoc("seances", k);
   dChain = dChain.then(() => data ? setDoc(ref, data) : deleteDoc(ref))
     .then(() => setSave(""))
@@ -297,7 +301,7 @@ function savePrefs() { saveProfile({ prefs: { ...S.prefs } }); }
 // Résumé d'activité lu par l'administrateur (stocké dans le document de l'utilisateur).
 let statsTimer = null;
 function syncStats() {
-  if (!S.uid || !S.profile) return;
+  if (!S.uid || !S.profile || !S.oldReady) return;
   clearTimeout(statsTimer);
   statsTimer = setTimeout(() => {
     const ks = Object.keys(S.days).sort(), byType = {};
@@ -336,7 +340,7 @@ function go(v) {
   if (!$("helpPanel").hidden && !FAB_SCREENS.includes(v)) $("helpPanel").hidden = true;
   updateFab();
   if (v !== "chat") leaveChat();
-  if (v === "home") { maybeNews(); maybeInvite(); }
+  if (v === "home") { if (!maybeTerms()) { maybeNews(); maybeInvite(); } }
 }
 function refresh() {
   if (S.screen === "profile") renderPfStats();
@@ -432,11 +436,12 @@ $("signup").addEventListener("submit", async e => {
   e.preventDefault();
   const f = readFields("su");
   if (!f.pseudo) { show($("suErr"), "Choisis un pseudo pour terminer ton inscription."); return; }
+  if (!$("suTerms").checked) { show($("suErr"), "Accepte les conditions d’utilisation pour terminer ton inscription."); return; }
   $("suErr").hidden = true;
   try {
     await saveProfile({
       ...f, photo: f.photo || null, email: S.email, createdAt: Date.now(), visits: 1, lastSeen: Date.now(),
-      typesV: TYPES_V, types: DEFAULT_TYPES.map(t => ({ ...t })), prefs: { creaDose: 5 }, goal: 3, seen: { amis1: true, v2: true }
+      typesV: TYPES_V, types: DEFAULT_TYPES.map(t => ({ ...t })), prefs: { creaDose: 5 }, goal: 3, seen: { amis1: true, v2: true }, termsV: TERMS_V, termsAt: Date.now()
     });
     S.visitCounted = true;
     subscribeData(); ensureSocialProfile(); subscribeSocial(); go("home"); openTuto();
@@ -1086,6 +1091,7 @@ function nutOf(k) { return S.nut[k] || { complements: [], creatine: null }; }
 function saveNut(k, n) {
   if (!(n.complements || []).length && !n.creatine) delete S.nut[k]; else S.nut[k] = { ...n, updatedAt: Date.now() };
   const data = S.nut[k], ref = subDoc("nutrition", k);
+  if (S.old && S.split && k < S.split) { if (data) S.old.nutrition[k] = data; else delete S.old.nutrition[k]; }
   nChain = nChain.then(() => data ? setDoc(ref, data) : deleteDoc(ref)).catch(() => {});
   syncStats(); renderNutrition();
 }
@@ -1207,7 +1213,11 @@ function renderAdmin() {
   const maxT = Math.max(1, ...Object.values(byType));
   const colorOf = nameColor;
   const msgs = S.messages, unread = msgs.filter(m => !m.lu).length;
+  const lb = +(lsGet("last-backup") || 0);
   $("adminBody").innerHTML = `<div style="display:flex;flex-direction:column;gap:22px">
+  <section class="card"><div class="lbl">Sauvegarde</div>
+    <p class="hint">Télécharge une copie de toute la base (profils, séances, nutrition, sans les photos). À faire environ une fois par mois et à garder dans Fichiers ou iCloud. ${lb ? "Dernière sauvegarde : " + esc(fmtDate(lb)) + "." : "Aucune sauvegarde faite depuis cet appareil."}</p>
+    <button class="btn" data-backup="1">💾 Sauvegarde complète</button></section>
   <div class="stats" style="grid-template-columns:repeat(2,1fr)">
     <div class="stat"><b>${M.length}</b><span>utilisateurs inscrits</span></div>
     <div class="stat"><b>${active}</b><span>actifs ces 7 derniers jours</span></div>
@@ -1216,12 +1226,40 @@ function renderAdmin() {
   </div>
   <section><h2 class="h2">Séances par type</h2><div class="card bars">${Object.keys(byType).length ? Object.entries(byType).sort((a, b) => b[1] - a[1]).map(([n, v]) => `<div class="barrow" style="--tc:${colorOf(n)}"><span>${esc(n)}</span><span class="track"><span class="fill" style="display:block;width:${Math.round(v / maxT * 100)}%"></span></span><b>${v}</b></div>`).join("") : `<p class="hint">Aucune séance enregistrée pour l’instant.</p>`}</div></section>
   <section><h2 class="h2">Utilisateurs · ${M.length}</h2><div class="card" style="gap:0;padding-block:4px">${M.length ? M.map(m => `<button class="urow" data-uid="${esc(m.id)}">${avatarHTML(m, 42)}<span class="main"><b>${esc(m.pseudo)}${m.id === S.uid ? ' <span class="tag done">toi</span>' : ""}</b><span>Vu ${esc(ago(m.lastSeen))} · ${plural((m.stats && m.stats.seances) || 0, "séance")} · ${plural(m.visits || 0, "visite")}</span></span><span class="arrow" aria-hidden="true">›</span></button>`).join("") : `<p class="hint" style="padding-block:12px">Personne ne s’est encore inscrit.</p>`}</div></section>
-  <section><h2 class="h2">Signalements · ${(S.reports || []).length}</h2><div class="card" style="gap:0;padding-block:4px">${(S.reports || []).length ? S.reports.map(r => `<div class="msg"><div class="msg-top"><span class="tag">${r.kind === "conversation" ? "Conversation" : "Message"}</span><b>${esc(r.targetPseudo || "?")}</b><small>signalé par ${esc(r.fromPseudo || "?")} · ${esc(fmtDate(r.at))}</small></div><p>${esc(r.text)}</p><button class="icon-btn" style="align-self:flex-start" data-repdone="${esc(r.id)}">Traité · supprimer</button></div>`).join("") : `<p class="hint" style="padding-block:12px">Aucun signalement.</p>`}</div></section>
+  <section><h2 class="h2">Signalements · ${(S.reports || []).length}</h2><div class="card" style="gap:0;padding-block:4px">${(S.reports || []).length ? S.reports.map(reportHTML).join("") : `<p class="hint" style="padding-block:12px">Aucun signalement.</p>`}</div></section>
   <section><h2 class="h2">Messages reçus · ${unread} non lu${unread > 1 ? "s" : ""}</h2><div class="card" style="gap:0;padding-block:4px">${msgs.length ? msgs.map(m => `<div class="msg"><div class="msg-top"><span class="tag${m.lu ? " done" : ""}">${esc(m.objet)}</span><b>${esc(m.pseudo || "Utilisateur")}</b><small>${esc(fmtDate(m.at))}</small></div><p>${esc(m.texte)}</p>${m.email ? `<small>Répondre à : <span style="user-select:all;color:var(--ink)">${esc(m.email)}</span></small>` : ""}<button class="icon-btn" style="align-self:flex-start" data-mid="${esc(m.id)}">${m.lu ? "Marquer non lu" : "Marquer comme lu"}</button></div>`).join("") : `<p class="hint" style="padding-block:12px">Aucun message pour l’instant.</p>`}</div></section>
   </div>`;
 }
-$("adminBody").addEventListener("click", e => {
+const REPORT_KINDS = { message: "Message", conversation: "Conversation", comment: "Commentaire", profile: "Profil", challenge: "Défi" };
+function reportHTML(r) {
+  const banned = !!(S.bans || {})[r.target], canDel = r.ref && ["message", "comment", "challenge"].includes(r.kind);
+  return `<div class="msg"><div class="msg-top"><span class="tag">${esc(REPORT_KINDS[r.kind] || "Signalement")}</span><b>${esc(r.targetPseudo || "?")}</b>${banned ? '<span class="tag done">Banni</span>' : ""}<small>signalé par ${esc(r.fromPseudo || "?")} · ${esc(fmtDate(r.at))}</small></div><p>${esc(r.text)}</p>
+    <div class="mod-actions">${canDel ? `<button class="icon-btn" data-repdel="${esc(r.id)}">🗑 Supprimer le contenu</button>` : ""}${r.kind === "profile" && r.target ? `<button class="icon-btn" data-dirdel="${esc(r.target)}">Retirer de la recherche</button>` : ""}${r.target ? `<button class="icon-btn" data-ban="${esc(r.target)}" data-banp="${esc(r.targetPseudo || "")}">${banned ? "Débannir" : "⛔ Bannir"}</button>` : ""}<button class="icon-btn" data-repdone="${esc(r.id)}">✓ Traité</button></div></div>`;
+}
+// Bannir : l'utilisateur ne peut plus rien publier (amis, messages, commentaires, réactions, défis).
+async function toggleBan(uid, pseudo) {
+  try {
+    if ((S.bans || {})[uid]) await deleteDoc(doc(db, "bans", uid));
+    else await setDoc(doc(db, "bans", uid), { at: Date.now(), by: S.uid, pseudo: pseudo || (S.members[uid] || {}).pseudo || "" });
+  } catch (x) { toast("Action impossible. Vérifie les règles Firebase."); }
+}
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-ban]"); if (!b || !S.admin) return;
+  if (!armed(b, "Confirmer")) return;
+  await toggleBan(b.dataset.ban, b.dataset.banp); if (S.screen === "auser") openUser(b.dataset.ban);
+});
+$("adminBody").addEventListener("click", async e => {
   const u = e.target.closest("[data-uid]"); if (u) { openUser(u.dataset.uid); return; }
+  const bk = e.target.closest("[data-backup]"); if (bk) { adminBackup(bk); return; }
+  const rdel = e.target.closest("[data-repdel]");
+  if (rdel) {
+    if (!armed(rdel, "Confirmer")) return;
+    const r = (S.reports || []).find(x => x.id === rdel.dataset.repdel); if (!r || !r.ref) return;
+    try { await deleteDoc(doc(db, ...r.ref.split("/"))); await deleteDoc(doc(db, "reports", r.id)); toast("🗑 Contenu supprimé"); } catch (x) { toast("Suppression impossible. Vérifie les règles Firebase."); }
+    return;
+  }
+  const dd = e.target.closest("[data-dirdel]");
+  if (dd) { if (!armed(dd, "Confirmer")) return; deleteDoc(doc(db, "directory", dd.dataset.dirdel)).then(() => toast("Profil retiré de la recherche"), () => toast("Action impossible.")); return; }
   const rd = e.target.closest("[data-repdone]"); if (rd) { if (!armed(rd, "Confirmer")) return; deleteDoc(doc(db, "reports", rd.dataset.repdone)).catch(() => {}); return; }
   const r = e.target.closest("[data-mid]"); if (!r) return;
   const m = S.messages.find(x => x.id === r.dataset.mid); if (!m) return;
@@ -1247,6 +1285,7 @@ async function openUser(uid) {
      return `<div class="row" style="--tc:${mt.color}"><i class="bar"></i><span class="d">${DAYS[d.getDay()].slice(0, 3)}<b>${d.getDate()}</b></span><span class="main"><div class="ti">${esc(titleOf(s, types))}</div><div class="me">${esc(MONTHS_S[d.getMonth()])} ${d.getFullYear()} · ${esc(sessionSummary(s, types))}</div></span></div>`;
    }).join("") : `<div class="empty">Aucune séance enregistrée.</div>`}</div></section>
    <p class="hint">${nut} jour${nut > 1 ? "s" : ""} de nutrition renseigné${nut > 1 ? "s" : ""}.</p>
+   ${uid !== S.uid ? `<button class="btn ghost-danger" data-ban="${esc(uid)}" data-banp="${esc(m.pseudo || "")}">${(S.bans || {})[uid] ? "Débannir " : "⛔ Bannir "}${esc(m.pseudo || "")}</button>` : ""}
   </div>`;
 }
 
@@ -1836,7 +1875,7 @@ $("installBannerClose").onclick = () => { lsSet("install-banner-off", 1); refres
 let installTimer = null;
 function maybeInvite() {
   clearTimeout(installTimer);
-  if (newsPending()) return;
+  if (newsPending() || termsPending()) return;
   const later = +(lsGet("install-later") || 0);
   if (!canInstall() || Date.now() - later < 7 * 864e5) return;
   installTimer = setTimeout(() => { if (S.screen === "home" && !document.body.classList.contains("sheet-open")) openInstall(); }, 3000);
@@ -2100,7 +2139,7 @@ async function dirOf(uid) {
 }
 // Fiche publique (annuaire) + ce que voient les amis (share), mises à jour à chaque connexion et modification.
 async function ensureSocialProfile() {
-  if (!S.profile) return;
+  if (!S.profile || S.banned) return;
   if (!S.profile.friendCode) await saveProfile({ friendCode: makeCode(S.profile.pseudo) }).catch(() => {});
   const p = S.profile;
   setDoc(doc(db, "directory", S.uid), { uid: S.uid, pseudo: p.pseudo, pseudoLower: norm(p.pseudo).trim(), code: p.friendCode, photo: p.photo || null, objectif: p.objectif || "" }).catch(() => {});
@@ -2118,7 +2157,7 @@ function recordsSummary() {
 }
 let shareTimer = null;
 function syncShare() {
-  if (!S.uid || !S.profile) return;
+  if (!S.uid || !S.profile || !S.oldReady) return;
   clearTimeout(shareTimer);
   shareTimer = setTimeout(() => {
     const ks = Object.keys(S.days);
@@ -2222,6 +2261,7 @@ async function searchUsers(q) {
 }
 const relDoc = uid => doc(db, "friends", pairId(S.uid, uid));
 async function addFriend(uid) {
+  if (bannedStop()) return;
   const pid = pairId(S.uid, uid), f = SOC.friends[pid];
   if (f && f.status === "pending" && f.to === S.uid) return acceptFriend(pid);
   try { await setDoc(relDoc(uid), { users: pairOf(S.uid, uid), from: S.uid, to: uid, status: "pending", at: Date.now() }); }
@@ -2304,7 +2344,7 @@ function renderFriend() {
           <div class="reacts">${rx(s.k)}</div>${commentsHTML(fd.comments || [], uid, s.k, { all: SOC.openCmt === s.k })}</article>`; }).join("")}</div>
         ${days.length > SOC.friendShow ? `<button type="button" class="btn" data-fmore="1">Voir plus de séances</button>` : ""}`}
     </section>
-    <button type="button" class="danger" data-fblock="${uid}">Bloquer ${esc(d.pseudo)}</button>`;
+    <div class="grid2"><button type="button" class="btn ghost-danger" data-freport="${uid}">⚑ Signaler</button><button type="button" class="btn ghost-danger" data-fblock="${uid}">Bloquer</button></div>`;
 }
 $("friendBody").addEventListener("click", async e => {
   const t = e.target.closest("button"); if (!t) return;
@@ -2312,7 +2352,14 @@ $("friendBody").addEventListener("click", async e => {
   if (t.dataset.fchat2) { openChat(t.dataset.fchat2); return; }
   if (t.dataset.fmore) { SOC.friendShow += 10; renderFriend(); return; }
   if (t.dataset.fsk) { SOC.friendOpenK = SOC.friendOpenK === t.dataset.fsk ? null : t.dataset.fsk; renderFriend(); return; }
-  if (t.dataset.fblock) { if (!armed(t, "Toucher à nouveau pour bloquer")) return; await blockUser(uid); go("friends"); return; }
+  if (t.dataset.fblock) { if (!armed(t, "Confirmer")) return; await blockUser(uid); go("friends"); return; }
+  if (t.dataset.freport) {
+    if (!armed(t, "Confirmer")) return;
+    const d = SOC.dir[uid] || {};
+    try { await reportContent({ target: uid, kind: "profile", text: `Profil « ${d.pseudo || "?"} »${d.objectif ? " · objectif : " + d.objectif : ""}${d.photo ? " · avec photo" : ""}`, ref: `directory/${uid}` }); t.textContent = "Signalé ✓"; t.disabled = true; }
+    catch (x) { toast("Signalement impossible. Réessaie."); }
+    return;
+  }
   if (t.dataset.react) {
     const i = t.dataset.react.lastIndexOf(":"), k = t.dataset.react.slice(0, i), id = t.dataset.react.slice(i + 1);
     await toggleReact(uid, k, id, fd); renderFriend(); return;
@@ -2354,12 +2401,14 @@ function renderChatMsgs(scroll) {
   }).join("") : `<p class="hint" style="text-align:center;margin-top:30px">Dis bonjour 👋<br>Les messages ne sont visibles que par vous deux.</p>`;
   if (scroll) box.scrollTop = box.scrollHeight;
 }
-async function sendReport(text, extra) {
-  const d = SOC.dir[SOC.chatUid] || {};
-  await addDoc(collection(db, "reports"), { from: S.uid, fromPseudo: S.profile.pseudo, target: SOC.chatUid, targetPseudo: d.pseudo || "", text: String(text).slice(0, 1200), kind: extra || "message", at: Date.now() });
+// Signalement envoyé à l'administrateur. ref = chemin du contenu, pour pouvoir le supprimer.
+async function reportContent(o) {
+  const d = SOC.dir[o.target] || {};
+  await addDoc(collection(db, "reports"), { from: S.uid, fromPseudo: S.profile.pseudo, target: o.target || "", targetPseudo: o.targetPseudo || d.pseudo || "", text: String(o.text || "").slice(0, 1200), kind: o.kind, ref: o.ref || null, at: Date.now() });
 }
 $("chatForm").addEventListener("submit", async e => {
   e.preventDefault();
+  if (bannedStop()) return;
   const inp = $("chatInput"), text = inp.value.trim(); if (!text) return;
   const pid = pairId(S.uid, SOC.chatUid), at = Date.now(); inp.value = "";
   try {
@@ -2376,13 +2425,13 @@ $("v-chat").addEventListener("click", async e => {
   if (t.id === "chatWho") { openFriend(SOC.chatUid); return; }
   if (t.dataset.report) {
     const m = SOC.msgs.find(x => x.id === t.dataset.report); if (!m) return;
-    try { await sendReport(m.text); t.textContent = "Signalé ✓ Merci"; t.disabled = true; } catch (x) { t.textContent = "Échec, réessaie"; }
+    try { await reportContent({ target: SOC.chatUid, kind: "message", text: m.text, ref: `chats/${pairId(S.uid, SOC.chatUid)}/messages/${m.id}` }); t.textContent = "Signalé ✓ Merci"; t.disabled = true; } catch (x) { t.textContent = "Échec, réessaie"; }
     return;
   }
   if (t.dataset.cm === "profile") { openFriend(SOC.chatUid); return; }
   if (t.dataset.cm === "report") {
     const last = SOC.msgs.filter(m => m.from !== S.uid).slice(-10).map(m => "« " + m.text + " »").join("\n");
-    try { await sendReport(last || "(conversation vide)", "conversation"); t.textContent = "Conversation signalée ✓"; t.disabled = true; } catch (x) { t.textContent = "Échec, réessaie"; }
+    try { await reportContent({ target: SOC.chatUid, kind: "conversation", text: last || "(conversation vide)", ref: `chats/${pairId(S.uid, SOC.chatUid)}` }); t.textContent = "Conversation signalée ✓"; t.disabled = true; } catch (x) { t.textContent = "Échec, réessaie"; }
     return;
   }
   if (t.dataset.cm === "block") { if (!armed(t, "Toucher à nouveau pour bloquer")) return; await blockUser(SOC.chatUid); go("friends"); }
@@ -2391,6 +2440,12 @@ function leaveChat() { if (SOC.chatUnsub) { SOC.chatUnsub(); SOC.chatUnsub = nul
 
 /* ---------- Annonce de la nouveauté (une seule fois par utilisateur) ---------- */
 const NEWS_ID = "v2";
+function termsPending() { return !!(S.profile && (S.profile.termsV || 0) < TERMS_V); }
+function maybeTerms() { if (termsPending()) { $("termsBackdrop").hidden = false; $("termsSheet").hidden = false; return true; } return false; }
+$("termsOk").onclick = () => {
+  saveProfile({ termsV: TERMS_V, termsAt: Date.now() });
+  $("termsBackdrop").hidden = true; $("termsSheet").hidden = true; maybeNews();
+};
 function newsPending() { return !!(S.profile && !((S.profile.seen || {})[NEWS_ID]) && !lsGet("seen-" + NEWS_ID)); }
 let newsTimer = null;
 function maybeNews() {
@@ -2979,11 +3034,13 @@ function activityList() {
   return [...r, ...c].filter(x => x.at).sort((a, b) => b.at - a.at);
 }
 function sessLabel(k) { const s = S.days[k]; return s ? titleOf(s) : "ta séance"; }
+const BANNED_MSG = "Ton compte est suspendu des fonctions sociales suite à des signalements. Pour en parler, écris depuis la page Contact.";
+function bannedStop() { if (!S.banned) return false; toast("⛔ Compte suspendu des fonctions sociales"); return true; }
 function renderSocial() {
   const c = socialCounts(), act = activityList().slice(0, 8), seen = seenAct(), nf2 = acceptedFriends().length;
   const live = (SOC.challenges || []).filter(ch => ch.end >= todayK()).length, newCh = newChallenges().length;
   const em = id => (REACTS.find(r => r[0] === id) || [, "👍"])[1];
-  $("socialBody").innerHTML = `<div class="menu">
+  $("socialBody").innerHTML = `${S.banned ? `<div class="card ban-card"><b>⛔ Compte suspendu</b><p class="hint">${BANNED_MSG}</p></div>` : ""}<div class="menu">
       <button class="menu-card" data-go="feed"><span class="mark ok">≡</span><span class="mc"><b>Fil d’actu</b><span class="s">Les dernières séances de tes amis</span></span><span class="arrow" aria-hidden="true">›</span></button>
       <button class="menu-card${c.requests ? " hot" : ""}" data-go="friends"><span class="mark${c.requests ? " ok" : ""}">${nf2}</span><span class="mc"><b>Amis ${c.requests ? '<i class="dot-new"></i>' : ""}</b><span class="s">${c.requests ? plural(c.requests, "demande") + " d’ami en attente" : "Ajoute tes potes, vois leurs séances"}</span></span><span class="arrow" aria-hidden="true">›</span></button>
       <button class="menu-card${c.unread ? " hot" : ""}" data-go="messages"><span class="mark${c.unread ? " ok" : ""}">${c.unread || "✉"}</span><span class="mc"><b>Messages ${c.unread ? '<i class="dot-new"></i>' : ""}</b><span class="s">${c.unread ? plural(c.unread, "conversation") + " en attente de réponse" : "Tes conversations avec tes amis"}</span></span><span class="arrow" aria-hidden="true">›</span></button>
@@ -3030,7 +3087,7 @@ function commentsHTML(list, owner, k, opt) {
   const o = opt || {}, all = list.filter(c => c.date === k).sort((a, b) => a.at - b.at), show = o.all ? all : all.slice(-2);
   return `<div class="comments" data-cowner="${owner}" data-ck="${esc(k)}">
     ${all.length > show.length ? `<button type="button" class="linkish c-more" data-callk="${esc(k)}">Voir les ${all.length} commentaires</button>` : ""}
-    ${show.map(c => { const d = SOC.dir[c.from] || {}; return `<p class="cmt"><b>${esc(c.from === S.uid ? "Toi" : d.pseudo || c.pseudo || "Ami")}</b> ${esc(c.text)} <small>${esc(ago(c.at))}</small>${c.from === S.uid || owner === S.uid ? `<button type="button" class="c-del" data-cdel="${owner}|${c.id}" aria-label="Supprimer le commentaire">✕</button>` : ""}</p>`; }).join("")}
+    ${show.map(c => { const d = SOC.dir[c.from] || {}; return `<p class="cmt"><b>${esc(c.from === S.uid ? "Toi" : d.pseudo || c.pseudo || "Ami")}</b> ${esc(c.text)} <small>${esc(ago(c.at))}</small>${c.from === S.uid || owner === S.uid ? `<button type="button" class="c-del" data-cdel="${owner}|${c.id}" aria-label="Supprimer le commentaire">✕</button>` : ""}${c.from !== S.uid ? `<button type="button" class="c-del" data-crep="${owner}|${c.id}" aria-label="Signaler le commentaire">⚑</button>` : ""}</p>`; }).join("")}
     <form class="c-form" data-cform="${owner}|${esc(k)}"><input placeholder="${owner === S.uid ? "Répondre…" : "Écrire un commentaire…"}" maxlength="500" aria-label="Commentaire"><button class="btn sm" type="submit">Envoyer</button></form>
   </div>`;
 }
@@ -3044,6 +3101,7 @@ function myCommentsHTML(k) {
 document.addEventListener("submit", async e => {
   const f = e.target.closest("[data-cform]"); if (!f) return;
   e.preventDefault();
+  if (bannedStop()) return;
   const inp = f.querySelector("input"), text = inp.value.trim(); if (!text) return;
   const [owner, k] = f.dataset.cform.split("|"); inp.value = ""; inp.disabled = true;
   try {
@@ -3053,7 +3111,23 @@ document.addEventListener("submit", async e => {
   } catch (x) { inp.value = text; toast("Commentaire non envoyé. Vérifie ta connexion."); }
   inp.disabled = false;
 });
+function findComment(owner, id) {
+  const lists = [SOC.myComments, SOC.feed && SOC.feed.by[owner] && SOC.feed.by[owner].comments, SOC.friendUid === owner && SOC.friendData && SOC.friendData.comments];
+  for (const l of lists) { const c = (l || []).find(x => x.id === id); if (c) return c; }
+  return null;
+}
 document.addEventListener("click", async e => {
+  const rp = e.target.closest("[data-crep]");
+  if (rp) {
+    if (!armed(rp, "Signaler ?")) return;
+    const [owner, id] = rp.dataset.crep.split("|"), c = findComment(owner, id); if (!c) return;
+    SOC.reported = SOC.reported || new Set();
+    if (SOC.reported.has(id)) { toast("Déjà signalé, merci !"); return; }
+    SOC.reported.add(id);
+    try { await reportContent({ target: c.from, targetPseudo: c.pseudo, kind: "comment", text: c.text, ref: `comments/${owner}/items/${id}` }); toast("⚑ Merci, le commentaire est signalé"); }
+    catch (x) { SOC.reported.delete(id); toast("Signalement impossible. Réessaie."); }
+    return;
+  }
   const m = e.target.closest("[data-callk]"); if (m) { SOC.openCmt = m.dataset.callk; rerenderComments(true); return; }
   const d = e.target.closest("[data-cdel]"); if (!d) return;
   if (!armed(d, "Supprimer ?")) return;
@@ -3139,6 +3213,7 @@ $("feedBody").addEventListener("click", async e => {
   if (t) { const [uid, k] = t.dataset.ftry2.split("|"), x = SOC.feed.by[uid], s = x && x.days.find(d => d.k === k); if (s) trySession(t, uid, s, (x.share && x.share.types) || DEFAULT_TYPES); }
 });
 async function toggleReact(uid, k, id, holder) {
+  if (bannedStop()) return;
   const ref = doc(db, "reacts", uid, "items", k + "__" + S.uid), mine = holder.reacts.find(r => r.date === k && r.from === S.uid);
   try {
     if (mine && mine.emoji === id) { await deleteDoc(ref); holder.reacts = holder.reacts.filter(r => r !== mine); }
@@ -3168,6 +3243,7 @@ function myScore(ch) {
 }
 let chTimer = null;
 function syncChallenges() {
+  if (!S.oldReady) return;
   clearTimeout(chTimer);
   chTimer = setTimeout(() => (SOC.challenges || []).forEach(ch => {
     if (ch.end < key(addDays(new Date(), -2))) return;
@@ -3220,6 +3296,7 @@ $("chBody").addEventListener("click", e => {
 });
 $("chBody").addEventListener("submit", async e => {
   e.preventDefault(); const NC = SOC.newCh; if (!NC) return;
+  if (bannedStop()) return;
   if (!NC.friends.length) { show($("chErr"), "Invite au moins un ami."); return; }
   const members = [S.uid, ...NC.friends].slice(0, 20), names = {};
   members.forEach(u => { names[u] = u === S.uid ? S.profile.pseudo : (SOC.dir[u] || {}).pseudo || "Ami"; });
@@ -3237,13 +3314,19 @@ function renderChallenge() {
       ${r.map((x, i) => `<div class="rank-row${x.u === S.uid ? " me" : ""}"><span class="rk">${["🥇", "🥈", "🥉"][i] || i + 1}</span><span class="main"><b>${esc(x.name)}</b><span class="track"><span class="fill" style="width:${x.v / max * 100}%"></span></span></span><b class="rv">${esc(m[2](x.v))} <small>${esc(m[1](x.v))}</small></b></div>`).join("")}
       <p class="hint">Les scores se mettent à jour quand chacun ouvre l’app.</p>
     </section>
-    ${ch.owner === S.uid ? `<button class="danger" data-chdel="1">Supprimer le défi</button>` : `<button class="danger" data-chleave="1">Quitter le défi</button>`}`;
+    ${ch.owner === S.uid ? `<button class="danger" data-chdel="1">Supprimer le défi</button>` : `<div class="grid2"><button class="btn ghost-danger" data-chrep="1">⚑ Signaler</button><button class="btn ghost-danger" data-chleave="1">Quitter le défi</button></div>`}`;
   (ch.members || []).forEach(u => { if (!SOC.dir[u] && u !== S.uid) dirOf(u).then(() => { if (S.screen === "challenge") renderChallenge(); }); });
 }
 $("chdBody").addEventListener("click", async e => {
   const b = e.target.closest("button"); if (!b) return;
   const ch = (SOC.challenges || []).find(c => c.id === SOC.chId); if (!ch) return;
   if (b.dataset.chdel) { if (!armed(b, "Toucher à nouveau pour supprimer")) return; await deleteDoc(doc(db, "challenges", ch.id)).catch(() => {}); go("challenges"); }
+  if (b.dataset.chrep) {
+    if (!armed(b, "Confirmer")) return;
+    try { await reportContent({ target: ch.owner, targetPseudo: (ch.names || {})[ch.owner] || "", kind: "challenge", text: "Défi « " + ch.name + " »", ref: "challenges/" + ch.id }); b.textContent = "Signalé ✓"; b.disabled = true; }
+    catch (x) { toast("Signalement impossible. Réessaie."); }
+    return;
+  }
   if (b.dataset.chleave) { if (!armed(b, "Toucher à nouveau pour quitter")) return; await updateDoc(doc(db, "challenges", ch.id), { members: arrayRemove(S.uid) }).catch(() => {}); go("challenges"); }
 });
 
@@ -3414,6 +3497,54 @@ $("tutoNext").onclick = () => { if (tutoI === TUTO.length - 1) closeTuto(); else
 $("tutoPrev").onclick = () => { if (tutoI) { tutoI--; renderTuto(); } };
 $("tutoSkip").onclick = closeTuto;
 $("tutoAgain").onclick = openTuto;
+
+/* ============================================================
+   Mes données : export (droit d'accès et de portabilité)
+   ============================================================ */
+function downloadJSON(obj, name) {
+  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: "application/json" }), file = new File([blob], name, { type: "application/json" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) return navigator.share({ files: [file], title: name }).catch(() => {});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+}
+async function exportMyData(btn) {
+  btn.disabled = true; const label = btn.textContent; btn.textContent = "Préparation…";
+  try {
+    const all = async name => { const o = {}; (await getDocs(subCol(name))).forEach(d => { o[d.id] = d.data(); }); return o; };
+    const [seances, nutrition, photos] = await Promise.all([all("seances"), all("nutrition"), all("photos")]);
+    const convs = {};
+    for (const [pid, f] of Object.entries(SOC.friends).filter(([, f]) => f.status === "accepted")) {
+      try { convs[(SOC.dir[otherOf(f)] || {}).pseudo || otherOf(f)] = (await getDocs(query(collection(db, "chats", pid, "messages"), orderBy("at"), limitToLast(500)))).docs.map(d => d.data()); } catch (x) { /* conversation indisponible */ }
+    }
+    downloadJSON({
+      app: "L'agenda du sportif", exportedAt: new Date().toISOString(), email: S.email, profil: S.profile,
+      seances, nutrition, photos, amis: acceptedFriends().map(u => (SOC.dir[u] || {}).pseudo || u),
+      reactionsRecues: SOC.myReacts, commentairesRecus: SOC.myComments, conversations: convs,
+      defis: (SOC.challenges || []).map(({ id, ...c }) => c)
+    }, "mes-donnees-agenda-du-sportif.json");
+    btn.textContent = "✓ Données téléchargées";
+  } catch (x) { btn.textContent = "Échec, réessaie"; }
+  setTimeout(() => { btn.disabled = false; btn.textContent = label; }, 4000);
+}
+$("exportBtn").onclick = e => exportMyData(e.currentTarget);
+
+// Administration : sauvegarde complète (profils, séances et nutrition de tous les utilisateurs, sans les photos).
+async function adminBackup(btn) {
+  if (!S.admin) return;
+  btn.disabled = true; const label = btn.textContent, users = Object.values(S.members), out = { exportedAt: new Date().toISOString(), users: {}, messages: S.messages, reports: S.reports || [], bans: S.bans || {} };
+  try {
+    let i = 0;
+    for (const m of users) {
+      btn.textContent = `Sauvegarde… ${++i} / ${users.length}`;
+      const get = async name => { const o = {}; (await getDocs(subCol(name, m.id))).forEach(d => { o[d.id] = d.data(); }); return o; };
+      const { id, ...profil } = m;
+      out.users[id] = { profil, seances: await get("seances"), nutrition: await get("nutrition") };
+    }
+    downloadJSON(out, "sauvegarde-agenda-du-sportif-" + todayK() + ".json");
+    lsSet("last-backup", Date.now()); btn.textContent = "✓ Sauvegarde téléchargée";
+  } catch (x) { btn.textContent = "Échec, réessaie"; }
+  setTimeout(() => { btn.disabled = false; btn.textContent = label; renderAdmin(); }, 4000);
+}
 // Hors connexion : petit bandeau discret sur tous les écrans (les données restent enregistrées sur le téléphone).
 function netState() { $("offlinePill").hidden = navigator.onLine; if (S.screen === "home") $("mode").textContent = ""; }
 window.addEventListener("online", () => { netState(); if (S.screen === "feed") loadFeed(true); });
@@ -3430,16 +3561,41 @@ $("tuto").addEventListener("touchend", e => {
    Abonnements temps réel et démarrage
    ============================================================ */
 function stopSubscriptions() { S.unsubs.forEach(u => { try { u(); } catch (e) { /* déjà arrêté */ } }); S.unsubs = []; S.dataSubscribed = false; }
+/* Chargement de l'historique par morceaux (moins de lectures = l'app reste gratuite plus longtemps) :
+   - les 90 derniers jours sont suivis en direct ;
+   - le plus ancien est lu une fois, puis repris du cache du téléphone (nouvelle lecture au plus une fois par semaine). */
+const RECENT_DAYS = 90;
+function mergeDays() {
+  const d = { ...S.old.seances, ...S.recent.seances };
+  if (S.open && S.cur) { if (isEmpty(S.cur)) delete d[S.open]; else d[S.open] = clone(S.cur); }
+  S.days = d;
+}
+async function loadOld(name) {
+  const q = query(subCol(name), where(documentId(), "<", S.split)), tag = "old-" + name + "-" + S.uid, uid = S.uid;
+  let snap = null;
+  if (Date.now() - +(lsGet(tag) || 0) < 7 * 864e5) { try { snap = await getDocsFromCache(q); if (!snap.size) snap = null; } catch (e) { snap = null; } }
+  if (!snap) {
+    try { snap = await getDocs(q); lsSet(tag, Date.now()); }
+    catch (e) { try { snap = await getDocsFromCache(q); } catch (x) { snap = null; } }
+  }
+  if (S.uid !== uid) return;
+  const d = {}; if (snap) snap.docs.forEach(x => { d[x.id] = x.data(); });
+  S.old[name] = d;
+}
 function subscribeData() {
   if (S.dataSubscribed) return; S.dataSubscribed = true;
-  S.unsubs.push(onSnapshot(subCol("seances"), snap => {
-    const d = {}; snap.docs.forEach(x => { d[x.id] = x.data(); });
-    if (S.open && S.cur) { if (isEmpty(S.cur)) delete d[S.open]; else d[S.open] = clone(S.cur); }
-    S.days = d; refresh(); syncStats();
+  S.split = key(new Date(Date.now() - RECENT_DAYS * 864e5)); S.old = { seances: {}, nutrition: {} }; S.recent = { seances: {}, nutrition: {} }; S.oldReady = false;
+  S.unsubs.push(onSnapshot(query(subCol("seances"), where(documentId(), ">=", S.split)), snap => {
+    const d = {}; snap.docs.forEach(x => { d[x.id] = x.data(); }); S.recent.seances = d;
+    mergeDays(); refresh(); syncStats();
   }, () => {}));
-  S.unsubs.push(onSnapshot(subCol("nutrition"), snap => {
-    const d = {}; snap.docs.forEach(x => { d[x.id] = x.data(); }); S.nut = d; refresh();
+  S.unsubs.push(onSnapshot(query(subCol("nutrition"), where(documentId(), ">=", S.split)), snap => {
+    const d = {}; snap.docs.forEach(x => { d[x.id] = x.data(); }); S.recent.nutrition = d;
+    S.nut = { ...S.old.nutrition, ...d }; refresh();
   }, () => {}));
+  Promise.all([loadOld("seances"), loadOld("nutrition")]).then(() => {
+    S.oldReady = true; mergeDays(); S.nut = { ...S.old.nutrition, ...S.recent.nutrition }; refresh(); syncStats();
+  });
 }
 function subscribeAdmin() {
   S.unsubs.push(onSnapshot(collection(db, "users"), snap => {
@@ -3450,13 +3606,17 @@ function subscribeAdmin() {
     S.messages = snap.docs.map(x => ({ id: x.id, ...x.data() }));
     if (S.screen === "admin") renderAdmin();
   }, () => {}));
+  S.unsubs.push(onSnapshot(collection(db, "bans"), snap => {
+    S.bans = {}; snap.docs.forEach(x => { S.bans[x.id] = x.data(); });
+    if (S.screen === "admin") renderAdmin();
+  }, () => {}));
   S.unsubs.push(onSnapshot(query(collection(db, "reports"), orderBy("at", "desc")), snap => {
     S.reports = snap.docs.map(x => ({ id: x.id, ...x.data() }));
     if (S.screen === "admin") renderAdmin();
   }, () => {}));
 }
 function resetState() {
-  Object.assign(S, { uid: null, email: "", admin: false, profile: null, days: {}, nut: {}, members: {}, messages: [], myMsgs: [], photoCache: {}, visitCounted: false, prefs: { creaDose: 5 } });
+  Object.assign(S, { uid: null, email: "", admin: false, banned: false, profile: null, days: {}, nut: {}, members: {}, messages: [], myMsgs: [], photoCache: {}, visitCounted: false, prefs: { creaDose: 5 }, oldReady: false, bans: {} });
   S.types = DEFAULT_TYPES.map(t => ({ ...t }));
   const f = $("suFields"); if (f) f.innerHTML = "";
   resetSocial();
@@ -3469,6 +3629,7 @@ onAuthStateChanged(auth, async user => {
   S.uid = user.uid; S.email = user.email || "";
   go("splash");
   try { S.admin = (await getDoc(doc(db, "admins", user.uid))).exists(); } catch (e) { S.admin = false; }
+  try { S.banned = (await getDoc(doc(db, "bans", user.uid))).exists(); } catch (e) { S.banned = false; }
   if (S.admin) subscribeAdmin();
   let first = true;
   S.unsubs.push(onSnapshot(userRef(), snap => {

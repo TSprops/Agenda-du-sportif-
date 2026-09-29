@@ -93,3 +93,15 @@ npm run emulators
 ```
 
 Puis ouvre http://127.0.0.1:5000 : l’app utilise des serveurs Firebase de test, sans toucher à tes vraies données.
+
+## Tests automatiques
+
+Les tests vérifient les règles de sécurité Firestore et les principaux parcours de l'app
+(inscription, séance, record, suppression, export, social, signalement, modération).
+
+```bash
+npm install --no-save playwright@1.56.1 && npx playwright install chromium
+npm test   # démarre les émulateurs Firebase, lance les tests, puis les arrête
+```
+
+Ils tournent aussi automatiquement sur GitHub à chaque modification (onglet « Actions »).

@@ -1,7 +1,7 @@
 // Service worker : l'app s'ouvre même sans réseau (réseau d'abord, cache en secours).
-const CACHE = "agenda-v18";
+const CACHE = "agenda-v19";
 const FONTS = "agenda-fonts";
-const SHELL = ["./", "index.html", "styles.css?v=18", "app.js?v=18", "data.js", "firebase-config.js", "vendor/firebase.js", "manifest.webmanifest", "icons/icon-192.png", "icons/apple-touch-icon.png"];
+const SHELL = ["./", "index.html", "styles.css?v=19", "app.js?v=19", "data.js", "firebase-config.js", "vendor/firebase.js", "manifest.webmanifest", "confidentialite.html", "conditions.html", "legal.css", "icons/icon-192.png", "icons/apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
