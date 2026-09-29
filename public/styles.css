@@ -764,3 +764,15 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .disc-card{min-width:0}
 .disc-card b{font-size:clamp(17px,5vw,22px);overflow-wrap:normal;word-break:normal;hyphens:manual}
 .disc-grid>.disc-card:last-child:nth-child(odd){grid-column:1/-1;min-height:0}
+
+/* Glisser pour supprimer une séance */
+.swipe{position:relative;border-radius:var(--r);overflow:hidden}
+.swipe-bg{position:absolute;inset:0;display:flex;align-items:center;padding-left:18px;background:color-mix(in srgb,var(--danger) 30%,var(--surface));color:var(--danger);font-weight:700;border-radius:var(--r);transition:background .15s}
+.swipe.armed .swipe-bg{background:var(--danger);color:#fff}
+.swipe .row{position:relative;touch-action:pan-y;transition:transform .22s cubic-bezier(.2,.8,.2,1)}
+.swipe .row.dragging{transition:none}
+.swipe-hint{text-align:center;margin-top:2px}
+#confirmSheet .lead{margin:0;font-size:15px;line-height:1.45}
+@media (prefers-reduced-motion: reduce){.swipe .row{transition:none}}
+.dow,.grid{grid-template-columns:repeat(7,minmax(0,1fr))}
+.day{min-width:0;overflow:hidden}
