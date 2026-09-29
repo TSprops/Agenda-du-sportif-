@@ -86,4 +86,4 @@ $("musBody").addEventListener("click", e => {
   document.querySelectorAll(`#musBody [data-mu="${mu}"]`).forEach(x => x.classList.add("on"));
 });
 
-export { muscleLoad, muscleMini, renderMuscles };
+export { bodySVG, muscleLoad, muscleMini, renderMuscles };

@@ -801,15 +801,36 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .how-btn span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:15px;color:var(--red-hi);border:1.5px solid color-mix(in srgb,var(--red) 55%,var(--line));background:var(--red-soft)}
 .how-btn:active span{transform:scale(.92)}
 .hf{display:block;width:100%;height:auto;overflow:visible}
-.hf polyline,.hf line{fill:none;stroke-linecap:round;stroke-linejoin:round}
-.hf-body{stroke:color-mix(in srgb,var(--muted) 75%,var(--surface))}
-.hf-hot{stroke:var(--red-hi)}
-.hf-head{fill:color-mix(in srgb,var(--muted) 75%,var(--surface))}
-.hf-back{opacity:.45}
+/* Corps : peau neutre, muscles dessinés en relief, muscles travaillés en rouge */
+.hf{--skin:color-mix(in srgb,var(--ink) 62%,var(--surface));--mu:var(--skin)}
+.hf-skin{fill:var(--skin)}
+.hf-shoe{fill:color-mix(in srgb,var(--ink) 18%,var(--surface-2))}
+.hf-hair{fill:color-mix(in srgb,var(--ink) 16%,var(--surface-2))}
+.hf-short{fill:color-mix(in srgb,var(--ink) 26%,var(--surface-2))}
+.hf-mu{fill:var(--mu)}
+.hf-mu.hf-s{fill:color-mix(in srgb,var(--red) 58%,var(--skin))}
+.hf-mu.hf-p{fill:var(--red-hi)}
+.hf-back{opacity:.55}
 .hf-ground{stroke:var(--line);stroke-width:2}
-.hf-eq{stroke:color-mix(in srgb,var(--ink) 55%,transparent);stroke-width:3;fill:none}
-.hf-eq circle{fill:var(--surface-2)}
-.hf-eq .hf-dot,.hf-fill{fill:color-mix(in srgb,var(--ink) 45%,var(--surface-2))}
+.hf-metal{fill:color-mix(in srgb,var(--ink) 38%,var(--surface))}
+.hf-dark,.hf-plate{fill:color-mix(in srgb,var(--ink) 22%,var(--surface-2));stroke:color-mix(in srgb,var(--ink) 45%,transparent);stroke-width:1}
+.hf-plate2{fill:none;stroke:color-mix(in srgb,var(--ink) 40%,transparent);stroke-width:1}
+.hf-dot{fill:color-mix(in srgb,var(--ink) 55%,transparent)}
+.hf-pad{fill:color-mix(in srgb,var(--red) 30%,var(--surface-2));stroke:color-mix(in srgb,var(--ink) 30%,transparent);stroke-width:.8}
+.hf-line{fill:none;stroke:color-mix(in srgb,var(--ink) 60%,transparent);stroke-width:2.6;stroke-linecap:round}
+.hf-cable{stroke:color-mix(in srgb,var(--ink) 45%,transparent);stroke-width:1.2}
+.hf-rope{stroke:#B98A52;stroke-width:3.4;stroke-linecap:round}
+.hf-box{fill:color-mix(in srgb,#B98A52 45%,var(--surface-2));stroke:color-mix(in srgb,#B98A52 70%,transparent);stroke-width:1.2}
+.how-map{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:260px;margin:0 auto;width:100%}
+.how-map figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:2px}
+.how-map svg.body{max-height:150px;width:auto}
+.how-map figcaption{font-family:var(--display);font-weight:700;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.how-legend{grid-column:1/-1;display:flex;justify-content:center;gap:14px;margin:0;font-size:12px;color:var(--muted)}
+.how-legend span{display:inline-flex;align-items:center;gap:5px}
+.how-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.how-legend .lp{background:var(--red-hi)}
+.how-legend .ls{background:color-mix(in srgb,var(--red) 52%,var(--surface-2))}
+#howSheet{max-height:92vh;overflow-y:auto}
 #howSheet .install-head{align-items:flex-start}
 .how-x{margin-left:auto;flex:none;width:44px;height:44px;border-radius:50%;background:var(--surface-2);color:var(--muted);font-size:16px;display:grid;place-items:center}
 .how-stage{display:grid;gap:12px;background:var(--ground);border:1px solid var(--line);border-radius:18px;padding:12px}
