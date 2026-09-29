@@ -795,3 +795,33 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .moved .btn{align-self:stretch;text-decoration:none}
 .steps li.warn{border-color:color-mix(in srgb,var(--red) 55%,var(--line));background:var(--red-soft)}
 .steps li.warn .n{background:var(--ink);color:var(--ground)}
+
+/* ===== « Comment faire » : silhouettes animées ===== */
+.how-btn{flex:none;width:44px;height:44px;margin:-7px -8px -7px -4px;display:grid;place-items:center;border-radius:50%}
+.how-btn span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:15px;color:var(--red-hi);border:1.5px solid color-mix(in srgb,var(--red) 55%,var(--line));background:var(--red-soft)}
+.how-btn:active span{transform:scale(.92)}
+.hf{display:block;width:100%;height:auto;overflow:visible}
+.hf polyline,.hf line{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.hf-body{stroke:color-mix(in srgb,var(--muted) 75%,var(--surface))}
+.hf-hot{stroke:var(--red-hi)}
+.hf-head{fill:color-mix(in srgb,var(--muted) 75%,var(--surface))}
+.hf-back{opacity:.45}
+.hf-ground{stroke:var(--line);stroke-width:2}
+.hf-eq{stroke:color-mix(in srgb,var(--ink) 55%,transparent);stroke-width:3;fill:none}
+.hf-eq circle{fill:var(--surface-2)}
+.hf-eq .hf-dot,.hf-fill{fill:color-mix(in srgb,var(--ink) 45%,var(--surface-2))}
+#howSheet .install-head{align-items:flex-start}
+.how-x{margin-left:auto;flex:none;width:44px;height:44px;border-radius:50%;background:var(--surface-2);color:var(--muted);font-size:16px;display:grid;place-items:center}
+.how-stage{display:grid;gap:12px;background:var(--ground);border:1px solid var(--line);border-radius:18px;padding:12px}
+.how-stage figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:4px}
+.how-stage figcaption{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.how-stage.side{grid-template-columns:1fr 1fr}
+.how-stage .hf{max-width:240px;margin:0 auto}
+.how-anim{position:relative;max-width:240px;width:100%;margin:0 auto}
+.how-anim .how-b{position:absolute;inset:0;opacity:0;animation:howBoom 2.6s ease-in-out infinite}
+/* Boomerang : départ (pause) → fondu ~1 s → arrivée (pause) → fondu ~1 s → départ */
+@keyframes howBoom{0%,12%{opacity:0}50%,62%{opacity:1}100%{opacity:0}}
+.how-anim .how-a{animation:howBoomA 2.6s ease-in-out infinite}
+@keyframes howBoomA{0%,12%{opacity:1}50%,62%{opacity:0}100%{opacity:1}}
+.how-cue{margin:0;font-size:14.5px;line-height:1.45}
+@media (prefers-reduced-motion: reduce){.how-anim .how-a,.how-anim .how-b{animation:none}}

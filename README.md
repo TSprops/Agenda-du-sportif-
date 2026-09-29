@@ -144,4 +144,4 @@ dans `public/index.html` y affiche la page « L'app déménage ».
 | `contact.js`, `faq.js`, `install.js`, `extras.js` | Contact, assistant, installation, tutoriel / export / sauvegarde |
 | `main.js` | Abonnements temps réel et démarrage |
 
-Règle à respecter : `core.js` n'importe jamais les autres fichiers (il doit être prêt en premier).
+Règles à respecter : `core.js` n'importe jamais les autres fichiers (il doit être prêt en premier), et au chargement d'un fichier (hors fonctions) on n'utilise que des éléments de `core.js`.

@@ -10,6 +10,7 @@ import { myReactsHTML } from "./friends.js";
 import { addExercise, announcePRs, cordesExHTML, cordesOf, freshKey, lastLineHTML, openLib, saveRoutineFromSession, sessTabsHTML,
   sessionPRs, toast } from "./workout.js";
 import { myCommentsHTML } from "./social.js";
+import { howBtnHTML } from "./howto.js";
 
 /* ============================================================
    Séances : calendrier
@@ -148,7 +149,7 @@ function exHTML(ex, i, disc) {
   const r = ex.rpe || 0, calis = disc === "calis";
   const col1 = calis ? (ex.hold ? "Tenue (s)" : "Reps") : "Reps", col2 = calis ? "Lest (kg)" : "Poids (kg)";
   return `<article class="ex">
-  <div class="ex-head"><span class="ex-num">${pad(i + 1)}</span><input id="exn-${i}" class="ex-name${ex.lock ? " locked" : ""}" data-f="ex-name" data-ex="${i}" placeholder="${calis ? "ex. Tractions" : "Nom de l’exercice"}" value="${esc(ex.name)}" autocomplete="off"${ex.lock ? ' readonly aria-readonly="true"' : ""}>${calis ? `<button class="icon-btn" data-a="hold" data-ex="${i}" aria-label="Changer répétitions ou tenue">${ex.hold ? "Tenue" : "Reps"} ⇄</button>` : ""}<button class="icon-btn" data-a="del-ex" data-ex="${i}" aria-label="Supprimer l’exercice">Retirer</button></div>
+  <div class="ex-head"><span class="ex-num">${pad(i + 1)}</span><input id="exn-${i}" class="ex-name${ex.lock ? " locked" : ""}" data-f="ex-name" data-ex="${i}" placeholder="${calis ? "ex. Tractions" : "Nom de l’exercice"}" value="${esc(ex.name)}" autocomplete="off"${ex.lock ? ' readonly aria-readonly="true"' : ""}>${howBtnHTML(ex.name, i)}${calis ? `<button class="icon-btn" data-a="hold" data-ex="${i}" aria-label="Changer répétitions ou tenue">${ex.hold ? "Tenue" : "Reps"} ⇄</button>` : ""}<button class="icon-btn" data-a="del-ex" data-ex="${i}" aria-label="Supprimer l’exercice">Retirer</button></div>
   <div class="ex-last" id="el-${i}">${lastLineHTML(ex)}</div>
   <div class="ex-stats" id="st-${i}">${exStats(ex, disc)}</div>
   <div class="set-now" id="sn-${i}">${setNowText(ex, i)}</div>

@@ -6,6 +6,7 @@ import { EMPTY_DAY, changed, fmtRest, forceFlush, isDone, normCordes, openDay, r
 import { doneSet, ideaExercises, repsText, shortDate } from "./ideas.js";
 import { norm } from "./faq.js";
 import { muscleMini } from "./muscles.js";
+import { howBtnHTML, moveOf } from "./howto.js";
 
 /* ============================================================
    Plusieurs séances par jour
@@ -83,6 +84,7 @@ $("sheet").addEventListener("change", e => {
   const i = +e.target.dataset.ex, ex = S.cur.exercises[i]; if (!ex || ex.lock || ex.kind === "cordes") return;
   const blank = (ex.sets || []).every(st => (st.reps === "" || st.reps == null) && (st.kg === "" || st.kg == null) && !st.done);
   if (blank && prefillFromLast(ex, S.open)) { changed(); renderSheet(); }
+  else if (!!moveOf(ex.name) !== !!document.querySelector(`[data-how="${i}"]`)) renderSheet(); // bouton « ? » à ajouter ou retirer
   else { const el = $("el-" + i); if (el) el.innerHTML = lastLineHTML(ex); }
 });
 
@@ -106,7 +108,7 @@ function lastCordes(name, before) {
 function cordesExHTML(ex, i) {
   const h = S.open && lastCordes(ex.name, S.open), val = v => v === undefined || v === null ? "" : esc(v);
   return `<article class="ex cordes">
-  <div class="ex-head"><span class="ex-num">${pad(i + 1)}</span><input id="exn-${i}" class="ex-name${ex.lock ? " locked" : ""}" data-f="ex-name" data-ex="${i}" placeholder="ex. Montée de corde" value="${esc(ex.name)}" autocomplete="off"${ex.lock ? ' readonly aria-readonly="true"' : ""}><button class="icon-btn" data-a="del-ex" data-ex="${i}" aria-label="Supprimer l’exercice">Retirer</button></div>
+  <div class="ex-head"><span class="ex-num">${pad(i + 1)}</span><input id="exn-${i}" class="ex-name${ex.lock ? " locked" : ""}" data-f="ex-name" data-ex="${i}" placeholder="ex. Montée de corde" value="${esc(ex.name)}" autocomplete="off"${ex.lock ? ' readonly aria-readonly="true"' : ""}>${howBtnHTML(ex.name, i)}<button class="icon-btn" data-a="del-ex" data-ex="${i}" aria-label="Supprimer l’exercice">Retirer</button></div>
   ${h ? `<div class="ex-last"><span class="ll-k">↺ ${esc(shortDate(h.k))}</span> ${esc(cordesText(h.ex))}</div>` : ""}
   <div class="grid2">
     <label class="field"><span>Nombre de cordes</span><input id="cd-ropes-${i}" class="num" data-f="cd-ropes" data-ex="${i}" inputmode="numeric" placeholder="ex. 10" value="${val(ex.ropes)}"></label>
