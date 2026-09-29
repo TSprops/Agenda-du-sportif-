@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="styles.css?v=23">
+<link rel="stylesheet" href="styles.css?v=24">
 <script>
   // Déménagement : l'ancienne adresse (GitHub) renvoie vers la nouvelle (Firebase) quand MOVED vaut true.
   window.NEW_HOME = "https://agenda-du-sportif.web.app/";
@@ -31,7 +31,7 @@
     });
   }
   // Version de la page : doit correspondre à APP_VERSION dans app.js.
-  window.APP_PAGE_VERSION = "23";
+  window.APP_PAGE_VERSION = "24";
   // Comme une vraie application : pas de zoom avec deux doigts ni en tapant deux fois (Safari ignore parfois la balise viewport).
   ["gesturestart", "gesturechange", "gestureend"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
   document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -58,7 +58,7 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=23"></script>
+<script type="module" src="app.js?v=24"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->
@@ -505,6 +505,16 @@
   </ol>
   <p class="hint">En continuant, tu confirmes avoir au moins 15 ans et tu acceptes les <a href="conditions.html" target="_blank" rel="noopener">conditions d’utilisation</a> et la <a href="confidentialite.html" target="_blank" rel="noopener">politique de confidentialité</a>.</p>
   <button type="button" class="btn primary" id="termsOk">J’accepte</button>
+</div>
+
+<!-- ============ ANCIENNE ICÔNE À SUPPRIMER (une fois) ============ -->
+<div class="install-backdrop" id="oldIconBackdrop" hidden></div>
+<div class="install" id="oldIconSheet" hidden role="dialog" aria-modal="true" aria-labelledby="oldIconTitle">
+  <i class="grab" aria-hidden="true"></i>
+  <div class="install-head"><img src="icons/icon-192.png" alt=""><div><b id="oldIconTitle">Bien installée ✓</b><span>Nouvelle adresse de l’app</span></div></div>
+  <p class="lead">Pense à <b>supprimer l’ancienne icône</b> de l’app sur ton écran d’accueil : elle ne marche plus. Garde uniquement celle-ci.</p>
+  <ol class="steps" id="oldIconSteps"></ol>
+  <button type="button" class="btn primary" id="oldIconOk">C’est fait</button>
 </div>
 
 <!-- ============ CONFIRMATION DE SUPPRESSION ============ -->

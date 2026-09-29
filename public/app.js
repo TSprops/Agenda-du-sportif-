@@ -10,7 +10,7 @@ import { MUSCLES, GROUPS, EQUIP, EXERCISES, KEYWORDS, PROGRAMS } from "./data.js
 
 if (window.__appMoved) throw new Error("L'app a déménagé : " + window.NEW_HOME);
 /* Version : si la page et le code ne correspondent pas (ancien fichier en cache), on recharge proprement. */
-const APP_VERSION = "23";
+const APP_VERSION = "24";
 if (window.APP_PAGE_VERSION !== APP_VERSION) {
   let tried = false; try { tried = sessionStorage.getItem("reload-v" + APP_VERSION) === "1"; sessionStorage.setItem("reload-v" + APP_VERSION, "1"); } catch (e) { /* stockage bloqué */ }
   if (!tried && window.__repairApp) { window.__repairApp(); throw new Error("Mise à jour en cours"); }
@@ -1837,13 +1837,20 @@ function refreshInstallBtn() {
 }
 const ICON_SHARE = '<svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
 const ICON_PLUS = '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/></svg>';
+// Comptes créés avant le déménagement (30 sept. 2026) : ils ont peut-être encore l'ancienne icône.
+const MOVED_AT = Date.UTC(2026, 8, 30);
+const hadOldIcon = () => !!(S.profile && (S.profile.createdAt || 0) < MOVED_AT) && !/github\.io$/.test(location.hostname);
+const OLD_ICON_STEP = () => IS_IOS
+  ? `<li class="warn"><span class="n">!</span><span><b>Supprime l’ancienne icône</b> : appui long dessus › <b>Supprimer le signet</b> (ou « Supprimer l’app »).</span></li>`
+  : `<li class="warn"><span class="n">!</span><span><b>Supprime l’ancienne icône</b> : appui long dessus › <b>Supprimer</b> (ou « Désinstaller »).</span></li>`;
 const INSTALL_LEAD = "Ajoute l’app à ton écran d’accueil : elle s’ouvre en plein écran, en un toucher, comme une vraie application.";
 function openInstall(welcome) {
   if (!canInstall()) return;
   $("installTitle").textContent = welcome ? "Mets l’app sur ton téléphone" : "Installe l’app";
-  $("installLead").innerHTML = welcome
-    ? "Bienvenue sur la nouvelle adresse de l’app ! 🏠 Ajoute-la à ton écran d’accueil pour l’ouvrir en un toucher, en plein écran. <b>Si tu avais l’ancienne icône, supprime-la</b> : elle ne sert plus."
-    : INSTALL_LEAD;
+  const old = welcome && hadOldIcon();
+  $("installLead").innerHTML = old
+    ? "L’app a une nouvelle adresse ! 🏠 Ajoute la nouvelle icône à ton écran d’accueil, puis <b>supprime l’ancienne</b> : elle ne marche plus."
+    : welcome ? "Bienvenue ! 🏠 Ajoute l’app à ton écran d’accueil pour l’ouvrir en un toucher, en plein écran." : INSTALL_LEAD;
   const link = location.origin + location.pathname;
   $("installBody").innerHTML = IN_APP
     ? `<ol class="steps"><li><span class="n">1</span><span>Tu as ouvert le lien depuis une autre app (Snapchat, Instagram…). Il faut l’ouvrir dans <b>${IS_IOS ? "Safari" : "Chrome"}</b>.</span></li>
@@ -1860,6 +1867,7 @@ function openInstall(welcome) {
          <p class="hint" style="margin-top:6px">Tu ne vois pas « Partager » ? Il est parfois dans le menu <b>•••</b>. Sur un autre navigateur que Safari, ouvre d’abord ce lien dans Safari.</p>`
       : `<ol class="steps"><li><span class="n">1</span><span>Touche le menu <b>⋮</b> en haut à droite</span></li>
          <li><span class="n">2</span><span>Choisis <b>Installer l’application</b> ou <b>Ajouter à l’écran d’accueil</b></span><span class="ico">${ICON_PLUS}</span></li></ol>`;
+  if (old && !IN_APP) { const ol = $("installBody").querySelector("ol.steps"); if (ol) ol.insertAdjacentHTML("beforeend", OLD_ICON_STEP()); else $("installBody").insertAdjacentHTML("beforeend", `<ol class="steps">${OLD_ICON_STEP()}</ol>`); }
   $("installBackdrop").hidden = false; $("installSheet").hidden = false;
   const cp = $("installCopy");
   if (cp) cp.onclick = async () => {
@@ -1882,6 +1890,7 @@ $("installBannerClose").onclick = () => { lsSet("install-banner-off", 1); refres
 let installTimer = null;
 // Une seule fois par téléphone sur la nouvelle adresse : rappel du mode d'emploi pour installer l'app.
 function maybeWelcomeInstall() {
+  if (maybeOldIconTip()) return true;
   if (lsGet("welcome-install") || !canInstall() || /github\.io$/.test(location.hostname)) return false;
   clearTimeout(installTimer);
   installTimer = setTimeout(() => {
@@ -1890,6 +1899,23 @@ function maybeWelcomeInstall() {
   }, 900);
   return true;
 }
+// Déjà installée depuis la nouvelle adresse : rappel unique pour supprimer l'ancienne icône.
+function maybeOldIconTip() {
+  if (!standalone() || !hadOldIcon() || lsGet("old-icon-tip") || (S.profile.seen || {}).oldIcon) return false;
+  clearTimeout(installTimer);
+  installTimer = setTimeout(() => {
+    if (S.screen !== "home" || document.body.classList.contains("sheet-open") || !$("termsSheet").hidden || !$("newsSheet").hidden || !$("tuto").hidden) return;
+    $("oldIconSteps").innerHTML = OLD_ICON_STEP().replace('class="warn"', "");
+    $("oldIconBackdrop").hidden = false; $("oldIconSheet").hidden = false;
+  }, 900);
+  return true;
+}
+function closeOldIcon() {
+  $("oldIconBackdrop").hidden = true; $("oldIconSheet").hidden = true;
+  lsSet("old-icon-tip", 1); saveProfile({ seen: { ...(S.profile.seen || {}), oldIcon: true } });
+}
+$("oldIconOk").onclick = closeOldIcon;
+$("oldIconBackdrop").onclick = closeOldIcon;
 function maybeInvite() {
   clearTimeout(installTimer);
   if (newsPending() || termsPending()) return;

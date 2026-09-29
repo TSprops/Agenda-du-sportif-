@@ -793,3 +793,5 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .moved-url{font-family:var(--display);font-weight:800;font-size:clamp(20px,7vw,28px);color:var(--red-hi);text-decoration:none;white-space:nowrap}
 .moved ol{text-align:left;margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 14px 14px 34px}
 .moved .btn{align-self:stretch;text-decoration:none}
+.steps li.warn{border-color:color-mix(in srgb,var(--red) 55%,var(--line));background:var(--red-soft)}
+.steps li.warn .n{background:var(--ink);color:var(--ground)}
