@@ -10,7 +10,7 @@ import { MUSCLES, GROUPS, EQUIP, EXERCISES, KEYWORDS, PROGRAMS } from "./data.js
 
 if (window.__appMoved) throw new Error("L'app a déménagé : " + window.NEW_HOME);
 /* Version : si la page et le code ne correspondent pas (ancien fichier en cache), on recharge proprement. */
-const APP_VERSION = "22";
+const APP_VERSION = "23";
 if (window.APP_PAGE_VERSION !== APP_VERSION) {
   let tried = false; try { tried = sessionStorage.getItem("reload-v" + APP_VERSION) === "1"; sessionStorage.setItem("reload-v" + APP_VERSION, "1"); } catch (e) { /* stockage bloqué */ }
   if (!tried && window.__repairApp) { window.__repairApp(); throw new Error("Mise à jour en cours"); }
@@ -342,7 +342,7 @@ function go(v) {
   if (!$("helpPanel").hidden && !FAB_SCREENS.includes(v)) $("helpPanel").hidden = true;
   updateFab();
   if (v !== "chat") leaveChat();
-  if (v === "home") { if (!maybeTerms()) { maybeNews(); maybeInvite(); } }
+  if (v === "home") { if (!maybeTerms()) { maybeNews(); if (newsPending() || !maybeWelcomeInstall()) maybeInvite(); } }
 }
 function refresh() {
   if (S.screen === "profile") renderPfStats();
@@ -1837,8 +1837,13 @@ function refreshInstallBtn() {
 }
 const ICON_SHARE = '<svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
 const ICON_PLUS = '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/></svg>';
-function openInstall() {
+const INSTALL_LEAD = "Ajoute l’app à ton écran d’accueil : elle s’ouvre en plein écran, en un toucher, comme une vraie application.";
+function openInstall(welcome) {
   if (!canInstall()) return;
+  $("installTitle").textContent = welcome ? "Mets l’app sur ton téléphone" : "Installe l’app";
+  $("installLead").innerHTML = welcome
+    ? "Bienvenue sur la nouvelle adresse de l’app ! 🏠 Ajoute-la à ton écran d’accueil pour l’ouvrir en un toucher, en plein écran. <b>Si tu avais l’ancienne icône, supprime-la</b> : elle ne sert plus."
+    : INSTALL_LEAD;
   const link = location.origin + location.pathname;
   $("installBody").innerHTML = IN_APP
     ? `<ol class="steps"><li><span class="n">1</span><span>Tu as ouvert le lien depuis une autre app (Snapchat, Instagram…). Il faut l’ouvrir dans <b>${IS_IOS ? "Safari" : "Chrome"}</b>.</span></li>
@@ -1875,6 +1880,16 @@ $("installBtn").onclick = () => openInstall();
 $("installBannerOpen").onclick = () => openInstall();
 $("installBannerClose").onclick = () => { lsSet("install-banner-off", 1); refreshInstallBtn(); };
 let installTimer = null;
+// Une seule fois par téléphone sur la nouvelle adresse : rappel du mode d'emploi pour installer l'app.
+function maybeWelcomeInstall() {
+  if (lsGet("welcome-install") || !canInstall() || /github\.io$/.test(location.hostname)) return false;
+  clearTimeout(installTimer);
+  installTimer = setTimeout(() => {
+    if (S.screen !== "home" || document.body.classList.contains("sheet-open") || !$("termsSheet").hidden || !$("newsSheet").hidden || !$("tuto").hidden) return;
+    lsSet("welcome-install", 1); openInstall(true);
+  }, 900);
+  return true;
+}
 function maybeInvite() {
   clearTimeout(installTimer);
   if (newsPending() || termsPending()) return;
@@ -2446,7 +2461,7 @@ function termsPending() { return !!(S.profile && (S.profile.termsV || 0) < TERMS
 function maybeTerms() { if (termsPending()) { $("termsBackdrop").hidden = false; $("termsSheet").hidden = false; return true; } return false; }
 $("termsOk").onclick = () => {
   saveProfile({ termsV: TERMS_V, termsAt: Date.now() });
-  $("termsBackdrop").hidden = true; $("termsSheet").hidden = true; maybeNews();
+  $("termsBackdrop").hidden = true; $("termsSheet").hidden = true; maybeNews(); if (!newsPending()) maybeWelcomeInstall();
 };
 function newsPending() { return !!(S.profile && !((S.profile.seen || {})[NEWS_ID]) && !lsGet("seen-" + NEWS_ID)); }
 let newsTimer = null;
@@ -3487,6 +3502,7 @@ function openTuto() { tutoI = 0; renderTuto(); $("tuto").hidden = false; documen
 function closeTuto() {
   $("tuto").hidden = true; if (!$("sheet").classList.contains("open")) document.body.classList.remove("sheet-open");
   lsSet("seen-tuto", 1); if (S.profile) saveProfile({ seen: { ...(S.profile.seen || {}), tuto: true } });
+  if (S.screen === "home") maybeWelcomeInstall();
 }
 function renderTuto() {
   const [ico, t, d] = TUTO[tutoI], last = tutoI === TUTO.length - 1;
