@@ -113,6 +113,33 @@ service cloud.firestore {
       allow delete: if signedIn() && (resource.data.from == me() || isSelf(owner));
     }
 
+    // Commentaires des amis sur les séances : comments/{propriétaire}/items/{id}
+    match /comments/{owner}/items/{cid} {
+      allow read: if isSelf(owner) || isFriend(owner);
+      allow create: if (isSelf(owner) || isFriend(owner)) && request.resource.data.from == me()
+                    && request.resource.data.date is string && request.resource.data.date.size() <= 14
+                    && request.resource.data.text is string
+                    && request.resource.data.text.size() > 0 && request.resource.data.text.size() <= 500;
+      allow update: if false;
+      allow delete: if signedIn() && (resource.data.from == me() || isSelf(owner));
+    }
+
+    // Défis entre amis : chacun ne peut modifier que son propre score, ou quitter le défi.
+    match /challenges/{cid} {
+      allow read: if signedIn() && me() in resource.data.members;
+      allow create: if signedIn() && request.resource.data.owner == me()
+                    && me() in request.resource.data.members
+                    && request.resource.data.members.size() <= 20
+                    && request.resource.data.name is string && request.resource.data.name.size() <= 60
+                    && request.resource.data.metric in ['seances', 'jours', 'km', 'volume'];
+      allow update: if signedIn() && me() in resource.data.members && (
+                      (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['scores'])
+                        && request.resource.data.scores.diff(resource.data.scores).affectedKeys().hasOnly([me()]))
+                      || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['members'])
+                        && request.resource.data.members == resource.data.members.removeAll([me()])));
+      allow delete: if signedIn() && resource.data.owner == me();
+    }
+
     // Signalements (lus par l'administrateur).
     match /reports/{id} {
       allow create: if signedIn() && request.resource.data.from == me()

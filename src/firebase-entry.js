@@ -8,5 +8,5 @@ export {
 export {
   initializeFirestore, connectFirestoreEmulator, persistentLocalCache, persistentMultipleTabManager,
   doc, collection, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, onSnapshot,
-  query, where, orderBy, limit, limitToLast, serverTimestamp, writeBatch
+  query, where, orderBy, limit, limitToLast, serverTimestamp, writeBatch, documentId, arrayRemove, arrayUnion
 } from "firebase/firestore";
