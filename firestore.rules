@@ -58,11 +58,10 @@ service cloud.firestore {
     match /directory/{uid} {
       allow get: if signedIn();
       allow list: if signedIn() && request.query.limit <= 10;
-      allow delete: if isAdmin();
       allow write: if isSelf(uid) && !banned() && request.resource.data.uid == uid
                    && request.resource.data.pseudo is string && request.resource.data.pseudo.size() <= 30
                    && request.resource.data.code is string && request.resource.data.code.size() <= 12;
-      allow delete: if isSelf(uid);
+      allow delete: if isSelf(uid) || isAdmin();
     }
 
     // Ce que les amis peuvent voir : records, statistiques, partage des séances.
