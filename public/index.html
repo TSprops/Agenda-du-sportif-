@@ -16,10 +16,22 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="styles.css?v=20">
+<link rel="stylesheet" href="styles.css?v=21">
 <script>
+  // Déménagement : l'ancienne adresse (GitHub) renvoie vers la nouvelle (Firebase) quand MOVED vaut true.
+  window.NEW_HOME = "https://agenda-du-sportif.web.app/";
+  window.MOVED = false;
+  if (window.MOVED && /github\.io$/.test(location.hostname)) {
+    window.__appMoved = window.__appBooted = true;
+    document.addEventListener("DOMContentLoaded", function () {
+      document.body.innerHTML = '<main class="moved"><span class="onair"><i></i>Nouvelle adresse</span><h1 class="brand-title">L’app <span>déménage</span> 🚚</h1>'
+        + '<p>L’agenda du sportif a une nouvelle adresse, plus simple :</p><a class="moved-url" href="' + window.NEW_HOME + '">agenda-du-sportif.web.app</a>'
+        + '<ol><li><b>Ouvre la nouvelle adresse</b> avec le bouton ci-dessous.</li><li><b>Connecte-toi</b> avec ton e-mail et ton mot de passe habituels : tes séances, tes amis et tes records sont toujours là.</li><li><b>Réinstalle l’app</b> : Partager › « Sur l’écran d’accueil », puis supprime l’ancienne icône.</li></ol>'
+        + '<a class="btn primary" href="' + window.NEW_HOME + '">Ouvrir la nouvelle adresse</a></main>';
+    });
+  }
   // Version de la page : doit correspondre à APP_VERSION dans app.js.
-  window.APP_PAGE_VERSION = "20";
+  window.APP_PAGE_VERSION = "21";
   // Comme une vraie application : pas de zoom avec deux doigts ni en tapant deux fois (Safari ignore parfois la balise viewport).
   ["gesturestart", "gesturechange", "gestureend"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
   document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -46,7 +58,7 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=20"></script>
+<script type="module" src="app.js?v=21"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->

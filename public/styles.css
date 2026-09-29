@@ -786,3 +786,10 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .ban-card{border-color:var(--danger)}
 .ban-card b{color:var(--danger)}
 .grid2 .btn.ghost-danger{height:44px;font-size:14px}
+
+/* Page « L'app déménage » (ancienne adresse) */
+.moved{max-width:520px;margin:0 auto;min-height:100vh;padding:calc(env(safe-area-inset-top,0px) + 40px) 20px 40px;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+.moved p{margin:0;color:var(--muted)}
+.moved-url{font-family:var(--display);font-weight:800;font-size:clamp(20px,7vw,28px);color:var(--red-hi);text-decoration:none;white-space:nowrap}
+.moved ol{text-align:left;margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 14px 14px 34px}
+.moved .btn{align-self:stretch;text-decoration:none}

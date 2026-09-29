@@ -105,3 +105,17 @@ npm test   # démarre les émulateurs Firebase, lance les tests, puis les arrêt
 ```
 
 Ils tournent aussi automatiquement sur GitHub à chaque modification (onglet « Actions »).
+
+## Mise en ligne sur Firebase Hosting
+
+À chaque modification de `main`, le workflow « Tests et mise en ligne Firebase » lance les tests,
+puis (s'ils passent) publie le site **et les règles de sécurité** sur https://agenda-du-sportif.web.app.
+
+Réglage à faire une seule fois :
+1. Console Firebase › Hosting › « Commencer » (passer les étapes).
+2. Paramètres du projet › Comptes de service › « Générer une nouvelle clé privée ».
+3. Google Cloud › IAM : donner au compte `firebase-adminsdk-…` les rôles « Administrateur Firebase » et « Consommateur Service Usage ».
+4. GitHub › Settings › Secrets and variables › Actions › secret `FIREBASE_SERVICE_ACCOUNT` = contenu du fichier JSON.
+
+Pendant la transition, l'ancienne adresse GitHub Pages reste en ligne ; passer `window.MOVED` à `true`
+dans `public/index.html` y affiche la page « L'app déménage ».
