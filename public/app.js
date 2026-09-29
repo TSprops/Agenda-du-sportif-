@@ -9,7 +9,7 @@ import { firebaseConfig } from "./firebase-config.js";
 import { MUSCLES, GROUPS, EQUIP, EXERCISES, KEYWORDS, PROGRAMS } from "./data.js";
 
 /* Version : si la page et le code ne correspondent pas (ancien fichier en cache), on recharge proprement. */
-const APP_VERSION = "19";
+const APP_VERSION = "20";
 if (window.APP_PAGE_VERSION !== APP_VERSION) {
   let tried = false; try { tried = sessionStorage.getItem("reload-v" + APP_VERSION) === "1"; sessionStorage.setItem("reload-v" + APP_VERSION, "1"); } catch (e) { /* stockage bloqué */ }
   if (!tried && window.__repairApp) { window.__repairApp(); throw new Error("Mise à jour en cours"); }
@@ -55,6 +55,7 @@ if (!configured && !LOCAL) {
 const EMU = LOCAL && (!configured || location.port === "5000");
 const fbApp = initializeApp(EMU ? { apiKey: "demo-key", authDomain: "localhost", projectId: "demo-agenda" } : firebaseConfig);
 const auth = getAuth(fbApp);
+auth.languageCode = "fr"; // e-mails (mot de passe oublié…) envoyés en français
 const db = initializeFirestore(fbApp, EMU ? {} : { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) });
 if (EMU) {
   connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true });
@@ -391,7 +392,7 @@ $("auForgot").onclick = async () => {
   const email = $("auEmail").value.trim();
   $("auErr").hidden = true; $("auOk").hidden = true;
   if (!email) { show($("auErr"), "Entre ton e-mail ci-dessus, puis touche « Mot de passe oublié ? »."); return; }
-  try { await sendPasswordResetEmail(auth, email); show($("auOk"), "E-mail envoyé. Suis le lien reçu pour choisir un nouveau mot de passe."); }
+  try { await sendPasswordResetEmail(auth, email); show($("auOk"), "Si un compte existe avec " + email + ", un e-mail vient de partir (expéditeur : noreply@agenda-du-sportif.firebaseapp.com). Regarde aussi dans tes spams ou courriers indésirables, il arrive en 1 à 5 minutes."); }
   catch (err) { show($("auErr"), authMsg(err)); }
 };
 
@@ -485,7 +486,7 @@ $("pfForm").addEventListener("submit", e => {
     .finally(() => { btn.disabled = false; });
 });
 $("pwReset").onclick = async () => {
-  try { await sendPasswordResetEmail(auth, S.email); show($("pwMsg"), "E-mail envoyé à " + S.email + ". Suis le lien pour choisir un nouveau mot de passe."); }
+  try { await sendPasswordResetEmail(auth, S.email); show($("pwMsg"), "E-mail envoyé à " + S.email + ". Suis le lien pour choisir un nouveau mot de passe (regarde aussi dans tes spams)."); }
   catch (err) { show($("pwMsg"), authMsg(err)); }
 };
 $("logout").onclick = () => signOut(auth);
