@@ -21,6 +21,16 @@ module.exports = async function appTests(t) {
     t("record en direct", /Nouveau record/.test(await A.textContent("#toast")), true);
     await A.click("#rtSkip"); await A.click("[data-a=close]"); await A.waitForTimeout(500);
 
+    // Programme et routine : la séance se prépare toute seule.
+    await home(A); await A.click("[data-go=go]"); await A.click(".go-tile[data-go=programs]"); await A.click("[data-pgstart=ppl]"); await A.waitForTimeout(300);
+    await A.click("[data-pgnext]"); await A.waitForSelector("#f-title", { timeout: 8000 });
+    t("programme : séance prête", await A.inputValue("#f-title"), "Push");
+    t("programme : noms d'exercices verrouillés", await A.$eval("#exn-0", e => e.readOnly), true);
+    await A.click("[data-a=save-routine]"); await A.click("[data-a=close]"); await A.waitForTimeout(400);
+    await home(A); await A.click("[data-go=go]"); await A.click("[data-rgo2]"); await A.waitForSelector("#f-title", { timeout: 8000 });
+    t("routine : séance lancée", await A.$$eval("[id^=exn-]", x => x.length), 5);
+    await A.click("[data-a=close]"); await A.waitForTimeout(400);
+
     // Séance ancienne (plus de 90 jours) : chargée par morceaux.
     const old = new Date(Date.now() - 200 * 864e5), ok = old.getFullYear() + "-" + String(old.getMonth() + 1).padStart(2, "0") + "-" + String(old.getDate()).padStart(2, "0");
     await put(`users/${A.uid}/seances/${ok}`, { disc: "course", runType: "ef", title: "Vieille sortie", run: { dist: 12, h: "", m: 70, s: "", blocks: [] }, updatedAt: 1 });

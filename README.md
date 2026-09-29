@@ -119,3 +119,29 @@ Réglage à faire une seule fois :
 
 Pendant la transition, l'ancienne adresse GitHub Pages reste en ligne ; passer `window.MOVED` à `true`
 dans `public/index.html` y affiche la page « L'app déménage ».
+
+## Organisation du code (`public/js/`)
+
+`public/app.js` charge les parties de l'app dans l'ordre. Chaque fichier correspond à un sujet :
+
+| Fichier | Contenu |
+|---|---|
+| `boot.js` | Déménagement et contrôle de version (tout premier chargé) |
+| `core.js` | Firebase, constantes, état, utilitaires — ne dépend d'aucun autre fichier |
+| `store.js` | Enregistrement (profil, séances, statistiques) et navigation entre écrans |
+| `theme.js` | Couleurs et modes sombre / clair |
+| `account.js` | Connexion, inscription, profil |
+| `seances.js` | Calendrier, fiche de séance, photos, types |
+| `workout.js` | Plusieurs séances par jour, « dernière fois », cordes, bibliothèque, records en direct, routines, programmes |
+| `timer.js` | Minuteur de repos et départs |
+| `ideas.js` | CrossFit, idées, records, courbes de progression |
+| `home.js` | Accueil, Let's go, série, objectif, bilan du mois |
+| `muscles.js` | Carte musculaire |
+| `nutrition.js` | Compléments et créatine |
+| `friends.js` | Amis, séances partagées, messages |
+| `social.js` | Activité, fil d'actu, commentaires, défis, classements |
+| `admin.js` | Administration et modération |
+| `contact.js`, `faq.js`, `install.js`, `extras.js` | Contact, assistant, installation, tutoriel / export / sauvegarde |
+| `main.js` | Abonnements temps réel et démarrage |
+
+Règle à respecter : `core.js` n'importe jamais les autres fichiers (il doit être prêt en premier).
