@@ -16,10 +16,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="styles.css?v=15">
+<link rel="stylesheet" href="styles.css?v=16">
 <script>
   // Version de la page : doit correspondre à APP_VERSION dans app.js.
-  window.APP_PAGE_VERSION = "15";
+  window.APP_PAGE_VERSION = "16";
   // Comme une vraie application : pas de zoom avec deux doigts ni en tapant deux fois (Safari ignore parfois la balise viewport).
   ["gesturestart", "gesturechange", "gestureend"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
   document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -46,7 +46,7 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=15"></script>
+<script type="module" src="app.js?v=16"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->
@@ -248,6 +248,11 @@
   <h1 class="vtitle">Social</h1>
   <div id="socialBody" style="display:flex;flex-direction:column;gap:22px"></div>
 </main>
+<main class="app view" id="v-messages" hidden>
+  <button class="back" data-go="social">‹ Social</button>
+  <h1 class="vtitle">Messages</h1>
+  <div id="msgsBody" style="display:flex;flex-direction:column;gap:18px"></div>
+</main>
 <main class="app view" id="v-feed" hidden>
   <button class="back" data-go="social">‹ Social</button>
   <h1 class="vtitle">Fil d’actu</h1>
@@ -282,7 +287,7 @@
 </main>
 <main class="view chat-view" id="v-chat" hidden>
   <header class="chat-head">
-    <button class="back" data-go="friends" aria-label="Retour aux amis">‹</button>
+    <button class="back" id="chatBack" aria-label="Retour">‹</button>
     <button type="button" class="chat-who" id="chatWho"></button>
     <button type="button" class="icon-btn" id="chatMore" aria-label="Plus d’options">•••</button>
   </header>
@@ -432,7 +437,8 @@
 <div class="sheet lib-sheet" id="libSheet" role="dialog" aria-modal="true" aria-label="Bibliothèque d’exercices">
   <div class="bar-top"><button class="link" id="libClose">‹ Retour</button><b>Exercices</b><span style="width:60px"></span></div>
   <div class="sheet-body" style="gap:12px">
-    <input id="libQ" class="lib-q" type="search" placeholder="Chercher un exercice…" aria-label="Chercher un exercice" autocomplete="off">
+    <input id="libQ" class="lib-q" type="search" placeholder="Chercher un exercice ou crée le tien en l’écrivant" aria-label="Chercher un exercice ou créer le tien en l’écrivant" autocomplete="off">
+    <p class="hint lib-help">Tu ne trouves pas ton exercice ? Écris son nom en entier : un bouton « + Créer » apparaît en haut de la liste.</p>
     <div class="chips lib-chips" id="libChips"></div>
     <div id="libList" style="display:flex;flex-direction:column;gap:8px"></div>
   </div>

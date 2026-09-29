@@ -736,3 +736,27 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .go-hero .grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
 .go-hero .btn{padding-inline:10px;white-space:nowrap}
 #musBody .track,#musBody .fill{display:block}
+
+/* ===== Messages et mise en avant dans Social ===== */
+.menu-card.hot{border-color:var(--red);background:color-mix(in srgb,var(--red) 14%,var(--surface));box-shadow:0 0 22px color-mix(in srgb,var(--red) 22%,transparent)}
+.menu-card .dot-new{margin-left:4px;vertical-align:middle}
+.conv-list{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.conv{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;border-bottom:1px solid var(--line)}
+.conv:last-child{border-bottom:0}
+.conv .main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.conv .main b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.conv .main span{font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.conv small{flex:none;font-size:11.5px;color:var(--muted)}
+.conv.unread{background:color-mix(in srgb,var(--red) 16%,var(--surface));box-shadow:inset 4px 0 0 var(--red)}
+.conv.unread .main span{color:var(--ink);font-weight:600}
+.conv.unread small{color:var(--red-hi);font-weight:700}
+.lib-help{margin-top:-4px}
+.lib-q{padding-inline:12px}
+.lib-q::placeholder{font-size:13px;letter-spacing:-.01em}
+/* Noms d'exercices verrouillés (programme, routine, séance reprise) */
+.ex-name.locked{cursor:default;color:var(--ink)}
+.ex-name.locked:focus{outline:none}
+/* Cordes */
+.cd-every{display:flex;gap:6px}
+.cd-every .num{flex:1;min-width:0;height:42px}
+.cordes .grid2 .field>span{font-size:12.5px}

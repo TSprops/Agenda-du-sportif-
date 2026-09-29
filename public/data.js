@@ -73,6 +73,8 @@ export const EXERCISES = [
   ["Kickback triceps", ["triceps"], [], "H"],
   ["Curl poignets", ["avantbras"], [], "H"],
   ["Farmer walk", ["avantbras", "trapezes"], ["abdos"], "H"],
+  ["Montée de corde", ["dorsaux", "biceps"], ["avantbras", "abdos"], "C"],
+  ["Montée de corde sans jambes", ["dorsaux", "biceps"], ["avantbras", "abdos"], "C"],
   // Jambes
   ["Squat", ["quadriceps", "fessiers"], ["ischios", "lombaires", "abdos"], "B"],
   ["Front squat", ["quadriceps"], ["fessiers", "abdos"], "B"],
@@ -140,7 +142,8 @@ export const KEYWORDS = [
   [/mollet|calf/, ["mollets"], []],
   [/abdo|crunch|gainage|planche abdo|relev|twist|sit ?up|toes|obliq/, ["abdos"], ["obliques"]],
   [/lombaire/, ["lombaires"], []],
-  [/poignet|avant ?bras|farmer/, ["avantbras"], []]
+  [/poignet|avant ?bras|farmer/, ["avantbras"], []],
+  [/corde|rope/, ["dorsaux", "biceps"], ["avantbras"]]
 ];
 
 /* ---------- Programmes ---------- */
