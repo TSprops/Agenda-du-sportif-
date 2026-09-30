@@ -684,7 +684,9 @@ const FAM_HOW = { burpee: "Burpees", wallball: "Wall balls", snatch: "Snatch", b
   crunch: "Crunch", legraise: "Relevés de jambes", plank: "Gainage", hollow: "Hollow hold", climber: "Mountain climbers",
   squat: "Squat", squatbw: "Squats (poids du corps)", lunge: "Fentes", hipthrust: "Hip thrust", calf: "Mollets debout", legext: "Leg extension", legpress: "Presse à cuisses", legcurl: "Leg curl",
   hinge: "Soulevé de terre", row: "Rowing barre", rowdb: "Rowing haltère", seatrow: "Tirage horizontal", pulldown: "Tirage vertical", shrug: "Shrugs", backext: "Extension lombaire", goodmorning: "Good morning",
-  ohp: "Développé militaire", ohpdb: "Développé militaire", raise: "Élévations latérales", fraise: "Élévations frontales", uprow: "Rowing menton", rearfly: "Oiseau (arrière d’épaule)", facepull: "Face pull" };
+  ohp: "Développé militaire", ohpdb: "Développé militaire", raise: "Élévations latérales", fraise: "Élévations frontales", uprow: "Rowing menton", rearfly: "Oiseau (arrière d’épaule)", facepull: "Face pull",
+  bench: "Développé couché", fly: "Écarté haltères", flycable: "Écarté poulie haute", pecdeck: "Pec deck (butterfly)", chestpress: "Presse pectoraux", pullover: "Pull-over",
+  incline: "Développé incliné", inclinedb: "Développé incliné haltères", decline: "Développé décliné", benchdb: "Développé couché haltères" };
 function howOf(name) {
   HOW_KEYS = HOW_KEYS || Object.fromEntries(Object.keys(HOW).map(n => [key(n), n]));
   const mv = HOW_KEYS[key(name)] ? null : moveOf(name), n = HOW_KEYS[key(name)] || (mv && FAM_HOW[mv.id]);

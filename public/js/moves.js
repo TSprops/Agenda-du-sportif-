@@ -474,3 +474,90 @@ Object.assign(HOW, {
     tips: ["Petite flexion des genoux, buste droit.", "L’élan des jambes lance la barre, les bras finissent.", "Bras verrouillés en haut, barre au-dessus de la nuque."] }
 });
 HOW["Développé épaules haltères"] = HOW["Développé militaire"];   // ancien nom (doublon supprimé de la bibliothèque)
+
+/* ═══ Pectoraux ═══ */
+const BT = 163;                                            // dessus du banc
+const lieHip = [114, BT - 13];
+// Couché sur le banc (tête à gauche), pieds au sol. deg > 0 : incliné, deg < 0 : décliné.
+const benchLie = (deg, arms, eq, o = {}) => {
+  const t = 180 + deg, sh = shOf(lieHip, t);
+  const legs = deg < 0 ? { th: -35, sh: 70, ft: 20, ankleAt: null } : { ankleAt: [152, ANK], ft: 0, kneeBend: 1 };
+  return merge({ hip: lieHip, torso: t, neck: t + (deg > 0 ? -8 : 2), near: { ...legs, ...arms(sh, t) } }, { eq, ...o });
+};
+// Point au-dessus de la poitrine (côté ventre) à la distance k de l'épaule, décalé de « along » vers les hanches.
+const overChest = (sh, t, k, along = 6) => add(add(sh, [-Math.sin(rad(t)) * k, Math.cos(rad(t)) * k]), [Math.cos(rad(t + 180)) * along, Math.sin(rad(t + 180)) * along]);
+const pressArms = (down, grip = 0) => (sh, t) => { const b = overChest(sh, t, down ? 15 : 58, down ? 8 : 4); return { wristAt: add(b, [0, 5.5]), hand: -90, elbowBend: -1, ls: { ua: down ? 0.72 - grip : 1 } }; };
+const benchEq = (deg, tool) => [bench(18, 150, BT, deg, 118), ...(deg < 0 ? [roller(P => add(P.near.ankle, [-2, -7]), 5.5, { top: true })] : []),
+  tool === "db" ? db(P => [P.near.grip, 0], "end", { top: true }) : bar(P => P.near.grip, 13, { top: true })];
+// Vue depuis les pieds : buste raccourci, tête derrière, bras vers le plafond.
+const benchF = (down, x = 150, tool = "bar", o = {}) => ({ view: "front", nolegs: true, headBehind: true, torso: -90, neck: -90, tls: 0.3, hip: [120, 158],
+  R: { wristAt: down ? [x, 122] : [x - 8, 90], hand: -90, elbowBend: -1, ls: { ua: down ? 0.85 : 1 } }, ...o,
+  eq: [fbench(160, o.back), tool === "db" ? fdb("across", { top: true }) : fbar(P => P.R.grip[1], { top: true })] });
+const incF = (down, tool) => benchF(down, 150, tool, { hip: [120, 158], tls: 0.62, back: 118 });
+const BENCH_TIPS = ["Pieds à plat au sol, fesses et omoplates collées au banc.", "Coudes à environ 45° du buste, pas écartés à 90°.", "En bas, avant-bras verticaux et coudes à angle droit (90°).", "Débutant : commence avec la barre seule et fais-toi surveiller."];
+const flyArms = open => (sh, t) => open ? { ua: 100, fa: 80, hand: 90, ls: { ua: 0.3, fa: 0.35 } } : { wristAt: add(overChest(sh, t, 54, 2), [0, 5.5]), hand: -90, elbowBend: 1 };
+const cableFly = (py, level) => {
+  const endY = { haute: 136, moyenne: 88, basse: 62 }[level], startY = { haute: 40, moyenne: 80, basse: 150 }[level];
+  return [
+    standF({ box: [40, -10, 200, GROUND], R: { wristAt: [180, startY], hand: 0, elbowBend: 1 }, eq: [fcables(py)] }),
+    standF({ box: [40, -10, 200, GROUND], R: { wristAt: [127, endY], hand: 90, elbowBend: 1 }, eq: [fcables(py)] })];
+};
+const cableFlySide = level => {
+  const a = { haute: [-40, 60], moyenne: [180, 0], basse: [150, -10] }[level];
+  return [stand({ torso: -84, near: { ua: a[0], fa: a[0] - 10, hand: a[0] - 10, ls: { ua: 0.5, fa: 0.5 }, ankleAt: [138, ANK] }, far: { ankleAt: [104, ANK], ft: 20 } }),
+    stand({ torso: -84, near: { ua: a[1], fa: a[1] - 6, hand: a[1] - 6, ankleAt: [138, ANK] }, far: { ankleAt: [104, ANK], ft: 20 } })];
+};
+const pecDeckF = close => ({ view: "front", torso: -90, neck: -90, hip: [120, 150], R: { th: 90, sh: 90, ls: { th: 0.3, ...(close ? { ua: 0.3 } : {}) }, ua: close ? 180 : 0, fa: -90, hand: -90 },
+  eq: [fbench(158), raw(P => [P.R, P.L].map(s => `<rect class="fg-pad" x="${(s.wrist[0] - (s.k > 0 ? -3 : 9)).toFixed(1)}" y="${(s.wrist[1] - 4).toFixed(1)}" width="6" height="30" rx="3"/>`).join(""))] });
+const chestPressS = out => ({ hip: [100, 142], torso: -92, neck: -90, near: { th: 0, sh: 92, ft: 0, wristAt: out ? [156, 88] : [112, 92], hand: -90, ls: { ua: out ? 1 : 0.8 } },
+  eq: [seat(86, 150, 1, 4), raw(P => { const g = P.near.grip; return `<line class="fg-rail" x1="${g[0].toFixed(1)}" y1="${(g[1] - 8).toFixed(1)}" x2="${g[0].toFixed(1)}" y2="${(g[1] + 8).toFixed(1)}"/>`; }, { top: true })] });
+const chestPressF = out => ({ view: "front", torso: -90, neck: -90, hip: [120, 150], R: { th: 90, sh: 90, ls: { th: 0.3, ...(out ? { ua: 0.3, fa: 0.3 } : {}) }, ...(out ? { ua: 170, fa: 170, hand: -90 } : { ua: 40, fa: -80, hand: -90 }) }, eq: [fbench(158)] });
+
+Object.assign(HOW, {
+  "Développé couché": { grip: "bench", views: [side([benchLie(0, pressArms(1), benchEq(0)), benchLie(0, pressArms(0), benchEq(0))], ["Barre au bas des pectoraux", "Bras tendus"]),
+      front([benchF(1), benchF(0)], ["Avant-bras verticaux, coudes à 90°", "Bras tendus"])],
+    cue: "Allongé sur un banc plat, omoplates serrées, pieds au sol : descends la barre au bas des pectoraux, puis pousse vers le haut.", tips: BENCH_TIPS },
+  "Développé couché haltères": { views: [side([benchLie(0, pressArms(1), benchEq(0, "db")), benchLie(0, pressArms(0), benchEq(0, "db"))], ["Haltères au niveau de la poitrine", "Bras tendus"]),
+      front([benchF(1, 150, "db"), benchF(0, 142, "db")], ["Coudes à 90°", "Haltères au-dessus des épaules"])],
+    cue: "Allongé sur un banc plat, un haltère dans chaque main : descends-les sur les côtés de la poitrine, puis pousse vers le haut.",
+    tips: ["Banc à plat, pieds bien à plat au sol.", "Pars bras tendus, paumes tournées vers tes pieds.", "Descends jusqu’aux coudes à 90°, coudes à environ 45° du buste.", "Remonte en rapprochant les haltères, sans les cogner."] },
+  "Développé incliné": { grip: "bench", views: [side([benchLie(35, pressArms(1), benchEq(35)), benchLie(35, pressArms(0), benchEq(35))], ["Barre en haut des pectoraux", "Bras tendus"]),
+      front([incF(1), incF(0)], ["Coudes à 90°", "Bras tendus"])],
+    cue: "Sur un banc incliné à 30–45° : descends la barre sur le haut des pectoraux, puis pousse vers le haut.",
+    tips: ["Dossier relevé à 30–45° (2 ou 3 crans).", "Barre descendue sur le haut des pectoraux, sous les clavicules.", "Coudes à environ 45° du buste ; en bas, coudes à 90°."] },
+  "Développé incliné haltères": { views: [side([benchLie(35, pressArms(1), benchEq(35, "db")), benchLie(35, pressArms(0), benchEq(35, "db"))], ["Haltères en haut des pectoraux", "Bras tendus"]),
+      front([incF(1, "db"), incF(0, "db")], ["Coudes à 90°", "Bras tendus"])],
+    cue: "Sur un banc incliné à 30–45°, un haltère dans chaque main : descends-les au niveau du haut des pectoraux, puis pousse vers le haut.",
+    tips: ["Dossier relevé à 30–45°.", "Paumes vers tes pieds, coudes à environ 45° du buste.", "Descends jusqu’aux coudes à 90°, remonte en rapprochant les haltères."] },
+  "Développé décliné": { grip: "bench", views: [side([benchLie(-18, pressArms(1), benchEq(-18)), benchLie(-18, pressArms(0), benchEq(-18))], ["Barre au bas des pectoraux", "Bras tendus"])],
+    cue: "Sur un banc décliné, pieds bloqués sous les boudins : descends la barre au bas des pectoraux, puis pousse vers le haut.",
+    tips: ["Tête plus basse que les hanches (15–30°), pieds bloqués.", "Barre descendue sur le bas des pectoraux.", "Fais-toi aider pour prendre et reposer la barre."] },
+  "Développé couché prise serrée": { grip: "close", views: [side([benchLie(0, pressArms(1, 0.25), benchEq(0)), benchLie(0, pressArms(0), benchEq(0))], ["Barre au bas des pectoraux", "Bras tendus"]),
+      front([benchF(1, 138, "bar", { R: { wristAt: [138, 122], hand: -90, elbowBend: -1, ls: { ua: 0.5 } } }), benchF(0, 146)], ["Mains à largeur d’épaules, coudes serrés", "Bras tendus"])],
+    cue: "Mains à largeur d’épaules sur la barre : descends au bas des pectoraux en gardant les coudes près du corps, puis pousse.",
+    tips: ["Mains à largeur d’épaules, pas plus serré.", "Coudes près du corps pendant la descente.", "Travaille surtout les triceps."] },
+  "Écarté haltères": { views: [side([benchLie(0, flyArms(1), benchEq(0, "db")), benchLie(0, flyArms(0), benchEq(0, "db"))], ["Bras ouverts", "Haltères au-dessus de la poitrine"]),
+      front([benchF(1, 150, "db", { R: { ua: 4, fa: -12, hand: -12 } }), benchF(0, 128, "db", { R: { wristAt: [128, 92], hand: -90, elbowBend: -1 } })], ["Bras ouverts, coudes légèrement pliés", "Mains qui se rejoignent"])],
+    cue: "Allongé, coudes légèrement fléchis : ouvre les bras sur les côtés sans descendre plus bas que le banc, puis referme au-dessus de la poitrine.",
+    tips: ["Coudes légèrement fléchis et fixes.", "Ouvre jusqu’à sentir l’étirement des pectoraux, pas plus bas que le banc.", "Referme comme pour faire un câlin à un tronc d’arbre."] },
+  "Écarté poulie haute": { views: [front(cableFly(8, "haute"), ["Bras ouverts vers les poulies hautes", "Mains qui se rejoignent devant les hanches"]), side(cableFlySide("haute"), ["Bras en haut", "Mains devant les hanches"])],
+    cue: "Poulies réglées en haut : ramène les mains vers le bas et l’avant jusqu’à ce qu’elles se rejoignent devant les hanches. Cible le bas des pectoraux.",
+    tips: ["Un pied devant l’autre, buste légèrement penché.", "Coudes légèrement fléchis et fixes.", "Poulie haute = bas des pectoraux."] },
+  "Écarté poulie moyenne": { views: [front(cableFly(SH_Y + 16, "moyenne"), ["Bras ouverts à hauteur d’épaules", "Mains qui se rejoignent devant la poitrine"]), side(cableFlySide("moyenne"), ["Bras ouverts", "Mains devant la poitrine"])],
+    cue: "Poulies à hauteur d’épaules : ramène les mains devant la poitrine en gardant les bras à l’horizontale. Cible le milieu des pectoraux.",
+    tips: ["Bras à hauteur d’épaules pendant tout le mouvement.", "Coudes légèrement fléchis et fixes.", "Poulie moyenne = milieu des pectoraux."] },
+  "Écarté poulie basse": { views: [front(cableFly(GROUND - 10, "basse"), ["Bras ouverts vers les poulies basses", "Mains qui se rejoignent à hauteur du visage"]), side(cableFlySide("basse"), ["Bras en bas", "Mains devant le visage"])],
+    cue: "Poulies réglées en bas : ramène les mains vers le haut et l’avant jusqu’à ce qu’elles se rejoignent à hauteur du menton. Cible le haut des pectoraux.",
+    tips: ["Buste droit, un pied devant l’autre.", "Coudes légèrement fléchis, monte en arc de cercle.", "Poulie basse = haut des pectoraux."] },
+  "Pec deck (butterfly)": { views: [front([pecDeckF(0), pecDeckF(1)], ["Avant-bras contre les coussins", "Coussins qui se touchent"])],
+    cue: "Assis sur la machine, dos collé, avant-bras contre les coussins : ramène les bras devant toi jusqu’à ce que les coussins se touchent, puis rouvre lentement.",
+    tips: ["Règle le siège pour avoir les coudes à hauteur des épaules.", "Bras pliés à 90° contre les coussins.", "Rouvre lentement sans aller trop loin en arrière."] },
+  "Presse pectoraux": { views: [side([chestPressS(0), chestPressS(1)], ["Poignées à la poitrine", "Bras tendus devant"]), front([chestPressF(0), chestPressF(1)], ["Coudes à hauteur de poitrine", "Bras tendus vers l’avant"])],
+    cue: "Assis sur la machine, dos collé, poignées à hauteur de poitrine : pousse devant toi sans verrouiller les coudes, puis reviens lentement.",
+    tips: ["Règle le siège : poignées à hauteur du milieu de la poitrine.", "Dos et tête collés au dossier.", "Pousse jusqu’aux bras presque tendus."] },
+  "Pull-over": { views: [side([benchLie(0, () => ({ ua: 186, fa: 176, hand: 176 }), [bench(18, 150, BT), db(P => [P.near.grip, 90], "side", { top: true })]),
+      benchLie(0, (sh, t) => ({ wristAt: add(overChest(sh, t, 56, 2), [0, 5.5]), hand: -90, elbowBend: 1 }), [bench(18, 150, BT), db(P => [P.near.grip, 0], "side", { top: true })])], ["Haltère derrière la tête", "Haltère au-dessus de la poitrine"])],
+    cue: "Allongé, un haltère tenu à deux mains, bras presque tendus : descends-le derrière la tête, puis ramène-le au-dessus de la poitrine.",
+    tips: ["Coudes légèrement fléchis et fixes.", "Descends jusqu’à sentir l’étirement, sans douleur à l’épaule.", "Bassin et bas du dos restent posés sur le banc."] }
+});
+HOW["Écarté à la poulie"] = HOW["Écarté poulie haute"];   // ancien nom
