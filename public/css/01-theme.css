@@ -1,0 +1,53 @@
+/* Single deliberate dark theme: black & red */
+:root{
+  color-scheme:dark;
+  --ground:#0A0A0B; --surface:#141416; --surface-2:#1D1D20; --line:#2B2B2F; --ink:#F4F1EE; --muted:#9C9690;
+  --red:#E3161F; --red-hi:#FF2B34; --red-soft:color-mix(in srgb,var(--red) 16%,var(--surface)); --cf-ink:#FFD60A; --on-red:#FFFFFF; --danger:#FF4B4B;
+  --glow:0 0 28px color-mix(in srgb,var(--red) 45%,transparent);
+  --shadow:0 1px 0 rgba(255,255,255,.03) inset,0 8px 24px rgba(0,0,0,.35);
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  --r:14px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{background:var(--ground)}
+body{color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0}
+:focus-visible{outline:2px solid var(--red-hi);outline-offset:2px}
+.app{max-width:560px;margin:0 auto;padding-inline:16px;padding-block:20px 104px;display:flex;flex-direction:column;gap:22px}
+.back{font-weight:600;font-size:15px;padding:6px 0;align-self:flex-start;color:var(--muted)}
+.vtitle{overflow-wrap:anywhere;font-family:var(--display);font-weight:800;font-size:clamp(32px,10vw,42px);line-height:1;text-transform:uppercase;margin:-12px 0 0;text-wrap:balance}
+.h2{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.hint{font-size:13px;color:var(--muted);margin:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.btn{height:50px;border-radius:14px;padding-inline:18px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--surface-2);border:1px solid var(--line)}
+.btn.primary{background:var(--red);border-color:var(--red);color:var(--on-red);box-shadow:0 6px 22px color-mix(in srgb,var(--red) 30%,transparent)}
+.btn.primary:active{background:var(--red-hi)}
+.btn.ghost-danger{background:transparent;border-color:color-mix(in srgb,var(--danger) 45%,transparent);color:var(--danger)}
+.btn.ghost-danger.armed{background:var(--danger);color:#fff}
+.lbl{font-family:var(--display);font-weight:700;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.lbl em{font-style:normal;font-family:var(--body);text-transform:none;letter-spacing:0;font-weight:600;color:var(--ink)}
+.dot{width:10px;height:10px;border-radius:3px;background:var(--tc);flex:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{height:36px;padding-inline:14px;border-radius:18px;background:var(--surface);border:1.5px solid var(--line);font-size:13.5px;font-weight:600;display:inline-flex;align-items:center;gap:7px}
+.chip[aria-pressed="true"]{background:var(--tc,var(--red));border-color:var(--tc,var(--red));color:#0A0A0B;font-weight:700}
+.chip[aria-pressed="true"] .dot{background:#0A0A0B}
+.field{display:flex;flex-direction:column;gap:6px}
+.field>span{font-size:13px;color:var(--muted)}
+.field input,.field textarea{height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface-2);padding-inline:12px;font-size:16px;width:100%}
+.field input:focus,.field textarea:focus,textarea:focus{outline:none;border-color:var(--red)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+textarea{width:100%;min-height:64px;resize:vertical;border-radius:12px;border:1.5px solid var(--line);background:var(--surface-2);padding:10px 12px;font-size:16px}
+.err{color:var(--danger);font-size:13.5px;margin:0}
+.note-mode{font-size:12px;color:var(--muted);text-align:center;margin:0}
+
+/* Avatar */
+.avatar{width:var(--s,40px);height:var(--s,40px);border-radius:50%;overflow:hidden;display:grid;place-items:center;background:var(--red);color:var(--on-red);font-family:var(--display);font-weight:800;font-size:calc(var(--s,40px)*.42);flex:none;text-transform:uppercase}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.avatar-pick{display:flex;align-items:center;gap:14px;cursor:pointer}
+.avatar-pick input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.avatar-pick b{display:block;font-weight:600}
+

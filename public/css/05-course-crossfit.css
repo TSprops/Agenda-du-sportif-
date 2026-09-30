@@ -1,0 +1,63 @@
+/* Course à pied, CrossFit, bulle de l'assistant */
+/* Course à pied */
+.dur{display:flex;align-items:center;gap:4px}
+.dur input{flex:1;min-width:0;height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface-2);text-align:center;font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+.dur input:focus{outline:none;border-color:var(--tc,var(--red))}
+.dur i{font-style:normal;font-weight:700;color:var(--muted)}
+.dur2{max-width:220px}
+.run-calc{display:flex;flex-wrap:wrap;gap:8px 16px;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--tc) 10%,var(--surface-2));border:1px solid color-mix(in srgb,var(--tc) 35%,transparent);font-size:13.5px;color:var(--muted)}
+.run-calc b{font-family:var(--display);font-weight:800;font-size:22px;color:var(--ink);font-variant-numeric:tabular-nums}
+.bloc{display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line);border-left:3px solid var(--tc)}
+.bloc-top{display:flex;align-items:center;gap:6px}
+.bloc-top .num{height:42px}
+.bloc-top .bl-rep{width:58px;flex:none}
+.bloc-top .times{font-weight:800;color:var(--muted)}
+.unit{flex:none;height:42px;min-width:48px;padding-inline:10px;border-radius:11px;background:var(--surface);border:1.5px solid var(--line);font-weight:700}
+
+/* CrossFit */
+.move{display:flex;align-items:center;gap:6px}
+.move .num{height:42px}
+.move .mv-reps{width:78px;flex:none;font-size:16px}
+.move .mv-kg{width:62px;flex:none;font-size:16px}
+.mv-name{flex:1;min-width:0;height:42px;border-radius:11px;border:1.5px solid var(--line);background:var(--surface-2);padding-inline:10px;font-size:16px;font-weight:600}
+.mv-name:focus{outline:none;border-color:var(--tc)}
+.btn.primary.cf-btn{background:#FFD60A;border-color:#FFD60A;color:#0A0A0B;box-shadow:0 6px 22px rgba(255,214,10,.25)}
+.pill.ok.cf{background:#FFD60A;border-color:#FFD60A;color:#0A0A0B}
+.tag.cf{background:color-mix(in srgb,#FFD60A 14%,var(--surface));color:var(--cf-ink);border-color:color-mix(in srgb,#FFD60A 40%,transparent)}
+.pr{border-bottom:1px solid var(--line)}
+.pr:last-child{border-bottom:0}
+.pr-row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding-block:12px}
+.pr-row .main{flex:1;min-width:0}
+.pr-row b{display:block}
+.pr-row .main span{font-size:12.5px;color:var(--muted)}
+.pr-kg{font-family:var(--display);font-weight:800;font-size:24px;color:var(--cf-ink);font-variant-numeric:tabular-nums}
+.pr-kg small{font-size:13px;color:var(--muted)}
+.pr-row .arrow{color:var(--cf-ink);width:18px;text-align:center}
+.pr-form{display:flex;flex-direction:column;gap:10px;padding-bottom:12px}
+.hist{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:6px}
+.hist li{display:flex;align-items:center;gap:10px;font-size:13.5px;padding:6px 10px;border-radius:10px;background:var(--surface-2)}
+.hist li span{color:var(--muted);min-width:70px}
+.hist li b{font-variant-numeric:tabular-nums}
+.hist li small{color:var(--muted)}
+.hist li .icon-btn,.hist li .src{margin-left:auto}
+.bench{background:var(--surface);border:1px solid var(--line);border-left:3px solid #FFD60A;border-radius:var(--r);padding:0 14px}
+.bench-top{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding-block:14px}
+.bench-top .main{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:5px}
+.bench-top b{font-family:var(--display);font-weight:800;font-size:22px;line-height:1;text-transform:uppercase}
+.bench-top .desc{font-size:13px;color:var(--muted);line-height:1.35}
+.bench-best{display:flex;flex-direction:column;align-items:flex-end;flex:none}
+.bench-best b{font-family:var(--display);font-weight:800;font-size:22px;color:var(--cf-ink);font-variant-numeric:tabular-nums;text-transform:none}
+.bench-best small{font-size:12px;color:var(--muted)}
+.bench .add-set{color:var(--cf-ink);margin-bottom:12px}
+.help-sugg button.lex{background:var(--surface-2);border-color:var(--line);color:var(--ink)}
+
+/* Bulle discrète à côté de l'assistant */
+.help-hint{position:fixed;right:84px;bottom:calc(env(safe-area-inset-bottom,0px) + 26px);z-index:20;max-width:min(250px,calc(100vw - 110px));display:flex;align-items:flex-start;gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:14px 14px 4px 14px;padding:8px 6px 8px 12px;box-shadow:0 8px 24px rgba(0,0,0,.5);animation:hintIn .35s cubic-bezier(.2,.8,.2,1)}
+.help-hint::after{content:"";position:absolute;right:-6px;bottom:10px;width:10px;height:10px;background:var(--surface);border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:rotate(-45deg)}
+.hh-text{text-align:left;font-size:13px;line-height:1.35;color:var(--ink);font-weight:500}
+.hh-x{flex:none;width:24px;height:24px;border-radius:50%;color:var(--muted);font-size:11px;display:grid;place-items:center;margin-top:-2px}
+.hh-x:hover,.hh-x:focus-visible{background:var(--surface-2)}
+body.sheet-open .help-hint{display:none}
+@keyframes hintIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.help-hint{animation:none}}
+
