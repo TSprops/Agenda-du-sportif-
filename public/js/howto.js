@@ -682,7 +682,8 @@ const FAM_HOW = { burpee: "Burpees", wallball: "Wall balls", snatch: "Snatch", b
   pushup: "Pompes", pushdiamond: "Pompes diamant", pike: "Pompes pike", dips: "Dips", pullup: "Tractions", invrow: "Tractions australiennes", rope: "Montée de corde",
   lsit: "L-sit", handstand: "Handstand", hspu: "Handstand push-up", planche: "Planche",
   crunch: "Crunch", legraise: "Relevés de jambes", plank: "Gainage", hollow: "Hollow hold", climber: "Mountain climbers",
-  squat: "Squat", squatbw: "Squats (poids du corps)", lunge: "Fentes", hipthrust: "Hip thrust", calf: "Mollets debout", legext: "Leg extension", legpress: "Presse à cuisses", legcurl: "Leg curl" };
+  squat: "Squat", squatbw: "Squats (poids du corps)", lunge: "Fentes", hipthrust: "Hip thrust", calf: "Mollets debout", legext: "Leg extension", legpress: "Presse à cuisses", legcurl: "Leg curl",
+  hinge: "Soulevé de terre", row: "Rowing barre", rowdb: "Rowing haltère", seatrow: "Tirage horizontal", pulldown: "Tirage vertical", shrug: "Shrugs", backext: "Extension lombaire", goodmorning: "Good morning" };
 function howOf(name) {
   HOW_KEYS = HOW_KEYS || Object.fromEntries(Object.keys(HOW).map(n => [key(n), n]));
   const mv = HOW_KEYS[key(name)] ? null : moveOf(name), n = HOW_KEYS[key(name)] || (mv && FAM_HOW[mv.id]);

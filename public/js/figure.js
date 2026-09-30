@@ -104,7 +104,8 @@ function shorts(S, p, d, rect, flip, sx = 1) {
 // pose = { hip:[x,y], torso (hanche → épaule), neck, head? (inclinaison), near:{ua,fa,hand,th,sh,ft,h?}, far:{…} (par défaut = near) }
 // h : "fist" (main fermée, par défaut), "flat" (à plat), "open" (ouverte).
 export function solveSide(pose) {
-  const hip = pose.hip, sh = add(hip, mul(dir(pose.torso), LEN.torso));
+  // shrug : épaules haussées (la tête ne bouge pas, le cou raccourcit).
+  const hip = pose.hip, sh = add(hip, mul(dir(pose.torso), LEN.torso + (pose.shrug || 0)));
   const side = o0 => {
     const o = limbAngles(o0, sh, hip), ls = o.ls || {};
     const elbow = add(sh, mul(dir(o.ua), LEN.ua * (ls.ua || 1))), wrist = add(elbow, mul(dir(o.fa), LEN.fa * (ls.fa || 1)));
@@ -117,7 +118,7 @@ export function solveSide(pose) {
   if (pf.th != null && !pf.ankleAt) delete fo.ankleAt;
   if (pf.ua != null && !pf.wristAt) delete fo.wristAt;
   const near = side(pose.near), far = side(fo);
-  const neckEnd = add(sh, mul(dir(pose.neck), LEN.neck)), headRot = pose.neck + 90 + (pose.head || 0);
+  const neckEnd = add(sh, mul(dir(pose.neck), LEN.neck - (pose.shrug || 0))), headRot = pose.neck + 90 + (pose.head || 0);
   return { ...pose, sh, neckEnd, headRot, head: add(neckEnd, rot([2, -9.4], headRot)), near, far };
 }
 function sideBody(P, target) {
@@ -129,7 +130,7 @@ function sideBody(P, target) {
   return {
     back: `${arm(P.far, "fg-far", farT)}${leg(P.far, "fg-far", farT)}`,
     body: `${leg(P.near, "", t)}${shorts(SIDE.th, P.hip, P.near.th, "M-12 -15H16Q17 0 16 15H-12Z", 0, L(P.near, "th"))}
-      ${seg(SIDE.torso, P.sh, P.torso + 180, t, "")}${shorts(SIDE.torso, P.sh, P.torso + 180, "M42 -22H66V22H42Z")}
+      ${seg(SIDE.torso, P.sh, P.torso + 180, t, "", 0, 1 + (P.shrug || 0) / LEN.torso)}${shorts(SIDE.torso, P.sh, P.torso + 180, "M42 -22H66V22H42Z", 0, 1 + (P.shrug || 0) / LEN.torso)}
       ${seg(SIDE.neck, P.sh, P.neck, none, "")}
       <g transform="${at(P.head, P.headRot)}"><path class="fg-sk" d="${SIDE.head.d}"/><path class="fg-hair" d="${SIDE.hair}"/>${SIDE.head.lines.map(l => `<path class="fg-ln" d="${l}"/>`).join("")}<path class="fg-ol" d="${SIDE.head.d}"/></g>`,
     arm: arm(P.near, "", t)
@@ -146,7 +147,7 @@ export function solveFront(pose) {
   const L = { ua: R.ua != null ? mirrorA(R.ua) : null, fa: R.fa != null ? mirrorA(R.fa) : null, hand: mirrorA(R.hand || 90), th: R.th != null ? mirrorA(R.th) : null, sh: R.sh != null ? mirrorA(R.sh) : null,
     h: R.h, ls: R.ls, wristAt: mx(R.wristAt), ankleAt: mx(R.ankleAt), elbowBend: -(R.elbowBend ?? 1), kneeBend: -(R.kneeBend ?? -1), ...(pose.L || {}) };
   const side = (o0, k) => {
-    const shoulder = add(add(neckBase, mul(across, 18 * k)), mul(up, -4)), hipJ = add(pose.hip, mul(across, 9 * k));
+    const shoulder = add(add(neckBase, mul(across, 18 * k)), mul(up, -4 + (pose.shrug || 0))), hipJ = add(pose.hip, mul(across, 9 * k));
     const o = limbAngles(o0, shoulder, hipJ);
     const ls = o.ls || {}, elbow = add(shoulder, mul(dir(o.ua), LEN.ua * (ls.ua || 1))), wrist = add(elbow, mul(dir(o.fa), LEN.fa * (ls.fa || 1)));
     const knee = add(hipJ, mul(dir(o.th), LEN.th * (ls.th || 1))), ankle = add(knee, mul(dir(o.sh), LEN.sh * (ls.sh || 1)));
