@@ -113,7 +113,7 @@ export function solveSide(pose) {
   // shrug : épaules haussées (la tête ne bouge pas, le cou raccourcit).
   // curl : le haut du dos s'enroule à partir de la taille (crunch) ; le bas du buste garde l'angle « torso ».
   const hip = pose.hip, waist = add(hip, mul(dir(pose.torso), LEN.torso / 2));
-  const sh = pose.curl ? add(waist, mul(dir(pose.torso + pose.curl), LEN.torso / 2 + (pose.shrug || 0))) : add(hip, mul(dir(pose.torso), LEN.torso + (pose.shrug || 0)));
+  const sh = pose.curl ? curlPts(waist, pose.torso, pose.curl).at(-1) : add(hip, mul(dir(pose.torso), LEN.torso + (pose.shrug || 0)));
   const side = o0 => {
     const o = limbAngles(o0, sh, hip), ls = o.ls || {};
     const elbow = add(sh, mul(dir(o.ua), LEN.ua * (ls.ua ?? 1))), wrist = add(elbow, mul(dir(o.fa), LEN.fa * (ls.fa ?? 1)));
@@ -145,13 +145,26 @@ function sideBody(P, target) {
   };
 }
 
-// Buste enroulé : moitié basse (taille → hanche) posée selon « torso », moitié haute tournée de « curl » autour de la taille.
+// Buste enroulé : moitié basse (taille → hanche) posée selon « torso » ; moitié haute enroulée progressivement,
+// en CURL_N tranches dont l'angle augmente peu à peu (une colonne qui s'arrondit, pas un buste plié en deux).
+const CURL_N = 7;
+function curlPts(waist, torso, curl) {
+  const h = LEN.torso / 2 / CURL_N, pts = [waist];
+  for (let j = 0; j < CURL_N; j++) pts.push(add(pts[j], mul(dir(torso + curl * (j + 0.5) / CURL_N), h)));
+  return pts;
+}
 function curledTorso(P, t) {
-  const half = LEN.torso / 2, lowSh = add(P.waist, mul(dir(P.torso), half)), upA = P.torso + P.curl + 180, loA = P.torso + 180;
-  const clip = (p, d, x1, x2) => { const id = "fc" + (++uid); return [id, `<clipPath id="${id}"><rect x="${x1}" y="-40" width="${x2 - x1}" height="80" transform="${at(p, d)}"/></clipPath>`]; };
-  const [lo, loDef] = clip(lowSh, loA, half - 1, 80), [up, upDef] = clip(P.sh, upA, -30, half + 1.5);
-  return `${loDef}${upDef}<g clip-path="url(#${lo})">${seg(SIDE.torso, lowSh, loA, t, "")}${shorts(SIDE.torso, lowSh, loA, "M42 -22H66V22H42Z")}</g>
-    <g clip-path="url(#${up})">${seg(SIDE.torso, P.sh, upA, t, "")}</g>`;
+  const half = LEN.torso / 2, h = half / CURL_N, lowSh = add(P.waist, mul(dir(P.torso), half)), loA = P.torso + 180, pts = curlPts(P.waist, P.torso, P.curl);
+  // Tranche [a, b] du buste (repère du buste : x depuis l'épaule), posée avec son point x0 en p.
+  const slice = (p, d, x0, a, b, inner) => { const id = "fc" + (++uid);
+    return `<g transform="${at(p, d)} translate(${r1(-x0)} 0)"><clipPath id="${id}"><rect x="${r1(a - 0.7)}" y="-40" width="${r1(b - a + 1.4)}" height="80"/></clipPath><g clip-path="url(#${id})">${inner}</g></g>`; };
+  let up = "";
+  for (let j = CURL_N - 1; j >= 0; j--) { const x0 = half - (j + 1) * h; up += slice(pts[j + 1], P.torso + P.curl * (j + 0.5) / CURL_N + 180, x0, j === CURL_N - 1 ? -30 : x0, x0 + h, seg(SIDE.torso, [0, 0], 0, t, "").replace(/<path class="fg-(ol|ln)"[^>]*\/>/g, "")); }
+  // Tranche du haut : elle garde tout ce qui dépasse côté épaule (x < 0). Pas de contour par tranche (sinon des « dents »).
+  // Fond continu le long de l'arc : comble les petits écarts entre tranches côté dos quand l'enroulement est fort.
+  // (décalé vers le dos, là où le buste est le plus épais)
+  const arc = `M${pts.map((p, j) => pt(add(p, mul(dir(P.torso + P.curl * Math.min(j, CURL_N - 0.5) / CURL_N - 90), 2.8)))).join("L")}`;
+  return `<path class="fg-spine-o" d="${arc}"/><path class="fg-spine" d="${arc}"/>${slice(lowSh, loA, 0, half, 80, seg(SIDE.torso, [0, 0], 0, t, "") + shorts(SIDE.torso, [0, 0], 0, "M42 -22H66V22H42Z"))}${up}`;
 }
 
 /* ---------- Mannequin de face ---------- */
@@ -352,8 +365,9 @@ export function lerpPose(A, B, t) {
   const o = { ...(t < 0.5 ? A : B), hip: [num(A.hip[0], B.hip[0]), num(A.hip[1], B.hip[1])], torso: turn(A.torso, B.torso, t), neck: turn(A.neck, B.neck, t),
     shrug: num(A.shrug, B.shrug), tls: num(A.tls, B.tls, 1), curl: num(A.curl, B.curl), spin: num(A.spin, B.spin) };
   if (A.head != null || B.head != null) o.head = num(A.head, B.head);
-  // Marche : les deux pieds échangent leur place (un pas, puis le suivant) : pas de pied levé, sinon le corps « s'assoit ».
-  const cross = (p, q) => { const c = (u, v) => u && v && Math.hypot(u[0] - v[0], u[1] - v[1]) < 12; return c(p.a.an, q.b.an) && c(q.a.an, p.b.an) && !c(p.a.an, p.b.an); };
+  // Marche (pieds à plat qui échangent leur place, un pas puis le suivant) : pas de pied levé, sinon le corps « s'assoit ».
+  const cross = (p, q) => { const c = (u, v) => u && v && Math.hypot(u[0] - v[0], u[1] - v[1]) < 12; const flat = u => u && u[1] > GROUND - 14;
+    return c(p.a.an, q.b.an) && c(q.a.an, p.b.an) && !c(p.a.an, p.b.an) && [p.a.an, p.b.an, q.a.an, q.b.an].every(flat); };
   if (A.view === "front") { o.R = limb(A.R, B.R); o.L = limb(A.L, B.L); }
   else { const x = cross({ a: A.near || {}, b: B.near || {} }, { a: A.far || {}, b: B.far || {} }); o.near = limb(A.near, B.near, x); o.far = limb(A.far, B.far, x); }
   return o;
