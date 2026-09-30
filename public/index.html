@@ -17,17 +17,17 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
 <!-- Styles : dossier css/, chargés dans cet ordre (l'ordre compte). -->
-<link rel="stylesheet" href="css/01-theme.css?v=55">
-<link rel="stylesheet" href="css/02-accueil-seances.css?v=55">
-<link rel="stylesheet" href="css/03-nutrition-contact.css?v=55">
-<link rel="stylesheet" href="css/04-general.css?v=55">
-<link rel="stylesheet" href="css/05-course-crossfit.css?v=55">
-<link rel="stylesheet" href="css/06-apparence-progression.css?v=55">
-<link rel="stylesheet" href="css/07-amis.css?v=55">
-<link rel="stylesheet" href="css/08-bibliotheque-corps.css?v=55">
-<link rel="stylesheet" href="css/09-accueil-social.css?v=55">
-<link rel="stylesheet" href="css/10-comment-faire.css?v=55">
-<link rel="stylesheet" href="css/11-nouveautes-tutoriel.css?v=55">
+<link rel="stylesheet" href="css/01-theme.css?v=56">
+<link rel="stylesheet" href="css/02-accueil-seances.css?v=56">
+<link rel="stylesheet" href="css/03-nutrition-contact.css?v=56">
+<link rel="stylesheet" href="css/04-general.css?v=56">
+<link rel="stylesheet" href="css/05-course-crossfit.css?v=56">
+<link rel="stylesheet" href="css/06-apparence-progression.css?v=56">
+<link rel="stylesheet" href="css/07-amis.css?v=56">
+<link rel="stylesheet" href="css/08-bibliotheque-corps.css?v=56">
+<link rel="stylesheet" href="css/09-accueil-social.css?v=56">
+<link rel="stylesheet" href="css/10-comment-faire.css?v=56">
+<link rel="stylesheet" href="css/11-nouveautes-tutoriel.css?v=56">
 <script>
   // Déménagement : l'ancienne adresse (GitHub) renvoie vers la nouvelle (Firebase) quand MOVED vaut true.
   window.NEW_HOME = "https://agenda-du-sportif.web.app/";
@@ -42,7 +42,7 @@
     });
   }
   // Version de la page : doit correspondre à APP_VERSION dans js/commun/boot.js.
-  window.APP_PAGE_VERSION = "55";
+  window.APP_PAGE_VERSION = "56";
   // Comme une vraie application : pas de zoom avec deux doigts ni en tapant deux fois (Safari ignore parfois la balise viewport).
   ["gesturestart", "gesturechange", "gestureend"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
   document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -69,7 +69,7 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=55"></script>
+<script type="module" src="app.js?v=56"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->
@@ -268,6 +268,11 @@
   <h1 class="vtitle">Bilan du mois</h1>
   <div class="daynav"><button id="recapPrev" aria-label="Mois précédent">‹</button><span id="recapMonth"></span><button id="recapNext" aria-label="Mois suivant">›</button></div>
   <div id="recapBody" style="display:flex;flex-direction:column;gap:12px"></div>
+</main>
+<main class="app view" id="v-trophees" hidden>
+  <button class="back" data-go="go">‹ Let’s go</button>
+  <h1 class="vtitle">Mes trophées</h1>
+  <div id="trophyBody" style="display:flex;flex-direction:column;gap:16px"></div>
 </main>
 
 <!-- ============ SOCIAL ============ -->

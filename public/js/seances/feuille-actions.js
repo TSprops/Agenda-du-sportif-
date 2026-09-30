@@ -62,6 +62,7 @@ $("sheet").addEventListener("click", e => {
   else if (a === "cd-go") { const ex = c.exercises[i]; startIntervals((+ex.every || 0) * (ex.unit === "min" ? 60 : 1), +ex.ropes || 1, ex.name || "Corde"); return; }
   else if (a === "del-ex") { if (!armed(b, "Confirmer")) return; c.exercises.splice(i, 1); }
   else if (a === "add-set") { const s = c.exercises[i].sets, l = s[s.length - 1]; s.push(l ? { reps: "", kg: l.kg, target: l.reps !== "" && l.reps != null ? l.reps : (l.target ?? "") } : { reps: "", kg: "" }); }
+  else if (a === "kg-up") { const kg = +b.dataset.kg, from = +b.dataset.from; c.exercises[i].sets.forEach(st => { if (!st.done && (st.kg === "" || st.kg == null || +st.kg === from)) st.kg = kg; }); }
   else if (a === "del-set") { c.exercises[i].sets.splice(+b.dataset.s, 1); }
   else if (a === "photo") { openViewer(+b.dataset.i); return; }
   else if (a === "rest-inc" || a === "rest-dec") {

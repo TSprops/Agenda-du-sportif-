@@ -10,7 +10,7 @@ import "../pages/faq.js";
 import "../pages/muscles.js";
 import "../comment-faire/index.js";
 export { freshKey, sessTabsHTML } from "./plusieurs-seances.js";
-export { exKey, lastLineHTML, prefillKg, addExercise } from "./derniere-fois.js";
+export { exKey, lastLineHTML, prefillKg, addExercise, kgSuggestHTML } from "./derniere-fois.js";
 export { cordesOf, cordesText, cordesExHTML } from "./cordes.js";
 export { musclesOf, openLib } from "./bibliotheque.js";
 export { bestSets, sessionPRs, announcePRs, toast } from "./records.js";

@@ -28,6 +28,27 @@ export function lastLineHTML(ex) {
   const sets = h.ex.sets.filter(doneSet);
   return `<span class="ll-k">↺ ${esc(shortDate(h.k))}</span> ${esc(sets.map(st => setTxt(st, h.ex.hold)).join(" · "))}`;
 }
+// Suggestion de charge : si toutes les séries à la charge la plus lourde ont été réussies la dernière fois
+// (répétitions prévues atteintes, ou mêmes répétitions à chaque série), on propose un peu plus lourd.
+// +2,5 kg à partir de 20 kg, +1 kg en dessous (haltères légers). Rien si une série est déjà faite aujourd'hui.
+export const kgStep = kg => kg >= 20 ? 2.5 : 1;
+export function kgSuggestion(ex) {
+  if (!S.open || ex.hold || ex.kind === "cordes" || !String(ex.name || "").trim()) return null;
+  if ((ex.sets || []).some(st => st.done)) return null;
+  const h = exHistory(ex.name, S.open); if (!h || h.ex.hold) return null;
+  const sets = h.ex.sets.filter(doneSet).filter(st => +st.kg > 0); if (!sets.length) return null;
+  const max = Math.max(...sets.map(st => +st.kg)), top = sets.filter(st => +st.kg === max);
+  const ok = top.every(st => st.target !== undefined && st.target !== "" ? +st.reps >= +st.target : +st.reps >= +top[0].reps);
+  if (!ok) return null;
+  const next = Math.round((max + kgStep(max)) * 100) / 100;
+  if ((ex.sets || []).some(st => +st.kg >= next)) return null;
+  return { from: max, kg: next, reps: top[0].reps };
+}
+export function kgSuggestHTML(ex, i) {
+  const g = kgSuggestion(ex); if (!g) return "";
+  return `<span class="kg-tip-t">💡 Tout réussi à ${esc(nf.format(g.from))} kg la dernière fois : essaie <b>${esc(nf.format(g.kg))} kg</b></span>`
+    + `<button class="kg-tip-b" data-a="kg-up" data-ex="${i}" data-kg="${g.kg}" data-from="${g.from}">Appliquer</button>`;
+}
 // Pré-remplit les séries avec celles de la dernière fois (poids repris, répétitions en objectif).
 function prefillFromLast(ex, before) {
   const h = exHistory(ex.name, before); if (!h) return false;
@@ -61,5 +82,5 @@ $("sheet").addEventListener("change", e => {
   const blank = (ex.sets || []).every(st => (st.reps === "" || st.reps == null) && (st.kg === "" || st.kg == null) && !st.done);
   if (blank && prefillFromLast(ex, S.open)) { changed(); renderSheet(); }
   else if (!!moveOf(ex.name) !== !!document.querySelector(`[data-how="${i}"]`)) renderSheet(); // bouton « ? » à ajouter ou retirer
-  else { const el = $("el-" + i); if (el) el.innerHTML = lastLineHTML(ex); }
+  else { const el = $("el-" + i); if (el) el.innerHTML = lastLineHTML(ex); const sg = $("sg-" + i); if (sg) sg.innerHTML = kgSuggestHTML(ex, i); }
 });

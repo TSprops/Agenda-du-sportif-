@@ -14,6 +14,7 @@ import { renderPrograms, renderRoutine, renderRoutines } from "../entrainement/i
 import { renderGo, renderHome, renderRecap } from "../pages/accueil.js";
 import { loadFeed, renderChallenge, renderChallenges, renderMessages, renderRanks, renderSocial, syncChallenges } from "../social/index.js";
 import { renderMuscles } from "../pages/muscles.js";
+import { renderTrophees } from "../pages/trophees.js";
 import { maybeResetTours, renderTutos, tourCheck } from "./tutoriel.js";
 
 /* ============================================================
@@ -77,7 +78,7 @@ function syncStats() {
    ============================================================ */
 const RENDER = {
   home: renderHome, seances: renderMain, nutrition: renderNutrition, complements: renderNutrition, creatine: renderNutrition,
-  contact: renderContact, profile: renderProfile, admin: renderAdmin, onboard: renderOnboard, friends: renderFriends, friend: renderFriend, chat: renderChat, go: renderGo, social: renderSocial, messages: renderMessages, feed: () => loadFeed(false), challenges: renderChallenges, challenge: renderChallenge, ranks: renderRanks, muscles: renderMuscles, recap: renderRecap, routines: renderRoutines, routine: renderRoutine, tutos: renderTutos, programs: renderPrograms, crossfit: renderCrossfit, types: renderTypesHub, hub: renderHub, records: renderRecordsHub, rec: renderRec, progress: renderProgHub, prog: renderProg
+  contact: renderContact, profile: renderProfile, admin: renderAdmin, onboard: renderOnboard, friends: renderFriends, friend: renderFriend, chat: renderChat, go: renderGo, trophees: renderTrophees, social: renderSocial, messages: renderMessages, feed: () => loadFeed(false), challenges: renderChallenges, challenge: renderChallenge, ranks: renderRanks, muscles: renderMuscles, recap: renderRecap, routines: renderRoutines, routine: renderRoutine, tutos: renderTutos, programs: renderPrograms, crossfit: renderCrossfit, types: renderTypesHub, hub: renderHub, records: renderRecordsHub, rec: renderRec, progress: renderProgHub, prog: renderProg
 };
 function go(v) {
   if (v === "complements" && !S.cpDay) S.cpDay = todayK();

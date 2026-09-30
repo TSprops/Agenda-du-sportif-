@@ -3,6 +3,7 @@ import { exKey } from "./derniere-fois.js";
 import { $, S, discOf, esc, nf, runPace, runSecs } from "../commun/core.js";
 import { doneSet } from "../idees/index.js";
 import { isDone } from "../seances/index.js";
+import { celebrate } from "../commun/fete.js";
 
 /* ============================================================
    Records battus en direct
@@ -53,7 +54,7 @@ export function announcePRs(prs, k) {
   prs.forEach(p => S.prSeen.add(k + "|" + p.ex));
   if (!fresh.length) return;
   const p = fresh[0];
-  toast(`<b>🏆 Nouveau record !</b><span>${esc(p.ex)} · ${esc(p.txt)}</span>`, "pr");
+  celebrate(`<b>🏆 Nouveau record !</b><span>${esc(p.ex)} · ${esc(p.txt)}</span>`, "pr");
   if (navigator.vibrate) navigator.vibrate([80, 60, 160]);
 }
 let toastTimer = null;

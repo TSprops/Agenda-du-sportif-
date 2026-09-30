@@ -55,9 +55,27 @@ module.exports = async function appTests(t) {
     await A.emulateMedia({ reducedMotion: "reduce" }); await A.click("[data-how='0']");
     t("comment faire : sans animation, poses côte à côte et pas de bouton", await A.evaluate(() => document.querySelectorAll("#howStage .how-frames figure").length + "," + !!document.getElementById("howPlay")), "4,false");
     await A.click("#howClose"); await A.emulateMedia({ reducedMotion: "no-preference" });
+    // Suggestion de charge : tout réussi à 80 kg la dernière fois → 82,5 kg proposé.
+    t("suggestion de charge", /Tout réussi à 80 kg.*82,5 kg/.test(await A.textContent("#sg-0")), true);
+    await A.click("#sg-0 .kg-tip-b");
+    t("suggestion de charge appliquée", await A.inputValue("#k-0-0"), "82.5");
     await A.fill("#r-0-0", "6"); await A.fill("#k-0-0", "85"); await A.click("#go-0"); await A.waitForTimeout(300);
     t("record en direct", /Nouveau record/.test(await A.textContent("#toast")), true);
+    t("célébration : confettis", !!(await A.$("canvas.confetti")), true);
     await A.click("#rtSkip"); await A.click("[data-a=close]"); await A.waitForTimeout(500);
+
+    // 1RM estimé (80 kg × 8 ≈ 101,5 ; 85 kg × 6 = 102) et trophées.
+    await home(A); await A.click("[data-go=go]");
+    t("trophées : bandeau sur Let's go", /Mes trophées · [1-9]/.test(await A.textContent(".trophy-strip")), true);
+    await A.click(".go-tile[data-go=records]"); await A.click("[data-cat='rec:muscu']");
+    t("1RM estimé dans les records", /1RM estimé : 102 kg \(85 kg × 6/.test(await A.textContent("#recBody")), true);
+    await home(A); await A.click("[data-go=go]"); await A.click(".go-tile[data-go=progress]"); await A.click("[data-cat='prog:muscu']");
+    t("progression : charge max par défaut", /85 kg/.test(await A.textContent("#progBody")), true);
+    await A.click("[data-pmetric='1rm']");
+    t("progression : 1RM estimé", /102 kg/.test(await A.textContent("#progBody")) && await A.getAttribute("[data-pmetric='1rm']", "aria-pressed"), "true");
+    await home(A); await A.click("[data-go=go]"); await A.click(".trophy-strip");
+    t("trophées : page avec « Premier pas » débloqué", await A.$$eval("#trophyBody .trophy.on b", x => x.map(e => e.textContent).includes("Premier pas")), true);
+    t("trophées : les autres restent à débloquer, avec leur progression", await A.$$eval("#trophyBody .trophy:not(.on) .tr-bar", x => x.length > 5), true);
 
     // Programme et routine : la séance se prépare toute seule.
     await home(A); await A.click("[data-go=go]"); await A.click(".go-tile[data-go=programs]"); await A.click("[data-pgstart=ppl]"); await A.waitForTimeout(300);

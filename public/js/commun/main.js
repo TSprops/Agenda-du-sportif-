@@ -7,6 +7,7 @@ import { renderAdmin } from "../pages/admin.js";
 import { lsGet, lsSet } from "./install.js";
 import { ensureSocialProfile, resetSocial, subscribeSocial } from "../amis/index.js";
 import { renderHome } from "../pages/accueil.js";
+import { checkTrophies } from "../pages/trophees.js";
 
 /* ============================================================
    Abonnements temps réel et démarrage
@@ -35,17 +36,17 @@ async function loadOld(name) {
 }
 function subscribeData() {
   if (S.dataSubscribed) return; S.dataSubscribed = true;
-  S.split = key(new Date(Date.now() - RECENT_DAYS * 864e5)); S.old = { seances: {}, nutrition: {} }; S.recent = { seances: {}, nutrition: {} }; S.oldReady = false;
+  S.split = key(new Date(Date.now() - RECENT_DAYS * 864e5)); S.old = { seances: {}, nutrition: {} }; S.recent = { seances: {}, nutrition: {} }; S.oldReady = false; S.recentReady = false;
   S.unsubs.push(onSnapshot(query(subCol("seances"), where(documentId(), ">=", S.split)), snap => {
-    const d = {}; snap.docs.forEach(x => { d[x.id] = x.data(); }); S.recent.seances = d;
-    mergeDays(); refresh(); syncStats();
+    const d = {}; snap.docs.forEach(x => { d[x.id] = x.data(); }); S.recent.seances = d; S.recentReady = true;
+    mergeDays(); refresh(); syncStats(); checkTrophies(false);
   }, () => {}));
   S.unsubs.push(onSnapshot(query(subCol("nutrition"), where(documentId(), ">=", S.split)), snap => {
     const d = {}; snap.docs.forEach(x => { d[x.id] = x.data(); }); S.recent.nutrition = d;
     S.nut = { ...S.old.nutrition, ...d }; refresh();
   }, () => {}));
   Promise.all([loadOld("seances"), loadOld("nutrition")]).then(() => {
-    S.oldReady = true; mergeDays(); S.nut = { ...S.old.nutrition, ...S.recent.nutrition }; refresh(); syncStats();
+    S.oldReady = true; mergeDays(); S.nut = { ...S.old.nutrition, ...S.recent.nutrition }; refresh(); syncStats(); checkTrophies(false);
   });
 }
 function subscribeAdmin() {
@@ -67,7 +68,7 @@ function subscribeAdmin() {
   }, () => {}));
 }
 function resetState() {
-  Object.assign(S, { uid: null, email: "", admin: false, banned: false, profile: null, days: {}, nut: {}, members: {}, messages: [], myMsgs: [], photoCache: {}, visitCounted: false, prefs: { creaDose: 5 }, oldReady: false, bans: {} });
+  Object.assign(S, { uid: null, email: "", admin: false, banned: false, profile: null, days: {}, nut: {}, members: {}, messages: [], myMsgs: [], photoCache: {}, visitCounted: false, prefs: { creaDose: 5 }, oldReady: false, recentReady: false, bans: {} });
   S.types = DEFAULT_TYPES.map(t => ({ ...t }));
   const f = $("suFields"); if (f) f.innerHTML = "";
   resetSocial();

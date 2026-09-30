@@ -29,6 +29,7 @@ function playSound(kind) {
   if (!master) return;
   try {
     if (kind === "tick") { tone(ctx, master, 1046, 0, 0.09, "square", 0.45); return; }
+    if (kind === "fete") { [523, 659, 784, 1046].forEach((f, i) => tone(ctx, master, f, i * 0.09, i === 3 ? 0.4 : 0.14, "triangle", 0.8)); return; }
     const type = kind || p.type;
     if (type === "alarme") for (let i = 0; i < 6; i++) tone(ctx, master, i % 2 ? 740 : 988, i * 0.18, 0.16, "sawtooth", 0.8);
     else if (type === "sifflet") { tone(ctx, master, [1400, 2600], 0, 0.28, "sine", 1); tone(ctx, master, [1400, 2600], 0.36, 0.28, "sine", 1); tone(ctx, master, 2600, 0.72, 0.5, "sine", 1); }
@@ -100,4 +101,4 @@ $("sndTypes").addEventListener("click", e => { const b = e.target.closest("[data
 $("sndCount").onclick = () => saveSound({ countdown: !soundPrefs().countdown }, true);
 $("sndTest").onclick = () => playSound();
 
-export { RT, renderSound, startIntervals, startRest };
+export { RT, playSound, renderSound, startIntervals, startRest };

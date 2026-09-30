@@ -8,6 +8,7 @@ import { refreshInstallBtn } from "../commun/install.js";
 import { refreshSocial } from "../amis/index.js";
 import { freshKey, programCardHTML, programState, routines, startWorkout, toTuple } from "../entrainement/index.js";
 import { muscleLoad } from "./muscles.js";
+import { trophyStripHTML } from "./trophees.js";
 
 /* ============================================================
    Série de semaines 🔥 et objectif de la semaine
@@ -98,6 +99,7 @@ function renderGo() {
     </section>
     ${programCardHTML(ps, true)}
     ${rs.length ? `<section><h2 class="h2">Lancer une routine</h2><div class="chips">${rs.slice(0, 6).map(r => `<button class="chip" data-rgo2="${r.id}" style="--tc:var(--red)">▶ ${esc(r.name)}</button>`).join("")}</div></section>` : ""}
+    ${trophyStripHTML()}
     <div class="go-grid">${GO_TILES.map(([v, n, d, ic]) => `<button class="go-tile" data-go="${v}"><span class="disc-ico" aria-hidden="true" style="--tc:var(--red-hi)"><svg viewBox="0 0 24 24">${ic}</svg></span><b>${n}</b><span>${d}</span></button>`).join("")}</div>`;
 }
 $("goBody").addEventListener("click", e => {

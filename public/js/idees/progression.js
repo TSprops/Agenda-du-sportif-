@@ -3,6 +3,7 @@ import { benchEntries, cfData, shortDate } from "./crossfit.js";
 import { fmtTime } from "./idees-seances.js";
 import { $, BENCH, DISC, LIFTS, RUN_TYPES, S, discOf, esc, nf, runSecs, typeOf } from "../commun/core.js";
 import { norm } from "../pages/faq.js";
+import { est1RM } from "./records.js";
 
 /* ---------- Graphiques de progression (courbes SVG) ---------- */
 const CHARTS = {};
@@ -105,10 +106,12 @@ export function renderProg() {
     const tab = S.progTab && used.some(t => t.id === S.progTab) ? S.progTab : (used[0] && used[0].id);
     if (!used.length) h = emptyProg("Pas encore de séance de musculation. Note tes séances avec leurs poids : ta progression s’affichera ici, exercice par exercice.");
     else {
+      const orm = S.progMetric === "1rm";
       const t = typeOf(tab), series = exerciseSeries(days.filter(k => S.days[k].typeId === tab),
-        ex => Math.max(0, ...(ex.sets || []).filter(doneSet).map(st => +st.kg || 0)));
+        ex => ex.hold ? 0 : Math.max(0, ...(ex.sets || []).filter(doneSet).map(st => orm ? est1RM(st.kg, st.reps) : +st.kg || 0)));
       h = `<div class="chips">${used.map(u => `<button class="chip" data-ptab="${u.id}" style="--tc:${u.color}" aria-pressed="${u.id === tab}"><i class="dot"></i>${esc(u.name)}</button>`).join("")}</div>
-        <p class="hint" style="margin:-10px 0 0">Charge maximale soulevée à chaque séance ${esc(t.name)}. Touche une courbe pour voir le détail.</p>
+        <div class="seg" role="group" aria-label="Valeur affichée"><button data-pmetric="max" aria-pressed="${!orm}">Charge max</button><button data-pmetric="1rm" aria-pressed="${orm}">1RM estimé</button></div>
+        <p class="hint" style="margin:-10px 0 0">${orm ? "1RM estimé (formule d’Epley, séries de 12 répétitions au plus) à chaque séance " + esc(t.name) : "Charge maximale soulevée à chaque séance " + esc(t.name)}. Touche une courbe pour voir le détail.</p>
         ${series.length ? `<div class="list">${series.slice(0, 15).map((s, i) => chartCard("m" + i, s.name, s.pts, { fmt: v => nf.format(v) + " kg", tickFmt: v => nf.format(v), color: t.color })).join("")}</div>`
           : emptyProg("Aucun poids noté dans tes séances " + esc(t.name) + " pour l’instant.")}`;
     }
@@ -142,4 +145,7 @@ export function renderProg() {
   }
   $("progBody").innerHTML = h;
 }
-$("v-prog").addEventListener("click", e => { const t = e.target.closest("[data-ptab]"); if (t) { S.progTab = t.dataset.ptab; renderProg(); } });
+$("v-prog").addEventListener("click", e => {
+  const t = e.target.closest("[data-ptab]"); if (t) { S.progTab = t.dataset.ptab; renderProg(); return; }
+  const m = e.target.closest("[data-pmetric]"); if (m) { S.progMetric = m.dataset.pmetric; renderProg(); }
+});

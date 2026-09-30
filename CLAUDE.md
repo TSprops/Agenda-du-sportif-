@@ -33,6 +33,7 @@ PWA en JavaScript sans framework (modules ES), Firebase (Auth + Firestore). Rép
 - **Animation** : `js/silhouette/animation.js` (passage d'une pose à l'autre) et `js/comment-faire/lecture.js` (lecture).
 - **Tutoriel guidé** : `js/commun/tutoriel.js`.
 - **Nouveautés** : `js/commun/nouveautes.js`, avec les diapositives dans `index.html` (`#news…`).
+- **Célébration** (confettis, son, message) : `js/commun/fete.js`. **Trophées** : `js/pages/trophees.js`.
 - **Contact** : `js/pages/contact.js`. Le bouton est sur l'accueil (`#homeLinks` dans `index.html`).
 - **Styles** : « Comment faire » dans `css/10-comment-faire.css`, Nouveautés et tutoriel dans `css/11-nouveautes-tutoriel.css`.
 

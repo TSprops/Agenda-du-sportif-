@@ -12,6 +12,7 @@ import { myCommentsHTML } from "../social/index.js";
 import { persistDay } from "../commun/store.js";
 import { tourCheck } from "../commun/tutoriel.js";
 import { announcePRs, sessTabsHTML, sessionPRs } from "../entrainement/index.js";
+import { checkTrophies } from "../pages/trophees.js";
 
 export function renderSheet() {
   const c = S.cur, k = S.open, d = parse(k), disc = c.disc;
@@ -79,6 +80,7 @@ export function flush() {
     const prs = sessionPRs(c, k); c.prs = prs.map(p => p.ex + " · " + p.txt);
     const data = { ...clone(c), updatedAt: Date.now() }; S.days[k] = data; persistDay(k, data);
     announcePRs(prs, k);
+    checkTrophies(true);
   }
 }
 export const intOr = v => { const n = parseInt(String(v), 10); return isFinite(n) ? n : ""; };

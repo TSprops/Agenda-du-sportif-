@@ -4,6 +4,23 @@ import { CALIS_PRS, MUSCU_LIFTS, RUN_PRS, fmtTime, prsData } from "./idees-seanc
 import { $, DISC, S, armed, esc, nf, numOr, runPace, todayK } from "../commun/core.js";
 import { intOr } from "../seances/index.js";
 import { saveProfile } from "../commun/store.js";
+import { norm } from "../pages/faq.js";
+
+/* ---------- 1RM estimé ---------- */
+// Formule d'Epley : charge × (1 + répétitions / 30). Au-delà de 12 répétitions l'estimation n'est plus fiable : ignorée.
+export const est1RM = (kg, reps) => { kg = +kg; reps = +reps; if (!(kg > 0) || !(reps >= 1) || reps > 12) return 0; return reps === 1 ? kg : Math.round(kg * (1 + reps / 30) * 2) / 2; };
+const nameKey = n => norm(String(n || "")).replace(/\s+/g, " ").trim();
+// Meilleur 1RM estimé d'un exercice sur toutes les séances : { v, kg, reps, k } ou null.
+export function best1RM(name) {
+  const nk = nameKey(name); let best = null;
+  Object.keys(S.days).forEach(k => (S.days[k].exercises || []).forEach(ex => {
+    if (ex.hold || nameKey(ex.name) !== nk) return;
+    (ex.sets || []).forEach(st => { if (st.reps === "" || st.reps == null) return; const v = est1RM(st.kg, st.reps); if (v && (!best || v > best.v)) best = { v, kg: +st.kg, reps: +st.reps, k }; });
+  }));
+  return best;
+}
+// Nom de l'exercice (dans les séances) correspondant à chaque record de musculation.
+const LIFT_EX = { bench: "Développé couché", squat: "Squat", dl: "Soulevé de terre", ohp: "Développé militaire", row: "Rowing barre" };
 
 /* ---------- Records ---------- */
 // items : [id, nom, distance (course), type : kg | time | reps | sec]
@@ -14,11 +31,13 @@ function prRows(items, data, defKind) {
     const kind = k || defKind, list = data[id] || [], open = S.recOpen === id, best = prBest(kind, list);
     const bestTxt = !best ? "–" : kind === "kg" ? `${nf.format(best.kg)}<small> kg</small>` : kind === "time" ? fmtTime(best.t) : `${best.v}<small>${kind === "sec" ? " s" : " reps"}</small>`;
     const sub = !best ? "Pas encore de record" : "le " + shortDate(best.date) + (kind === "time" ? " · " + runPace({ dist: km, s: best.t }) + " /km" : "");
+    const est = defKind === "kg" && LIFT_EX[id] ? best1RM(LIFT_EX[id]) : null;
+    const estTxt = est ? `<span class="pr-est">≈ 1RM estimé : <b>${nf.format(est.v)} kg</b> (${nf.format(est.kg)} kg × ${est.reps}, le ${esc(shortDate(est.k))})</span>` : "";
     const input = kind === "kg" ? `<label class="field"><span>Nouvelle charge (kg)</span><input id="rp-v" inputmode="decimal" placeholder="ex. 100" required></label>`
       : kind === "time" ? `<div class="field"><span>Ton temps (h : min : s)</span><div class="dur"><input id="rp-h" inputmode="numeric" placeholder="0" aria-label="Heures"><i>:</i><input id="rp-m" inputmode="numeric" placeholder="25" aria-label="Minutes" required><i>:</i><input id="rp-s" inputmode="numeric" placeholder="00" aria-label="Secondes"></div></div>`
       : `<label class="field"><span>${kind === "sec" ? "Durée de tenue (secondes)" : "Répétitions d’affilée"}</span><input id="rp-v" inputmode="numeric" placeholder="${kind === "sec" ? "ex. 15" : "ex. 12"}" required></label>`;
     return `<div class="pr${open ? " open" : ""}">
-      <button class="pr-row" data-ropen="${id}"><span class="main"><b>${esc(name)}</b><span>${esc(sub)}</span></span><span class="pr-kg">${bestTxt}</span><span class="arrow" aria-hidden="true">${open ? "−" : "+"}</span></button>
+      <button class="pr-row" data-ropen="${id}"><span class="main"><b>${esc(name)}</b><span>${esc(sub)}</span>${estTxt}</span><span class="pr-kg">${bestTxt}</span><span class="arrow" aria-hidden="true">${open ? "−" : "+"}</span></button>
       ${open ? `<form class="pr-form" data-rpr="${id}" data-kind="${kind}">${input}<button class="btn primary" type="submit">Ajouter</button></form>
         ${list.length ? `<ul class="hist">${list.map((e, idx) => ({ ...e, idx })).sort((a, b) => a.date < b.date ? 1 : -1).map(e => `<li><span>${esc(shortDate(e.date))}</span><b>${prText(kind, e)}</b><button class="icon-btn" data-rdel="${id}:${e.idx}">Retirer</button></li>`).join("")}</ul>` : ""}` : ""}
     </div>`;
@@ -29,7 +48,7 @@ export function renderRec() {
   $("recTitle").textContent = "Records · " + x.name; $("v-rec").style.setProperty("--tc", x.color);
   const pd = prsData();
   const items = d === "muscu" ? MUSCU_LIFTS : d === "course" ? RUN_PRS : CALIS_PRS;
-  const hint = d === "muscu" ? "Ta charge maximale sur une répétition (ou ta meilleure série lourde)." : d === "course" ? "Ton meilleur temps sur chaque distance. L’allure se calcule toute seule." : "Ton maximum de répétitions d’affilée, ou ta plus longue tenue.";
+  const hint = d === "muscu" ? "Ta charge maximale sur une répétition (ou ta meilleure série lourde). Le 1RM estimé est calculé d’après tes séances." : d === "course" ? "Ton meilleur temps sur chaque distance. L’allure se calcule toute seule." : "Ton maximum de répétitions d’affilée, ou ta plus longue tenue.";
   $("recBody").innerHTML = `<p class="hint" style="margin-top:-10px">${hint} Touche + pour ajouter un record.</p>
     <div class="card" style="gap:0;padding-block:4px">${prRows(items, pd[d], d === "muscu" ? "kg" : "time")}</div>`;
 }

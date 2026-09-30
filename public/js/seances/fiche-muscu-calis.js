@@ -2,7 +2,7 @@
 import { effortLabel, exStats, fmtRest, goLabel, lastComparable, restOf, resting, rpeColor, rpeLabel, setNowText, setState } from "./series.js";
 import { howBtnHTML } from "../comment-faire/index.js";
 import { CALIS_MOVES, DISC, MONTHS, S, esc, pad, parse, typeOf } from "../commun/core.js";
-import { lastLineHTML } from "../entrainement/index.js";
+import { kgSuggestHTML, lastLineHTML } from "../entrainement/index.js";
 
 function exHTML(ex, i, disc) {
   const r = ex.rpe || 0, calis = disc === "calis";
@@ -10,6 +10,7 @@ function exHTML(ex, i, disc) {
   return `<article class="ex">
   <div class="ex-head"><span class="ex-num">${pad(i + 1)}</span><input id="exn-${i}" class="ex-name${ex.lock ? " locked" : ""}" data-f="ex-name" data-ex="${i}" placeholder="${calis ? "ex. Tractions" : "Nom de l’exercice"}" value="${esc(ex.name)}" autocomplete="off"${ex.lock ? ' readonly aria-readonly="true"' : ""}>${howBtnHTML(ex.name, i)}${calis ? `<button class="icon-btn" data-a="hold" data-ex="${i}" aria-label="Changer répétitions ou tenue">${ex.hold ? "Tenue" : "Reps"} ⇄</button>` : ""}<button class="icon-btn" data-a="del-ex" data-ex="${i}" aria-label="Supprimer l’exercice">Retirer</button></div>
   <div class="ex-last" id="el-${i}">${lastLineHTML(ex)}</div>
+  ${disc === "muscu" ? `<div class="kg-tip" id="sg-${i}">${kgSuggestHTML(ex, i)}</div>` : ""}
   <div class="ex-stats" id="st-${i}">${exStats(ex, disc)}</div>
   <div class="set-now" id="sn-${i}">${setNowText(ex, i)}</div>
   <table class="sets"><thead><tr><th style="text-align:center">Série</th><th>${col1}</th><th>${col2}</th><th></th></tr></thead><tbody>

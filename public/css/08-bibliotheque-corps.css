@@ -70,3 +70,9 @@ svg.mini .mu{stroke-width:.8}
 .offline-pill{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 86px);z-index:24;background:var(--surface-2);border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:600;padding:6px 12px;border-radius:14px;white-space:nowrap;max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis}
 body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px)}
 
+/* Suggestion de charge (tout réussi la dernière fois) */
+.kg-tip{display:flex;align-items:center;gap:10px;margin:-4px 0 0 22px;padding:8px 10px;border-radius:12px;background:color-mix(in srgb,#2FBF71 12%,transparent);border:1px solid color-mix(in srgb,#2FBF71 35%,transparent);font-size:13px;line-height:1.35}
+.kg-tip:empty{display:none}
+.kg-tip-t{flex:1}
+.kg-tip-t b{color:#2FBF71}
+.kg-tip-b{flex:none;font-weight:700;font-size:13px;padding:8px 12px;border-radius:10px;background:#2FBF71;color:#06180e;min-height:36px}
