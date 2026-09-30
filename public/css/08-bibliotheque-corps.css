@@ -64,8 +64,10 @@ svg.mini .mu{stroke-width:.8}
 
 /* ===== Messages éphémères ===== */
 .toast{position:fixed;left:16px;right:16px;top:calc(env(safe-area-inset-top,0px) + 12px);z-index:60;max-width:420px;margin:0 auto;background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:12px 16px;box-shadow:0 12px 30px rgba(0,0,0,.45);font-weight:600;text-align:center;animation:toastIn .3s cubic-bezier(.2,.8,.2,1)}
-.toast.pr{background:linear-gradient(135deg,#FFD60A,#FF9F0A);border-color:#FFD60A;color:#141414;display:flex;flex-direction:column;gap:2px;box-shadow:0 0 40px rgba(255,214,10,.45),0 12px 30px rgba(0,0,0,.45)}
-.toast.pr b{font-family:var(--display);font-weight:800;font-size:24px;text-transform:uppercase;letter-spacing:.02em}
+.toast.pr{display:flex;align-items:center;gap:14px;text-align:left;padding:12px 16px 12px 12px;border-color:color-mix(in srgb,var(--red) 55%,var(--line));box-shadow:0 0 34px color-mix(in srgb,var(--red) 28%,transparent),0 12px 30px rgba(0,0,0,.35)}
+.toast.pr .pr-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.toast.pr .pr-txt span{font-size:13.5px;color:var(--muted);font-weight:600}
+.toast.pr b{font-family:var(--display);font-weight:800;font-size:22px;line-height:1.05;text-transform:uppercase;letter-spacing:.02em;color:var(--red-hi)}
 @keyframes toastIn{from{opacity:0;transform:translateY(-16px) scale(.96)}to{opacity:1;transform:none}}
 .offline-pill{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 86px);z-index:24;background:var(--surface-2);border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:600;padding:6px 12px;border-radius:14px;white-space:nowrap;max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis}
 body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px)}

@@ -19,7 +19,7 @@ const FAQ = [
   { q: "C’est quoi « la dernière fois » ?", k: "derniere fois historique precedent poids pre rempli avant",
     a: "Quand tu ajoutes un exercice déjà fait, l’app affiche ce que tu as fait la dernière fois (↺) et reprend tes poids. Les répétitions sont proposées en gris : tape les tiennes ou valide la série." },
   { q: "Comment marchent les records en direct ?", k: "record nouveau pr battre trophee direct",
-    a: "Quand tu valides une série plus lourde que ton meilleur résultat (ou plus de reps au même poids), un bandeau « 🏆 Nouveau record ! » s’affiche. Pour la course : ta plus longue sortie et ta meilleure allure. Tes amis voient tes records dans le fil d’actu." },
+    a: "Quand tu valides une série plus lourde que ton meilleur résultat (ou plus de reps au même poids), le message « Nouveau record ! » s’affiche, avec des confettis. Pour la course : ta plus longue sortie et ta meilleure allure. Tes amis voient tes records dans le fil d’actu." },
   { q: "C’est quoi la série 🔥 ?", k: "serie flamme streak objectif semaine hebdo anneau",
     a: "Sur l’accueil, choisis ton objectif de séances par semaine (touche l’anneau). Chaque semaine où tu l’atteins fait grandir ta série 🔥. Les jours « Repos » ne comptent pas." },
   { q: "Plusieurs séances le même jour ?", k: "plusieurs deux seances meme jour matin soir double",
