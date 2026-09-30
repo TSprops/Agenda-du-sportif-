@@ -880,10 +880,10 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .how-frames figure{margin:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;min-width:0}
 .how-frames .fg{max-height:230px;width:auto;max-width:100%}
 /* Animation : un seul dessin par vue, largeur fixe (pas de largeur « auto » qui s'effondre à 0 dans Safari). */
-.how-live{display:none;margin:0;width:100%;flex-direction:column;align-items:center;gap:4px}
+.how-stage .how-live{display:none;margin:0;width:100%;flex-direction:column;align-items:center;gap:4px}
 .how-live-fig{width:100%;max-width:300px;margin:0 auto}
 .how-live-fig .fg{width:100%;height:auto;max-height:300px}
-.how-stage.playing .how-frames{display:none}
+.how-stage.playing .how-view{display:none}
 .how-stage.playing .how-live{display:flex}
 .how-play{justify-self:center;min-height:44px;padding:0 18px;font-size:14px}
 @media (prefers-reduced-motion: reduce){.how-play{display:none}}
@@ -892,3 +892,4 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .fg-rail{stroke:var(--fg-metal);stroke-width:3;stroke-linecap:round}
 .fg-plat{stroke:var(--fg-plate);stroke-width:7;stroke-linecap:round}
 .fg-ghost .fg-plate{fill-opacity:.45}.fg-ghost .fg-plate-in{opacity:.6}
+.how-lives{display:contents}

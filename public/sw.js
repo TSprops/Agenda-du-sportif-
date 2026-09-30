@@ -1,7 +1,7 @@
 // Service worker : l'app s'ouvre même sans réseau (réseau d'abord, cache en secours).
-const CACHE = "agenda-v43";
+const CACHE = "agenda-v44";
 const FONTS = "agenda-fonts";
-const SHELL = ["./", "index.html", "styles.css?v=43", "app.js?v=43", "data.js", "js/boot.js", "js/core.js", "js/theme.js", "js/store.js", "js/account.js", "js/seances.js", "js/nutrition.js", "js/contact.js", "js/admin.js", "js/ideas.js", "js/timer.js", "js/install.js", "js/faq.js", "js/friends.js", "js/workout.js", "js/home.js", "js/social.js", "js/muscles.js", "js/extras.js", "js/howto.js", "js/figure.js", "js/moves.js", "js/main.js", "firebase-config.js", "vendor/firebase.js", "manifest.webmanifest", "confidentialite.html", "conditions.html", "legal.css", "icons/icon-192.png", "icons/apple-touch-icon.png"];
+const SHELL = ["./", "index.html", "styles.css?v=44", "app.js?v=44", "data.js", "js/boot.js", "js/core.js", "js/theme.js", "js/store.js", "js/account.js", "js/seances.js", "js/nutrition.js", "js/contact.js", "js/admin.js", "js/ideas.js", "js/timer.js", "js/install.js", "js/faq.js", "js/friends.js", "js/workout.js", "js/home.js", "js/social.js", "js/muscles.js", "js/extras.js", "js/howto.js", "js/figure.js", "js/moves.js", "js/main.js", "firebase-config.js", "vendor/firebase.js", "manifest.webmanifest", "confidentialite.html", "conditions.html", "legal.css", "icons/icon-192.png", "icons/apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));

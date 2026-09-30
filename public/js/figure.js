@@ -305,7 +305,7 @@ export const beltFront = () => E(P => { const a = add(P.hip, [0, 6]), b = add(P.
 // les angles : le mannequin bouge articulation par articulation, sans jamais changer de longueur.
 const LIMB = ["ua", "fa", "hand", "th", "sh", "ft"];
 // On garde aussi les points d'appui (main sur la barre, pied au sol) pour les suivre pendant le mouvement.
-const pick = o => { const r = { h: o.h, ls: o.ls, wristAt: o.wristAt, ankleAt: o.ankleAt, elbowBend: o.elbowBend, kneeBend: o.kneeBend }; LIMB.forEach(k => { if (o[k] != null && !isNaN(o[k])) r[k] = o[k]; }); return r; };
+const pick = o => { const r = { h: o.h, ls: o.ls, wristAt: o.wristAt, ankleAt: o.ankleAt, elbowBend: o.elbowBend, kneeBend: o.kneeBend, track: o.track }; LIMB.forEach(k => { if (o[k] != null && !isNaN(o[k])) r[k] = o[k]; }); return r; };
 export function anglesOf(pose) {
   const P = solve(pose), base = { ...pose, head: typeof pose.head === "number" ? pose.head : undefined };
   return P.front ? { ...base, R: pick(P.R), L: pick(P.L) } : { ...base, near: pick(P.near), far: pick(P.far) };
@@ -322,6 +322,8 @@ export function lerpPose(A, B, t) {
     // Seulement pour un appui fixe (même point au départ et à l'arrivée) ; le pli suit l'image où le membre est le plus plié.
     const same = (p, q) => p && q && Math.hypot(p[0] - q[0], p[1] - q[1]) < 3, bent = (o, x, y) => Math.abs(((((o[x] - o[y]) % 360) + 540) % 360) - 180);
     if (same(a.wristAt, b.wristAt)) { r.wristAt = a.wristAt; r.elbowBend = bent(a, "ua", "fa") >= bent(b, "ua", "fa") ? a.elbowBend : b.elbowBend; }
+    // « track » : la main (et ce qu'elle tient) suit la ligne droite entre les deux images (barre collée aux jambes).
+    else if ((a.track || b.track) && a.wristAt && b.wristAt) { r.wristAt = [num(a.wristAt[0], b.wristAt[0]), num(a.wristAt[1], b.wristAt[1])]; r.elbowBend = a.elbowBend ?? b.elbowBend; r.track = 1; }
     if (same(a.ankleAt, b.ankleAt)) { r.ankleAt = a.ankleAt; r.kneeBend = bent(a, "th", "sh") >= bent(b, "th", "sh") ? a.kneeBend : b.kneeBend; }
     return r;
   };

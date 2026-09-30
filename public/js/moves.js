@@ -30,7 +30,7 @@ const wallball = [
   stand({ neck: -100, near: { ua: -70, fa: -66, hand: -66, h: "open", ft: 40 }, hip: [120, HIPY - 6],
     eq: wb([medball(P => add(P.near.grip, [10, -16]), { top: true })]) })
 ];
-const snatchStart = { hip: [98, 165], torso: -30, neck: -20, near: { ankleAt: [124, ANK], ft: 0, wristAt: [128, GROUND - 18.5], hand: 90 }, eq: [bar([128, GROUND - 13], 13, { mid: true })] };
+const snatchStart = { hip: [98, 165], torso: -30, neck: -20, near: { ankleAt: [124, ANK], ft: 0, wristAt: [128, GROUND - 18.5], hand: 90 }, eq: [bar(P => P.near.grip, 13, { mid: true })] };
 const rack = { ua: 20, fa: -150, hand: -30 };
 const boxAt = box(150, 150, 58, 60);
 
@@ -277,7 +277,7 @@ const lunge = (front, o = {}) => stand({ hip: [118, 150], ...o, near: front === 
   far: front === "near" ? { ankleAt: [72, ANK - 1], ft: 62 } : { ankleAt: [160, ANK], ft: 0 }, eq: [db(P => [P.near.grip, 90], "side", { mid: true })] });
 const BENCH_HT = 163;
 const ht = (sh, hipUp) => { const hip = hipUp ? add(sh, [52, 0]) : add(sh, [52 * Math.cos(rad(33.7)), 52 * Math.sin(rad(33.7))]), b = add(hip, [4, -13]);
-  return { hip, torso: hipUp ? 180 : -146.3, neck: hipUp ? 200 : -150, near: { ankleAt: [150, ANK], ft: 0, kneeBend: 1, wristAt: add(b, [-4, -4]), hand: -60 }, eq: [bench(10, 72, BENCH_HT), bar(b, 13, { top: true })] }; };
+  return { hip, torso: hipUp ? 180 : -146.3, neck: hipUp ? 200 : -150, near: { ankleAt: [150, ANK], ft: 0, kneeBend: 1, wristAt: add(b, [-4, -4]), hand: -60 }, eq: [bench(10, 72, BENCH_HT), bar(P => add(P.hip, [4, -13]), 13, { top: true })] }; };
 
 Object.assign(HOW, {
   "Squat": { views: [
@@ -357,8 +357,10 @@ Object.assign(HOW, {
 });
 
 /* ═══ Dos / lombaires ═══ */
-const dlStart = (wx = 128, o = {}) => merge({ hip: [98, 165], torso: -30, neck: -20, near: { ankleAt: [124, ANK], ft: 0, wristAt: [wx, GROUND - 18.5], hand: 90 }, eq: [bar([wx, GROUND - 13], 13, { top: true })] }, o);
-const dlTop = (o = {}) => stand(merge({ near: { ua: 94, fa: 90, hand: 90 }, eq: [bar(P => P.near.grip, 13, { top: true })] }, o));
+const dlStart = (wx = 128, o = {}) => merge({ hip: [98, 165], torso: -30, neck: -20, near: { ankleAt: [124, ANK], ft: 0, wristAt: [wx, GROUND - 18.5], hand: 90, track: 1 }, eq: [bar(P => P.near.grip, 13, { top: true })] }, o);
+const dlTop = (o = {}) => stand(merge({ near: { wristAt: [117.8, 118.7], hand: 90, track: 1 }, eq: [bar(P => P.near.grip, 13, { top: true })] }, o));
+// Passage aux genoux (animation seulement) : tibias presque verticaux, la barre passe devant les genoux, bras tendus.
+const dlKnee = (o = {}) => merge({ hip: [92, 128], torso: -40, neck: -28, near: { ankleAt: [124, ANK], ft: 0, wristAt: [133, 152.5], hand: 90, track: 1 }, eq: [bar(P => P.near.grip, 13, { top: true })] }, o);
 const bentF = (tls, o = {}) => ({ view: "front", torso: -90, neck: -90, tls, hip: [120, 120], ...o, R: { th: 90, sh: 90, ls: { th: 0.85 }, ...(o.R || {}) } });
 const rowSide = (up, o = {}) => merge({ hip: [96, 120], torso: -35, neck: -24, near: { ankleAt: [120, ANK], ft: 0, wristAt: up ? [122, 113] : [136, 146], hand: 90 } }, o);
 const benchRow = up => ({ hip: [112, 112], torso: -10, neck: -14, near: { th: 96, sh: 88, ft: 0, ua: up ? -158 : 90, fa: 90, hand: 90 },
@@ -379,13 +381,13 @@ const hyper = t => ({ hip: [100, 120], torso: t, neck: t + 4, near: { th: 180, s
   eq: [raw(() => `<rect class="fg-frame" x="96" y="132" width="5" height="${GROUND - 132}"/><rect class="fg-frame" x="18" y="132" width="5" height="${GROUND - 132}"/><rect class="fg-frame" x="10" y="${GROUND - 3}" width="100" height="4" rx="1.5"/><rect class="fg-frame" x="18" y="130" width="84" height="4"/>`),
     pad(84, 126, 30, 8), roller([12, 128], 5.5, { top: true }), roller([12, 112], 5.5, { top: true })] });
 const tbar = up => { const g = up ? [128, 128] : [134, 170]; return { hip: [96, 120], torso: -35, neck: -24, near: { ankleAt: [120, ANK], ft: 0, wristAt: add(g, [0, -5.5]), hand: 90 },
-  eq: [line([30, GROUND - 3], [g[0] + 12, g[1]], "fg-barline"), bar(add(g, [12, 0]), 11, { top: true }), roller([30, GROUND - 4], 3)] }; };
+  eq: [raw(P => { const c = add(P.near.grip, [12, 0]); return `<line class="fg-barline" x1="30" y1="${GROUND - 3}" x2="${c[0].toFixed(1)}" y2="${c[1].toFixed(1)}"/>`; }), bar(P => add(P.near.grip, [12, 0]), 11, { top: true }), roller([30, GROUND - 4], 3)] }; };
 const shrugStand = up => stand({ shrug: up ? 7 : 0, near: { ua: 92, fa: 90, hand: 90 }, eq: [db(P => [P.near.grip, 90], "side", { mid: true })] });
 
 Object.assign(HOW, {
-  "Soulevé de terre": { views: [
+  "Soulevé de terre": { animViews: [side([dlStart(), dlKnee(), dlTop()], ["Barre au sol, dos plat", "Barre devant les genoux", "Debout, barre contre les cuisses"], [0, 1, 2, 1]), "De face"], views: [
       side([dlStart(), dlTop()], ["Barre au sol, dos plat", "Debout, barre contre les cuisses"]),
-      front([bentF(0.3, { hip: [120, 150], R: { ls: { th: 0.2 }, wristAt: [141, 190.5], hand: 90 }, eq: [fbar(() => 196, { top: true })] }), standF({ R: { wristAt: [141, 124], hand: 90 }, eq: [fbar(() => 129.5, { top: true })] })], ["Mains juste à l’extérieur des genoux", "Debout"])],
+      front([bentF(0.3, { hip: [120, 150], R: { ls: { th: 0.2 }, wristAt: [141, 190.5], hand: 90 }, eq: [fbar(P => P.R.grip[1], { top: true })] }), standF({ R: { wristAt: [141, 124], hand: 90 }, eq: [fbar(P => P.R.grip[1], { top: true })] })], ["Mains juste à l’extérieur des genoux", "Debout"])],
     cue: "Barre au-dessus du milieu des pieds, dos plat : pousse dans le sol avec les jambes en gardant la barre collée aux jambes, jusqu’à être debout.",
     tips: ["Pieds largeur de hanches, barre au-dessus du milieu du pied.", "Dos plat du début à la fin, jamais arrondi.", "Barre collée aux jambes pendant toute la montée.", "En haut, serre les fessiers sans te pencher en arrière."] },
   "Soulevé de terre roumain": { views: [side([
@@ -394,10 +396,10 @@ Object.assign(HOW, {
       { hip: [84, 124.5], torso: -20, neck: -20, near: { ankleAt: [122, ANK], ft: 0, wristAt: [132, 164.7], hand: 90 }, eq: [bar(P => P.near.grip, 13, { top: true })] }], ["Debout, genoux déverrouillés", "Hanches en arrière, barre sous les genoux"])],
     cue: "Jambes presque tendues : pousse les hanches vers l’arrière en gardant le dos plat, descends la barre le long des cuisses jusque sous les genoux, puis remonte.",
     tips: ["Genoux légèrement fléchis et fixes.", "Ce sont les hanches qui reculent : la barre glisse le long des cuisses.", "Arrête-toi quand tu sens l’étirement derrière les cuisses, dos toujours plat."] },
-  "Soulevé de terre sumo": { views: [
+  "Soulevé de terre sumo": { animViews: [side([dlStart(126, { hip: [104, 160], torso: -45 }), dlKnee(), dlTop()], ["Barre au sol, buste plus droit", "Barre devant les genoux", "Debout"], [0, 1, 2, 1]), "De face"], views: [
       side([dlStart(126, { hip: [104, 160], torso: -45 }), dlTop()], ["Barre au sol, buste plus droit", "Debout"]),
-      front([{ view: "front", torso: -90, neck: -90, tls: 0.35, hip: [120, 150], R: { th: 40, sh: 95, ls: { th: 0.8, sh: 0.65 }, wristAt: [132, 190.5], hand: 90 }, eq: [fbar(() => 196, { top: true })] },
-        { view: "front", torso: -90, neck: -90, hip: [120, 116], R: { th: 70, sh: 95, wristAt: [133, 120], hand: 90 }, eq: [fbar(() => 125.5, { top: true })] }], ["Pieds très écartés, mains entre les genoux", "Debout"])],
+      front([{ view: "front", torso: -90, neck: -90, tls: 0.35, hip: [120, 150], R: { th: 40, sh: 95, ls: { th: 0.8, sh: 0.65 }, wristAt: [132, 190.5], hand: 90 }, eq: [fbar(P => P.R.grip[1], { top: true })] },
+        { view: "front", torso: -90, neck: -90, hip: [120, 116], R: { th: 70, sh: 95, wristAt: [133, 120], hand: 90 }, eq: [fbar(P => P.R.grip[1], { top: true })] }], ["Pieds très écartés, mains entre les genoux", "Debout"])],
     cue: "Pieds très écartés, pointes vers l’extérieur, mains entre les genoux : pousse les genoux vers l’extérieur et remonte en gardant le dos plat.",
     tips: ["Écartement des pieds bien plus large que les épaules, pointes vers l’extérieur.", "Mains à l’intérieur des genoux, bras tendus.", "Genoux dans l’axe des pieds, buste plus droit qu’au soulevé classique."] },
   "Good morning": { views: [side([backSquat([120, HIPY], -90, [124, ANK]), backSquat([98, HIPY + 6], -12, [124, ANK])], ["Barre sur les épaules", "Buste penché, dos plat"])],
@@ -415,8 +417,8 @@ Object.assign(HOW, {
     cue: "Une main et un genou sur le banc, dos plat : tire l’haltère vers la hanche, coude près du corps, puis redescends.",
     tips: ["Dos plat, parallèle au sol.", "Tire le coude vers la hanche, pas vers l’épaule.", "Le buste ne tourne pas pendant le mouvement."] },
   "Rowing T-bar": { views: [side([tbar(0), tbar(1)], ["Barre entre les jambes, bras tendus", "Poignée à la poitrine"]),
-      front([bentF(0.55, { R: { wristAt: [124, 150], hand: 90 }, eq: [line([120, GROUND], [120, 158], "fg-barline"), raw(P => `<circle class="fg-plate" cx="120" cy="${(P.R.grip[1] + 8).toFixed(1)}" r="12"/>`, { top: true })] }),
-        bentF(0.55, { R: { wristAt: [124, 122], hand: 90, ls: { ua: 0.28, th: 0.85 } }, eq: [line([120, GROUND], [120, 130], "fg-barline"), raw(P => `<circle class="fg-plate" cx="120" cy="${(P.R.grip[1] + 8).toFixed(1)}" r="12"/>`, { top: true })] })], ["Barre entre les jambes", "Coudes serrés"])],
+      front([bentF(0.55, { R: { wristAt: [124, 150], hand: 90 }, eq: [raw(P => `<line class="fg-barline" x1="120" y1="${GROUND}" x2="120" y2="${(P.R.grip[1] + 8).toFixed(1)}"/>`), raw(P => `<circle class="fg-plate" cx="120" cy="${(P.R.grip[1] + 8).toFixed(1)}" r="12"/>`, { top: true })] }),
+        bentF(0.55, { R: { wristAt: [124, 122], hand: 90, ls: { ua: 0.28, th: 0.85 } }, eq: [raw(P => `<line class="fg-barline" x1="120" y1="${GROUND}" x2="120" y2="${(P.R.grip[1] + 8).toFixed(1)}"/>`), raw(P => `<circle class="fg-plate" cx="120" cy="${(P.R.grip[1] + 8).toFixed(1)}" r="12"/>`, { top: true })] })], ["Barre entre les jambes", "Coudes serrés"])],
     cue: "Debout au-dessus de la barre, elle passe entre tes jambes : tire la poignée vers la poitrine en gardant les coudes près du corps, puis redescends.",
     tips: ["La barre passe entre les jambes, poignée en V dans les mains.", "Buste penché, dos plat, genoux légèrement fléchis.", "Coudes serrés le long du corps."] },
   "Tirage horizontal": { views: [side([seatedRow(0), seatedRow(1)], ["Bras tendus", "Poignée au ventre"])],
@@ -654,3 +656,12 @@ Object.assign(HOW, {
     cue: "Un genou et une main en appui sur un banc, dos plat, bras collé au corps : tends l’avant-bras vers l’arrière, puis reviens lentement.",
     tips: ["Genou et main du même côté posés sur le banc, dos parallèle au sol.", "Le haut du bras reste collé au corps et immobile.", "Charge légère, mouvement lent."] }
 });
+
+/* ═══ Vue gardée dans l'animation (« Voir le mouvement ») ═══ */
+// Les images de départ / arrivée gardent toutes leurs vues ; seule l'animation est limitée à la vue indiquée.
+const ANIM_ONLY = {
+  "De profil": ["Presse pectoraux", "Pompes", "Tractions", "Tractions lestées", "Tractions supination (chin-up)", "Rowing barre", "Face pull", "Élévations frontales",
+    "Curl barre", "Curl haltères", "Extension triceps à la poulie", "Extension triceps nuque", "Squats (poids du corps)", "Thrusters"],
+  "De face": ["Écarté poulie haute", "Rowing T-bar", "Développé militaire", "Élévations latérales", "Rowing menton"]
+};
+Object.entries(ANIM_ONLY).forEach(([label, names]) => names.forEach(n => { HOW[n].anim = label; }));

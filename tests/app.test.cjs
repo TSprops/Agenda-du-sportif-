@@ -36,6 +36,15 @@ module.exports = async function appTests(t) {
     t("comment faire : le bouton lance l'animation (fenêtre ouverte, un dessin animé par vue)", await A.evaluate(() => [!document.getElementById("howSheet").hidden, document.getElementById("howStage").classList.contains("playing"), document.getElementById("howPlay").getAttribute("aria-pressed"), document.querySelectorAll("#howStage .how-live svg").length, document.querySelector("#howStage .how-live-fig").getBoundingClientRect().width > 100].join()), "true,true,true,2,true");
     await A.waitForTimeout(700);
     t("comment faire : la silhouette bouge", (await A.evaluate(() => [...document.querySelectorAll("#howStage .how-live svg")].map(s => s.innerHTML).join("|"))) !== live1, true);
+    // Allers-retours : « Revoir départ et arrivée » redonne exactement la présentation d'origine (aucun dessin animé en plus).
+    const shown = () => A.evaluate(() => { const st = document.getElementById("howStage"), vis = e => e.getClientRects().length > 0;
+      return [[...st.querySelectorAll(".how-frames figure")].filter(vis).length, [...st.querySelectorAll(".how-live")].filter(vis).length, st.querySelectorAll(".how-live svg").length, st.querySelectorAll("svg.fg").length].join(); });
+    for (let k = 0; k < 3; k++) {
+      await A.click("#howPlay"); await A.waitForTimeout(80);
+      t("comment faire : retour aux images, aller-retour " + (k + 1), await shown(), "4,0,0,4");
+      await A.click("#howPlay"); await A.waitForTimeout(80);
+      t("comment faire : animation relancée, aller-retour " + (k + 1), await shown(), "0,2,2,6");
+    }
     t("comment faire : fond inerte", await A.$eval("#sheet", e => e.inert), true);
     await A.keyboard.press("Escape");
     t("comment faire : fermé par Échap", await A.$eval("#howSheet", e => e.hidden), true);

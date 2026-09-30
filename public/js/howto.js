@@ -77,11 +77,17 @@ export function howBtnHTML(name, i) {
 let opener = null, inerted = [];
 // Une vue : les images clés côte à côte (Départ / Arrivée…) et, cachée, la même vue animée (bouton « Voir le mouvement »).
 // L'animation redessine chaque image (identifiants de découpe uniques : un doublon caché casserait l'affichage).
+// Vues animées : toutes par défaut ; « anim » garde une seule vue (ex. "De profil") ; « animViews » donne la liste
+// (une vue propre à l'animation, ou le nom d'une vue des images).
+export function animViewsOf(def) {
+  if (def.animViews) return def.animViews.map(v => typeof v === "string" ? def.views.find(w => w.label === v) : v).filter(Boolean);
+  return def.anim ? def.views.filter(v => v.label === def.anim) : def.views;
+}
 function viewHTML(v, draw, many, k) {
   const n = v.frames.length, caps = v.caps || (n === 1 ? ["Position à tenir"] : n === 2 ? ["Départ", "Arrivée"] : []);
   return `<div class="how-view">${many ? `<p class="how-vt">${v.label}</p>` : ""}
     <div class="how-frames${n > 1 ? " multi" : ""}">${v.frames.map((p, i) => `<figure>${draw(p)}<figcaption>${caps[i] || ""}</figcaption></figure>`).join("")}</div>
-    ${n > 1 ? `<figure class="how-live" data-live="${k}" role="img" aria-label="Animation ${v.label.toLowerCase()}, en boucle"><div class="how-live-fig"></div><figcaption></figcaption></figure>` : ""}</div>`;
+    </div>`;
 }
 // Animation : le mannequin passe d'une image clé à la suivante (ordre « seq »), avec une pause sur chacune.
 let live = null;
@@ -100,7 +106,8 @@ function playViews(views, target) {
       // L'heure passée par le navigateur peut précéder t0 de quelques ms : on garde un temps toujours positif.
       const seg = MOVE_MS + HOLD_MS, total = tr.seq.length * seg, e = (((now - t0) % total) + total) % total, i = Math.floor(e / seg), f = e - i * seg;
       const a = tr.seq[i], b = tr.seq[(i + 1) % tr.seq.length], t = f < HOLD_MS ? 0 : ease((f - HOLD_MS) / MOVE_MS);
-      const pose = { ...lerpPose(tr.poses[a], tr.poses[b], t), eq: t < 0.5 ? tr.eq[a] : tr.eq[b] };
+      // Matériel de l'image de départ pendant tout le trajet : il est accroché aux mains / au bassin, il suit le corps.
+      const pose = { ...lerpPose(tr.poses[a], tr.poses[b], t), eq: tr.eq[a] };
       tr.el.innerHTML = figure(pose, target, tr.box);
       const c = t < 0.5 ? tr.caps[a] : tr.caps[b]; if (tr.cap.textContent !== (c || "")) tr.cap.textContent = c || "";
     });
@@ -108,7 +115,10 @@ function playViews(views, target) {
   };
   live = requestAnimationFrame(tick);
 }
-function stopLive() { if (live) cancelAnimationFrame(live); live = null; }
+function stopLive() {
+  if (live) cancelAnimationFrame(live); live = null;
+  $h("howStage").querySelectorAll(".how-live-fig").forEach(el => { el.innerHTML = ""; });
+}
 let current = null;
 function openHow(name, btn) {
   const def = moveOf(name); if (!def) return;
@@ -118,9 +128,11 @@ function openHow(name, btn) {
   const found = musclesOf(name), mus = found && found.p.length ? found : { p: [], s: [] };
   const lv = {}; (mus.s || []).forEach(m => { lv[m] = 2; }); mus.p.forEach(m => { lv[m] = 4; });
   // Les silhouettes ne sont dessinées qu'ici, à l'ouverture.
-  const target = def.t || mus.p, moving = def.views.some(v => v.frames.length > 1);
-  const html = def.views.map((v, k) => { const b = frameBox(v.frames); return viewHTML(v, p => figure(p, target, b), def.views.length > 1, k); }).join("");
-  current = { views: def.views, target };
+  const target = def.t || mus.p;
+  const anim = animViewsOf(def).filter(v => v.frames.length > 1), moving = anim.length > 0;
+  const html = def.views.map((v, k) => { const b = frameBox(v.frames); return viewHTML(v, p => figure(p, target, b), def.views.length > 1, k); }).join("")
+    + `<div class="how-lives">${anim.map((v, k) => `<figure class="how-live" data-live="${k}" role="img" aria-label="Animation ${v.label.toLowerCase()}, en boucle">${anim.length > 1 ? `<p class="how-vt">${v.label}</p>` : ""}<div class="how-live-fig"></div><figcaption></figcaption></figure>`).join("")}</div>`;
+  current = { views: anim, target };
   const info = def;
   $h("howTitle").textContent = name;
   $h("howStage").className = "how-stage";
