@@ -878,18 +878,15 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .how-frames{display:grid;gap:8px}
 .how-frames.multi{grid-template-columns:1fr 1fr}
 .how-frames figure{margin:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;min-width:0}
-.how-frames .fg,.how-anim .fg{max-height:230px;width:auto;max-width:100%}
-.how-anim{display:none;justify-items:center}
-.how-anim>.how-f{grid-area:1/1;display:flex;justify-content:center;align-items:flex-end;width:100%}
+.how-frames .fg{max-height:230px;width:auto;max-width:100%}
+/* Animation : un seul dessin par vue, largeur fixe (pas de largeur « auto » qui s'effondre à 0 dans Safari). */
+.how-live{display:none;margin:0;width:100%;flex-direction:column;align-items:center;gap:4px}
+.how-live-fig{width:100%;max-width:300px;margin:0 auto}
+.how-live-fig .fg{width:100%;height:auto;max-height:300px}
 .how-stage.playing .how-frames{display:none}
-.how-stage.playing .how-anim{display:grid}
+.how-stage.playing .how-live{display:flex}
 .how-play{justify-self:center;min-height:44px;padding:0 18px;font-size:14px}
-@keyframes hs2{0%,47%{opacity:1}53%,97%{opacity:0}100%{opacity:1}}
-@keyframes hs3{0%,30%{opacity:1}36%,97%{opacity:0}100%{opacity:1}}
-@keyframes hs4{0%,22%{opacity:1}28%,97%{opacity:0}100%{opacity:1}}
-@keyframes hs5{0%,17%{opacity:1}23%,97%{opacity:0}100%{opacity:1}}
-@keyframes hs6{0%,14%{opacity:1}20%,97%{opacity:0}100%{opacity:1}}
-@media (prefers-reduced-motion: reduce){.how-f{animation:none!important}.how-play{display:none}}
+@media (prefers-reduced-motion: reduce){.how-play{display:none}}
 .fg-chain{stroke:#8E8E95;stroke-width:1.6;stroke-dasharray:2 1.2}
 .fg-padline{stroke:var(--fg-pad);stroke-width:9;stroke-linecap:round}
 .fg-rail{stroke:var(--fg-metal);stroke-width:3;stroke-linecap:round}

@@ -31,8 +31,11 @@ module.exports = async function appTests(t) {
     await A.click("[data-how='0']"); await A.waitForSelector("#howSheet:not([hidden])");
     t("comment faire : focus sur la croix", await A.evaluate(() => document.activeElement.id), "howClose");
     t("comment faire : départ et arrivée côte à côte (profil et face)", await A.$$eval("#howStage .how-frames figure", x => x.length), 4);
-    await A.click("#howPlay");
-    t("comment faire : le bouton lance l'animation", await A.evaluate(() => [document.getElementById("howStage").classList.contains("playing"), document.getElementById("howPlay").getAttribute("aria-pressed"), document.querySelectorAll("#howStage .how-anim svg").length].join()), "true,true,4");
+    await A.click("#howPlay"); await A.waitForTimeout(150);
+    const live1 = await A.evaluate(() => [...document.querySelectorAll("#howStage .how-live svg")].map(s => s.innerHTML).join("|"));
+    t("comment faire : le bouton lance l'animation (fenêtre ouverte, un dessin animé par vue)", await A.evaluate(() => [!document.getElementById("howSheet").hidden, document.getElementById("howStage").classList.contains("playing"), document.getElementById("howPlay").getAttribute("aria-pressed"), document.querySelectorAll("#howStage .how-live svg").length, document.querySelector("#howStage .how-live-fig").getBoundingClientRect().width > 100].join()), "true,true,true,2,true");
+    await A.waitForTimeout(700);
+    t("comment faire : la silhouette bouge", (await A.evaluate(() => [...document.querySelectorAll("#howStage .how-live svg")].map(s => s.innerHTML).join("|"))) !== live1, true);
     t("comment faire : fond inerte", await A.$eval("#sheet", e => e.inert), true);
     await A.keyboard.press("Escape");
     t("comment faire : fermé par Échap", await A.$eval("#howSheet", e => e.hidden), true);

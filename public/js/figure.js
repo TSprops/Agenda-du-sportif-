@@ -82,6 +82,7 @@ function limbAngles(o, shoulder, hip) {
   const ls = o.ls || {}, q = { ...o };
   if (o.wristAt) [q.ua, q.fa] = ik(shoulder, o.wristAt, LEN.ua * (ls.ua || 1), LEN.fa * (ls.fa || 1), o.elbowBend || -1);
   if (o.ankleAt) [q.th, q.sh] = ik(hip, o.ankleAt, LEN.th * (ls.th || 1), LEN.sh * (ls.sh || 1), o.kneeBend || 1);
+  if (q.hand == null && q.fa != null) q.hand = q.fa;   // main dans l'axe de l'avant-bras par défaut
   return q;
 }
 
@@ -285,3 +286,28 @@ export const wall = (x, targetY) => BB(wall_(x, targetY), [x - 2, targetY != nul
 export const pole = x => BB(E(() => `<g class="fg-eq"><rect class="fg-frame" x="${x - 3}" y="-60" width="6" height="${G + 60}"/><rect class="fg-frame" x="${x - 14}" y="${G - 3}" width="28" height="4" rx="1.5"/></g>`), [x - 14, GROUND - 10, x + 14, GROUND]);
 export const beltSide = () => E(P => { const a = add(P.hip, [7, 9]), b = add(P.hip, [9, 36]); return `<g class="fg-eq"><line class="fg-chain" x1="${r1(a[0])}" y1="${r1(a[1])}" x2="${r1(b[0])}" y2="${r1(b[1])}"/><rect class="fg-plate" x="${r1(b[0] - 3)}" y="${r1(b[1])}" width="6" height="24" rx="2"/></g>`; }, { top: true });
 export const beltFront = () => E(P => { const a = add(P.hip, [0, 6]), b = add(P.hip, [0, 30]); return `<g class="fg-eq"><line class="fg-chain" x1="${r1(a[0])}" y1="${r1(a[1])}" x2="${r1(b[0])}" y2="${r1(b[1])}"/><circle class="fg-plate" cx="${r1(b[0])}" cy="${r1(b[1] + 11)}" r="11"/><circle class="fg-hub" cx="${r1(b[0])}" cy="${r1(b[1] + 11)}" r="2.6"/></g>`; }, { top: true });
+
+/* ---------- Animation : passage fluide d'une pose à l'autre ---------- */
+// Chaque pose est d'abord ramenée à ses angles (cibles de mains et de pieds résolues), puis on interpole
+// les angles : le mannequin bouge articulation par articulation, sans jamais changer de longueur.
+const LIMB = ["ua", "fa", "hand", "th", "sh", "ft"];
+const pick = o => { const r = { h: o.h, ls: o.ls }; LIMB.forEach(k => { if (o[k] != null && !isNaN(o[k])) r[k] = o[k]; }); return r; };
+export function anglesOf(pose) {
+  const P = solve(pose), base = { ...pose, head: typeof pose.head === "number" ? pose.head : undefined };
+  return P.front ? { ...base, R: pick(P.R), L: pick(P.L) } : { ...base, near: pick(P.near), far: pick(P.far) };
+}
+const turn = (a, b, t) => a + ((((b - a) % 360) + 540) % 360 - 180) * t;
+export function lerpPose(A, B, t) {
+  const num = (x, y, d = 0) => (x ?? d) + ((y ?? d) - (x ?? d)) * t;
+  const limb = (a = {}, b = {}) => {
+    const r = { h: t < 0.5 ? a.h : b.h, ls: {} };
+    LIMB.forEach(k => { if (a[k] != null && b[k] != null) r[k] = turn(a[k], b[k], t); else if (a[k] != null || b[k] != null) r[k] = a[k] ?? b[k]; });
+    ["ua", "fa", "th", "sh"].forEach(k => { const x = (a.ls || {})[k] ?? 1, y = (b.ls || {})[k] ?? 1; if (x !== 1 || y !== 1) r.ls[k] = x + (y - x) * t; });
+    return r;
+  };
+  const o = { ...(t < 0.5 ? A : B), hip: [num(A.hip[0], B.hip[0]), num(A.hip[1], B.hip[1])], torso: turn(A.torso, B.torso, t), neck: turn(A.neck, B.neck, t),
+    shrug: num(A.shrug, B.shrug), tls: num(A.tls, B.tls, 1) };
+  if (A.head != null || B.head != null) o.head = num(A.head, B.head);
+  if (A.view === "front") { o.R = limb(A.R, B.R); o.L = limb(A.L, B.L); } else { o.near = limb(A.near, B.near); o.far = limb(A.far, B.far); }
+  return o;
+}

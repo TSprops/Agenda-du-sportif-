@@ -4,7 +4,7 @@ import { esc } from "./core.js";
 import { norm } from "./faq.js";
 import { musclesOf } from "./workout.js";
 import { bodySVG } from "./muscles.js";
-import { figure, frameBox } from "./figure.js";
+import { figure, frameBox, anglesOf, lerpPose } from "./figure.js";
 import { HOW } from "./moves.js";
 
 // Noms tapés à la main : on retrouve la fiche grâce à quelques mots-clés.
@@ -77,13 +77,38 @@ export function howBtnHTML(name, i) {
 let opener = null, inerted = [];
 // Une vue : les images clés côte à côte (Départ / Arrivée…) et, cachée, la même vue animée (bouton « Voir le mouvement »).
 // L'animation redessine chaque image (identifiants de découpe uniques : un doublon caché casserait l'affichage).
-function viewHTML(v, draw, many) {
+function viewHTML(v, draw, many, k) {
   const n = v.frames.length, caps = v.caps || (n === 1 ? ["Position à tenir"] : n === 2 ? ["Départ", "Arrivée"] : []);
-  const figs = v.frames.map(draw), seq = v.seq || v.frames.map((_, i) => i), D = seq.length * 1.1;
   return `<div class="how-view">${many ? `<p class="how-vt">${v.label}</p>` : ""}
-    <div class="how-frames${n > 1 ? " multi" : ""}">${figs.map((f, i) => `<figure>${f}<figcaption>${caps[i] || ""}</figcaption></figure>`).join("")}</div>
-    ${n > 1 ? `<div class="how-anim" role="img" aria-label="Animation ${v.label.toLowerCase()}, en boucle">${seq.map((k, i) => `<div class="how-f" style="animation:hs${Math.min(seq.length, 6)} ${D.toFixed(1)}s ease-in-out infinite;animation-delay:${(-((seq.length - i) % seq.length) * 1.1).toFixed(1)}s">${draw(v.frames[k])}</div>`).join("")}</div>` : ""}</div>`;
+    <div class="how-frames${n > 1 ? " multi" : ""}">${v.frames.map((p, i) => `<figure>${draw(p)}<figcaption>${caps[i] || ""}</figcaption></figure>`).join("")}</div>
+    ${n > 1 ? `<figure class="how-live" data-live="${k}" role="img" aria-label="Animation ${v.label.toLowerCase()}, en boucle"><div class="how-live-fig"></div><figcaption></figcaption></figure>` : ""}</div>`;
 }
+// Animation : le mannequin passe d'une image clé à la suivante (ordre « seq »), avec une pause sur chacune.
+let live = null;
+const MOVE_MS = 950, HOLD_MS = 350;
+const ease = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+function playViews(views, target) {
+  stopLive();
+  const tracks = views.map((v, k) => {
+    const el = $h("howStage").querySelector(`[data-live="${k}"]`); if (!el) return null;
+    const seq = v.seq || v.frames.map((_, i) => i), caps = v.caps || (v.frames.length === 2 ? ["Départ", "Arrivée"] : []);
+    return { el: el.querySelector(".how-live-fig"), cap: el.querySelector("figcaption"), box: frameBox(v.frames), seq, caps, poses: v.frames.map(anglesOf), eq: v.frames.map(p => p.eq) };
+  }).filter(Boolean);
+  const t0 = performance.now();
+  const tick = now => {
+    tracks.forEach(tr => {
+      const seg = MOVE_MS + HOLD_MS, total = tr.seq.length * seg, e = (now - t0) % total, i = Math.floor(e / seg), f = e - i * seg;
+      const a = tr.seq[i], b = tr.seq[(i + 1) % tr.seq.length], t = f < HOLD_MS ? 0 : ease((f - HOLD_MS) / MOVE_MS);
+      const pose = { ...lerpPose(tr.poses[a], tr.poses[b], t), eq: t < 0.5 ? tr.eq[a] : tr.eq[b] };
+      tr.el.innerHTML = figure(pose, target, tr.box);
+      const c = t < 0.5 ? tr.caps[a] : tr.caps[b]; if (tr.cap.textContent !== (c || "")) tr.cap.textContent = c || "";
+    });
+    live = requestAnimationFrame(tick);
+  };
+  live = requestAnimationFrame(tick);
+}
+function stopLive() { if (live) cancelAnimationFrame(live); live = null; }
+let current = null;
 function openHow(name, btn) {
   const def = moveOf(name); if (!def) return;
   opener = btn;
@@ -93,7 +118,8 @@ function openHow(name, btn) {
   const lv = {}; (mus.s || []).forEach(m => { lv[m] = 2; }); mus.p.forEach(m => { lv[m] = 4; });
   // Les silhouettes ne sont dessinées qu'ici, à l'ouverture.
   const target = def.t || mus.p, moving = def.views.some(v => v.frames.length > 1);
-  const html = def.views.map(v => { const b = frameBox(v.frames); return viewHTML(v, p => figure(p, target, b), def.views.length > 1); }).join("");
+  const html = def.views.map((v, k) => { const b = frameBox(v.frames); return viewHTML(v, p => figure(p, target, b), def.views.length > 1, k); }).join("");
+  current = { views: def.views, target };
   const info = def;
   $h("howTitle").textContent = name;
   $h("howStage").className = "how-stage";
@@ -115,6 +141,7 @@ function openHow(name, btn) {
 }
 function closeHow() {
   if ($h("howSheet").hidden) return;
+  stopLive(); current = null;
   $h("howBackdrop").hidden = true; $h("howSheet").hidden = true; $h("howStage").innerHTML = ""; $h("howMap").innerHTML = ""; $h("howGrip").innerHTML = ""; $h("howTips").innerHTML = "";
   inerted.forEach(el => { el.inert = false; }); inerted = [];
   document.removeEventListener("keydown", onKey);
@@ -140,6 +167,7 @@ $h("howStage").addEventListener("click", e => {
   const b = e.target.closest("#howPlay"); if (!b) return;
   const on = $h("howStage").classList.toggle("playing");
   b.setAttribute("aria-pressed", on);
+  if (on && current) playViews(current.views, current.target); else stopLive();
   b.innerHTML = on ? `<span aria-hidden="true">■</span> Revoir départ et arrivée` : `<span aria-hidden="true">▶</span> Voir le mouvement`;
 });
 $h("howBackdrop").onclick = closeHow;
