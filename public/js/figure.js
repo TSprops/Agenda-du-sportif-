@@ -65,7 +65,9 @@ const FRONT = {
   head: { d: "M0 -12.6Q10 -12.6 10 0Q10 9 5 12Q2.6 13.6 0 13.6Q-2.6 13.6 -5 12Q-10 9 -10 0Q-10 -12.6 0 -12.6Z",
     lines: ["M-5.4 -0.6H-2.4", "M2.4 -0.6H5.4", "M0 1L-0.8 5H0.8", "M-2.6 8.4Q0 9.6 2.6 8.4"] },
   hair: "M-10 -1Q-10.6 -12.6 0 -12.8Q10.6 -12.6 10 -1Q8 -7.4 0 -7.6Q-8 -7.4 -10 -1Z",
-  fist: SIDE.fist, flat: SIDE.flat, open: SIDE.open
+  fist: SIDE.fist, flat: SIDE.flat, open: SIDE.open,
+  // Main posée à plat au sol, vue de face : doigts vers nous (paume raccourcie, doigts écartés côte à côte).
+  palm: { d: "M-1 -6.2Q3 -6.8 6 -5.6L6.6 5.6Q3 6.8 -1 6.2Z", lines: ["M3 -3.1L6.3 -3.1", "M3 0L6.4 0", "M3 3.1L6.3 3.1"] }
 };
 
 /* ---------- Cinématique inverse ---------- */
