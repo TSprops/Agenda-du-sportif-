@@ -6,13 +6,13 @@ import { renderMain, setSave } from "./seances/index.js";
 import { renderNutrition } from "./nutrition.js";
 import { renderContact, renderObjets } from "./contact.js";
 import { renderAdmin } from "./admin.js";
-import { renderCrossfit, renderHub, renderProg, renderProgHub, renderRec, renderRecordsHub, renderTypesHub } from "./ideas.js";
+import { renderCrossfit, renderHub, renderProg, renderProgHub, renderRec, renderRecordsHub, renderTypesHub } from "./idees/index.js";
 import { maybeInvite, maybeWelcomeInstall } from "./install.js";
 import { FAB_SCREENS, updateFab } from "./faq.js";
-import { leaveChat, maybeNews, maybeTerms, newsPending, renderChat, renderFriend, renderFriends, syncShare } from "./friends.js";
+import { leaveChat, maybeNews, maybeTerms, newsPending, renderChat, renderFriend, renderFriends, syncShare } from "./amis/index.js";
 import { renderPrograms, renderRoutine, renderRoutines } from "./entrainement/index.js";
 import { renderGo, renderHome, renderRecap } from "./home.js";
-import { loadFeed, renderChallenge, renderChallenges, renderMessages, renderRanks, renderSocial, syncChallenges } from "./social.js";
+import { loadFeed, renderChallenge, renderChallenges, renderMessages, renderRanks, renderSocial, syncChallenges } from "./social/index.js";
 import { renderMuscles } from "./muscles.js";
 import { maybeResetTours, renderTutos, tourCheck } from "./tour.js";
 

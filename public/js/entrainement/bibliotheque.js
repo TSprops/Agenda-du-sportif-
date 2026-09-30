@@ -4,7 +4,7 @@ import { CORDES_EX, LEGACY_EX } from "../../data.js";
 import { howBtnHTML } from "../comment-faire/index.js";
 import { $, EQUIP, EXERCISES, GROUPS, KEYWORDS, MUSCLES, S, esc } from "../core.js";
 import { norm } from "../faq.js";
-import { doneSet } from "../ideas.js";
+import { doneSet } from "../idees/index.js";
 import { muscleMini } from "../muscles.js";
 import { saveProfile } from "../store.js";
 

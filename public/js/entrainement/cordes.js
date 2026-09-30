@@ -2,7 +2,7 @@
 import { exKey } from "./derniere-fois.js";
 import { howBtnHTML } from "../comment-faire/index.js";
 import { S, esc, nf, pad, plural } from "../core.js";
-import { shortDate } from "../ideas.js";
+import { shortDate } from "../idees/index.js";
 
 /* ============================================================
    Séance « Cordes » : nombre de cordes, départ toutes les X, lest

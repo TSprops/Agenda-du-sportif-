@@ -1,7 +1,7 @@
 // Installation sur l'écran d'accueil (iPhone, Android).
 import { $, S, esc } from "./core.js";
 import { go, saveProfile } from "./store.js";
-import { newsPending, termsPending } from "./friends.js";
+import { newsPending, termsPending } from "./amis/index.js";
 
 /* ============================================================
    Installation sur l'écran d'accueil

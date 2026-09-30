@@ -2,7 +2,7 @@
 import { $, BENCH, S } from "./core.js";
 import { go } from "./store.js";
 import { lsGet, lsSet } from "./install.js";
-import { who } from "./friends.js";
+import { who } from "./amis/index.js";
 
 /* ============================================================
    Assistant (FAQ, sans IA)

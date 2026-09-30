@@ -5,7 +5,7 @@ import { applyProfile, go, refresh, saveProfile, subCol, syncStats, userRef } fr
 import { renderPfView, setAuthMode } from "./account.js";
 import { renderAdmin } from "./admin.js";
 import { lsGet, lsSet } from "./install.js";
-import { ensureSocialProfile, resetSocial, subscribeSocial } from "./friends.js";
+import { ensureSocialProfile, resetSocial, subscribeSocial } from "./amis/index.js";
 import { renderHome } from "./home.js";
 
 /* ============================================================

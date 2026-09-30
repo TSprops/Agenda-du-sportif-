@@ -5,7 +5,7 @@ import { go, refresh, saveProfile } from "./store.js";
 import { openDay } from "./seances/index.js";
 import { nutOf } from "./nutrition.js";
 import { refreshInstallBtn } from "./install.js";
-import { refreshSocial } from "./friends.js";
+import { refreshSocial } from "./amis/index.js";
 import { freshKey, programCardHTML, programState, routines, startWorkout, toTuple } from "./entrainement/index.js";
 import { muscleLoad } from "./muscles.js";
 

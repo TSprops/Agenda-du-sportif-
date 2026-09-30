@@ -3,12 +3,12 @@
 // Même ordre de chargement que l'ancien fichier unique.
 import "../core.js";
 import "../store.js";
-import "../ideas.js";
+import "../idees/index.js";
 import "../timer.js";
 import "../faq.js";
-import "../friends.js";
+import "../amis/index.js";
 import "../entrainement/index.js";
-import "../social.js";
+import "../social/index.js";
 import "../comment-faire/index.js";
 import "../tour.js";
 export { restOf, fmtRest, isDone, advanceAfterRest } from "./series.js";

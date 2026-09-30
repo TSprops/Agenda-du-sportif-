@@ -6,7 +6,7 @@
 import { $, S, esc, todayK } from "./core.js";
 import { go, saveProfile } from "./store.js";
 import { lsGet } from "./install.js";
-import { newsPending, termsPending } from "./friends.js";
+import { newsPending, termsPending } from "./amis/index.js";
 import { openDay } from "./seances/index.js";
 import { freshKey, toast } from "./entrainement/index.js";
 

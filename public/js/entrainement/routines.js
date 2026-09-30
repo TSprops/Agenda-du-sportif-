@@ -5,7 +5,7 @@ import { prefillKg } from "./derniere-fois.js";
 import { freshKey } from "./plusieurs-seances.js";
 import { toast } from "./records.js";
 import { $, DISC, S, armed, clone, dayMeta, esc, show, todayK, typeOf } from "../core.js";
-import { doneSet, ideaExercises, repsText } from "../ideas.js";
+import { doneSet, ideaExercises, repsText } from "../idees/index.js";
 import { EMPTY_DAY, fmtRest, forceFlush, normCordes, openDay, renderMain, renderSheet, restOf, setDisc } from "../seances/index.js";
 import { go, saveProfile } from "../store.js";
 

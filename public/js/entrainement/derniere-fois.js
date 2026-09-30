@@ -4,7 +4,7 @@ import { cordesOf, lastCordes } from "./cordes.js";
 import { moveOf } from "../comment-faire/index.js";
 import { $, S, esc, nf } from "../core.js";
 import { norm } from "../faq.js";
-import { doneSet, shortDate } from "../ideas.js";
+import { doneSet, shortDate } from "../idees/index.js";
 import { changed, renderSheet, restOf } from "../seances/index.js";
 
 /* ============================================================

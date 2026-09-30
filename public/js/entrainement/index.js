@@ -5,7 +5,7 @@ import "../core.js";
 import "../store.js";
 import "../../data.js";
 import "../seances/index.js";
-import "../ideas.js";
+import "../idees/index.js";
 import "../faq.js";
 import "../muscles.js";
 import "../comment-faire/index.js";

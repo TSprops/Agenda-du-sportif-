@@ -7,7 +7,7 @@ import { go, saveProfile, subCol, userRef } from "./store.js";
 import { blobToData, compress } from "./seances/index.js";
 import { renderSound } from "./timer.js";
 import { refreshInstallBtn } from "./install.js";
-import { ensureSocialProfile, subscribeSocial } from "./friends.js";
+import { ensureSocialProfile, subscribeSocial } from "./amis/index.js";
 import { stopSubscriptions, subscribeData } from "./main.js";
 
 /* ============================================================
