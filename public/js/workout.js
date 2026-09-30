@@ -7,7 +7,7 @@ import { EMPTY_DAY, changed, fmtRest, forceFlush, isDone, normCordes, openDay, r
 import { doneSet, ideaExercises, repsText, shortDate } from "./ideas.js";
 import { norm } from "./faq.js";
 import { muscleMini } from "./muscles.js";
-import { howBtnHTML, moveOf } from "./howto.js";
+import { howBtnHTML, moveOf } from "./comment-faire/index.js";
 
 /* ============================================================
    Plusieurs séances par jour

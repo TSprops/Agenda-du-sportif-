@@ -10,7 +10,7 @@ import { myReactsHTML } from "./friends.js";
 import { addExercise, announcePRs, cordesExHTML, cordesOf, freshKey, lastLineHTML, openLib, saveRoutineFromSession, sessTabsHTML,
   sessionPRs, toast } from "./workout.js";
 import { myCommentsHTML } from "./social.js";
-import { howBtnHTML } from "./howto.js";
+import { howBtnHTML } from "./comment-faire/index.js";
 import { tourCheck } from "./tour.js";
 
 /* ============================================================

@@ -18,6 +18,6 @@ import "./js/home.js";
 import "./js/social.js";
 import "./js/muscles.js";
 import "./js/extras.js";
-import "./js/howto.js";
+import "./js/comment-faire/index.js";
 import "./js/tour.js";
 import "./js/main.js";
