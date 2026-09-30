@@ -33,7 +33,7 @@ module.exports = async function appTests(t) {
     t("comment faire : départ et arrivée côte à côte (profil et face)", await A.$$eval("#howStage .how-frames figure", x => x.length), 4);
     await A.click("#howPlay"); await A.waitForTimeout(150);
     const live1 = await A.evaluate(() => [...document.querySelectorAll("#howStage .how-live svg")].map(s => s.innerHTML).join("|"));
-    t("comment faire : le bouton lance l'animation (fenêtre ouverte, un dessin animé par vue)", await A.evaluate(() => [!document.getElementById("howSheet").hidden, document.getElementById("howStage").classList.contains("playing"), document.getElementById("howPlay").getAttribute("aria-pressed"), document.querySelectorAll("#howStage .how-live svg").length, document.querySelector("#howStage .how-live-fig").getBoundingClientRect().width > 100].join()), "true,true,true,2,true");
+    t("comment faire : le bouton lance l'animation (fenêtre ouverte, vue de profil seule animée)", await A.evaluate(() => [!document.getElementById("howSheet").hidden, document.getElementById("howStage").classList.contains("playing"), document.getElementById("howPlay").getAttribute("aria-pressed"), document.querySelectorAll("#howStage .how-live svg").length, document.querySelector("#howStage .how-live-fig").getBoundingClientRect().width > 100].join()), "true,true,true,1,true");
     await A.waitForTimeout(700);
     t("comment faire : la silhouette bouge", (await A.evaluate(() => [...document.querySelectorAll("#howStage .how-live svg")].map(s => s.innerHTML).join("|"))) !== live1, true);
     // Allers-retours : « Revoir départ et arrivée » redonne exactement la présentation d'origine (aucun dessin animé en plus).
@@ -43,7 +43,7 @@ module.exports = async function appTests(t) {
       await A.click("#howPlay"); await A.waitForTimeout(80);
       t("comment faire : retour aux images, aller-retour " + (k + 1), await shown(), "4,0,0,4");
       await A.click("#howPlay"); await A.waitForTimeout(80);
-      t("comment faire : animation relancée, aller-retour " + (k + 1), await shown(), "0,2,2,6");
+      t("comment faire : animation relancée, aller-retour " + (k + 1), await shown(), "0,1,1,5");
     }
     t("comment faire : fond inerte", await A.$eval("#sheet", e => e.inert), true);
     await A.keyboard.press("Escape");

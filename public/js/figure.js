@@ -179,7 +179,8 @@ function frontBody(P, target) {
   const leg = o => o.th == null || P.nolegs ? "" : `${seg(FRONT.th, o.hipJ, o.th, t, "", o.k < 0, L(o, "th"))}${seg(FRONT.sh, o.knee, o.sh, t, "", o.k < 0, L(o, "sh"))}
     <path class="fg-sk fg-shoe" d="M${pt(add(o.ankle, [-4.4 * o.k, -1]))}L${pt(add(o.ankle, [4.2 * o.k, -1]))}L${pt(add(o.ankle, [7.4 * o.k, 7.4]))}Q${pt(add(o.ankle, [1 * o.k, 9.4]))} ${pt(add(o.ankle, [-4.2 * o.k, 7.4]))}Z"/>`;
   const legShort = o => o.th == null || P.nolegs ? "" : shorts(FRONT.th, o.hipJ, o.th, "M-12 -15H17Q18 0 17 15H-12Z", o.k < 0, L(o, "th"));
-  const arm = o => `${seg(FRONT.ua, o.shoulder, o.ua, t, "", o.k < 0, L(o, "ua"))}${seg(FRONT.fa, o.elbow, o.fa, t, "", o.k < 0, L(o, "fa"))}${seg(FRONT[o.h || "fist"], o.wrist, o.hand, none, "", o.k < 0)}${seg(FRONT.delt, o.shoulder, o.ua, t, "", o.k < 0)}`;
+  // fore : bras tendu vers nous (écarté à la poulie) : il passe devant l'épaule, dessinée alors en premier.
+  const arm = o => { const d = seg(FRONT.delt, o.shoulder, o.ua, t, "", o.k < 0), a = `${seg(FRONT.ua, o.shoulder, o.ua, t, "", o.k < 0, L(o, "ua"))}${seg(FRONT.fa, o.elbow, o.fa, t, "", o.k < 0, L(o, "fa"))}${seg(FRONT[o.h || "fist"], o.wrist, o.hand, none, "", o.k < 0)}`; return o.fore ? d + a : a + d; };
   const face = P.crown ? `<path class="fg-hair" d="${FRONT.crown}"/>${FRONT.crownLines.map(l => `<path class="fg-ln" d="${l}"/>`).join("")}` : `<path class="fg-hair" d="${FRONT.hair}"/>${FRONT.head.lines.map(l => `<path class="fg-ln" d="${l}"/>`).join("")}`;
   const tr = P.torso + 180, head = `<g transform="${at(P.head, P.neck + 90)}"><path class="fg-sk" d="${FRONT.head.d}"/>${face}<path class="fg-ol" d="${FRONT.head.d}"/></g>`;
   return {
@@ -199,7 +200,7 @@ export function figure(pose, target, box) {
   const P = solve(pose), B = P.front ? frontBody(P, target || []) : sideBody(P, target || []);
   const eq = k => (pose.eq || []).filter(e => (e.top ? "top" : e.mid ? "mid" : "back") === k).map(e => (e.f || e)(P)).join("");
   return `<svg viewBox="${box.join(" ")}" class="fg" aria-hidden="true" focusable="false">
-    <ellipse class="fg-shadow" cx="${r1(box[0] + box[2] / 2)}" cy="${GROUND + 1}" rx="${r1(box[2] * 0.42)}" ry="3.2"/>
+    ${pose.noShadow ? "" : `<ellipse class="fg-shadow" cx="${r1(box[0] + box[2] / 2)}" cy="${GROUND + 1}" rx="${r1(box[2] * 0.42)}" ry="3.2"/>`}
     ${eq("back")}${B.back}${B.body}${eq("mid")}${B.arm}${eq("top")}</svg>`;
 }
 // Cadre commun à toutes les images d'une vue (pour que départ et arrivée se superposent pile).
@@ -309,7 +310,7 @@ export const beltFront = () => E(P => { const a = add(P.hip, [0, 6]), b = add(P.
 const LIMB = ["ua", "fa", "hand", "th", "sh", "ft"];
 // On garde aussi les points d'appui (main sur la barre, pied au sol) pour les suivre pendant le mouvement.
 // at : position réelle de la cheville et du poignet (même donnés par des angles) pour repérer un appui immobile.
-const pick = o => { const r = { h: o.h, ls: o.ls, wristAt: o.wristAt, ankleAt: o.ankleAt, elbowBend: o.elbowBend, kneeBend: o.kneeBend, track: o.track, wr: o.wrist, an: o.ankle }; LIMB.forEach(k => { if (o[k] != null && !isNaN(o[k])) r[k] = o[k]; }); return r; };
+const pick = o => { const r = { h: o.h, ls: o.ls, wristAt: o.wristAt, ankleAt: o.ankleAt, elbowBend: o.elbowBend, kneeBend: o.kneeBend, track: o.track, wr: o.wrist, an: o.ankle, fore: o.fore }; LIMB.forEach(k => { if (o[k] != null && !isNaN(o[k])) r[k] = o[k]; }); return r; };
 export function anglesOf(pose) {
   const P = solve(pose), base = { ...pose, head: typeof pose.head === "number" ? pose.head : undefined };
   return P.front ? { ...base, R: pick(P.R), L: pick(P.L) } : { ...base, near: pick(P.near), far: pick(P.far) };
@@ -318,7 +319,7 @@ const turn = (a, b, t) => a + ((((b - a) % 360) + 540) % 360 - 180) * t;
 export function lerpPose(A, B, t) {
   const num = (x, y, d = 0) => (x ?? d) + ((y ?? d) - (x ?? d)) * t;
   const limb = (a = {}, b = {}, noStep) => {
-    const r = { h: t < 0.5 ? a.h : b.h, ls: {} };
+    const r = { h: t < 0.5 ? a.h : b.h, ls: {}, fore: a.fore || b.fore };
     LIMB.forEach(k => { if (a[k] != null && b[k] != null) r[k] = turn(a[k], b[k], t); else if (a[k] != null || b[k] != null) r[k] = a[k] ?? b[k]; });
     ["ua", "fa", "th", "sh"].forEach(k => { const x = (a.ls || {})[k] ?? 1, y = (b.ls || {})[k] ?? 1; if (x !== 1 || y !== 1) r.ls[k] = x + (y - x) * t; });
     // Appui présent au départ et à l'arrivée : il se déplace en ligne droite et le coude / genou est recalculé
