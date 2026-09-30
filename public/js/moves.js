@@ -154,7 +154,8 @@ Object.assign(HOW, {
     tips: ["Hanches hautes : le corps forme un V à l’envers.", "La tête descend devant les mains, pas entre elles.", "Plus les pieds sont proches des mains, plus c’est dur."] },
   "Tractions australiennes": { grip: "row", views: [side([
       { hip: [130.6, 182], torso: -166.6, neck: -170, near: { wristAt: [80, 115.5], hand: -90, th: 13.4, sh: 13.4, ft: -75 }, eq: [pullbar(80, 110)] },
-      { hip: [140.2, 157.1], torso: -149.5, neck: -155, near: { wristAt: [80, 115.5], hand: -90, elbowBend: 1, th: 30.5, sh: 30.5, ft: -60 }, eq: [pullbar(80, 110)] }], ["Bras tendus", "Poitrine à la barre"])],
+      // Poitrine près de la barre, talons au même endroit : le haut du bras reste perpendiculaire au buste (coude vers le sol).
+      { hip: [145.9, 148.5], torso: -142.9, neck: -148, near: { wristAt: [80, 115.5], hand: -90, elbowBend: 1, th: 37.1, sh: 37.1, ft: -60 }, eq: [pullbar(80, 110)] }], ["Bras tendus", "Poitrine à la barre"])],
     cue: "Sous une barre basse, corps gainé et droit, talons au sol : tire la poitrine jusqu’à la barre, coudes près du corps, puis redescends.",
     tips: ["Corps droit des épaules aux talons.", "Coudes près du corps, poitrine vers la barre.", "Plus les pieds sont loin, plus c’est dur."] },
   "Montée de corde": { views: [side([
@@ -378,7 +379,9 @@ const pulldown = (down, o = {}) => merge({ hip: [104, 150], torso: -95, neck: -9
   eq: [seat(88, 158, 0), roller(P => add(P.near.knee, [-6, -9]), 6, { top: true }), cableTop(113, -30, 170)] }, o);
 const pulldownF = (grip, down) => ({ view: "front", torso: -90, neck: -90, hip: [120, 150], R: { th: 90, sh: 90, ls: { th: 0.3, sh: 0.86 },
     // Prise serrée, en bas : coudes vers le bas le long des côtes, avant-bras presque verticaux.
-    ...(grip < 15 ? { wristAt: down ? [130.6, 102.3] : [126, 38], hand: -90, elbowBend: 1 } : { wristAt: [120 + grip, down ? 94 : 38], hand: -90, elbowBend: down ? -1 : 1 }) },
+    // Le coude descend devant, dans l'axe du corps : vu de face le haut du bras raccourcit puis s'inverse
+    // (raccourci négatif), sans s'écarter sur le côté ni croiser l'autre bras.
+    ...(grip < 15 ? (down ? { ua: -105, fa: -121, hand: -90, ls: { th: 0.3, sh: 0.86, ua: -1 }, fore: 1 } : { ua: -102.3, fa: -100.3, hand: -90, fore: 1 }) : { wristAt: [120 + grip, down ? 94 : 38], hand: -90, elbowBend: down ? -1 : 1 }) },
   eq: [fbench(158), fcableTop()] });
 const hyper = t => ({ hip: [100, 120], torso: t, neck: t + 4, near: { th: 180, sh: 180, ft: 180, ua: t + 70, fa: t - 160, hand: t - 160 },
   eq: [raw(() => `<rect class="fg-frame" x="96" y="132" width="5" height="${GROUND - 132}"/><rect class="fg-frame" x="18" y="132" width="5" height="${GROUND - 132}"/><rect class="fg-frame" x="10" y="${GROUND - 3}" width="100" height="4" rx="1.5"/><rect class="fg-frame" x="18" y="130" width="84" height="4"/>`),
@@ -394,9 +397,10 @@ Object.assign(HOW, {
     cue: "Barre au-dessus du milieu des pieds, dos plat : pousse dans le sol avec les jambes en gardant la barre collée aux jambes, jusqu’à être debout.",
     tips: ["Pieds largeur de hanches, barre au-dessus du milieu du pied.", "Dos plat du début à la fin, jamais arrondi.", "Barre collée aux jambes pendant toute la montée.", "En haut, serre les fessiers sans te pencher en arrière."] },
   "Soulevé de terre roumain": { views: [side([
-      // Même légère flexion des genoux en haut et en bas (hanche à 87 de la cheville) ; la barre frôle les cuisses puis les tibias.
-      { hip: [118, ANK - 87], torso: -90, neck: -90, near: { ankleAt: [122, ANK], ft: 0, wristAt: [129, 121], hand: 90 }, eq: [bar(P => P.near.grip, 13, { top: true })] },
-      { hip: [84, 124.5], torso: -20, neck: -20, near: { ankleAt: [122, ANK], ft: 0, wristAt: [132, 164.7], hand: 90 }, eq: [bar(P => P.near.grip, 13, { top: true })] }], ["Debout, genoux déverrouillés", "Hanches en arrière, barre sous les genoux"])],
+      // En haut, jambes tendues ; les genoux se fléchissent un peu pendant la descente (hanche à 87 de la cheville en bas).
+      // La barre descend en ligne droite le long des cuisses puis des tibias (track).
+      { hip: [121, HIPY], torso: -90, neck: -90, near: { ankleAt: [122, ANK], ft: 0, wristAt: [128.5, 118], hand: 90, track: 1 }, eq: [bar(P => P.near.grip, 13, { top: true })] },
+      { hip: [84, 124.5], torso: -20, neck: -20, near: { ankleAt: [122, ANK], ft: 0, wristAt: [132, 164.7], hand: 90, track: 1 }, eq: [bar(P => P.near.grip, 13, { top: true })] }], ["Debout, jambes tendues", "Hanches en arrière, genoux un peu fléchis"])],
     cue: "Jambes presque tendues : pousse les hanches vers l’arrière en gardant le dos plat, descends la barre le long des cuisses jusque sous les genoux, puis remonte.",
     tips: ["Genoux légèrement fléchis et fixes.", "Ce sont les hanches qui reculent : la barre glisse le long des cuisses.", "Arrête-toi quand tu sens l’étirement derrière les cuisses, dos toujours plat."] },
   "Soulevé de terre sumo": { animViews: [side([dlStart(126, { hip: [104, 160], torso: -45 }), dlKnee(), dlTop()], ["Barre au sol, buste plus droit", "Barre devant les genoux", "Debout"], [0, 1, 2, 1]), "De face"], views: [

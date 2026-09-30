@@ -75,6 +75,7 @@ const FRONT = {
 /* ---------- Cinématique inverse ---------- */
 // Deux os (l1, l2) de « from » vers « to » : renvoie [angle1, angle2]. bend = +1 ou -1 (côté de la pliure).
 export function ik(from, to, l1, l2, bend) {
+  l1 = Math.max(l1, 0.5); l2 = Math.max(l2, 0.5);   // os presque vu de bout : jamais de longueur nulle
   const v = sub(to, from), d = Math.min(Math.max(Math.hypot(v[0], v[1]), Math.abs(l1 - l2) + 0.01), l1 + l2 - 0.01);
   const base = Math.atan2(v[1], v[0]) * 180 / Math.PI, a = Math.acos((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d)) * 180 / Math.PI;
   const a1 = base - bend * a, j = add(from, mul(dir(a1), l1));
@@ -84,8 +85,8 @@ export function ik(from, to, l1, l2, bend) {
 // ls : raccourcissement apparent d'un os qui sort du plan (ex. { ua: 0.7 } = bras écarté du corps).
 function limbAngles(o, shoulder, hip) {
   const ls = o.ls || {}, q = { ...o };
-  if (o.wristAt) [q.ua, q.fa] = ik(shoulder, o.wristAt, LEN.ua * (ls.ua || 1), LEN.fa * (ls.fa || 1), o.elbowBend || -1);
-  if (o.ankleAt) [q.th, q.sh] = ik(hip, o.ankleAt, LEN.th * (ls.th || 1), LEN.sh * (ls.sh || 1), o.kneeBend || 1);
+  if (o.wristAt) [q.ua, q.fa] = ik(shoulder, o.wristAt, LEN.ua * (ls.ua ?? 1), LEN.fa * (ls.fa ?? 1), o.elbowBend || -1);
+  if (o.ankleAt) [q.th, q.sh] = ik(hip, o.ankleAt, LEN.th * (ls.th ?? 1), LEN.sh * (ls.sh ?? 1), o.kneeBend || 1);
   if (q.hand == null && q.fa != null) q.hand = q.fa;   // main dans l'axe de l'avant-bras par défaut
   return q;
 }
@@ -115,8 +116,8 @@ export function solveSide(pose) {
   const sh = pose.curl ? add(waist, mul(dir(pose.torso + pose.curl), LEN.torso / 2 + (pose.shrug || 0))) : add(hip, mul(dir(pose.torso), LEN.torso + (pose.shrug || 0)));
   const side = o0 => {
     const o = limbAngles(o0, sh, hip), ls = o.ls || {};
-    const elbow = add(sh, mul(dir(o.ua), LEN.ua * (ls.ua || 1))), wrist = add(elbow, mul(dir(o.fa), LEN.fa * (ls.fa || 1)));
-    const knee = add(hip, mul(dir(o.th), LEN.th * (ls.th || 1))), ankle = add(knee, mul(dir(o.sh), LEN.sh * (ls.sh || 1)));
+    const elbow = add(sh, mul(dir(o.ua), LEN.ua * (ls.ua ?? 1))), wrist = add(elbow, mul(dir(o.fa), LEN.fa * (ls.fa ?? 1)));
+    const knee = add(hip, mul(dir(o.th), LEN.th * (ls.th ?? 1))), ankle = add(knee, mul(dir(o.sh), LEN.sh * (ls.sh ?? 1)));
     // grip : point tenu par la main (centre du poing), toe : bout du pied, sole : dessous du talon.
     return { ...o, elbow, wrist, knee, ankle, grip: add(wrist, mul(dir(o.hand), 5.5)), toe: add(ankle, rot([23, 5], o.ft)), heel: add(ankle, rot([-4, 7], o.ft)) };
   };
@@ -130,7 +131,7 @@ export function solveSide(pose) {
 }
 function sideBody(P, target) {
   const t = target, none = [];
-  const L = (o, k) => (o.ls || {})[k] || 1;
+  const L = (o, k) => (o.ls || {})[k] ?? 1;
   const leg = (o, cls, tt) => `${seg(SIDE.th, P.hip, o.th, tt, cls, 0, L(o, "th"))}${seg(SIDE.sh, o.knee, o.sh, tt, cls, 0, L(o, "sh"))}${seg(SIDE.foot, o.ankle, o.ft, none, cls)}`;
   const arm = (o, cls, tt) => `${seg(SIDE.delt, P.sh, o.ua, tt, cls)}${seg(SIDE.ua, P.sh, o.ua, tt, cls, 0, L(o, "ua"))}${seg(SIDE.fa, o.elbow, o.fa, tt, cls, 0, L(o, "fa"))}${seg(SIDE[o.h || "fist"], o.wrist, o.hand, none, cls)}`;
   const farT = P.farWorks === false ? none : t;
@@ -158,24 +159,25 @@ function curledTorso(P, t) {
 // R : côté droit de l'image. L (côté gauche) est par défaut le miroir de R ; ses angles se donnent tels qu'à l'écran.
 const mirrorA = a => 180 - a;
 export function solveFront(pose) {
-  const up = dir(pose.torso), across = dir(pose.torso + 90), neckBase = add(pose.hip, mul(up, LEN.torsoF * (pose.tls || 1)));
+  // shrug : le haut du tronc monte avec les épaules (le cou raccourcit, la tête ne bouge pas).
+  const up = dir(pose.torso), across = dir(pose.torso + 90), tl = LEN.torsoF * (pose.tls || 1) + (pose.shrug || 0), neckBase = add(pose.hip, mul(up, tl));
   const cx = pose.hip[0], mx = p => p && [2 * cx - p[0], p[1]], R = pose.R;
   const L = { ua: R.ua != null ? mirrorA(R.ua) : null, fa: R.fa != null ? mirrorA(R.fa) : null, hand: mirrorA(R.hand || 90), th: R.th != null ? mirrorA(R.th) : null, sh: R.sh != null ? mirrorA(R.sh) : null,
     h: R.h, ls: R.ls, wristAt: mx(R.wristAt), ankleAt: mx(R.ankleAt), elbowBend: -(R.elbowBend ?? 1), kneeBend: -(R.kneeBend ?? -1), ...(pose.L || {}) };
   const side = (o0, k) => {
-    const shoulder = add(add(neckBase, mul(across, 18 * k)), mul(up, -4 + (pose.shrug || 0))), hipJ = add(pose.hip, mul(across, 9 * k));
+    const shoulder = add(add(neckBase, mul(across, 18 * k)), mul(up, -4)), hipJ = add(pose.hip, mul(across, 9 * k));
     const o = limbAngles(o0, shoulder, hipJ);
-    const ls = o.ls || {}, elbow = add(shoulder, mul(dir(o.ua), LEN.ua * (ls.ua || 1))), wrist = add(elbow, mul(dir(o.fa), LEN.fa * (ls.fa || 1)));
-    const knee = add(hipJ, mul(dir(o.th), LEN.th * (ls.th || 1))), ankle = add(knee, mul(dir(o.sh), LEN.sh * (ls.sh || 1)));
+    const ls = o.ls || {}, elbow = add(shoulder, mul(dir(o.ua), LEN.ua * (ls.ua ?? 1))), wrist = add(elbow, mul(dir(o.fa), LEN.fa * (ls.fa ?? 1)));
+    const knee = add(hipJ, mul(dir(o.th), LEN.th * (ls.th ?? 1))), ankle = add(knee, mul(dir(o.sh), LEN.sh * (ls.sh ?? 1)));
     return { ...o, k, shoulder, hipJ, elbow, wrist, knee, ankle, grip: add(wrist, mul(dir(o.hand), 5.5)) };
   };
-  const neckEnd = add(neckBase, mul(dir(pose.neck), LEN.neck));
-  return { ...pose, front: true, neckBase, neckEnd, head: add(neckEnd, mul(dir(pose.neck), 11)), R: side({ elbowBend: 1, kneeBend: -1, ...R }, 1), L: side(L, -1) };
+  const neckEnd = add(neckBase, mul(dir(pose.neck), LEN.neck - (pose.shrug || 0)));
+  return { ...pose, front: true, tsc: tl / LEN.torsoF, neckBase, neckEnd, head: add(neckEnd, mul(dir(pose.neck), 11)), R: side({ elbowBend: 1, kneeBend: -1, ...R }, 1), L: side(L, -1) };
 }
 function frontBody(P, target) {
   const t = target, none = [];
   // Côté gauche : repère retourné pour que +y reste « vers l'intérieur » des deux côtés.
-  const L = (o, k) => (o.ls || {})[k] || 1;
+  const L = (o, k) => (o.ls || {})[k] ?? 1;
   const leg = o => o.th == null || P.nolegs ? "" : `${seg(FRONT.th, o.hipJ, o.th, t, "", o.k < 0, L(o, "th"))}${seg(FRONT.sh, o.knee, o.sh, t, "", o.k < 0, L(o, "sh"))}
     <path class="fg-sk fg-shoe" d="M${pt(add(o.ankle, [-4.4 * o.k, -1]))}L${pt(add(o.ankle, [4.2 * o.k, -1]))}L${pt(add(o.ankle, [7.4 * o.k, 7.4]))}Q${pt(add(o.ankle, [1 * o.k, 9.4]))} ${pt(add(o.ankle, [-4.2 * o.k, 7.4]))}Z"/>`;
   const legShort = o => o.th == null || P.nolegs ? "" : shorts(FRONT.th, o.hipJ, o.th, "M-12 -15H17Q18 0 17 15H-12Z", o.k < 0, L(o, "th"));
@@ -186,7 +188,7 @@ function frontBody(P, target) {
   return {
     back: P.headBehind ? head : "",
     body: `${leg(P.L)}${leg(P.R)}${legShort(P.L)}${legShort(P.R)}
-      ${seg(FRONT.torso, P.neckBase, tr, t, "", 0, P.tls || 1)}${shorts(FRONT.torso, P.neckBase, tr, "M47 -22H64V22H47Z", 0, P.tls || 1)}
+      ${seg(FRONT.torso, P.neckBase, tr, t, "", 0, P.tsc)}${shorts(FRONT.torso, P.neckBase, tr, "M47 -22H64V22H47Z", 0, P.tsc)}
       ${seg(FRONT.neck, P.neckBase, P.neck, none, "")}${P.headBehind ? "" : head}`,
     arm: `${arm(P.L)}${arm(P.R)}`
   };
