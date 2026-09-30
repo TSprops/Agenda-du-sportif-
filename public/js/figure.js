@@ -163,8 +163,10 @@ function curledTorso(P, t) {
   // Tranche du haut : elle garde tout ce qui dépasse côté épaule (x < 0). Pas de contour par tranche (sinon des « dents »).
   // Fond continu le long de l'arc : comble les petits écarts entre tranches côté dos quand l'enroulement est fort.
   // (décalé vers le dos, là où le buste est le plus épais)
-  const arc = `M${pts.map((p, j) => pt(add(p, mul(dir(P.torso + P.curl * Math.min(j, CURL_N - 0.5) / CURL_N - 90), 2.8)))).join("L")}`;
-  return `<path class="fg-spine-o" d="${arc}"/><path class="fg-spine" d="${arc}"/>${slice(lowSh, loA, 0, half, 80, seg(SIDE.torso, [0, 0], 0, t, "") + shorts(SIDE.torso, [0, 0], 0, "M42 -22H66V22H42Z"))}${up}`;
+  // Épaisseur et décalage proportionnels à l'enroulement : discret pour un crunch, plus large pour un dos très arrondi.
+  const k = Math.min(1, Math.abs(P.curl) / 90), w = 22 + 6 * k;
+  const arc = `M${pts.map((p, j) => pt(add(p, mul(dir(P.torso + P.curl * Math.min(j, CURL_N - 0.5) / CURL_N - 90), 2.8 * k)))).join("L")}`;
+  return `<path class="fg-spine-o" d="${arc}" stroke-width="${r1(w + 2.2)}"/><path class="fg-spine" d="${arc}" stroke-width="${r1(w)}"/>${slice(lowSh, loA, 0, half, 80, seg(SIDE.torso, [0, 0], 0, t, "") + shorts(SIDE.torso, [0, 0], 0, "M42 -22H66V22H42Z"))}${up}`;
 }
 
 /* ---------- Mannequin de face ---------- */
