@@ -267,7 +267,8 @@ const hackEq = [
   line([60, 4], [172, 214], "fg-rail"), line([150, 212], [196, 170], "fg-plat"),
   roller(P => add(P.sh, [-2, -9]), 6, { top: true })];
 const pressEq = ank => [line([30, 202], [196, 36], "fg-rail"), raw(() => `<rect class="fg-pad" x="30" y="150" width="70" height="8" rx="3.5"/><rect class="fg-pad" x="18" y="118" width="46" height="8" rx="3.5" transform="rotate(32 64 122)"/><rect class="fg-frame" x="56" y="158" width="4" height="${GROUND - 158}"/><rect class="fg-frame" x="30" y="${GROUND - 3}" width="60" height="4" rx="1.5"/>`),
-  raw(P => { const a = P.near.ankle; return `<g transform="translate(${(a[0] + 5).toFixed(1)} ${(a[1] - 4).toFixed(1)}) rotate(45)"><rect class="fg-plate" x="-24" y="-3" width="48" height="7" rx="2"/><rect class="fg-frame" x="-6" y="4" width="12" height="16"/></g>`; }, { top: true })];
+  // Plateforme sous la semelle (pied à plat, orteils vers le haut de la plateforme), chariot derrière elle.
+  raw(P => { const a = add(P.near.ankle, [0.5, -14.6]); return `<g transform="translate(${a[0].toFixed(1)} ${a[1].toFixed(1)}) rotate(45)"><rect class="fg-plate" x="-26" y="-3.5" width="52" height="7" rx="2"/><rect class="fg-frame" x="-6" y="-19.5" width="12" height="16"/></g>`; })];
 const legExt = ext => ({ hip: [100, 142], torso: -95, neck: -90, near: { th: -4, sh: ext ? -8 : 92, ft: ext ? -20 : 10, wristAt: [104, 150], hand: 0 },
   // Boudin sur l'avant du bas du tibia, juste au-dessus de la cheville, pendant tout le mouvement.
   eq: [seat(86, 150, 1, 8), roller(P => { const a = rad(P.near.sh); return add(P.near.ankle, [-6 * Math.cos(a) + 6.5 * Math.sin(a), -6 * Math.sin(a) - 6.5 * Math.cos(a)]); }, 6, { top: true })] });
@@ -316,8 +317,8 @@ Object.assign(HOW, {
     cue: "Dos collé au dossier, épaules sous les coussins, pieds sur la plateforme : descends le chariot en pliant les genoux, puis pousse.",
     tips: ["Dos et bassin collés au dossier.", "Pieds largeur d’épaules au milieu de la plateforme.", "Ne verrouille pas les genoux en haut."] },
   "Presse à cuisses": { views: [side([
-      { hip: [92, 150], torso: -148, neck: -148, near: { ankleAt: [134, 104], ft: -45, kneeBend: 1, wristAt: [100, 158], hand: 0 }, eq: pressEq() },
-      { hip: [92, 150], torso: -148, neck: -148, near: { ankleAt: [158, 80], ft: -45, kneeBend: 1, wristAt: [100, 158], hand: 0 }, eq: pressEq() }], ["Genoux pliés", "Jambes presque tendues"])],
+      { hip: [92, 150], torso: -148, neck: -148, near: { ankleAt: [134, 104], ft: -135, kneeBend: 1, wristAt: [100, 158], hand: 0 }, eq: pressEq() },
+      { hip: [92, 150], torso: -148, neck: -148, near: { ankleAt: [158, 80], ft: -135, kneeBend: 1, wristAt: [100, 158], hand: 0 }, eq: pressEq() }], ["Genoux pliés", "Jambes presque tendues"])],
     cue: "Dos et bassin collés au siège, pieds sur la plateforme : pousse sans verrouiller les genoux, puis redescends lentement.",
     tips: ["Pieds largeur de hanches au milieu de la plateforme.", "Descends jusqu’à avoir les genoux à 90°, sans décoller le bassin.", "Ne verrouille pas les genoux en haut."] },
   "Leg extension": { views: [side([legExt(0), legExt(1)], ["Genoux à 90°", "Jambes tendues"])],
