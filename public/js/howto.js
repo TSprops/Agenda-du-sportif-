@@ -6,6 +6,10 @@ import { norm } from "./faq.js";
 import { musclesOf } from "./workout.js";
 import { bodySVG } from "./muscles.js";
 
+// Petits calculs de géométrie (utilisés par les poses et le dessin).
+const sub = (a, b) => [a[0] - b[0], a[1] - b[1]], add = (a, b) => [a[0] + b[0], a[1] + b[1]], mul = (a, k) => [a[0] * k, a[1] * k];
+const len = v => Math.hypot(v[0], v[1]) || 1, unit = v => mul(v, 1 / len(v)), f = n => Math.round(n * 10) / 10, P2 = q => f(q[0]) + " " + f(q[1]);
+
 // Pose de profil (tournée vers la droite). h tête, s épaule, e coude, w main, p hanche, k genou, a cheville, t pointe du pied.
 // k2 / a2 : seconde jambe (fentes, marche), dessinée en retrait. eq : matériel.
 const STAND = { h: [60, 26], s: [60, 38], e: [61, 54], w: [62, 69], p: [60, 66], k: [60, 87], a: [60, 107] };
@@ -41,7 +45,7 @@ const FAMILIES = {
   bench: { mus: M(["pecs"], ["triceps", "epaules"]), grip: "bench", cue: "Omoplates serrées, pieds au sol : descends la barre à la poitrine puis pousse vers le haut.", poses: [
     { h: [26, 71], s: [37, 75], e: [29, 84], w: [40, 64], p: [64, 76], k: [84, 72], a: [90, 106], eq: [BENCH, { bar: [40, 61] }] },
     { h: [26, 71], s: [37, 75], e: [38, 59], w: [40, 43], p: [64, 76], k: [84, 72], a: [90, 106], eq: [BENCH, { bar: [40, 41] }] }], front: [
-    LIE({ e: [89, 88], w: [84, 70], eq: [{ fbench: 95 }, { fbar: 69, front: true }] }),
+    LIE({ e: [91, 83], w: [90, 66], eq: [{ fbench: 95 }, { fbar: 65, front: true }] }),
     LIE({ e: [81, 58], w: [79, 42], eq: [{ fbench: 95 }, { fbar: 41, front: true }] })] },
   fly: { mus: M(["pecs"], ["epaules"]), cue: "Coudes légèrement fléchis : ouvre les bras sans descendre trop bas, puis referme au-dessus de la poitrine.", poses: [
     { h: [26, 71], s: [37, 75], e: [26, 82], w: [15, 76], p: [64, 76], k: [84, 72], a: [90, 106], eq: [BENCH, { db: [15, 76], front: true }] },
@@ -208,34 +212,244 @@ const FAMILIES = {
     { ...DOWN, h: [33, 72], s: [44, 79], e: [44, 93], w: [44, 106], p: [72, 79], k: [90, 79], a: [106, 79], t: [111, 83] }] }
 };
 
+/* ---------- Variantes : même mouvement, autre banc ou autre charge ---------- */
+const rotP = (q, c, deg) => { const r = deg * Math.PI / 180, x = q[0] - c[0], y = q[1] - c[1]; return [f(c[0] + x * Math.cos(r) - y * Math.sin(r)), f(c[1] + x * Math.sin(r) + y * Math.cos(r))]; };
+// Barre ↔ haltères.
+function withTool(poses, tool) {
+  return poses.map(q => ({ ...q, eq: (q.eq || []).map(e => {
+    if (tool === "db" && e.bar) return { db: [e.bar[0], e.bar[1] + 2], front: true };
+    if (tool === "db" && e.fbar != null) return { fdb: 1, front: e.front };
+    if (tool === "bar" && e.db) return { bar: e.db, front: e.front };
+    if (tool === "bar" && e.fdb) return { fbar: q.w[1], front: true };
+    return e;
+  }) }));
+}
+// Banc incliné (deg > 0, tête plus haute) ou décliné (deg < 0, tête plus basse), vu de profil.
+function tiltBench(poses, deg) {
+  const c = [62, 77];
+  return poses.map(q => {
+    const o = { ...q };
+    (deg > 0 ? ["h", "s"] : ["h", "s", "k"]).forEach(j => { o[j] = rotP(q[j], c, deg); });
+    const d = sub(o.s, q.s); o.e = add(q.e, d); o.w = add(q.w, d);
+    if (deg < 0) { o.a = add(o.k, [6, 15]); o.t = add(o.a, [8, 1]); }
+    o.eq = (q.eq || []).flatMap(e => e.bench ? [{ ibench: [c[0], 81, deg] }].concat(deg < 0 ? [{ roller: add(o.a, [-1, -6]), front: true }] : [])
+      : e.bar ? [{ ...e, bar: add(e.bar, d) }] : e.db ? [{ ...e, db: add(e.db, d) }] : [e]);
+    return o;
+  });
+}
+// Même banc vu depuis les pieds : le haut du corps monte (incliné) ou descend (décliné).
+function tiltFront(poses, deg) {
+  const dy = -Math.round(Math.sin(deg * Math.PI / 180) * 24), up = q => add(q, [0, dy]);
+  return poses.map(q => ({ ...q, h: up(q.h), s: up(q.s), e: up(q.e), w: up(q.w),
+    eq: (q.eq || []).map(e => e.fbench != null ? { fbench: e.fbench, back: deg > 0 ? q.s[1] + dy - 8 : null } : e.fbar != null ? { ...e, fbar: e.fbar + dy } : e) }));
+}
+const B = FAMILIES.bench;
+B.front[0].mark = ["e", "90°"];
+B.tips = ["Banc à plat, pieds bien à plat au sol, fesses et omoplates collées au banc.",
+  "Barre : descends-la doucement jusqu’au bas des pectoraux (au niveau des tétons).",
+  "Coudes à environ 45° du buste (ni collés au corps, ni écartés à 90°).",
+  "En bas, les avant-bras sont verticaux et le coude fait un angle droit (90°).",
+  "Débutant : commence avec la barre seule (20 kg) et fais-toi surveiller."];
+const DB_TIPS = ["Haltères : pars bras tendus au-dessus des épaules, paumes tournées vers tes pieds.",
+  "Descends jusqu’à ce que les coudes soient un peu plus bas que le banc (angle droit au coude, 90°).",
+  "Coudes à environ 45° du buste, puis remonte en rapprochant les haltères sans les cogner.",
+  "Pour t’installer : assieds-toi haltères sur les cuisses, puis allonge-toi en les ramenant contre la poitrine."];
+const INCL = "Banc incliné : dossier relevé à 30–45° (2 ou 3 crans), assise un peu relevée pour ne pas glisser.";
+const DECL = "Banc décliné : tête plus basse que les hanches (15–30°), pieds bloqués sous les boudins.";
+Object.assign(FAMILIES, {
+  benchdb: { ...B, grip: null, poses: withTool(B.poses, "db"), front: withTool(B.front, "db"), cue: "Allongé sur un banc plat, un haltère dans chaque main : descends-les sur les côtés de la poitrine, puis pousse vers le haut.",
+    tips: ["Banc à plat, pieds bien à plat au sol.", ...DB_TIPS] },
+  incline: { ...B, mus: M(["pecs", "epaules"], ["triceps"]), poses: tiltBench(B.poses, 35), front: tiltFront(B.front, 35),
+    cue: "Sur un banc incliné : descends la barre sur le haut des pectoraux, puis pousse vers le haut.",
+    tips: [INCL, "Barre : descends-la sur le haut des pectoraux, juste sous les clavicules.", "Coudes à environ 45° du buste ; en bas, avant-bras verticaux et coude à 90°.", "Omoplates serrées et collées au dossier, pieds à plat au sol."] },
+  inclinedb: { ...B, grip: null, mus: M(["pecs", "epaules"], ["triceps"]), poses: withTool(tiltBench(B.poses, 35), "db"), front: withTool(tiltFront(B.front, 35), "db"),
+    cue: "Sur un banc incliné, un haltère dans chaque main : descends-les au niveau du haut des pectoraux, puis pousse vers le haut.",
+    tips: [INCL, ...DB_TIPS] },
+  decline: { ...B, mus: M(["pecs"], ["triceps", "epaules"]), poses: tiltBench(B.poses, -18), front: tiltFront(B.front, -18),
+    cue: "Sur un banc décliné, pieds bloqués : descends la barre sur le bas des pectoraux, puis pousse vers le haut.",
+    tips: [DECL, "Barre : descends-la sur le bas des pectoraux.", "Coudes à environ 45° du buste ; en bas, coude à 90°.", "Débutant : fais-toi aider pour prendre et reposer la barre."] },
+  ohpdb: { ...FAMILIES.ohp, poses: withTool(FAMILIES.ohp.poses, "db"), front: withTool(FAMILIES.ohp.front, "db"),
+    cue: "Un haltère dans chaque main à hauteur des épaules : pousse au-dessus de la tête sans cambrer, redescends lentement.",
+    tips: ["Debout ou assis sur un banc avec dossier bien droit (90°).", "Départ : haltères à hauteur des oreilles, coudes sous les poignets.", "Monte jusqu’à avoir les bras presque tendus au-dessus de la tête, sans cogner les haltères.", "Abdos et fessiers serrés : le dos ne se creuse pas."] },
+  curlbar: { ...FAMILIES.curl, poses: withTool(FAMILIES.curl.poses, "bar"), front: withTool(FAMILIES.curl.front, "bar"),
+    cue: "Barre en main, paumes vers l’avant, coudes collés au corps : monte la barre sans balancer, redescends lentement.",
+    tips: ["Mains à largeur d’épaules, paumes vers l’avant (supination).", "Seuls les avant-bras bougent : les coudes restent le long du corps.", "Pas d’élan avec le dos : si tu balances, allège la barre."] }
+});
+FAMILIES.squat.tips = ["Pieds largeur d’épaules, pointes légèrement vers l’extérieur.", "Barre posée sur le haut du dos (pas sur la nuque), mains un peu plus larges que les épaules.", "Descends au moins jusqu’à avoir les cuisses parallèles au sol, genoux dans l’axe des pieds.", "Dos droit et regard devant : pousse dans les talons pour remonter."];
+FAMILIES.hinge.tips = ["Pieds largeur de hanches, barre au-dessus du milieu du pied.", "Dos plat du début à la fin : jamais arrondi.", "Barre collée aux jambes pendant toute la montée.", "En haut, serre les fessiers sans te pencher en arrière."];
+FAMILIES.pushup.tips = ["Mains un peu plus larges que les épaules, doigts vers l’avant.", "Corps droit comme une planche : ni fesses en l’air, ni ventre qui tombe.", "Coudes à environ 45° du corps, descends jusqu’à frôler le sol.", "Trop dur ? Fais-les sur les genoux ou mains sur un banc."];
+FAMILIES.pushdiamond.tips = ["Pouces et index se touchent sous la poitrine et forment un losange.", "Coudes serrés le long du corps en descendant.", "Plus dur que les pompes classiques : commence sur les genoux si besoin."];
+FAMILIES.pullup.tips = ["Pars bras complètement tendus, épaules basses.", "Tire les coudes vers le bas et vers l’arrière, poitrine vers la barre.", "Menton au-dessus de la barre, puis redescends lentement.", "Trop dur ? Utilise un élastique ou la machine d’assistance."];
+FAMILIES.ohp.tips = ["Barre posée sur le haut de la poitrine, mains un peu plus larges que les épaules.", "Pousse la barre droit vers le haut en reculant légèrement la tête.", "Abdos et fessiers serrés : le dos ne se creuse pas.", "Bras tendus au-dessus de la tête, barre au-dessus du milieu du pied."];
+FAMILIES.row.tips = ["Genoux légèrement fléchis, buste penché à environ 45°, dos plat.", "Tire la barre vers le nombril, coudes le long du corps.", "Serre les omoplates en haut, redescends bras tendus sans arrondir le dos."];
+FAMILIES.dips.tips = ["Bras tendus au départ, épaules basses.", "Descends jusqu’à avoir les coudes à 90°, pas plus bas.", "Buste penché en avant = plus de pectoraux ; buste droit = plus de triceps."];
+FAMILIES.fly.tips = ["Banc à plat, un haltère dans chaque main, paumes face à face.", "Coudes légèrement fléchis et fixes pendant tout le mouvement.", "Ouvre jusqu’à sentir l’étirement des pectoraux, sans descendre plus bas que le banc."];
+FAMILIES.lunge.tips = ["Grand pas en avant, buste droit.", "Genou avant au-dessus de la cheville (pas au-delà des orteils).", "Genou arrière qui frôle le sol, puis pousse sur le talon avant."];
+FAMILIES.hipthrust.tips = ["Le bas des omoplates posé sur le bord d’un banc plat.", "Pieds à plat, largeur de hanches ; en haut, les tibias sont verticaux.", "Barre sur le pli des hanches (avec une mousse), menton rentré.", "Serre fort les fessiers en haut : le corps forme une table des épaules aux genoux."];
+// Exercices qui ont leur propre mouvement (machine, banc, position particulière).
+const SEATED = { h: [48, 43], s: [50, 54], p: [50, 82], k: [72, 83], a: [73, 104] };
+const SEATF = { view: "front", h: [60, 40], s: [71, 50], p: [66, 76], k: [71, 86], a: [71, 106] };
+const LIEB = { h: [26, 71], s: [37, 75], p: [64, 76], k: [84, 72], a: [90, 106] };
+Object.assign(FAMILIES, {
+  chestpress: { mus: M(["pecs"], ["triceps", "epaules"]), cue: "Assis, dos collé au dossier, poignées à hauteur de poitrine : pousse devant toi sans verrouiller les coudes, reviens lentement.", poses: [
+    { ...SEATED, e: [40, 62], w: [56, 57], eq: [{ seat: [38, 84] }, { handle: 1 }] },
+    { ...SEATED, e: [66, 56], w: [82, 55], eq: [{ seat: [38, 84] }, { handle: 1 }] }], front: [
+    { ...SEATF, e: [90, 60], w: [87, 50], eq: [{ fseat: 80 }, { fhandle: 1, front: true }] },
+    { ...SEATF, e: [77, 53], w: [72, 50], eq: [{ fseat: 80 }, { fhandle: 1, front: true }] }],
+    tips: ["Règle le siège pour que les poignées soient à hauteur du milieu de la poitrine.", "Dos et tête collés au dossier pendant tout le mouvement.", "Pousse jusqu’à avoir les bras presque tendus, puis reviens lentement."] },
+  pecdeck: { mus: M(["pecs"], ["epaules"]), cue: "Assis, dos collé au dossier, avant-bras contre les coussins : ramène les bras l’un vers l’autre devant toi, puis rouvre lentement.", poses: [
+    { ...SEATED, e: [48, 52], w: [47, 38], eq: [{ seat: [38, 84] }] },
+    { ...SEATED, e: [66, 52], w: [68, 38], eq: [{ seat: [38, 84] }] }], front: [
+    { ...SEATF, e: [93, 50], w: [93, 34], eq: [{ fseat: 80 }] },
+    { ...SEATF, e: [71, 53], w: [65, 36], eq: [{ fseat: 80 }] }],
+    tips: ["Règle le siège pour avoir les coudes à hauteur des épaules.", "Coudes fixes, bras pliés à 90° contre les coussins.", "Serre les pectoraux quand les mains se rejoignent, rouvre sans aller trop loin en arrière."] },
+  goodmorning: { mus: M(["ischios", "lombaires"], ["fessiers"]), cue: "Barre sur le haut du dos, genoux à peine fléchis : penche le buste en avant dos droit, puis redresse-toi en poussant les hanches.", poses: [
+    P({ e: [50, 44], w: [58, 35], eq: [{ bar: [58, 35] }] }),
+    P({ h: [84, 58], s: [74, 62], e: [66, 56], w: [72, 52], p: [46, 74], k: [60, 90], eq: [{ bar: [72, 52] }] })], front: [
+    F({ e: [88, 46], w: [83, 35], eq: [{ fbar: 34 }] }),
+    F({ h: [60, 52], s: [71, 58], e: [88, 62], w: [83, 54], p: [66, 72], k: [68, 90], a: [68, 107], eq: [{ fbar: 53 }] })],
+    tips: ["Commence léger : barre seule ou même un bâton.", "Dos plat, genoux légèrement fléchis et fixes.", "Descends jusqu’à sentir l’étirement derrière les cuisses (buste presque à l’horizontale), pas plus."] },
+  backext: { mus: M(["lombaires"], ["fessiers", "ischios"]), cue: "Hanches calées sur le coussin, pieds bloqués : descends le buste dos droit, puis remonte jusqu’à être aligné.", poses: [
+    { p: [56, 64], k: [40, 80], a: [26, 94], t: [22, 101], s: [66, 86], h: [70, 98], e: [72, 80], w: [67, 76], eq: [{ line: [22, 106, 62, 70] }, { roller: [61, 70] }, { roller: [28, 88] }] },
+    { p: [56, 64], k: [40, 80], a: [26, 94], t: [22, 101], s: [76, 48], h: [84, 39], e: [80, 58], w: [74, 54], eq: [{ line: [22, 106, 62, 70] }, { roller: [61, 70] }, { roller: [28, 88] }] }],
+    tips: ["Règle le coussin juste sous le haut des hanches.", "Bras croisés sur la poitrine, dos droit.", "Remonte jusqu’à l’alignement jambes–buste, sans te cambrer au-dessus."] },
+  uprow: { mus: M(["epaules", "trapezes"], ["biceps"]), cue: "Barre contre les cuisses, mains un peu serrées : monte la barre le long du corps en levant les coudes, jusqu’en bas de la poitrine.", poses: [
+    P({ eq: [{ bar: [62, 72], front: true }] }),
+    P({ e: [52, 38], w: [65, 46], eq: [{ bar: [65, 46], front: true }] })], front: [
+    F({ e: [71, 56], w: [67, 70], eq: [{ fbar: 70, front: true }] }),
+    F({ e: [91, 37], w: [68, 47], eq: [{ fbar: 47, front: true }] })],
+    tips: ["Mains à largeur d’épaules (pas collées), prise en pronation.", "Les coudes montent plus haut que les mains.", "Arrête-toi au bas de la poitrine : pas plus haut que les épaules."] },
+  rearfly: { mus: M(["epaules"], ["trapezes", "dorsaux"]), cue: "Buste penché, dos droit, haltères sous la poitrine : ouvre les bras sur les côtés jusqu’à l’horizontale, redescends lentement.", poses: [
+    P({ h: [82, 54], s: [72, 60], e: [72, 77], w: [72, 93], p: [45, 78], k: [64, 92], eq: [{ db: [72, 95], front: true }] }),
+    P({ h: [82, 54], s: [72, 60], e: [71, 68], w: [70, 72], p: [45, 78], k: [64, 92], eq: [{ db: [70, 74], front: true }] })], front: [
+    F({ h: [60, 50], s: [71, 57], e: [74, 74], w: [74, 90], p: [66, 73], k: [71, 90], a: [68, 107], eq: [{ fdb: 1 }] }),
+    F({ h: [60, 50], s: [71, 57], e: [88, 62], w: [104, 63], p: [66, 73], k: [71, 90], a: [68, 107], eq: [{ fdb: 1 }] })],
+    tips: ["Charges légères : c’est un petit muscle.", "Coudes légèrement fléchis et fixes.", "Ouvre les bras sur les côtés en pensant « écarter », pas « tirer »."] },
+  inclcurl: { mus: M(["biceps"], ["avantbras"]), cue: "Assis sur un banc incliné, bras qui pendent derrière le corps : monte les haltères sans avancer les coudes, redescends lentement.", poses: [
+    { h: [34, 47], s: [40, 58], e: [38, 74], w: [37, 90], p: [54, 83], k: [74, 84], a: [76, 106], eq: [{ ibench: [56, 86, 55] }, { db: [37, 92], front: true }] },
+    { h: [34, 47], s: [40, 58], e: [38, 74], w: [48, 60], p: [54, 83], k: [74, 84], a: [76, 106], eq: [{ ibench: [56, 86, 55] }, { db: [48, 58], front: true }] }],
+    tips: ["Banc incliné à 45–60°, dos et tête collés au dossier.", "Bras qui pendent verticalement au départ : les coudes ne bougent pas.", "Charge plus légère qu’au curl debout."] },
+  preacher: { mus: M(["biceps"], ["avantbras"]), cue: "Haut des bras posé sur le pupitre : monte la charge vers les épaules, redescends lentement sans tendre brutalement.", poses: [
+    { h: [54, 40], s: [52, 52], e: [70, 67], w: [84, 80], p: [44, 82], k: [64, 84], a: [66, 106], eq: [{ box: [32, 86, 22, 24] }, { slab: [54, 60, 76, 76] }, { db: [85, 82], front: true }] },
+    { h: [54, 40], s: [52, 52], e: [70, 67], w: [64, 48], p: [44, 82], k: [64, 84], a: [66, 106], eq: [{ box: [32, 86, 22, 24] }, { slab: [54, 60, 76, 76] }, { db: [64, 46], front: true }] }],
+    tips: ["Règle le siège pour que les aisselles touchent le haut du pupitre.", "L’arrière des bras reste collé au coussin.", "Ne tends pas complètement les bras en bas : garde un léger pli."] },
+  skull: { mus: M(["triceps"]), cue: "Allongé, bras tendus au-dessus du visage : plie les coudes pour descendre la barre vers le front, puis tends les bras.", poses: [
+    { ...LIEB, e: [33, 50], w: [24, 62], eq: [BENCH, { bar: [24, 60] }] },
+    { ...LIEB, e: [33, 50], w: [35, 32], eq: [BENCH, { bar: [35, 30] }] }], front: [
+    LIE({ e: [78, 50], w: [76, 67], eq: [{ fbench: 95 }, { fbar: 66, front: true }] }),
+    LIE({ e: [78, 50], w: [78, 32], eq: [{ fbench: 95 }, { fbar: 31, front: true }] })],
+    tips: ["Mains à largeur d’épaules (barre droite ou barre EZ).", "Les coudes restent fixes et pointent vers le plafond.", "Descends lentement vers le front, sans le toucher."] },
+  ohext: { mus: M(["triceps"]), cue: "Haltère tenu à deux mains au-dessus de la tête : descends-le derrière la nuque en pliant les coudes, puis tends les bras.", poses: [
+    P({ e: [64, 15], w: [52, 28], eq: [{ db: [52, 30] }] }),
+    P({ e: [64, 15], w: [64, -1], eq: [{ db: [64, -3], front: true }] })], front: [
+    F({ e: [70, 16], w: [62, 30], eq: [{ db: [60, 32], front: true }] }),
+    F({ e: [70, 16], w: [62, 2], eq: [{ db: [60, 0], front: true }] })],
+    tips: ["Assis ou debout, abdos serrés pour ne pas cambrer.", "Coudes pointés vers le haut, près de la tête.", "Seuls les avant-bras bougent."] },
+  kickback: { mus: M(["triceps"]), cue: "Buste penché, bras collé au corps : tends l’avant-bras vers l’arrière, puis reviens lentement.", poses: [
+    P({ h: [82, 50], s: [72, 56], e: [56, 62], w: [58, 78], p: [45, 76], k: [62, 92], eq: [{ db: [58, 80], front: true }] }),
+    P({ h: [82, 50], s: [72, 56], e: [56, 62], w: [40, 68], p: [45, 76], k: [62, 92], eq: [{ db: [38, 68], front: true }] })],
+    tips: ["Une main et un genou sur un banc si tu veux plus de stabilité.", "Le haut du bras reste parallèle au sol et immobile.", "Charge légère, mouvement lent."] },
+  frontsquat: { mus: M(["quadriceps", "fessiers"], ["abdos"]), cue: "Barre posée sur l’avant des épaules, coudes hauts : descends en gardant le buste droit, puis remonte.", poses: [
+    P({ e: [72, 46], w: [67, 38], eq: [{ bar: [68, 36], front: true }] }),
+    P({ h: [62, 49], s: [57, 60], e: [70, 68], w: [64, 60], p: [42, 86], k: [69, 88], eq: [{ bar: [65, 58], front: true }] })], front: [
+    F({ e: [82, 47], w: [80, 37], eq: [{ fbar: 36, front: true }] }),
+    F({ h: [60, 47], s: [71, 61], e: [82, 70], w: [80, 60], p: [66, 84], k: [80, 90], a: [70, 107], eq: [{ fbar: 59, front: true }] })],
+    tips: ["La barre repose sur l’avant des épaules, pas dans les mains.", "Coudes hauts, pointés devant toi, pendant toute la descente.", "Buste plus droit qu’au squat classique."] },
+  goblet: { mus: M(["quadriceps", "fessiers"], ["abdos"]), cue: "Haltère ou kettlebell tenu contre la poitrine : descends entre tes genoux en gardant le buste droit, puis remonte.", poses: [
+    P({ e: [66, 53], w: [69, 44], eq: [{ kb: [71, 40], front: true }] }),
+    P({ h: [64, 50], s: [56, 61], e: [66, 74], w: [70, 65], p: [42, 86], k: [69, 88], eq: [{ kb: [72, 61], front: true }] })], front: [
+    F({ e: [72, 53], w: [63, 44], eq: [{ fkb: 1, front: true }] }),
+    F({ h: [60, 47], s: [71, 61], e: [74, 75], w: [63, 66], p: [66, 84], k: [80, 90], a: [70, 107], eq: [{ fkb: 1, front: true }] })],
+    tips: ["Tiens la charge collée à la poitrine, coudes vers le bas.", "Pieds un peu plus larges que les épaules.", "Les coudes passent entre les genoux en bas."] },
+  bulgarian: { mus: M(["quadriceps", "fessiers"], ["ischios"]), cue: "Pied arrière posé sur un banc : descends le genou arrière vers le sol, genou avant au-dessus de la cheville, puis remonte.", poses: [
+    { h: [59, 24], s: [58, 36], e: [59, 52], w: [60, 67], p: [58, 64], k: [70, 85], a: [74, 107], k2: [48, 84], a2: [30, 79], eq: [{ bench: [6, 82, 32] }, { db: [60, 69], front: true }] },
+    { h: [58, 42], s: [57, 54], e: [58, 70], w: [59, 85], p: [56, 82], k: [76, 86], a: [74, 107], k2: [42, 100], a2: [30, 79], eq: [{ bench: [6, 82, 32] }, { db: [59, 87], front: true }] }],
+    tips: ["Banc à hauteur de genou, dessus du pied arrière posé dessus.", "Pied avant assez loin du banc pour que le genou reste au-dessus de la cheville.", "Buste droit, descends à la verticale."] },
+  stepup: { mus: M(["quadriceps", "fessiers"], ["mollets"]), cue: "Un pied sur une box ou un banc : monte en poussant sur ce pied, puis redescends en contrôlant.", poses: [
+    { h: [54, 28], s: [54, 40], e: [55, 56], w: [56, 71], p: [54, 68], k: [70, 72], a: [72, 83], k2: [52, 88], a2: [50, 107], eq: [{ box: [62, 86, 34, 24] }, { db: [56, 73], front: true }] },
+    { h: [76, 8], s: [76, 20], e: [77, 36], w: [78, 51], p: [76, 48], k: [76, 67], a: [76, 83], k2: [70, 68], a2: [64, 84], eq: [{ box: [62, 86, 34, 24] }, { db: [78, 53], front: true }] }],
+    tips: ["Box à hauteur de genou environ.", "Pousse sur le talon du pied posé sur la box, sans t’aider de la jambe au sol.", "Redescends lentement, en contrôlant."] },
+  glutebridge: { mus: M(["fessiers"], ["ischios"]), cue: "Allongé au sol, pieds à plat : monte les hanches en serrant les fessiers, puis redescends.", poses: [
+    { h: [18, 100], s: [29, 102], e: [40, 106], w: [50, 106], p: [58, 103], k: [76, 88], a: [86, 107] },
+    { h: [18, 100], s: [30, 100], e: [40, 106], w: [50, 106], p: [58, 84], k: [78, 82], a: [86, 107] }],
+    tips: ["Pieds à plat, largeur de hanches, talons près des fesses.", "Bras au sol le long du corps.", "En haut, genoux–hanches–épaules alignés : serre les fessiers 1 seconde."] },
+  abduct: { mus: M(["fessiers"]), cue: "Assis, coussins contre l’extérieur des genoux : écarte les jambes, puis ramène-les lentement.", poses: [
+    { ...SEATF, e: [80, 64], w: [84, 76], k: [69, 86], a: [69, 106], eq: [{ fseat: 80 }] },
+    { ...SEATF, e: [80, 64], w: [84, 76], k: [85, 85], a: [82, 105], eq: [{ fseat: 80 }] }],
+    tips: ["Dos collé au dossier, mains sur les poignées.", "Écarte sans à-coups, garde 1 seconde, ramène lentement."] },
+  seatcalf: { mus: M(["mollets"]), cue: "Assis, coussin sur les cuisses, pointe des pieds sur la marche : monte les talons le plus haut possible, redescends lentement.", poses: [
+    { ...SEATED, e: [60, 68], w: [69, 78], a: [73, 102], t: [81, 102], eq: [{ seat: [38, 84] }, { box: [64, 104, 24, 6] }, { roller: [70, 79], front: true }] },
+    { ...SEATED, k: [72, 78], e: [60, 64], w: [69, 73], a: [73, 96], t: [81, 102], eq: [{ seat: [38, 84] }, { box: [64, 104, 24, 6] }, { roller: [70, 74], front: true }] }],
+    tips: ["Seule la pointe des pieds est sur la marche, talons dans le vide.", "Descends les talons le plus bas possible avant de remonter."] },
+  pistol: { mus: M(["quadriceps", "fessiers"], ["abdos"]), cue: "Sur une jambe, l’autre tendue devant : descends le plus bas possible en gardant l’équilibre, puis remonte.", poses: [
+    P({ e: [74, 44], w: [88, 44], k2: [66, 86], a2: [74, 104] }),
+    P({ h: [66, 52], s: [58, 63], e: [72, 64], w: [88, 62], p: [44, 90], k: [66, 90], a: [60, 107], k2: [66, 86], a2: [90, 84] })],
+    tips: ["Bras tendus devant pour l’équilibre.", "Talon au sol tout du long.", "Pour apprendre : descends sur un banc ou tiens-toi à un support."] },
+  cablecrunch: { mus: M(["abdos"], ["obliques"]), cue: "À genoux face à la poulie, corde derrière la tête : enroule le dos vers le sol en contractant les abdos, puis remonte.", poses: [
+    { h: [66, 42], s: [62, 54], e: [72, 50], w: [67, 44], p: [60, 80], k: [64, 104], a: [42, 106], t: [36, 108], eq: [{ ctop: 62 }] },
+    { h: [86, 86], s: [78, 76], e: [84, 88], w: [84, 82], p: [58, 82], k: [64, 104], a: [42, 106], t: [36, 108], eq: [{ ctop: 62 }] }],
+    tips: ["Les hanches ne bougent pas : c’est le dos qui s’enroule.", "Mains fixes contre la tête.", "Souffle en descendant."] },
+  russian: { mus: M(["obliques"], ["abdos"]), cue: "Assis, buste penché en arrière, pieds décollés : tourne les épaules d’un côté puis de l’autre en amenant les mains au sol.", poses: [
+    { h: [36, 64], s: [40, 76], e: [48, 88], w: [60, 86], p: [54, 100], k: [70, 86], a: [86, 92], t: [90, 88] },
+    { h: [36, 64], s: [40, 76], e: [46, 86], w: [54, 94], p: [54, 100], k: [70, 86], a: [86, 92], t: [90, 88] }], front: [
+    { view: "front", h: [60, 52], s: [71, 64], p: [66, 92], k: [70, 84], a: [70, 98], e: [84, 82], w: [96, 94], L: { e: [64, 84], w: [90, 94] } },
+    { view: "front", h: [60, 52], s: [71, 64], p: [66, 92], k: [70, 84], a: [70, 98], e: [56, 84], w: [30, 94], L: { e: [36, 82], w: [24, 94] } }],
+    tips: ["Dos droit (pas arrondi), buste penché à environ 45°.", "Ce sont les épaules qui tournent, pas seulement les bras.", "Trop dur ? Garde les talons au sol."] },
+  sideplank: { mus: M(["obliques"], ["abdos", "epaules"]), cue: "Sur un avant-bras, coude sous l’épaule, corps aligné de la tête aux pieds : tiens la position sans laisser tomber les hanches.", poses: [
+    { h: [24, 70], s: [33, 80], e: [34, 104], w: [48, 106], p: [64, 92], k: [84, 99], a: [104, 104], t: [106, 98] }],
+    tips: ["Coude juste sous l’épaule.", "Hanches hautes : le corps forme une ligne droite.", "Trop dur ? Pose le genou du dessous au sol."] },
+  abwheel: { mus: M(["abdos"], ["dorsaux", "epaules"]), cue: "À genoux, mains sur la roue : roule devant toi en gardant le dos plat, puis reviens en contractant les abdos.", poses: [
+    { ...DOWN, h: [36, 76], s: [46, 76], e: [46, 88], w: [46, 99], p: [68, 82], k: [72, 104], a: [92, 106], t: [96, 107], eq: [{ wheel: [46, 101] }] },
+    { ...DOWN, h: [20, 93], s: [30, 97], e: [20, 98], w: [10, 99], p: [60, 94], k: [72, 104], a: [92, 106], t: [96, 107], eq: [{ wheel: [10, 101] }] }],
+    tips: ["Dos plat, fesses serrées : le bas du dos ne se creuse jamais.", "Ne va pas plus loin que ce que tu contrôles.", "Débutant : fais de petites amplitudes."] },
+  pike: { mus: M(["epaules"], ["triceps", "trapezes"]), cue: "Mains au sol, fesses en l’air (corps en V à l’envers) : descends la tête vers le sol entre tes mains, puis pousse.", poses: [
+    { ...DOWN, h: [40, 90], s: [42, 80], e: [40, 93], w: [38, 106], p: [66, 60], k: [80, 84], a: [92, 106], t: [97, 108] },
+    { ...DOWN, h: [44, 101], s: [48, 91], e: [58, 96], w: [38, 106], p: [68, 64], k: [80, 86], a: [92, 106], t: [97, 108] }],
+    tips: ["Mains un peu plus larges que les épaules.", "Fesses hautes : plus tu es vertical, plus c’est dur.", "La tête descend devant les mains, pas entre elles."] },
+  wallball: { mus: M(["quadriceps", "epaules"], ["fessiers"]), cue: "Ballon contre la poitrine : descends en squat, puis remonte et lance le ballon sur la cible au mur. Rattrape-le et enchaîne.", poses: [
+    P({ h: [64, 50], s: [56, 61], e: [62, 72], w: [67, 62], p: [42, 86], k: [69, 88], eq: [{ box: [100, -8, 6, 118] }, { ball: [71, 58], front: true }] }),
+    P({ e: [64, 21], w: [66, 6], eq: [{ box: [100, -8, 6, 118] }, { ball: [69, -2], front: true }] })],
+    tips: ["Squat complet à chaque répétition.", "Utilise l’élan des jambes pour lancer le ballon.", "Regarde la cible, pas le ballon."] },
+  snatch: { mus: M(["fessiers", "epaules"], ["quadriceps", "trapezes", "ischios"]), cue: "Prise large : arrache la barre du sol d’un seul mouvement pour la recevoir bras tendus au-dessus de la tête.", poses: [
+    P({ h: [82, 54], s: [72, 60], e: [72, 77], w: [72, 93], p: [45, 78], k: [64, 92], eq: [{ bar: [72, 97] }] }),
+    P({ e: [60, 20], w: [58, 4], eq: [{ bar: [58, 3] }] })], front: [
+    F({ h: [60, 50], s: [71, 56], e: [80, 73], w: [86, 89], p: [66, 72], k: [71, 90], a: [68, 107], eq: [{ fbar: 91, front: true }] }),
+    F({ e: [88, 22], w: [98, 5], eq: [{ fbar: 4, front: true }] })],
+    tips: ["Mouvement technique : apprends-le avec un bâton ou une barre à vide.", "Prise très large (mains près des disques).", "Barre toujours près du corps pendant la montée."] },
+  wristcurl: { mus: M(["avantbras"]), cue: "Assis, avant-bras posés sur les cuisses, poignets dans le vide : monte la charge en pliant seulement les poignets.", poses: [
+    { h: [66, 46], s: [58, 56], e: [52, 80], w: [72, 84], p: [46, 84], k: [68, 84], a: [70, 106], eq: [{ box: [32, 88, 24, 22] }, { db: [75, 88], front: true }] },
+    { h: [66, 46], s: [58, 56], e: [52, 80], w: [72, 79], p: [46, 84], k: [68, 84], a: [70, 106], eq: [{ box: [32, 88, 24, 22] }, { db: [75, 76], front: true }] }],
+    tips: ["Avant-bras posés à plat sur les cuisses.", "Seuls les poignets bougent.", "Charge légère, beaucoup de répétitions."] }
+});
+
 // Exercice → famille de mouvement (bibliothèque de l'app).
 const MOVES = {
-  "Développé couché": "bench", "Développé couché haltères": "bench:", "Développé incliné": "bench", "Développé incliné haltères": "bench:", "Développé décliné": "bench",
-  "Écarté haltères": "fly", "Écarté à la poulie": "flycable", "Pec deck (butterfly)": "flycable", "Presse pectoraux": "bench:", "Pompes": "pushup", "Pompes diamant": "pushdiamond",
+  "Développé couché": "bench", "Développé couché haltères": "benchdb", "Développé incliné": "incline", "Développé incliné haltères": "inclinedb", "Développé décliné": "decline",
+  "Écarté haltères": "fly", "Écarté à la poulie": "flycable", "Pec deck (butterfly)": "pecdeck", "Presse pectoraux": "chestpress", "Pompes": "pushup", "Pompes diamant": "pushdiamond",
   "Dips": "dips", "Pull-over": "pullover", "Tractions": "pullup", "Tractions lestées": "pullup", "Tractions supination (chin-up)": "pullup:sup", "Tractions australiennes": "invrow",
   "Tirage vertical": "pulldown", "Tirage vertical prise serrée": "pulldown:close", "Tirage horizontal": "seatrow", "Rowing barre": "row", "Rowing haltère": "rowdb", "Rowing T-bar": "row",
   "Rowing machine": "seatrow", "Soulevé de terre": "hinge", "Soulevé de terre roumain": "hinge", "Soulevé de terre sumo": "hinge", "Shrugs": "shrug", "Face pull": "facepull",
-  "Extension lombaire": "hinge", "Good morning": "hinge", "Développé militaire": "ohp", "Développé épaules haltères": "ohp", "Développé Arnold": "ohp",
-  "Élévations latérales": "raise", "Élévations latérales à la poulie": "raise", "Élévations frontales": "fraise", "Oiseau (arrière d’épaule)": "raise",
-  "Rowing menton": "shrug", "Push press": "ohp", "Curl barre": "curl", "Curl haltères": "curl", "Curl marteau": "curl", "Curl incliné": "curl", "Curl pupitre": "curl",
-  "Curl à la poulie": "curl", "Extension triceps à la poulie": "pushdown", "Extension triceps nuque": "pushdown", "Barre au front": "pushdown",
-  "Développé couché prise serrée": "bench:close", "Kickback triceps": "pushdown", "Curl poignets": "curl", "Farmer walk": "walk", "Squat": "squat", "Front squat": "squat",
-  "Squat goblet": "squatbw", "Hack squat": "squat", "Presse à cuisses": "legpress", "Fentes": "lunge", "Fentes bulgares": "lunge", "Leg extension": "legext",
-  "Leg curl": "legcurl", "Hip thrust": "hipthrust", "Pont fessier": "hipthrust", "Abducteurs machine": "legext", "Step-up": "lunge", "Mollets debout": "calf",
-  "Mollets assis": "calf", "Squats (poids du corps)": "squatbw", "Pistol squat": "squatbw", "Box jumps": "boxjump", "Crunch": "crunch", "Crunch à la poulie": "crunch",
-  "Relevés de jambes": "legraise", "Toes to bar": "legraise", "Gainage": "plank", "Gainage latéral": "plank", "Russian twist": "crunch", "Roue abdominale": "pushup:",
-  "Mountain climbers": "climber", "Sit-ups": "crunch", "L-sit": "lsit", "Hollow hold": "hollow", "Muscle-up": "pullup", "Handstand push-up": "hspu", "Pompes pike": "pushup",
+  "Extension lombaire": "backext", "Good morning": "goodmorning", "Développé militaire": "ohp", "Développé épaules haltères": "ohpdb", "Développé Arnold": "ohpdb",
+  "Élévations latérales": "raise", "Élévations latérales à la poulie": "raise", "Élévations frontales": "fraise", "Oiseau (arrière d’épaule)": "rearfly",
+  "Rowing menton": "uprow", "Push press": "ohp", "Curl barre": "curlbar", "Curl haltères": "curl", "Curl marteau": "curl", "Curl incliné": "inclcurl", "Curl pupitre": "preacher",
+  "Curl à la poulie": "curl", "Extension triceps à la poulie": "pushdown", "Extension triceps nuque": "ohext", "Barre au front": "skull",
+  "Développé couché prise serrée": "bench:close", "Kickback triceps": "kickback", "Curl poignets": "wristcurl", "Farmer walk": "walk", "Squat": "squat", "Front squat": "frontsquat",
+  "Squat goblet": "goblet", "Hack squat": "squat", "Presse à cuisses": "legpress", "Fentes": "lunge", "Fentes bulgares": "bulgarian", "Leg extension": "legext",
+  "Leg curl": "legcurl", "Hip thrust": "hipthrust", "Pont fessier": "glutebridge", "Abducteurs machine": "abduct", "Step-up": "stepup", "Mollets debout": "calf",
+  "Mollets assis": "seatcalf", "Squats (poids du corps)": "squatbw", "Pistol squat": "pistol", "Box jumps": "boxjump", "Crunch": "crunch", "Crunch à la poulie": "cablecrunch",
+  "Relevés de jambes": "legraise", "Toes to bar": "legraise", "Gainage": "plank", "Gainage latéral": "sideplank", "Russian twist": "russian", "Roue abdominale": "abwheel",
+  "Mountain climbers": "climber", "Sit-ups": "crunch", "L-sit": "lsit", "Hollow hold": "hollow", "Muscle-up": "pullup", "Handstand push-up": "hspu", "Pompes pike": "pike",
   "Pompes archer": "pushup:wide", "Front lever": "lever", "Back lever": "lever", "Planche": "planche", "Handstand": "handstand", "Human flag": "lever",
-  "Dips aux anneaux": "dips", "Kettlebell swings": "swing", "Thrusters": "thruster", "Clean": "clean", "Snatch": "clean", "Burpees": "burpee", "Wall balls": "thruster",
+  "Dips aux anneaux": "dips", "Kettlebell swings": "swing", "Thrusters": "thruster", "Clean": "clean", "Snatch": "snatch", "Burpees": "burpee", "Wall balls": "wallball",
   "Montée de corde": "rope", "Montée de corde sans jambes": "rope"
 };
 // Noms tapés à la main : on reconnaît la famille grâce à quelques mots-clés.
 const MOVE_WORDS = [
-  [/diamant|diamond/, "pushdiamond"], [/pompe|push ?up/, "pushup"], [/dips/, "dips"], [/couche|bench|incline|decline|presse pec/, "bench"], [/poulie.*ecarte|ecarte.*poulie|vis a vis|butterfly|pec deck|crossover/, "flycable"], [/ecarte|fly/, "fly"], [/pull ?over/, "pullover"],
+  [/diamant|diamond/, "pushdiamond"], [/pompe|push ?up/, "pushup"], [/dips/, "dips"], [/incline.*haltere|haltere.*incline/, "inclinedb"], [/incline/, "incline"], [/decline/, "decline"], [/couche.*haltere|haltere.*couche/, "benchdb"], [/presse pec|chest press/, "chestpress"], [/couche|bench/, "bench"], [/poulie.*ecarte|ecarte.*poulie|vis a vis|butterfly|pec deck|crossover/, "flycable"], [/ecarte|fly/, "fly"], [/pull ?over/, "pullover"],
   [/tirage vertical|pulldown/, "pulldown"], [/traction|pull ?up|chin|muscle ?up/, "pullup"], [/face ?pull/, "facepull"], [/australien|inverted/, "invrow"], [/tirage horizontal|rowing machine|rowing assis|tirage assis/, "seatrow"], [/rowing haltere|haltere.*rowing/, "rowdb"], [/rowing|row\b|tirage/, "row"], [/terre|deadlift|good morning|lombaire/, "hinge"],
   [/militaire|epaule|overhead|arnold|push press/, "ohp"], [/elevations? frontale/, "fraise"], [/elevation|oiseau/, "raise"], [/shrug/, "shrug"], [/curl/, "curl"],
-  [/triceps|barre au front|kickback|extension nuque/, "pushdown"], [/goblet|pistol|poids du corps/, "squatbw"], [/squat/, "squat"], [/fente|lunge|step/, "lunge"],
-  [/leg curl/, "legcurl"], [/presse a cuisse|leg press/, "legpress"], [/leg extension|abduct/, "legext"], [/hip thrust|pont|fessier/, "hipthrust"], [/mollet|calf/, "calf"],
+  [/triceps|barre au front|kickback|extension nuque/, "pushdown"], [/goblet/, "goblet"], [/pistol/, "pistol"], [/front squat|squat avant/, "frontsquat"], [/poids du corps/, "squatbw"], [/squat/, "squat"], [/bulgare/, "bulgarian"], [/step/, "stepup"], [/fente|lunge/, "lunge"],
+  [/leg curl/, "legcurl"], [/presse a cuisse|leg press/, "legpress"], [/leg extension|abduct/, "legext"], [/pont fessier|glute bridge/, "glutebridge"], [/hip thrust|pont|fessier/, "hipthrust"], [/mollet|calf/, "calf"],
   [/relev|toes to bar/, "legraise"], [/crunch|sit ?up|twist/, "crunch"], [/gainage|planche abdo|plank/, "plank"], [/corde|rope/, "rope"],
   [/swing/, "swing"], [/thruster|wall ?ball/, "thruster"], [/clean|snatch|arrache|epaule jete/, "clean"], [/box/, "boxjump"], [/burpee/, "burpee"],
   [/climber/, "climber"], [/farmer|marche/, "walk"]
@@ -257,8 +471,6 @@ export function moveOf(name) {
 }
 
 /* ---------- Dessin ---------- */
-const sub = (a, b) => [a[0] - b[0], a[1] - b[1]], add = (a, b) => [a[0] + b[0], a[1] + b[1]], mul = (a, k) => [a[0] * k, a[1] * k];
-const len = v => Math.hypot(v[0], v[1]) || 1, unit = v => mul(v, 1 / len(v)), f = n => Math.round(n * 10) / 10, P2 = q => f(q[0]) + " " + f(q[1]);
 // Le « devant » d'un segment qui part vers le bas du corps (épaule → hanche, hanche → genou…).
 const front = (from, to, flip) => { const u = unit(sub(to, from)); return mul([u[1], -u[0]], flip ? -1 : 1); };
 // Muscle en forme de fuseau le long d'un segment, décalé vers l'avant (+) ou l'arrière (-).
@@ -278,10 +490,20 @@ function equipment(e, pose) {
   if (e.fcablev) return `<g class="hf-eq">${[pose.w, mirror(pose.w)].map(([x, y]) => `<line class="hf-cable" x1="60" y1="-8" x2="${x}" y2="${y}"/>`).join("")}</g>`;
   if (e.fdip != null) { const y = e.fdip; return [pose.w[0], 120 - pose.w[0]].map(x => `<g class="hf-eq"><rect class="hf-metal" x="${x - 2}" y="${y + 2}" width="4" height="${108 - y}"/><rect class="hf-metal" x="${x - 4}" y="${y}" width="8" height="4" rx="2"/></g>`).join(""); }
   if (e.fkb) { const y = pose.w[1] + 2; return `<g class="hf-eq"><path class="hf-line" d="M56 ${y}a4 4 0 0 1 8 0"/><circle class="hf-dark" cx="60" cy="${y + 7}" r="6.5"/></g>`; }
-  if (e.fbench != null) { const y = e.fbench; return `<g class="hf-eq"><rect class="hf-metal" x="58.5" y="${y + 4}" width="3" height="${106 - y}"/><rect class="hf-metal" x="46" y="107" width="28" height="3" rx="1"/><rect class="hf-pad" x="47" y="${y}" width="26" height="7" rx="3"/></g>`; }
+  if (e.fbench != null) { const y = e.fbench; return `<g class="hf-eq">${e.back != null ? `<rect class="hf-pad" x="47" y="${e.back}" width="26" height="${y - e.back + 2}" rx="4"/>` : ""}<rect class="hf-metal" x="58.5" y="${y + 4}" width="3" height="${106 - y}"/><rect class="hf-metal" x="46" y="107" width="28" height="3" rx="1"/><rect class="hf-pad" x="47" y="${y}" width="26" height="7" rx="3"/></g>`; }
   if (e.ctop != null) return `<g class="hf-eq"><line class="hf-cable" x1="${e.ctop}" y1="-8" x2="${pose.w[0]}" y2="${pose.w[1]}"/></g>`;
   if (e.hcable != null) { const y = e.hcable, [x, hy] = pose.w; return `<g class="hf-eq"><rect class="hf-metal" x="104" y="${y - 8}" width="7" height="${118 - y}" rx="1"/><circle class="hf-plate2" cx="103" cy="${y}" r="3"/><line class="hf-cable" x1="101" y1="${y}" x2="${x}" y2="${hy}"/></g>`; }
   if (e.lowbar) { const [x, y] = e.lowbar; return `<g class="hf-eq"><rect class="hf-metal" x="${x - 1.5}" y="${y}" width="3" height="${110 - y}"/><circle class="hf-plate" cx="${x}" cy="${y}" r="2.6"/></g>`; }
+  if (e.ibench) {
+    const [x, y, d] = e.ibench;
+    if (d > 0) return `<g class="hf-eq"><rect class="hf-metal" x="${x + 8}" y="${y + 4}" width="3" height="${106 - y}"/><rect class="hf-metal" x="${x - 26}" y="${y - 6}" width="3" height="${116 - y}"/><rect class="hf-metal" x="${x - 32}" y="107" width="48" height="3" rx="1"/><rect class="hf-pad" x="${x - 2}" y="${y}" width="22" height="6" rx="3"/><rect class="hf-pad" x="${x - 52}" y="${y}" width="52" height="6" rx="3" transform="rotate(${d} ${x} ${y + 3})"/></g>`;
+    return `<g class="hf-eq"><rect class="hf-metal" x="${x - 30}" y="${y + 8}" width="3" height="${98 - y}"/><rect class="hf-metal" x="${x + 14}" y="${y - 6}" width="3" height="${112 - y}"/><rect class="hf-metal" x="${x - 36}" y="107" width="58" height="3" rx="1"/><rect class="hf-pad" x="${x - 50}" y="${y}" width="76" height="6" rx="3" transform="rotate(${d} ${x} ${y + 3})"/></g>`;
+  }
+  if (e.handle) { const [x, y] = pose.w; return `<rect class="hf-dark" x="${x - 1.8}" y="${y - 6}" width="3.6" height="12" rx="1.5"/>`; }
+  if (e.fhandle) return [pose.w, mirror(pose.w)].map(([x, y]) => `<rect class="hf-dark" x="${x - 1.8}" y="${y - 6}" width="3.6" height="12" rx="1.5"/>`).join("");
+  if (e.slab) { const [x1, y1, x2, y2] = e.slab; return `<g class="hf-eq"><line class="hf-metal-l" x1="${(x1 + x2) / 2}" y1="${(y1 + y2) / 2}" x2="${(x1 + x2) / 2}" y2="108"/><line class="hf-slab" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/></g>`; }
+  if (e.wheel) { const [x, y] = e.wheel; return `<g class="hf-eq"><circle class="hf-dark" cx="${x}" cy="${y}" r="6"/><circle class="hf-dot" cx="${x}" cy="${y}" r="1.6"/></g>`; }
+  if (e.ball) { const [x, y] = e.ball; return `<g class="hf-eq"><circle class="hf-ball" cx="${x}" cy="${y}" r="6.5"/><path class="hf-plate2" d="M${x - 6.5} ${y}h13"/></g>`; }
   if (e.froll != null) { const y = e.froll; return `<rect class="hf-pad" x="42" y="${y}" width="36" height="7" rx="3.5"/>`; }
   if (e.bar) { const [x, y] = e.bar; return `<g class="hf-eq"><circle class="hf-plate" cx="${x}" cy="${y}" r="9"/><circle class="hf-plate2" cx="${x}" cy="${y}" r="5.5"/><circle class="hf-dot" cx="${x}" cy="${y}" r="1.8"/></g>`; }
   if (e.db) { const [x, y] = e.db; return `<g class="hf-eq"><rect class="hf-metal" x="${x - 6}" y="${y - 1.2}" width="12" height="2.4" rx="1"/><rect class="hf-dark" x="${x - 8}" y="${y - 4.5}" width="3.5" height="9" rx="1"/><rect class="hf-dark" x="${x + 4.5}" y="${y - 4.5}" width="3.5" height="9" rx="1"/></g>`; }
@@ -337,7 +559,16 @@ export function figureSVG(pose, mus, top = -8) {
     ${(pose.eq || []).filter(q => !q.front).map(q => equipment(q, pose)).join("")}
     ${body}
     ${(pose.eq || []).filter(q => q.front).map(q => equipment(q, pose)).join("")}
+    ${markSVG(pose)}
   </svg>`;
+}
+// Repère d'angle (ex. « 90° » au coude en bas du développé).
+function markSVG(q) {
+  if (!q.mark) return "";
+  const [j, txt] = q.mark, J = q[j], [A, C] = j === "e" ? [q.s, q.w] : j === "k" ? [q.p, q.a] : [q.s, q.k];
+  const u1 = unit(sub(A, J)), u2 = unit(sub(C, J)), r = 8, p1 = add(J, mul(u1, r)), p2 = add(J, mul(u2, r));
+  const sweep = u1[0] * u2[1] - u1[1] * u2[0] > 0 ? 1 : 0, t = add(J, mul(unit(add(u1, u2)), -9));
+  return `<g class="hf-mark"><path d="M${P2(p1)}A${r} ${r} 0 0 ${sweep} ${P2(p2)}"/><text x="${f(t[0])}" y="${f(t[1] + 2.5)}" text-anchor="middle">${txt}</text></g>`;
 }
 const lens = (A, B, nf, side, from, to, width) => belly(A, B, nf, side, from, to, width, "").replace(' class=""', "");
 const ell = (c, rx, ry, rot) => `<ellipse cx="${f(c[0])}" cy="${f(c[1])}" rx="${rx}" ry="${ry}"${rot ? ` transform="rotate(${f(rot)} ${f(c[0])} ${f(c[1])})"` : ""}/>`;
@@ -459,6 +690,8 @@ function openHow(name, btn) {
   $h("howTitle").textContent = name;
   $h("howStage").className = "how-stage" + (moving ? (reduce ? " side" : " boom") : " still") + (views.length > 1 ? " two" : "");
   $h("howStage").innerHTML = views.map(view).join("");
+  $h("howTips").hidden = !mv.tips;
+  $h("howTips").innerHTML = mv.tips ? `<p class="how-vt">Repères pour débuter</p><ul>${mv.tips.map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : "";
   const grip = GRIPS[mv.grip];
   $h("howGrip").hidden = !grip;
   $h("howGrip").innerHTML = grip ? `<p class="how-vt">Placement des mains</p>${gripSVG(mv.grip)}<p>${grip.txt}</p>` : "";
@@ -474,7 +707,7 @@ function openHow(name, btn) {
 }
 function closeHow() {
   if ($h("howSheet").hidden) return;
-  $h("howBackdrop").hidden = true; $h("howSheet").hidden = true; $h("howStage").innerHTML = ""; $h("howMap").innerHTML = ""; $h("howGrip").innerHTML = "";
+  $h("howBackdrop").hidden = true; $h("howSheet").hidden = true; $h("howStage").innerHTML = ""; $h("howMap").innerHTML = ""; $h("howGrip").innerHTML = ""; $h("howTips").innerHTML = "";
   inerted.forEach(el => { el.inert = false; }); inerted = [];
   document.removeEventListener("keydown", onKey);
   // Le bouton a pu être redessiné entre-temps : on retrouve le même.

@@ -862,3 +862,12 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .hg-thumb{stroke:var(--red-hi);stroke-width:2.6;stroke-linecap:round}
 .hg-dim{fill:none;stroke:var(--muted);stroke-width:1}
 .hg-txt{fill:var(--muted);font-size:7.5px;font-family:var(--body,sans-serif)}
+.hf-mark path{fill:none;stroke:var(--ink);stroke-width:1.3}
+.hf-mark text{fill:var(--ink);font-size:8px;font-weight:800;font-family:var(--body,sans-serif)}
+.hf-slab{stroke:color-mix(in srgb,var(--red) 30%,var(--surface-2));stroke-width:6;stroke-linecap:round}
+.hf-metal-l{stroke:color-mix(in srgb,var(--ink) 38%,var(--surface));stroke-width:3}
+.hf-ball{fill:color-mix(in srgb,#B98A52 55%,var(--surface-2));stroke:color-mix(in srgb,#B98A52 80%,transparent);stroke-width:1}
+.how-tips{background:var(--surface-2);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.how-tips .how-vt{text-align:left}
+.how-tips ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:14px;line-height:1.4}
+.how-tips li::marker{color:var(--red-hi)}
