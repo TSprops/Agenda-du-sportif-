@@ -191,9 +191,10 @@ Object.assign(HOW, {
     cue: "Mains au sol, hanches hautes (corps en V à l’envers) : plie les bras pour amener la tête vers le sol devant les mains, puis pousse.",
     tips: ["Hanches hautes : le corps forme un V à l’envers.", "La tête descend devant les mains, pas entre elles.", "Plus les pieds sont proches des mains, plus c’est dur."] },
   "Tractions australiennes": { grip: "row", views: [side([
-      { hip: [130.6, 182], torso: -166.6, neck: -170, near: { wristAt: [80, 115.5], hand: -90, th: 13.4, sh: 13.4, ft: -75 }, eq: [pullbar(80, 110)] },
-      // Poitrine près de la barre, talons au même endroit : le haut du bras reste perpendiculaire au buste (coude vers le sol).
-      { hip: [145.9, 148.5], torso: -142.9, neck: -148, near: { wristAt: [80, 115.5], hand: -90, elbowBend: 1, th: 37.1, sh: 37.1, ft: -60 }, eq: [pullbar(80, 110)] }], ["Bras tendus", "Poitrine à la barre"])],
+      // Talons au même point. En haut, la barre arrive au milieu de la poitrine (épaules au-delà de la barre) :
+      // le coude part vers les hanches, le long du corps, avant-bras vertical sous la barre.
+      { hip: [88.2, 173.5], torso: -161, neck: -164, near: { wristAt: [80, 115.5], hand: -90, elbowBend: -1, th: 19, sh: 19, ft: -71 }, eq: [pullbar(80, 110)] },
+      { hip: [99.4, 151.6], torso: -145.3, neck: -150, near: { wristAt: [80, 115.5], hand: -90, elbowBend: -1, th: 34.7, sh: 34.7, ft: -55 }, eq: [pullbar(80, 110)] }], ["Bras tendus", "Poitrine à la barre"])],
     cue: "Sous une barre basse, corps gainé et droit, talons au sol : tire la poitrine jusqu’à la barre, coudes près du corps, puis redescends.",
     tips: ["Corps droit des épaules aux talons.", "Coudes près du corps, poitrine vers la barre.", "Plus les pieds sont loin, plus c’est dur."] },
   "Montée de corde": { views: [side([
