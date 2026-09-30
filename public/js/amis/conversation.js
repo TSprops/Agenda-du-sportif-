@@ -2,10 +2,10 @@
 import { SOC, pairId, pairOf } from "./etat.js";
 import { blockUser } from "./liste.js";
 import { openFriend } from "./page-ami.js";
-import { $, S, addDoc, armed, avatarHTML, collection, db, doc, esc, key, limitToLast, onSnapshot, orderBy, pad, query, setDoc, todayK } from "../core.js";
+import { $, S, addDoc, armed, avatarHTML, collection, db, doc, esc, key, limitToLast, onSnapshot, orderBy, pad, query, setDoc, todayK } from "../commun/core.js";
 import { shortDate } from "../idees/index.js";
 import { bannedStop } from "../social/index.js";
-import { go } from "../store.js";
+import { go } from "../commun/store.js";
 
 /* ---------- Messages ---------- */
 export function openChat(uid) {

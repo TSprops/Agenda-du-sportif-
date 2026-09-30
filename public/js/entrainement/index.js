@@ -1,13 +1,13 @@
 // Saisie : plusieurs séances par jour, « dernière fois », cordes, bibliothèque, records en direct, routines et programmes.
 // Ce fichier regroupe ce que les autres modules utilisent.
 // Même ordre de chargement que l'ancien fichier unique.
-import "../core.js";
-import "../store.js";
+import "../commun/core.js";
+import "../commun/store.js";
 import "../../data.js";
 import "../seances/index.js";
 import "../idees/index.js";
-import "../faq.js";
-import "../muscles.js";
+import "../pages/faq.js";
+import "../pages/muscles.js";
 import "../comment-faire/index.js";
 export { freshKey, sessTabsHTML } from "./plusieurs-seances.js";
 export { exKey, lastLineHTML, prefillKg, addExercise } from "./derniere-fois.js";

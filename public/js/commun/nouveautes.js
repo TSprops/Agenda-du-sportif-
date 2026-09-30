@@ -1,9 +1,9 @@
 // Fenêtre « Nouveautés » (une seule fois par utilisateur) et acceptation des conditions.
-import { $, S, TERMS_V } from "../core.js";
+import { $, S, TERMS_V } from "./core.js";
 import { HOW } from "../exercices/index.js";
-import { closeInstall, lsGet, lsSet, maybeWelcomeInstall } from "../install.js";
+import { closeInstall, lsGet, lsSet, maybeWelcomeInstall } from "./install.js";
 import { figure, frameBox } from "../silhouette/index.js";
-import { saveProfile } from "../store.js";
+import { saveProfile } from "./store.js";
 
 /* ---------- Nouveautés (une seule fois par utilisateur) ---------- */
 // Deux diapositives : « Comment faire », puis où trouver le bouton Contact. Vue une fois = plus jamais

@@ -2,10 +2,10 @@
 import { openChat } from "./conversation.js";
 import { SOC, otherOf, pairId, pairOf, syncShare, unreadOf, who } from "./etat.js";
 import { openFriend } from "./page-ami.js";
-import { $, S, armed, avatarHTML, collection, db, deleteDoc, doc, esc, getDocs, limit, query, setDoc, updateDoc, where } from "../core.js";
-import { norm } from "../faq.js";
+import { $, S, armed, avatarHTML, collection, db, deleteDoc, doc, esc, getDocs, limit, query, setDoc, updateDoc, where } from "../commun/core.js";
+import { norm } from "../pages/faq.js";
 import { bannedStop } from "../social/index.js";
-import { saveProfile } from "../store.js";
+import { saveProfile } from "../commun/store.js";
 
 export function renderFriends() {
   const code = (S.profile && S.profile.friendCode) || "…", share = !S.profile || S.profile.shareSessions !== false;

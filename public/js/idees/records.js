@@ -1,9 +1,9 @@
 // Records par activité (liste, ajout, suppression).
 import { benchEntries, cfData, shortDate } from "./crossfit.js";
 import { CALIS_PRS, MUSCU_LIFTS, RUN_PRS, fmtTime, prsData } from "./idees-seances.js";
-import { $, BENCH, DISC, S, armed, esc, nf, numOr, runPace, todayK } from "../core.js";
+import { $, BENCH, DISC, S, armed, esc, nf, numOr, runPace, todayK } from "../commun/core.js";
 import { intOr } from "../seances/index.js";
-import { saveProfile } from "../store.js";
+import { saveProfile } from "../commun/store.js";
 
 /* ---------- Records ---------- */
 // items : [id, nom, distance (course), type : kg | time | reps | sec]

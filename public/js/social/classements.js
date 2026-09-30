@@ -1,9 +1,9 @@
 // Social : classements entre amis et bilan du mois partageable.
 import { acceptedFriends } from "./accueil.js";
-import { $, S, avatarHTML, dayOf, dayVolume, db, doc, esc, getDoc, nf, runKm, todayK } from "../core.js";
+import { $, S, avatarHTML, dayOf, dayVolume, db, doc, esc, getDoc, nf, runKm, todayK } from "../commun/core.js";
 import { bestSets, exKey } from "../entrainement/index.js";
 import { SOC, dirOf } from "../amis/index.js";
-import { counts, streakInfo } from "../home.js";
+import { counts, streakInfo } from "../pages/accueil.js";
 import { doneSet } from "../idees/index.js";
 
 /* ---------- Classements entre amis ---------- */

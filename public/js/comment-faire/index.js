@@ -2,10 +2,10 @@
 // Départ et arrivée côte à côte, bouton « Voir le mouvement » pour l'animation, repères pour débuter, placement des mains.
 // Ce fichier regroupe ce que les autres modules utilisent.
 // Même ordre de chargement que l'ancien fichier unique.
-import "../core.js";
-import "../faq.js";
+import "../commun/core.js";
+import "../pages/faq.js";
 import "../entrainement/index.js";
-import "../muscles.js";
+import "../pages/muscles.js";
 import "../silhouette/index.js";
 import "../exercices/index.js";
 export { moveOf } from "./recherche.js";

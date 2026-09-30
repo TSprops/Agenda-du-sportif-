@@ -2,11 +2,11 @@
 import { $, DEFAULT_TYPES, LOCAL, S, auth, clone, collection, db, doc, documentId, getDoc, getDocs, getDocsFromCache, isEmpty,
   key, onAuthStateChanged, onSnapshot, orderBy, query, show, where } from "./core.js";
 import { applyProfile, go, refresh, saveProfile, subCol, syncStats, userRef } from "./store.js";
-import { renderPfView, setAuthMode } from "./account.js";
-import { renderAdmin } from "./admin.js";
+import { renderPfView, setAuthMode } from "../pages/compte.js";
+import { renderAdmin } from "../pages/admin.js";
 import { lsGet, lsSet } from "./install.js";
-import { ensureSocialProfile, resetSocial, subscribeSocial } from "./amis/index.js";
-import { renderHome } from "./home.js";
+import { ensureSocialProfile, resetSocial, subscribeSocial } from "../amis/index.js";
+import { renderHome } from "../pages/accueil.js";
 
 /* ============================================================
    Abonnements temps réel et démarrage

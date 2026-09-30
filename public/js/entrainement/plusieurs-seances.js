@@ -1,5 +1,5 @@
 // Entraînement : plusieurs séances le même jour (onglets).
-import { S, dayMeta, dayOf, esc, isEmpty, sessionsOn } from "../core.js";
+import { S, dayMeta, dayOf, esc, isEmpty, sessionsOn } from "../commun/core.js";
 
 /* ============================================================
    Plusieurs séances par jour

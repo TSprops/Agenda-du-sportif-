@@ -1,7 +1,7 @@
 // Séances : types de séance (nom, couleur).
 import { renderMain } from "./calendrier.js";
-import { $, DEFAULT_TYPES, PALETTE, S, armed, esc } from "../core.js";
-import { persistTypes } from "../store.js";
+import { $, DEFAULT_TYPES, PALETTE, S, armed, esc } from "../commun/core.js";
+import { persistTypes } from "../commun/store.js";
 
 /* ============================================================
    Types de séance

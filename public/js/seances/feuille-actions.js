@@ -2,9 +2,9 @@
 import { EMPTY_DAY, changed, closeSheet, flush, forceFlush, intOr, openDay, renderSheet, setDisc } from "./feuille.js";
 import { addPhotos, dropPhoto, openViewer } from "./photos.js";
 import { activeSet, exStats, fmtRest, isDone, refreshAllSets, refreshSets, restOf } from "./series.js";
-import { $, BENCH, S, armed, clone, dayOf, isEmpty, numOr, parseClock, runCalcHTML } from "../core.js";
-import { norm } from "../faq.js";
-import { startIntervals, startRest } from "../timer.js";
+import { $, BENCH, S, armed, clone, dayOf, isEmpty, numOr, parseClock, runCalcHTML } from "../commun/core.js";
+import { norm } from "../pages/faq.js";
+import { startIntervals, startRest } from "../commun/timer.js";
 import { addExercise, announcePRs, cordesOf, freshKey, openLib, saveRoutineFromSession, sessionPRs } from "../entrainement/index.js";
 
 $("sheet").addEventListener("input", e => {

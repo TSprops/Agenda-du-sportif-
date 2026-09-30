@@ -1,7 +1,7 @@
 // Entraînement : séance « Cordes » (nombre de cordes, départ toutes les X, lest).
 import { exKey } from "./derniere-fois.js";
 import { howBtnHTML } from "../comment-faire/index.js";
-import { S, esc, nf, pad, plural } from "../core.js";
+import { S, esc, nf, pad, plural } from "../commun/core.js";
 import { shortDate } from "../idees/index.js";
 
 /* ============================================================

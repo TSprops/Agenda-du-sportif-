@@ -1,7 +1,7 @@
 // Séances, fiche du jour : exercices de musculation et de calisthénie, photos, ressenti, choix de l'activité.
 import { effortLabel, exStats, fmtRest, goLabel, lastComparable, restOf, resting, rpeColor, rpeLabel, setNowText, setState } from "./series.js";
 import { howBtnHTML } from "../comment-faire/index.js";
-import { CALIS_MOVES, DISC, MONTHS, S, esc, pad, parse, typeOf } from "../core.js";
+import { CALIS_MOVES, DISC, MONTHS, S, esc, pad, parse, typeOf } from "../commun/core.js";
 import { lastLineHTML } from "../entrainement/index.js";
 
 function exHTML(ex, i, disc) {

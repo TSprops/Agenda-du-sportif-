@@ -6,9 +6,9 @@ import {
   initializeFirestore, connectFirestoreEmulator, persistentLocalCache, persistentMultipleTabManager,
   doc, collection, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, onSnapshot, query, where, orderBy, limit, limitToLast, writeBatch,
   arrayRemove, documentId, getDocsFromCache
-} from "../vendor/firebase.js";
-import { firebaseConfig } from "../firebase-config.js";
-import { MUSCLES, GROUPS, EQUIP, EXERCISES, KEYWORDS, PROGRAMS } from "../data.js";
+} from "../../vendor/firebase.js";
+import { firebaseConfig } from "../../firebase-config.js";
+import { MUSCLES, GROUPS, EQUIP, EXERCISES, KEYWORDS, PROGRAMS } from "../../data.js";
 /* ============================================================
    Constantes
    ============================================================ */

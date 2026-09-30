@@ -1,20 +1,20 @@
 // Enregistrement (profil, séances, statistiques) et navigation entre les écrans.
 import { $, DEFAULT_TYPES, S, TYPES_V, clone, collection, dayMeta, dayVolume, db, deleteDoc, doc, runKm, setDoc, todayK } from "./core.js";
 import { applyTheme, currentTheme } from "./theme.js";
-import { renderOnboard, renderPfStats, renderProfile } from "./account.js";
-import { renderMain, setSave } from "./seances/index.js";
-import { renderNutrition } from "./nutrition.js";
-import { renderContact, renderObjets } from "./contact.js";
-import { renderAdmin } from "./admin.js";
-import { renderCrossfit, renderHub, renderProg, renderProgHub, renderRec, renderRecordsHub, renderTypesHub } from "./idees/index.js";
+import { renderOnboard, renderPfStats, renderProfile } from "../pages/compte.js";
+import { renderMain, setSave } from "../seances/index.js";
+import { renderNutrition } from "../pages/nutrition.js";
+import { renderContact, renderObjets } from "../pages/contact.js";
+import { renderAdmin } from "../pages/admin.js";
+import { renderCrossfit, renderHub, renderProg, renderProgHub, renderRec, renderRecordsHub, renderTypesHub } from "../idees/index.js";
 import { maybeInvite, maybeWelcomeInstall } from "./install.js";
-import { FAB_SCREENS, updateFab } from "./faq.js";
-import { leaveChat, maybeNews, maybeTerms, newsPending, renderChat, renderFriend, renderFriends, syncShare } from "./amis/index.js";
-import { renderPrograms, renderRoutine, renderRoutines } from "./entrainement/index.js";
-import { renderGo, renderHome, renderRecap } from "./home.js";
-import { loadFeed, renderChallenge, renderChallenges, renderMessages, renderRanks, renderSocial, syncChallenges } from "./social/index.js";
-import { renderMuscles } from "./muscles.js";
-import { maybeResetTours, renderTutos, tourCheck } from "./tour.js";
+import { FAB_SCREENS, updateFab } from "../pages/faq.js";
+import { leaveChat, maybeNews, maybeTerms, newsPending, renderChat, renderFriend, renderFriends, syncShare } from "../amis/index.js";
+import { renderPrograms, renderRoutine, renderRoutines } from "../entrainement/index.js";
+import { renderGo, renderHome, renderRecap } from "../pages/accueil.js";
+import { loadFeed, renderChallenge, renderChallenges, renderMessages, renderRanks, renderSocial, syncChallenges } from "../social/index.js";
+import { renderMuscles } from "../pages/muscles.js";
+import { maybeResetTours, renderTutos, tourCheck } from "./tutoriel.js";
 
 /* ============================================================
    Accès aux données

@@ -1,10 +1,10 @@
 // Social : page d'accueil (activité, réactions reçues, nouveaux défis).
-import { $, S, ago, esc, parse, plural, titleOf, todayK } from "../core.js";
+import { $, S, ago, esc, parse, plural, titleOf, todayK } from "../commun/core.js";
 import { toast } from "../entrainement/index.js";
 import { REACTS, SOC, dirOf, otherOf, socialCounts, who } from "../amis/index.js";
-import { lsGet, lsSet } from "../install.js";
+import { lsGet, lsSet } from "../commun/install.js";
 import { openDay, renderMain } from "../seances/index.js";
-import { go, saveProfile } from "../store.js";
+import { go, saveProfile } from "../commun/store.js";
 
 /* ============================================================
    Social : page d'accueil, activité, fil, commentaires, défis, classements

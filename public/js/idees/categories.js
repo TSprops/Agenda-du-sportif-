@@ -1,7 +1,7 @@
 // Pages « catégories » : idées, records, progression, et page des séances types.
 import { CALIS_IDEAS, MUSCU_IDEAS, RUN_IDEAS, ideaCard, ideaExercises, tryIdea } from "./idees-seances.js";
-import { $, DEFAULT_TYPES, DISC, MAIN_DISC, RUN_TYPES, S, esc, typeOf } from "../core.js";
-import { go } from "../store.js";
+import { $, DEFAULT_TYPES, DISC, MAIN_DISC, RUN_TYPES, S, esc, typeOf } from "../commun/core.js";
+import { go } from "../commun/store.js";
 
 /* ---------- Pages « catégories » (idées, records, progression) ---------- */
 const HUB_DESC = {

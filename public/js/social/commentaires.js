@@ -1,7 +1,7 @@
 // Social : commentaires (affichage, envoi, suppression, partout dans l'app).
 import { bannedStop } from "./accueil.js";
 import { renderFeed } from "./fil.js";
-import { $, S, addDoc, ago, armed, collection, db, deleteDoc, doc, esc } from "../core.js";
+import { $, S, addDoc, ago, armed, collection, db, deleteDoc, doc, esc } from "../commun/core.js";
 import { toast } from "../entrainement/index.js";
 import { SOC, renderFriend, reportContent } from "../amis/index.js";
 

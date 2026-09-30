@@ -1,8 +1,8 @@
 // Séances : photos (JPEG compressé dans Firestore) et visionneuse.
 import { renderMain } from "./calendrier.js";
 import { changed, forceFlush, renderSheet } from "./feuille.js";
-import { $, S, armed, clone, deleteDoc, doc, getDoc, setDoc } from "../core.js";
-import { persistDay, subCol, subDoc } from "../store.js";
+import { $, S, armed, clone, deleteDoc, doc, getDoc, setDoc } from "../commun/core.js";
+import { persistDay, subCol, subDoc } from "../commun/store.js";
 
 /* ============================================================
    Photos (stockées en JPEG compressé dans Firestore : reste gratuit)

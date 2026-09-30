@@ -1,8 +1,8 @@
 // Minuteur de repos et départs réguliers, sons.
 import { $, S, pad } from "./core.js";
 import { savePrefs } from "./store.js";
-import { advanceAfterRest } from "./seances/index.js";
-import { toast } from "./entrainement/index.js";
+import { advanceAfterRest } from "../seances/index.js";
+import { toast } from "../entrainement/index.js";
 
 /* ============================================================
    Minuteur de repos

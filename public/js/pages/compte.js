@@ -1,14 +1,14 @@
 // Connexion, inscription, champs du profil et page Profil.
 import { $, DEFAULT_TYPES, EmailAuthProvider, OBJECTIFS, S, TERMS_V, TYPES_V, arrayRemove, auth, avatarHTML, collection,
   createUserWithEmailAndPassword, db, deleteDoc, deleteUser, doc, esc, fmtDate, getDocs, nf, numOr, query,
-  reauthenticateWithCredential, sendPasswordResetEmail, show, signInWithEmailAndPassword, signOut, updateDoc, where, writeBatch } from "./core.js";
-import { renderTheme } from "./theme.js";
-import { go, saveProfile, subCol, userRef } from "./store.js";
-import { blobToData, compress } from "./seances/index.js";
-import { renderSound } from "./timer.js";
-import { refreshInstallBtn } from "./install.js";
-import { ensureSocialProfile, subscribeSocial } from "./amis/index.js";
-import { stopSubscriptions, subscribeData } from "./main.js";
+  reauthenticateWithCredential, sendPasswordResetEmail, show, signInWithEmailAndPassword, signOut, updateDoc, where, writeBatch } from "../commun/core.js";
+import { renderTheme } from "../commun/theme.js";
+import { go, saveProfile, subCol, userRef } from "../commun/store.js";
+import { blobToData, compress } from "../seances/index.js";
+import { renderSound } from "../commun/timer.js";
+import { refreshInstallBtn } from "../commun/install.js";
+import { ensureSocialProfile, subscribeSocial } from "../amis/index.js";
+import { stopSubscriptions, subscribeData } from "../commun/main.js";
 
 /* ============================================================
    Connexion / inscription

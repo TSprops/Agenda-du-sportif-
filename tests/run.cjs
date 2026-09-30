@@ -1,5 +1,5 @@
 // Lance tous les tests : `npm test` (démarre les émulateurs Firebase automatiquement).
-const tests = [["Règles de sécurité", require("./rules.test.cjs")], ["Parcours dans l'app", require("./app.test.cjs")]];
+const tests = [["Fichiers de l'app", require("./fichiers.test.cjs")], ["Règles de sécurité", require("./rules.test.cjs")], ["Parcours dans l'app", require("./app.test.cjs")]];
 (async () => {
   let fail = 0, pass = 0;
   for (const [name, fn] of tests) {

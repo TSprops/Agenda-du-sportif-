@@ -1,6 +1,6 @@
 // Nutrition : compléments et créatine.
-import { $, DAYS, DEFAULT_SUPPS, MONTHS, S, armed, cap, clone, deleteDoc, esc, hm, key, nf, numOr, parse, setDoc, todayK } from "./core.js";
-import { savePrefs, subDoc, syncStats } from "./store.js";
+import { $, DAYS, DEFAULT_SUPPS, MONTHS, S, armed, cap, clone, deleteDoc, esc, hm, key, nf, numOr, parse, setDoc, todayK } from "../commun/core.js";
+import { savePrefs, subDoc, syncStats } from "../commun/store.js";
 
 /* ============================================================
    Nutrition

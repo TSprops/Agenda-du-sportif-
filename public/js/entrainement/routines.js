@@ -4,10 +4,10 @@ import { cordesOf, cordesText } from "./cordes.js";
 import { prefillKg } from "./derniere-fois.js";
 import { freshKey } from "./plusieurs-seances.js";
 import { toast } from "./records.js";
-import { $, DISC, S, armed, clone, dayMeta, esc, show, todayK, typeOf } from "../core.js";
+import { $, DISC, S, armed, clone, dayMeta, esc, show, todayK, typeOf } from "../commun/core.js";
 import { doneSet, ideaExercises, repsText } from "../idees/index.js";
 import { EMPTY_DAY, fmtRest, forceFlush, normCordes, openDay, renderMain, renderSheet, restOf, setDisc } from "../seances/index.js";
-import { go, saveProfile } from "../store.js";
+import { go, saveProfile } from "../commun/store.js";
 
 /* ============================================================
    Routines et programmes

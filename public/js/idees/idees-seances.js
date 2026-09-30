@@ -1,8 +1,8 @@
 // Idées de séances par activité (muscu, calisthénie, course) et bouton « Essayer ».
-import { $, S, clone, esc, isEmpty, pad, sessionsOn, todayK } from "../core.js";
+import { $, S, clone, esc, isEmpty, pad, sessionsOn, todayK } from "../commun/core.js";
 import { freshKey, prefillKg, toast } from "../entrainement/index.js";
 import { EMPTY_DAY, fmtRest, forceFlush, normCordes, openDay, renderMain, renderSheet, setDisc } from "../seances/index.js";
-import { go } from "../store.js";
+import { go } from "../commun/store.js";
 
 /* ============================================================
    Séances types : idées de séances et records par activité

@@ -1,7 +1,7 @@
 // Social : fil d'actualité des amis et réactions.
 import { acceptedFriends, bannedStop } from "./accueil.js";
 import { commentsHTML } from "./commentaires.js";
-import { $, DAYS, DEFAULT_TYPES, S, cap, clone, collection, dayMeta, dayOf, db, deleteDoc, discOf, doc, esc, getDoc, getDocs, isEmpty, limit, orderBy, parse, query, setDoc, titleOf, where } from "../core.js";
+import { $, DAYS, DEFAULT_TYPES, S, cap, clone, collection, dayMeta, dayOf, db, deleteDoc, discOf, doc, esc, getDoc, getDocs, isEmpty, limit, orderBy, parse, query, setDoc, titleOf, where } from "../commun/core.js";
 import { cordesOf, toast } from "../entrainement/index.js";
 import { REACTS, SOC, dirOf, friendSessionDetail, who } from "../amis/index.js";
 import { MONTHS_S, tryIdea } from "../idees/index.js";

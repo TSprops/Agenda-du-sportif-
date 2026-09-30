@@ -1,10 +1,10 @@
 // CrossFit : records (1RM) et WOD de référence.
 import { tryIdea } from "./idees-seances.js";
-import { $, BENCH, DISC, LIFTS, S, armed, clone, discOf, esc, fmtDur, nf, numOr, parse, todayK } from "../core.js";
+import { $, BENCH, DISC, LIFTS, S, armed, clone, discOf, esc, fmtDur, nf, numOr, parse, todayK } from "../commun/core.js";
 import { freshKey } from "../entrainement/index.js";
-import { norm } from "../faq.js";
+import { norm } from "../pages/faq.js";
 import { intOr, openDay } from "../seances/index.js";
-import { go, saveProfile } from "../store.js";
+import { go, saveProfile } from "../commun/store.js";
 
 /* ============================================================
    CrossFit : records (1RM) et WOD de référence

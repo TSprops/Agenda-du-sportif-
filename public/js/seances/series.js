@@ -1,7 +1,7 @@
 // Séances, fiche du jour : séries, repos, état de chaque série (fait, en cours, à faire).
 import { changed } from "./feuille.js";
-import { $, S, dayMeta, dayOf, discOf, exVolume, nf, pad, todayK } from "../core.js";
-import { RT } from "../timer.js";
+import { $, S, dayMeta, dayOf, discOf, exVolume, nf, pad, todayK } from "../commun/core.js";
+import { RT } from "../commun/timer.js";
 
 /* ============================================================
    Séances : fiche du jour

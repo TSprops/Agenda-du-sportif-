@@ -67,8 +67,8 @@ Personne ne peut se nommer administrateur depuis l’app : seul ce document, cr�
 | Fichier | Rôle |
 |---|---|
 | `public/index.html` | Les écrans de l’app |
-| `public/styles.css` | Le thème noir et rouge |
-| `public/app.js` | Toute la logique : comptes, séances, photos, nutrition, contact, administration |
+| `public/css/` | Le thème noir et rouge, découpé par page (chargé dans l’ordre des numéros) |
+| `public/app.js`, `public/js/` | La logique de l’app (voir « Organisation du code » plus bas) |
 | `public/firebase-config.js` | Les identifiants de ton projet Firebase (à remplir) |
 | `public/vendor/firebase.js` | Le SDK Firebase, déjà empaqueté (`npm run build` pour le régénérer) |
 | `public/sw.js`, `public/manifest.webmanifest`, `public/icons/` | Installation sur l’écran d’accueil et fonctionnement hors ligne |
@@ -122,30 +122,20 @@ dans `public/index.html` y affiche la page « L'app déménage ».
 
 ## Organisation du code (`public/js/`)
 
-`public/app.js` charge les parties de l'app dans l'ordre. Chaque fichier correspond à un sujet :
+`public/app.js` charge les parties de l'app dans l'ordre. Chaque dossier correspond à un sujet ; dans un dossier
+découpé, `index.js` regroupe ce que les autres fichiers utilisent (et garde l'ordre de chargement d'origine).
+Le détail (où modifier quoi) est dans `CLAUDE.md` à la racine.
 
-| Fichier | Contenu |
+| Dossier | Contenu |
 |---|---|
-| `boot.js` | Déménagement et contrôle de version (tout premier chargé) |
-| `core.js` | Firebase, constantes, état, utilitaires — ne dépend d'aucun autre fichier |
-| `store.js` | Enregistrement (profil, séances, statistiques) et navigation entre écrans |
-| `theme.js` | Couleurs et modes sombre / clair |
-| `account.js` | Connexion, inscription, profil |
-| `seances.js` | Calendrier, fiche de séance, photos, types |
-| `workout.js` | Plusieurs séances par jour, « dernière fois », cordes, bibliothèque, records en direct, routines, programmes |
-| `timer.js` | Minuteur de repos et départs |
-| `ideas.js` | CrossFit, idées, records, courbes de progression |
-| `home.js` | Accueil, Let's go, série, objectif, bilan du mois |
-| `muscles.js` | Carte musculaire |
-| `howto.js` | Bouton « ? » et fenêtre « Comment faire » (départ / arrivée, bouton d'animation, repères, placement des mains) |
-| `tour.js` | Tutoriel guidé page par page (élément mis en évidence + bulle), une fois par compte et par page, page « Tutoriel » pour le revoir ; `?reset-tutoriels` remet le suivi à zéro |
-| `figure.js` | Mannequin articulé (profil et face) et matériel dessinés en SVG : longueurs fixes, poses données par des angles |
-| `moves.js` | Positions de chaque exercice pour « Comment faire » (n'importe que `figure.js`) |
-| `nutrition.js` | Compléments et créatine |
-| `friends.js` | Amis, séances partagées, messages |
-| `social.js` | Activité, fil d'actu, commentaires, défis, classements |
-| `admin.js` | Administration et modération |
-| `contact.js`, `faq.js`, `install.js`, `extras.js` | Contact, assistant, installation, export / sauvegarde |
-| `main.js` | Abonnements temps réel et démarrage |
+| `commun/` | Démarrage (`boot.js`, tout premier chargé), base (`core.js`), enregistrement et navigation (`store.js`), thème, minuteur, installation, export, tutoriel guidé (`tutoriel.js`), fenêtre « Nouveautés » (`nouveautes.js`), démarrage temps réel (`main.js`) |
+| `pages/` | Accueil, compte (connexion, profil), nutrition, contact, assistant (FAQ), carte musculaire, administration |
+| `seances/` | Calendrier, fiche du jour (une fiche par sport), séries, photos, types de séance |
+| `entrainement/` | Plusieurs séances par jour, « dernière fois », cordes, bibliothèque, records en direct, routines, programmes |
+| `idees/` | CrossFit, idées de séances, records, catégories, courbes de progression |
+| `social/`, `amis/` | Activité, fil, commentaires, défis, classements ; amis, page d'un ami, conversation |
+| `comment-faire/` | Bouton « ? » et fenêtre « Comment faire » (recherche de la fiche, placement des mains, animation) |
+| `silhouette/` | Mannequin articulé (profil et face) et matériel dessinés en SVG : longueurs fixes, poses données par des angles |
+| `exercices/` | Une fiche par exercice, rangée par groupe (`exercices/<groupe>/<exercice>.js`), aides communes dans `_communs.js` |
 
-Règles à respecter : `core.js` n'importe jamais les autres fichiers (il doit être prêt en premier), et au chargement d'un fichier (hors fonctions) on n'utilise que des éléments de `core.js` (ou de `figure.js`, qui n'importe rien).
+Règles à respecter : `commun/core.js` n'importe jamais les autres fichiers (il doit être prêt en premier), et au chargement d'un fichier (hors fonctions) on n'utilise que des éléments de `core.js` (ou de `silhouette/`, qui n'importe rien).

@@ -5,12 +5,12 @@ import { courseHTML } from "./fiche-course.js";
 import { crossfitHTML } from "./fiche-crossfit.js";
 import { calisHTML, choiceHTML, muscuHTML, photoTile } from "./fiche-muscu-calis.js";
 import { loadPhotos } from "./photos.js";
-import { $, DAYS, DISC, MONTHS, MOODS, S, cap, clone, dayMeta, esc, isEmpty, parse, typeOf } from "../core.js";
+import { $, DAYS, DISC, MONTHS, MOODS, S, cap, clone, dayMeta, esc, isEmpty, parse, typeOf } from "../commun/core.js";
 import { myReactsHTML } from "../amis/index.js";
 import { renderCrossfit } from "../idees/index.js";
 import { myCommentsHTML } from "../social/index.js";
-import { persistDay } from "../store.js";
-import { tourCheck } from "../tour.js";
+import { persistDay } from "../commun/store.js";
+import { tourCheck } from "../commun/tutoriel.js";
 import { announcePRs, sessTabsHTML, sessionPRs } from "../entrainement/index.js";
 
 export function renderSheet() {

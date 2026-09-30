@@ -1,8 +1,8 @@
 // Assistant : questions fréquentes, sans IA.
-import { $, BENCH, S } from "./core.js";
-import { go } from "./store.js";
-import { lsGet, lsSet } from "./install.js";
-import { who } from "./amis/index.js";
+import { $, BENCH, S } from "../commun/core.js";
+import { go } from "../commun/store.js";
+import { lsGet, lsSet } from "../commun/install.js";
+import { who } from "../amis/index.js";
 
 /* ============================================================
    Assistant (FAQ, sans IA)

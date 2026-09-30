@@ -2,12 +2,12 @@
 import { openChat, reportContent } from "./conversation.js";
 import { REACTS, SOC, dirOf } from "./etat.js";
 import { blockUser } from "./liste.js";
-import { $, DAYS, DEFAULT_TYPES, S, armed, avatarHTML, collection, dayMeta, dayOf, db, discOf, doc, esc, fmtDur, getDoc, getDocs, isEmpty, limit, nf, orderBy, parse, query, runPace, runSecs, titleOf, where, wodScore } from "../core.js";
+import { $, DAYS, DEFAULT_TYPES, S, armed, avatarHTML, collection, dayMeta, dayOf, db, discOf, doc, esc, fmtDur, getDoc, getDocs, isEmpty, limit, nf, orderBy, parse, query, runPace, runSecs, titleOf, where, wodScore } from "../commun/core.js";
 import { cordesText, toast } from "../entrainement/index.js";
 import { MONTHS_S } from "../idees/index.js";
 import { sessionSummary } from "../seances/index.js";
 import { commentsHTML, toggleReact, trySession } from "../social/index.js";
-import { go } from "../store.js";
+import { go } from "../commun/store.js";
 
 /* ---------- Page d'un ami : records, séances, réactions ---------- */
 export async function openFriend(uid) {

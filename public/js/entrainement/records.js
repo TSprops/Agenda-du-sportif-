@@ -1,6 +1,6 @@
 // Entraînement : records battus en direct et petit message (toast).
 import { exKey } from "./derniere-fois.js";
-import { $, S, discOf, esc, nf, runPace, runSecs } from "../core.js";
+import { $, S, discOf, esc, nf, runPace, runSecs } from "../commun/core.js";
 import { doneSet } from "../idees/index.js";
 import { isDone } from "../seances/index.js";
 

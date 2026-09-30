@@ -1,12 +1,12 @@
 // Amis : état partagé (SOC), fiche publique, synchronisation, compteurs de non-lus.
 import { renderFriends } from "./liste.js";
 import { myReactsHTML } from "./page-ami.js";
-import { $, BENCH, LIFTS, S, avatarHTML, collection, dayVolume, db, doc, getDoc, onSnapshot, plural, query, runKm, setDoc, todayK, where } from "../core.js";
-import { norm } from "../faq.js";
-import { streakInfo } from "../home.js";
+import { $, BENCH, LIFTS, S, avatarHTML, collection, dayVolume, db, doc, getDoc, onSnapshot, plural, query, runKm, setDoc, todayK, where } from "../commun/core.js";
+import { norm } from "../pages/faq.js";
+import { streakInfo } from "../pages/accueil.js";
 import { CALIS_PRS, MUSCU_LIFTS, RUN_PRS, benchEntries, benchText, benchValue, cfData, prBest, prText, prsData } from "../idees/index.js";
 import { acceptedFriends, activityList, bestLifts, monthShare, newChallenges, renderMessages, renderSocial, seenAct, subscribeChallenges } from "../social/index.js";
-import { go, saveProfile } from "../store.js";
+import { go, saveProfile } from "../commun/store.js";
 
 /* ============================================================
    Amis, séances partagées et messages

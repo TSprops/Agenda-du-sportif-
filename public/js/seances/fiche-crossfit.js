@@ -1,6 +1,6 @@
 // Séances, fiche du jour : CrossFit (WOD).
 import { effortCard } from "./fiche-muscu-calis.js";
-import { BENCH, CF_MOVES, DISC, WOD_FORMATS, WOD_HINTS, esc } from "../core.js";
+import { BENCH, CF_MOVES, DISC, WOD_FORMATS, WOD_HINTS, esc } from "../commun/core.js";
 
 export function crossfitHTML(c) {
   const w = c.wod || {}, f = w.format, val = v => v === undefined || v === null ? "" : esc(v);

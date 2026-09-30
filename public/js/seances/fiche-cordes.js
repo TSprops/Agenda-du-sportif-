@@ -1,6 +1,6 @@
 // Séances, fiche du jour : cordes.
 import { lastComparable } from "./series.js";
-import { MONTHS, S, parse } from "../core.js";
+import { MONTHS, S, parse } from "../commun/core.js";
 import { cordesExHTML } from "../entrainement/index.js";
 
 // Les anciennes séances « Musculation · Cordes » deviennent des séances Cordes.

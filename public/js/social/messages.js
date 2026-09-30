@@ -1,5 +1,5 @@
 // Social : liste de toutes les conversations.
-import { $, S, ago, esc } from "../core.js";
+import { $, S, ago, esc } from "../commun/core.js";
 import { SOC, openChat, otherOf, unreadOf, who } from "../amis/index.js";
 
 /* ---------- Messages : toutes les conversations ---------- */

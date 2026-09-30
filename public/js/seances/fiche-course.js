@@ -1,6 +1,6 @@
 // Séances, fiche du jour : course à pied (blocs fractionné, seuil…).
 import { effortCard } from "./fiche-muscu-calis.js";
-import { RUN_TYPES, esc, pad, runCalcHTML } from "../core.js";
+import { RUN_TYPES, esc, pad, runCalcHTML } from "../commun/core.js";
 
 export function courseHTML(c) {
   const r = c.run || {}, rt = RUN_TYPES.find(x => x.id === c.runType), blocks = r.blocks || [];

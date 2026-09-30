@@ -1,6 +1,6 @@
 // « Comment faire » : retrouver la fiche d'un exercice à partir de son nom.
 import { HOW } from "../exercices/index.js";
-import { norm } from "../faq.js";
+import { norm } from "../pages/faq.js";
 
 // Noms tapés à la main : on retrouve la fiche grâce à quelques mots-clés.
 const MOVE_WORDS = [

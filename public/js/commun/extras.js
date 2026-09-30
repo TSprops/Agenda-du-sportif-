@@ -1,10 +1,10 @@
 // Export de mes données, sauvegarde admin et état du réseau.
 import { $, S, collection, db, getDocs, limitToLast, orderBy, query, todayK } from "./core.js";
 import { subCol } from "./store.js";
-import { renderAdmin } from "./admin.js";
+import { renderAdmin } from "../pages/admin.js";
 import { lsSet } from "./install.js";
-import { SOC, otherOf } from "./amis/index.js";
-import { acceptedFriends, loadFeed } from "./social/index.js";
+import { SOC, otherOf } from "../amis/index.js";
+import { acceptedFriends, loadFeed } from "../social/index.js";
 
 /* ============================================================
    Mes données : export (droit d'accès et de portabilité)

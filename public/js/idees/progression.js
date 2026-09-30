@@ -1,8 +1,8 @@
 // Progression : courbes SVG par exercice et par activité.
 import { benchEntries, cfData, shortDate } from "./crossfit.js";
 import { fmtTime } from "./idees-seances.js";
-import { $, BENCH, DISC, LIFTS, RUN_TYPES, S, discOf, esc, nf, runSecs, typeOf } from "../core.js";
-import { norm } from "../faq.js";
+import { $, BENCH, DISC, LIFTS, RUN_TYPES, S, discOf, esc, nf, runSecs, typeOf } from "../commun/core.js";
+import { norm } from "../pages/faq.js";
 
 /* ---------- Graphiques de progression (courbes SVG) ---------- */
 const CHARTS = {};

@@ -1,12 +1,12 @@
 // Social : défis entre amis.
 import { acceptedFriends, bannedStop, markChallengesSeen } from "./accueil.js";
 import { myCommentsHTML } from "./commentaires.js";
-import { $, S, addDoc, armed, arrayRemove, collection, dayOf, dayVolume, db, deleteDoc, doc, esc, key, limit, nf, onSnapshot, orderBy, parse, query, runKm, show, todayK, updateDoc, where } from "../core.js";
+import { $, S, addDoc, armed, arrayRemove, collection, dayOf, dayVolume, db, deleteDoc, doc, esc, key, limit, nf, onSnapshot, orderBy, parse, query, runKm, show, todayK, updateDoc, where } from "../commun/core.js";
 import { toast } from "../entrainement/index.js";
 import { SOC, dirOf, refreshSocial, reportContent } from "../amis/index.js";
-import { addDays, counts } from "../home.js";
+import { addDays, counts } from "../pages/accueil.js";
 import { shortDate } from "../idees/index.js";
-import { go } from "../store.js";
+import { go } from "../commun/store.js";
 
 /* ---------- Défis entre amis ---------- */
 const METRICS = { seances: ["Séances", v => v > 1 ? "séances" : "séance", v => String(v)], jours: ["Jours actifs", v => v > 1 ? "jours" : "jour", v => String(v)], km: ["Km courus", () => "km", v => nf.format(v)], volume: ["Volume soulevé", () => "t", v => nf.format(Math.round(v / 100) / 10)] };

@@ -2,8 +2,8 @@
 import { flush, openDay } from "./feuille.js";
 import { dropPhoto } from "./photos.js";
 import { renderTypes } from "./types.js";
-import { $, DAYS, DISC, MONTHS, RUN_TYPES, S, cap, dayMeta, dayVolume, esc, fmtDur, key, nf, pad, parse, runKm, runPace, runSecs, sessionsOn, titleOf, todayK, wodScore } from "../core.js";
-import { persistDay } from "../store.js";
+import { $, DAYS, DISC, MONTHS, RUN_TYPES, S, cap, dayMeta, dayVolume, esc, fmtDur, key, nf, pad, parse, runKm, runPace, runSecs, sessionsOn, titleOf, todayK, wodScore } from "../commun/core.js";
+import { persistDay } from "../commun/store.js";
 import { toast } from "../entrainement/index.js";
 
 /* ============================================================

@@ -1,12 +1,12 @@
 // Accueil, Let's go, série de semaines, objectif et bilan du mois.
 import { $, DAYS, DISC, MONTHS, MUSCLES, S, avatarHTML, cap, dayMeta, dayOf, dayVolume, discOf, esc, fmtDur, isEmpty, key, nf,
-  pad, parse, runKm, runSecs, sessionsOn, titleOf, todayK } from "./core.js";
-import { go, refresh, saveProfile } from "./store.js";
-import { openDay } from "./seances/index.js";
+  pad, parse, runKm, runSecs, sessionsOn, titleOf, todayK } from "../commun/core.js";
+import { go, refresh, saveProfile } from "../commun/store.js";
+import { openDay } from "../seances/index.js";
 import { nutOf } from "./nutrition.js";
-import { refreshInstallBtn } from "./install.js";
-import { refreshSocial } from "./amis/index.js";
-import { freshKey, programCardHTML, programState, routines, startWorkout, toTuple } from "./entrainement/index.js";
+import { refreshInstallBtn } from "../commun/install.js";
+import { refreshSocial } from "../amis/index.js";
+import { freshKey, programCardHTML, programState, routines, startWorkout, toTuple } from "../entrainement/index.js";
 import { muscleLoad } from "./muscles.js";
 
 /* ============================================================

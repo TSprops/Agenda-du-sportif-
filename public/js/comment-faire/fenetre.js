@@ -2,8 +2,8 @@
 import { $h, playViews, stopLive } from "./lecture.js";
 import { GRIPS, gripSVG } from "./mains.js";
 import { moveOf } from "./recherche.js";
-import { esc } from "../core.js";
-import { bodySVG } from "../muscles.js";
+import { esc } from "../commun/core.js";
+import { bodySVG } from "../pages/muscles.js";
 import { figure, frameBox } from "../silhouette/index.js";
 import { musclesOf } from "../entrainement/index.js";
 

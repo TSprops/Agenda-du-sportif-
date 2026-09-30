@@ -1,5 +1,5 @@
 // Page Contact.
-import { $, OBJETS, S, addDoc, collection, db, esc, fmtDate, getDocs, query, show, where } from "./core.js";
+import { $, OBJETS, S, addDoc, collection, db, esc, fmtDate, getDocs, query, show, where } from "../commun/core.js";
 
 /* ============================================================
    Accueil

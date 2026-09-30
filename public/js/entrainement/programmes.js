@@ -1,8 +1,8 @@
 // Entraînement : programmes (progression, lancement de la séance du jour).
 import { toast } from "./records.js";
 import { startWorkout } from "./routines.js";
-import { $, PROGRAMS, S, armed, esc, todayK } from "../core.js";
-import { refresh, saveProfile } from "../store.js";
+import { $, PROGRAMS, S, armed, esc, todayK } from "../commun/core.js";
+import { refresh, saveProfile } from "../commun/store.js";
 
 // Programme suivi : { id, start, done } dans le profil.
 export function programState() {
