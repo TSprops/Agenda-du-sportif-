@@ -25,8 +25,16 @@ const ICO = {
   star: '<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4l-5.3 3 1.2-6-4.5-4.1 6-.7z"/>',
   runner: '<circle cx="14.5" cy="4.5" r="2"/><path d="M7 21l3.5-6 3 2.5V22M5.5 11.5l3.5-3 4 1 2.5 3.5h3.5M10.5 15l-1.5-4"/>',
   road: '<path d="M8 3L4 21M16 3l4 18M12 5v2M12 11v2M12 17v2"/>',
-  plate: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.2"/>',
-  mountain: '<path d="M3 20l6-10 4 6 3-4 5 8z"/>'
+  plate: '<path d="M9 8V6.5a3 3 0 0 1 6 0V8"/><path d="M6.5 8h11l2.5 13H4z"/>',
+  mountain: '<path d="M3 20l6-10 4 6 3-4 5 8z"/>',
+  wind: '<path d="M3 8h11a3 3 0 1 0-3-3M3 12h15a3 3 0 1 1-3 3M3 16h8"/>',
+  pin: '<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  route: '<circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h8a3 3 0 0 0 0-6H8a3 3 0 0 1 0-6h8"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
+  bar: '<path d="M2 12h20M5 8v8M8 6v12M16 6v12M19 8v8"/>',
+  anvil: '<path d="M4 7h13a4 4 0 0 1-4 4h-2v4h2l2 4H6l2-4h1v-4H6a2 2 0 0 1-2-2z"/>',
+  temple: '<path d="M4 21h16M6 21V10M10 21V10M14 21V10M18 21V10M3 10l9-6 9 6z"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9L7 7M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>'
 };
 const svg = (ico, cls = "hex-ic") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICO[ico]}</svg>`;
 const NDISC = Object.keys(DISC).length;
@@ -39,8 +47,12 @@ const FAMILIES = [
   ["Records", [["r1", "trophy", "Premier record", "Un record battu pendant une séance", "records", 1], ["r10", "target", "Chasseur", "10 records battus", "records", 10],
     ["r25", "gem", "Collectionneur", "25 records battus", "records", 25]]],
   ["Variété", [["d3", "compass", "Touche-à-tout", "3 activités différentes pratiquées", "disc", 3], ["d5", "star", "Complet", `Les ${NDISC} activités de l'app pratiquées`, "disc", NDISC]]],
-  ["Course", [["k10", "runner", "Premiers km", "10 km courus au total", "km", 10], ["k100", "road", "Centurion", "100 km courus au total", "km", 100]]],
-  ["Volume", [["t10", "plate", "10 tonnes", "10 tonnes soulevées au total en musculation", "tons", 10], ["t100", "mountain", "Titan", "100 tonnes soulevées au total", "tons", 100]]]
+  ["Course", [["k10", "runner", "Premiers km", "10 km courus au total", "km", 10], ["k25", "wind", "Endurant", "25 km courus au total", "km", 25],
+    ["k50", "pin", "Grand fond", "50 km courus au total", "km", 50], ["k100", "road", "Centurion", "100 km courus au total", "km", 100],
+    ["k200", "route", "Ultra", "200 km courus au total", "km", 200], ["k500", "globe", "Globe-trotteur", "500 km courus au total", "km", 500]]],
+  ["Volume", [["t10", "plate", "10 tonnes", "10 tonnes soulevées au total en musculation", "tons", 10], ["t25", "bar", "Costaud", "25 tonnes soulevées au total", "tons", 25],
+    ["t50", "anvil", "Force brute", "50 tonnes soulevées au total", "tons", 50], ["t100", "mountain", "Titan", "100 tonnes soulevées au total", "tons", 100],
+    ["t200", "temple", "Colosse", "200 tonnes soulevées au total", "tons", 200], ["t500", "sun", "Hercule", "500 tonnes soulevées au total", "tons", 500]]]
 ].map(([name, list]) => ({ name, list: list.map(([id, ico, n, desc, m, goal]) => ({ id, ico, name: n, desc, m, goal })) }));
 const TROPHIES = FAMILIES.flatMap(f => f.list);
 
@@ -101,7 +113,7 @@ export function renderTrophees() {
       const detail = sel.on ? `<b>${esc(sel.name)}</b> · ${esc(sel.desc)}<span class="tf-ok">Obtenu${sel.at ? " le " + esc(date(sel.at)) : ""}</span>`
         : `<b>${esc(sel.name)}</b> · ${esc(sel.desc)}<span>${fmtV(sel, sel.v)} / ${sel.goal}${unit(sel)}</span>`;
       return `<section class="tfam"><div class="tfam-top"><span class="lbl">${esc(f.name)}</span><em>${k}/${l.length}</em></div>
-        <div class="tfam-row">${l.map(t => `<button type="button" class="tbadge${t.on ? " on" : ""}${t === sel ? " sel" : ""}" data-trsel="${fi}:${t.id}" aria-label="${esc(t.name)} : ${t.on ? "obtenu" : "à débloquer"}">
+        <div class="tfam-row${l.length === 6 ? " six" : ""}">${l.map(t => `<button type="button" class="tbadge${t.on ? " on" : ""}${t === sel ? " sel" : ""}" data-trsel="${fi}:${t.id}" aria-label="${esc(t.name)} : ${t.on ? "obtenu" : "à débloquer"}">
           <span class="hex${t.on ? " on" : ""}">${svg(t.ico)}</span><span class="tb-n">${esc(t.name)}</span></button>`).join("")}</div>
         <div class="tfam-detail">${detail}</div>
         ${!sel.on ? `<div class="tfam-bar" role="img" aria-label="${fmtV(sel, sel.v)} sur ${sel.goal}"><i style="width:${Math.min(100, Math.round(sel.v / sel.goal * 100))}%"></i></div>` : ""}

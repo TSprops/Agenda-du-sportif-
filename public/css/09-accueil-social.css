@@ -191,3 +191,4 @@
 @media (prefers-reduced-motion: reduce){.fete-card{animation:none}}
 /* Célébration : confettis au-dessus de tout, sans gêner les touchers */
 .confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:200}
+.tfam-row.six{grid-template-columns:repeat(3,1fr);gap:10px 4px}
