@@ -74,8 +74,17 @@ module.exports = async function appTests(t) {
     await A.click("[data-pmetric='1rm']");
     t("progression : 1RM estimé", /102 kg/.test(await A.textContent("#progBody")) && await A.getAttribute("[data-pmetric='1rm']", "aria-pressed"), "true");
     await home(A); await A.click("[data-go=go]"); await A.click(".trophy-strip");
-    t("trophées : page avec « Premier pas » débloqué", await A.$$eval("#trophyBody .trophy.on b", x => x.map(e => e.textContent).includes("Premier pas")), true);
-    t("trophées : les autres restent à débloquer, avec leur progression", await A.$$eval("#trophyBody .trophy:not(.on) .tr-bar", x => x.length > 5), true);
+    t("trophées : page avec « Premier pas » débloqué", await A.$$eval("#trophyBody .tbadge.on .tb-n", x => x.map(e => e.textContent).includes("Premier pas")), true);
+    t("trophées : rangés par famille, les autres restent à débloquer", await A.evaluate(() => [document.querySelectorAll("#trophyBody .tfam").length, document.querySelectorAll("#trophyBody .tbadge:not(.on)").length > 5].join()), "6,true");
+    await A.click("#trophyBody .tbadge:not(.on)");
+    t("trophées : toucher un badge affiche son détail", /\d+ \/ \d+/.test(await A.textContent("#trophyBody .tfam-detail")), true);
+    // Badge au centre de l'écran (désactivé pendant les tests pour ne pas bloquer les touchers) : essai direct.
+    await A.evaluate(async () => { localStorage.removeItem("fete-off"); (await import("/js/commun/fete.js")).showBadge({ ico: "", kicker: "Trophée débloqué", title: "Essai", sub: "Test" }); });
+    await A.waitForSelector("#feteBadge:not([hidden])");
+    t("célébration : badge au centre, bouton Continuer en focus", await A.evaluate(() => document.getElementById("feteTitle").textContent + "|" + document.activeElement.textContent), "Essai|Continuer");
+    await A.click("#feteBadge [data-fete-ok]");
+    t("célébration : fermée par Continuer", await A.$eval("#feteBadge", e => e.hidden), true);
+    await A.evaluate(() => localStorage.setItem("fete-off", "1"));
 
     // Programme et routine : la séance se prépare toute seule.
     await home(A); await A.click("[data-go=go]"); await A.click(".go-tile[data-go=programs]"); await A.click("[data-pgstart=ppl]"); await A.waitForTimeout(300);

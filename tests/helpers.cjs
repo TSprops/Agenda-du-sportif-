@@ -33,7 +33,7 @@ async function signupPage(browser, pseudo) {
   p.on("pageerror", e => p.errs.push(e.message));
   await p.goto(BASE); await p.waitForSelector("#v-login:not([hidden])");
   // Tutoriels guidés coupés pour les parcours de test (ils ont leur propre test).
-  await p.evaluate(() => { localStorage.setItem("help-hint-off", "1"); localStorage.setItem("tours-off", "1"); });
+  await p.evaluate(() => { localStorage.setItem("help-hint-off", "1"); localStorage.setItem("tours-off", "1"); localStorage.setItem("fete-off", "1"); });
   p.email = pseudo.toLowerCase() + Date.now() + "@test.fr";
   await p.click("#tabUp"); await p.fill("#auEmail", p.email); await p.fill("#auPass", "secret123"); await p.click("#auSubmit");
   await p.waitForSelector("#v-onboard:not([hidden])"); await p.fill("#su-pseudo", pseudo);

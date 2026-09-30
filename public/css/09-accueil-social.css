@@ -155,23 +155,39 @@
 .steps li.warn{border-color:color-mix(in srgb,var(--red) 55%,var(--line));background:var(--red-soft)}
 .steps li.warn .n{background:var(--ink);color:var(--ground)}
 
-/* Trophées : bandeau Let's go et page « Mes trophées » */
-.trophy-strip{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;border-radius:18px;background:linear-gradient(135deg,color-mix(in srgb,#FFD60A 16%,var(--surface)),var(--surface));border:1px solid color-mix(in srgb,#FFD60A 40%,var(--line))}
+/* Trophées : badges hexagonaux aux couleurs du thème (bandeau Let's go, page « Mes trophées », célébration) */
+.hex{width:58px;height:64px;flex:none;display:grid;place-items:center;position:relative;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:var(--line);color:var(--muted)}
+.hex::after{content:"";position:absolute;inset:2px;clip-path:inherit;background:var(--surface-2)}
+.hex .hex-ic{position:relative;z-index:1;width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hex.on{background:linear-gradient(160deg,var(--red-hi),var(--red));color:var(--on-red)}
+.hex.on::after{display:none}
+.hex.sm{width:40px;height:44px}.hex.sm .hex-ic{width:20px;height:20px}
+.hex.big{width:112px;height:124px}.hex.big .hex-ic{width:52px;height:52px;stroke-width:1.6}
+.trophy-strip{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;border-radius:18px;background:var(--surface);border:1px solid var(--line)}
 .trophy-strip:active{transform:scale(.98)}
-.ts-ico{font-size:30px;line-height:1}
 .ts-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .ts-main span{font-size:12.5px;color:var(--muted)}
 .trophy-strip .arrow{font-size:22px;color:var(--muted)}
-.trophy-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.trophy{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;padding:14px 10px;border-radius:18px;background:var(--surface);border:1px solid var(--line)}
-.trophy .tr-ico{font-size:38px;line-height:1.1;filter:grayscale(1);opacity:.35}
-.trophy b{font-size:14.5px}
-.tr-desc{font-size:12px;color:var(--muted);line-height:1.35}
-.trophy.on{border-color:color-mix(in srgb,#FFD60A 55%,var(--line));background:linear-gradient(160deg,color-mix(in srgb,#FFD60A 14%,var(--surface)),var(--surface))}
-.trophy.on .tr-ico{filter:none;opacity:1}
-.tr-ok{font-size:11.5px;font-weight:700;color:#2FBF71;margin-top:2px}
-.tr-bar{width:100%;height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:4px}
-.tr-bar i{display:block;height:100%;border-radius:3px;background:var(--red-hi)}
-.tr-left{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tfam{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 14px 16px;display:flex;flex-direction:column;gap:12px}
+.tfam-top{display:flex;justify-content:space-between;align-items:baseline}
+.tfam-top em{font-style:normal;font-size:12.5px;font-weight:600;color:var(--muted)}
+.tfam-row{display:grid;grid-template-columns:repeat(5,1fr);gap:6px 4px}
+.tbadge{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:4px 0;border-radius:12px}
+.tbadge .tb-n{font-size:11px;line-height:1.2;color:var(--muted)}
+.tbadge.on .tb-n{color:var(--ink);font-weight:600}
+.tbadge.sel .tb-n{text-decoration:underline;text-decoration-color:var(--red-hi);text-decoration-thickness:2px;text-underline-offset:4px}
+.tfam-detail{font-size:13px;color:var(--muted);line-height:1.4}
+.tfam-detail b{color:var(--ink)}
+.tfam-detail span{display:block;margin-top:2px;font-weight:600;font-variant-numeric:tabular-nums}
+.tfam-detail .tf-ok{color:var(--red-hi)}
+.tfam-bar{height:4px;border-radius:2px;background:var(--line);overflow:hidden;margin-top:-4px}
+.tfam-bar i{display:block;height:100%;border-radius:2px;background:var(--red-hi)}
+.fete-veil{position:fixed;inset:0;z-index:150;display:grid;place-items:center;padding:24px;background:color-mix(in srgb,var(--ground) 78%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.fete-card{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;max-width:340px;animation:feteIn .45s cubic-bezier(.2,1.4,.4,1)}
+.fete-k{color:var(--red-hi);margin-top:6px}
+.fete-t{margin:0;font-family:var(--display);font-weight:800;font-size:40px;line-height:1;text-transform:uppercase}
+.fete-ok{min-width:220px;margin-top:6px}
+@keyframes feteIn{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){.fete-card{animation:none}}
 /* Célébration : confettis au-dessus de tout, sans gêner les touchers */
 .confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:200}
