@@ -15,7 +15,14 @@ module.exports = async function appTests(t) {
     await A.fill("#r-0-0", "8"); await A.fill("#k-0-0", "80"); await A.click("#go-0"); await A.click("#rtSkip");
     await A.click("[data-a=close]"); await A.waitForTimeout(500);
     await A.click("#v-seances .back"); await A.click("[data-gonew]"); await A.click("[data-a=disc][data-id=muscu]"); await A.click("[data-a=type][data-id=push]");
-    await A.click("[data-a=add-ex]"); await A.fill("#libQ", "couch"); await A.waitForTimeout(200); await A.click('#libList [data-lib="Développé couché"]');
+    await A.click("[data-a=add-ex]"); await A.fill("#libQ", "couch"); await A.waitForTimeout(200);
+    // « ? » directement dans la recherche : on voit le mouvement sans ajouter l'exercice.
+    await A.click('#libList [data-how="lib"][data-name="Développé couché"]'); await A.waitForSelector("#howSheet:not([hidden])");
+    t("comment faire depuis la recherche", await A.textContent("#howTitle"), "Développé couché");
+    t("comment faire : placement des mains", await A.$eval("#howGrip", e => !e.hidden && !!e.querySelector("svg.hg")), true);
+    await A.click("#howClose");
+    t("recherche toujours ouverte, rien d'ajouté", await A.isVisible('#libList [data-lib="Développé couché"]') && !(await A.$("#k-0-0")), true);
+    await A.click('#libList [data-lib="Développé couché"]');
     t("poids de la dernière fois repris", await A.inputValue("#k-0-0"), "80");
     // « Comment faire » : silhouette animée.
     t("comment faire : rien de dessiné avant l'ouverture", await A.$eval("#howStage", e => e.children.length), 0);
@@ -23,7 +30,7 @@ module.exports = async function appTests(t) {
     t("comment faire : zone tactile ≥ 44 px", await A.$eval("[data-how='0']", e => e.getBoundingClientRect().width >= 44 && e.getBoundingClientRect().height >= 44), true);
     await A.click("[data-how='0']"); await A.waitForSelector("#howSheet:not([hidden])");
     t("comment faire : focus sur la croix", await A.evaluate(() => document.activeElement.id), "howClose");
-    t("comment faire : deux poses en boomerang", await A.$$eval("#howStage .how-anim svg", x => x.length), 2);
+    t("comment faire : profil et face en boomerang", await A.$$eval("#howStage .how-anim svg", x => x.length), 4);
     t("comment faire : fond inerte", await A.$eval("#sheet", e => e.inert), true);
     await A.keyboard.press("Escape");
     t("comment faire : fermé par Échap", await A.$eval("#howSheet", e => e.hidden), true);
@@ -32,7 +39,7 @@ module.exports = async function appTests(t) {
     await A.click("[data-how='0']"); await A.click("#howBackdrop", { position: { x: 20, y: 20 } });
     t("comment faire : fermé par un toucher sur le fond", await A.$eval("#howSheet", e => e.hidden), true);
     await A.emulateMedia({ reducedMotion: "reduce" }); await A.click("[data-how='0']");
-    t("comment faire : sans animation, poses côte à côte", await A.$$eval("#howStage.side figure", x => x.length), 2);
+    t("comment faire : sans animation, poses côte à côte", await A.$$eval("#howStage.side figure", x => x.length), 4);
     await A.click("#howClose"); await A.emulateMedia({ reducedMotion: "no-preference" });
     await A.fill("#r-0-0", "6"); await A.fill("#k-0-0", "85"); await A.click("#go-0"); await A.waitForTimeout(300);
     t("record en direct", /Nouveau record/.test(await A.textContent("#toast")), true);

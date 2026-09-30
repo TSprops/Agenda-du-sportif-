@@ -584,8 +584,10 @@ html{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:10
 .lib-chips::-webkit-scrollbar{display:none}
 .lib-chips .chip{flex:none}
 .lib-group{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding-inline:12px}
-.lib-row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding-block:10px;border-bottom:1px solid var(--line)}
-.lib-group .lib-row:last-child{border-bottom:0}
+.lib-item{display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--line)}
+.lib-group .lib-item:last-child{border-bottom:0}
+.lib-item .how-btn{margin:0 -6px 0 0}
+.lib-row{display:flex;align-items:center;gap:12px;flex:1;min-width:0;width:100%;text-align:left;padding-block:10px}
 .lib-row .main{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
 .lib-row .main b{font-weight:700}
 .lib-row .main span{font-size:12.5px;color:var(--muted)}
@@ -846,3 +848,17 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 @keyframes howBoomA{0%,12%{opacity:1}50%,62%{opacity:0}100%{opacity:1}}
 .how-cue{margin:0;font-size:14.5px;line-height:1.45}
 @media (prefers-reduced-motion: reduce){.how-anim .how-a,.how-anim .how-b{animation:none}}
+.how-stage.two.boom{grid-template-columns:1fr 1fr}
+.how-view{min-width:0;display:flex;flex-direction:column;justify-content:flex-end;gap:4px}
+.how-vt{margin:0;text-align:center;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--red-hi)}
+.how-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.how-grip{display:flex;flex-direction:column;gap:6px;background:var(--surface-2);border:1px solid var(--line);border-radius:16px;padding:12px}
+.how-grip p:last-child{margin:0;font-size:14px;line-height:1.45}
+.hg{display:block;width:100%;max-width:280px;margin:0 auto}
+.hg-body{fill:none;stroke:var(--muted);stroke-width:1.6}
+.hg-guide{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3;opacity:.7}
+.hg-bar{stroke:color-mix(in srgb,var(--ink) 45%,transparent);stroke-width:3.5;stroke-linecap:round}
+.hg-hand{fill:var(--red-hi)}
+.hg-thumb{stroke:var(--red-hi);stroke-width:2.6;stroke-linecap:round}
+.hg-dim{fill:none;stroke:var(--muted);stroke-width:1}
+.hg-txt{fill:var(--muted);font-size:7.5px;font-family:var(--body,sans-serif)}

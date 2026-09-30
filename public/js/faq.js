@@ -9,7 +9,7 @@ import { who } from "./friends.js";
    ============================================================ */
 const FAQ = [
   { q: "Comment savoir faire un exercice ?", k: "comment faire exercice mouvement technique animation silhouette aide executer",
-    a: "Dans ta séance, touche le petit « ? » rouge à côté du nom de l’exercice : une silhouette animée montre le mouvement (départ puis arrivée, en boucle), avec un conseil de technique.\nLes parties du corps qui travaillent sont en rouge." },
+    a: "Touche le petit « ? » rouge : dans ta séance à côté du nom de l’exercice, ou directement dans la recherche d’exercices (sans l’ajouter).\nLe mouvement est animé de profil et de face (départ puis arrivée, en boucle), avec un conseil de technique et, pour les pompes, développés et tractions, un schéma du placement des mains.\nLes muscles qui travaillent sont en rouge." },
   { q: "C’est quoi Let’s go ?", k: "lets go let go lancer demarrer seance commencer accueil",
     a: "Let’s go, c’est ton point de départ pour t’entraîner : démarre une séance, lance une routine ou la prochaine séance de ton programme.\nTu y trouves aussi le calendrier, les idées de séances, tes records, ta progression, la carte musculaire et ton bilan du mois." },
   { q: "Comment créer une routine ?", k: "routine enregistrer sauvegarder modele refaire seance favorite",
