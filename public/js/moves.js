@@ -172,3 +172,66 @@ Object.assign(HOW, {
       { hip: [118, 126], torso: 93, neck: 92, near: { wristAt: [110, GROUND - 3], h: "flat", hand: 180, th: -90, sh: -90, ft: -90 }, eq: [wall(132)] }], ["Bras tendus contre le mur", "Tête près du sol"])],
     cue: "En équilibre, pieds contre le mur : descends la tête près du sol en pliant les bras, puis pousse bras tendus.", tips: ["Mains à 20–30 cm du mur, largeur d’épaules.", "Descends lentement, la tête frôle le sol.", "Progression : pompes pike sur un banc."] }
 });
+
+/* ═══ Abdos / gainage ═══ */
+// Allongé sur le dos : tête à gauche, genoux pliés, pieds à plat (orteils vers la droite).
+const backLie = (lift, o = {}) => {
+  const t = 180 + lift;
+  return merge({ hip: [130, GROUND - 13], torso: t, neck: t + 4, near: { ankleAt: [172, ANK], ft: 0, kneeBend: 1, wristAt: null, ua: t + 150, fa: t - 60, hand: t - 60 } }, o);
+};
+const hangLeg = (o = {}) => merge({ hip: [118, BY + 112], torso: -92, neck: -88, near: { wristAt: onBar, hand: -90, th: 92, sh: 94, ft: 40 } }, o);
+const forearmPlank = (o = {}) => {
+  const sh = [124, 173], a = Math.atan2(sh[1] - TOES[1], sh[0] - TOES[0]) * 180 / Math.PI;
+  return merge({ hip: [sh[0] - 52 * Math.cos(a * Math.PI / 180), sh[1] - 52 * Math.sin(a * Math.PI / 180)], torso: a, neck: a + 4,
+    near: { th: 180 + a, sh: 180 + a, ft: 75, ua: 90, fa: 0, hand: 0 } }, o);
+};
+Object.assign(HOW, {
+  "Crunch": { views: [side([backLie(0, { near: { ua: 150, fa: -60, hand: -60 } }), backLie(28, { near: { ua: 150, fa: -40, hand: -40 } })], ["Allongé, genoux pliés", "Haut du dos enroulé"])],
+    cue: "Allongé sur le dos, genoux pliés et pieds à plat : enroule le haut du dos en soufflant, sans tirer sur la nuque, puis redescends.",
+    tips: ["Pieds à plat au sol, talons près des fesses.", "Le bas du dos reste collé au sol : seules les épaules décollent.", "Mains contre les tempes, sans tirer sur la tête."] },
+  "Sit-ups": { views: [side([backLie(0, { near: { ua: 150, fa: -60, hand: -60 } }), backLie(72, { neck: 250, near: { ua: 170, fa: -30, hand: -30 } })], ["Allongé, genoux pliés", "Buste relevé jusqu’aux genoux"])],
+    cue: "Allongé, genoux pliés, pieds à plat (bloqués si besoin) : relève tout le buste jusqu’aux genoux, puis redescends doucement.",
+    tips: ["Pieds à plat, orteils vers l’avant, calés sous un support si besoin.", "Monte en déroulant le dos, redescends lentement.", "Mains contre les tempes ou bras croisés sur la poitrine."] },
+  "Crunch à la poulie": { views: [side([
+      { hip: [110, 158], torso: -80, neck: -70, near: { th: 90, sh: 180, ft: 180, wristAt: [128, 104], hand: -80 }, eq: [cable(186, 16, "rope")] },
+      { hip: [112, 160], torso: 22, neck: 50, near: { th: 90, sh: 180, ft: 180, wristAt: [160, 170], hand: 40 }, eq: [cable(186, 16, "rope")] }],
+      ["À genoux, corde derrière la tête", "Dos enroulé vers le sol"])],
+    cue: "À genoux face à la poulie haute, corde tenue derrière la tête : enroule le dos vers le sol en contractant les abdos, puis remonte lentement.",
+    tips: ["Les hanches restent au-dessus des genoux et ne bougent pas.", "Mains fixes contre la tête : c’est le dos qui s’enroule.", "Souffle en descendant."] },
+  "Mountain climbers": { views: [side([
+      plank(122, 150, 126, { near: { ls: {}, th: 40, sh: 150, ft: 70 }, far: { th: 157.6, sh: 157.6, ft: 75 } }),
+      plank(122, 150, 126, { near: { ls: {} }, far: { th: 40, sh: 150, ft: 70 } })], ["Genou droit vers la poitrine", "Genou gauche vers la poitrine"])],
+    cue: "En planche, bras tendus : ramène un genou vers la poitrine, puis l’autre, en alternant vite sans lever les fesses.",
+    tips: ["Un genou après l’autre, jamais les deux en même temps.", "Mains sous les épaules, bras tendus.", "Fesses basses, dos plat."] },
+  "Roue abdominale": { views: [side([
+      { hip: [78, 158], torso: -30, neck: -20, near: { th: 102, sh: 180, ft: 180, wristAt: [126, 190], hand: 90 }, eq: [wheel()] },
+      { hip: [94.4, 165.3], torso: -5, neck: 0, near: { th: 125, sh: 180, ft: 180, wristAt: [196, 192], hand: 90 }, eq: [wheel()] }],
+      ["À genoux, roue sous les épaules", "Roule devant toi, dos plat"])],
+    cue: "À genoux, mains sur la roue sous les épaules : roule devant toi en gardant le dos plat, puis reviens en contractant les abdos.",
+    tips: ["Dos plat, fesses serrées : le bas du dos ne se creuse jamais.", "Ne va pas plus loin que ce que tu contrôles.", "Débutant : petites amplitudes, ou contre un mur."] },
+  "Russian twist": { views: [
+      side([{ hip: [110, GROUND - 10], torso: -125, neck: -110, near: { th: -40, sh: 25, ft: 10, wristAt: [116, 164], hand: -10 }, eq: [medball(P => add(P.near.grip, [4, 0]), { top: true })] }], ["Assis, buste penché en arrière"]),
+      front([
+        { view: "front", hip: [120, 184], tls: 0.75, torso: -90, neck: -90, R: { th: -70, sh: 90, ls: { th: 0.35, sh: 0.45 }, wristAt: [152, 170], hand: 0 }, L: { wristAt: [140, 176], hand: 0 }, eq: [medball(P => [(P.R.grip[0] + P.L.grip[0]) / 2 + 4, P.R.grip[1] + 2], { top: true })] },
+        { view: "front", hip: [120, 184], tls: 0.75, torso: -90, neck: -90, R: { th: -70, sh: 90, ls: { th: 0.35, sh: 0.45 }, wristAt: [100, 176], hand: 180 }, L: { wristAt: [88, 170], hand: 180 }, eq: [medball(P => [(P.R.grip[0] + P.L.grip[0]) / 2 - 4, P.L.grip[1] + 2], { top: true })] }],
+        ["Poids à droite", "Poids à gauche"])],
+    cue: "Assis, buste penché en arrière comme en haut d’un crunch, pieds décollés : fais passer le poids d’un côté à l’autre en tournant les épaules.",
+    tips: ["Dos droit (pas arrondi), buste penché à environ 45°.", "Ce sont les épaules qui tournent, le poids suit.", "Trop dur ? Garde les talons au sol."] },
+  "Gainage": { views: [side([forearmPlank()], ["Position à tenir"])],
+    cue: "Sur les avant-bras, coudes sous les épaules, avant-bras vers l’avant : corps aligné des épaules aux talons.",
+    tips: ["Coudes sous les épaules, avant-bras parallèles pointés vers l’avant.", "Corps droit : ni fesses en l’air, ni ventre qui tombe.", "Serre les abdos et les fessiers, respire normalement."] },
+  "Gainage latéral": { views: [front([{ view: "front", hip: [70, 170], torso: -12, neck: -12,
+      R: { ua: 90, fa: 90, hand: 90, ls: { fa: 0.3 }, th: 168, sh: 168 }, L: { ua: 170, fa: 178, hand: 178, th: 168, sh: 168 } }], ["Position à tenir"])],
+    cue: "Sur un avant-bras, coude sous l’épaule : corps aligné de la tête aux pieds, sans laisser tomber ni monter les hanches.",
+    tips: ["Coude juste sous l’épaule.", "Corps aligné : les hanches ne montent pas et ne tombent pas.", "Trop dur ? Pose le genou du dessous au sol."] },
+  "Relevés de jambes": { views: [side([hangLeg({ eq: [pullbar(120, BY)] }), hangLeg({ near: { th: -2, sh: -2, ft: -20 }, eq: [pullbar(120, BY)] })], ["Suspendu, jambes tendues", "Jambes à l’horizontale"])],
+    cue: "Suspendu à la barre sans balancer : monte les jambes tendues jusqu’à l’horizontale, puis redescends lentement.",
+    tips: ["Bras tendus, épaules actives.", "Pas d’élan : les jambes montent et descendent lentement.", "Trop dur ? Monte les genoux pliés."] },
+  "Toes to bar": { views: [side([hangLeg({ eq: [pullbar(120, BY)] }),
+      { hip: [148, BY + 93], torso: -140, neck: -120, near: { wristAt: onBar, hand: -90, ankleAt: [132, BY + 6], ft: -40 }, eq: [pullbar(120, BY)] }], ["Suspendu", "Pieds qui touchent la barre"])],
+    cue: "Suspendu à la barre : monte les pieds jusqu’à toucher la barre, jambes tendues, puis redescends en contrôlant.",
+    tips: ["Les pointes de pieds touchent la barre, entre les mains.", "Bras tendus, épaules qui tirent vers le bas.", "Contrôle la descente pour ne pas te balancer."] },
+  "Hollow hold": { views: [side([{ hip: [124, GROUND - 13], torso: -172, neck: -170, near: { ua: -168, fa: -170, hand: -170, th: -12, sh: -12, ft: -12 } }], ["Position à tenir"])],
+    cue: "Allongé sur le dos, bas du dos plaqué au sol : bras tendus derrière la tête et jambes tendues, décollés du sol.",
+    tips: ["Le bas du dos reste collé au sol.", "Épaules et pieds décollés de quelques centimètres.", "Trop dur ? Genoux pliés ou bras le long du corps."] }
+});
