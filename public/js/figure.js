@@ -262,7 +262,9 @@ export const pad = (x, y, w, h, deg = 0) => E(() => `<rect class="fg-pad" x="${x
 export const raw = (f, o) => E(f, o);
 
 /* ---------- Matériel (face) ---------- */
-export const fbar = (y, o) => E(P => { const cx = P.front ? P.hip[0] : 120; return `<g class="fg-eq"><line class="fg-barline" x1="${cx - 64}" y1="${r1(y(P))}" x2="${cx + 64}" y2="${r1(y(P))}"/>${[-1, 1].map(k => `<rect class="fg-plate" x="${cx + k * 56 - 3}" y="${r1(y(P) - 14)}" width="6" height="28" rx="2"/><rect class="fg-plate" x="${cx + k * 49 - 2.5}" y="${r1(y(P) - 10)}" width="5" height="20" rx="1.6"/>`).join("")}</g>`; }, o);
+export const fbar = (y, o) => E(P => { const cx = P.front ? P.hip[0] : 120, yy = r1(y(P)); return `<g class="fg-eq">${o && o.ez
+    ? `<path class="fg-barline" d="M${cx - 64} ${yy}H${cx - 22}L${cx - 16} ${yy - 4}L${cx - 8} ${yy + 3}L${cx} ${yy - 3}L${cx + 8} ${yy + 3}L${cx + 16} ${yy - 4}L${cx + 22} ${yy}H${cx + 64}"/>`
+    : `<line class="fg-barline" x1="${cx - 64}" y1="${yy}" x2="${cx + 64}" y2="${yy}"/>`}${[-1, 1].map(k => `<rect class="fg-plate" x="${cx + k * 56 - 3}" y="${r1(y(P) - 14)}" width="6" height="28" rx="2"/><rect class="fg-plate" x="${cx + k * 49 - 2.5}" y="${r1(y(P) - 10)}" width="5" height="20" rx="1.6"/>`).join("")}</g>`; }, o);
 // Haltères vues de face : "across" = poignée gauche-droite (disques de chaque côté), "end" = poignée vers nous.
 export const fdb = (mode = "across", o) => E(P => [P.R.grip, P.L.grip].map(c => mode === "end"
   ? `<g class="fg-eq"><circle class="fg-plate" cx="${r1(c[0])}" cy="${r1(c[1])}" r="8"/><circle class="fg-hub" cx="${r1(c[0])}" cy="${r1(c[1])}" r="2.2"/></g>`

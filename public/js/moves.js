@@ -561,3 +561,63 @@ Object.assign(HOW, {
     tips: ["Coudes légèrement fléchis et fixes.", "Descends jusqu’à sentir l’étirement, sans douleur à l’épaule.", "Bassin et bas du dos restent posés sur le banc."] }
 });
 HOW["Écarté à la poulie"] = HOW["Écarté poulie haute"];   // ancien nom
+
+/* ═══ Bras ═══ */
+const curlS = (up, eq, o = {}) => stand(merge({ near: up ? { ua: 86, fa: -72, hand: -62 } : { ua: 93, fa: 86, hand: 88 }, eq }, o));
+const curlF = (up, eq, o = {}) => standF({ ...o, R: up ? { ua: 88, fa: -92, hand: -90, ls: { fa: 0.35 } } : { ua: 88, fa: 90, hand: 90 }, eq });
+const inclCurl = up => ({ hip: [116, 150], torso: -125, neck: -110, near: { ankleAt: [156, ANK], ft: 0, kneeBend: 1, ua: 90, fa: up ? -60 : 90, hand: up ? -60 : 90 },
+  eq: [bench(40, 156, 158, 55, 118), db(P => [P.near.grip, 0], "end", { top: true })] });
+const preacher = up => ({ hip: [96, 150], torso: -80, neck: -80, near: { th: 0, sh: 92, ft: 0, ua: 40, fa: up ? -100 : 55, hand: up ? -100 : 60 },
+  eq: [box(74, 158, 34, 52), raw(P => { const n = [Math.cos(rad(130)), Math.sin(rad(130))], a = add(P.sh, [n[0] * 10 + 3, n[1] * 10 + 3]), b = add(P.near.elbow, [n[0] * 8, n[1] * 8]);
+    return `<line class="fg-padline" x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}"/><line class="fg-rail" x1="${((a[0] + b[0]) / 2).toFixed(1)}" y1="${((a[1] + b[1]) / 2 + 6).toFixed(1)}" x2="${((a[0] + b[0]) / 2).toFixed(1)}" y2="${GROUND}"/>`; }, { mid: true }),
+    bar(P => P.near.grip, 10, { top: true })] });
+// Avant-bras posé à plat sur la cuisse, poignet juste au-delà du genou.
+const wristCurl = up => ({ hip: [96, 158], torso: -35, neck: -20, near: { th: 0, sh: 90, ft: 0, ua: 130.9, fa: -2, hand: up ? -45 : 55 },
+  eq: [bench(40, 120, 166), bar(P => P.near.grip, 9, { top: true })] });
+const skull = up => benchLie(0, () => ({ ua: -100, fa: up ? -100 : 150, hand: up ? -100 : 150 }), [bench(18, 150, BT), bar(P => P.near.grip, 13, { top: true })]);
+const ohExt = up => stand({ near: { ua: -102, fa: up ? -96 : 120, hand: up ? -96 : 120 }, eq: [db(P => [add(P.near.grip, up ? [0, -6] : [-4, 4]), (up ? -96 : 120) - 90], "side", { top: true })] });
+const ohExtF = up => standF({ R: up ? { ua: -84, fa: -96, hand: -120 } : { ua: -76, fa: 104, hand: 150, ls: { fa: 0.5 } }, eq: [db(P => [[120, P.R.grip[1] - (up ? 10 : 8)], 0], "side", { top: !!up })] });
+const pushdownS = down => stand({ torso: -86, near: { ua: 92, fa: down ? 88 : -36, hand: down ? 88 : -36 }, eq: [cable(184, 12, "rope")] });
+const pushdownF = down => standF({ R: down ? { ua: 92, fa: 96, hand: 96 } : { ua: 92, fa: -94, hand: -94, ls: { fa: 0.4 } },
+  eq: [raw(P => `<line class="fg-cable" x1="120" y1="-40" x2="120" y2="${(P.R.grip[1] - 8).toFixed(1)}"/><path class="fg-rope" d="M120 ${(P.R.grip[1] - 8).toFixed(1)}L${P.R.grip[0].toFixed(1)} ${P.R.grip[1].toFixed(1)}M120 ${(P.R.grip[1] - 8).toFixed(1)}L${P.L.grip[0].toFixed(1)} ${P.L.grip[1].toFixed(1)}"/>`, { top: true })] });
+const kickback = up => ({ hip: [112, 114], torso: -10, neck: -14, near: { th: 96, sh: 88, ft: 0, ua: 172, fa: up ? 172 : 90, hand: up ? 172 : 90 },
+  far: { ua: 97, fa: 93, hand: 0, h: "flat", th: 92, sh: 180, ft: 160 }, farWorks: false, eq: [bench(62, 196, 167), db(P => [P.near.grip, up ? 172 : 90], "side", { mid: true })] });
+const HAMMER = { cue: "Coudes collés au corps, pouces vers le haut : monte les haltères sans balancer, puis redescends lentement.",
+  tips: ["Prise marteau : pouces vers le haut pendant tout le mouvement.", "Coudes fixes le long du corps.", "Sans élan : si tu balances, allège les charges."] };
+
+Object.assign(HOW, {
+  "Curl barre": { views: [side([curlS(0, [bar(P => P.near.grip, 11, { top: true })]), curlS(1, [bar(P => P.near.grip, 11, { top: true })])], ["Bras tendus", "Barre aux épaules, coudes fixes"]),
+      front([curlF(0, [fbar(P => P.R.grip[1], { top: true, ez: 1 })]), curlF(1, [fbar(P => P.R.grip[1], { top: true, ez: 1 })])], ["Barre EZ, mains à largeur d’épaules", "Coudes le long du corps"])],
+    cue: "Barre EZ en main, paumes vers l’avant, coudes collés au corps : monte la barre sans balancer, puis redescends lentement.",
+    tips: ["Barre EZ (coudée) : plus confortable pour les poignets.", "Seuls les avant-bras bougent, les coudes restent le long du corps.", "Pas d’élan avec le dos."] },
+  "Curl haltères": { views: [side([curlS(0, [db(P => [P.near.grip, 90], "side", { mid: true })]), curlS(1, [db(P => [P.near.grip, 0], "end", { top: true })])], ["Pouces vers l’avant", "Paumes vers les épaules"]),
+      front([curlF(0, [fdb("end", { top: true })]), curlF(1, [fdb("across", { top: true })])], ["Paumes face au corps", "Rotation : paumes vers le haut"])],
+    cue: "Haltères le long du corps, paumes face aux cuisses : monte en tournant le poignet pour finir paumes vers les épaules, puis redescends en tournant dans l’autre sens.",
+    tips: ["Supination : le poignet tourne pendant la montée (paumes vers le haut en haut).", "Coudes fixes le long du corps.", "Monte et descends lentement, sans élan."] },
+  "Curl marteau": { views: [side([curlS(0, [db(P => [P.near.grip, 90], "side", { mid: true })]), curlS(1, [db(P => [P.near.grip, -62], "side", { top: true })])], ["Bras tendus", "Pouces vers le haut"]),
+      front([curlF(0, [fdb("end", { top: true })]), curlF(1, [fdb("end", { top: true })])], ["Paumes face au corps", "Pouces vers le haut"])], ...HAMMER },
+  "Curl à la poulie": { views: [side([curlS(0, [cable(186, GROUND - 8, "bar")], { near: { ua: 92, fa: 76, hand: 76 } }), curlS(1, [cable(186, GROUND - 8, "bar")])], ["Bras tendus vers la poulie", "Barre aux épaules"])],
+    cue: "Face à la poulie basse, barre en main : monte la barre vers les épaules en gardant les coudes fixes, puis redescends lentement.",
+    tips: ["Un pas en arrière pour que le câble reste tendu en bas.", "Coudes collés au corps.", "La tension du câble reste constante : descends lentement."] },
+  "Curl pupitre": { views: [side([preacher(0), preacher(1)], ["Bras presque tendus sur le pupitre", "Barre vers les épaules"])],
+    cue: "Assis, l’arrière des bras posé sur le pupitre : monte la barre vers les épaules, puis redescends lentement sans tendre brutalement.",
+    tips: ["Aisselles calées en haut du pupitre.", "L’arrière des bras reste collé au coussin.", "Garde un léger pli du coude en bas."] },
+  "Curl incliné": { views: [side([inclCurl(0), inclCurl(1)], ["Bras qui pendent derrière le buste", "Haltères vers les épaules"])],
+    cue: "Assis sur un banc incliné, bras qui pendent derrière le buste : monte les haltères sans avancer les coudes, puis redescends lentement.",
+    tips: ["Banc incliné à 45–60°, dos et tête collés au dossier.", "Bras verticaux au départ, derrière le buste : les coudes ne bougent pas.", "Charge plus légère qu’au curl debout."] },
+  "Curl poignets": { views: [side([wristCurl(0), wristCurl(1)], ["Poignets vers le bas", "Poignets enroulés vers le haut"])],
+    cue: "Assis, avant-bras posés sur les cuisses, poignets dans le vide, paumes vers le haut : enroule les poignets vers le haut, puis redescends.",
+    tips: ["Avant-bras posés à plat sur les cuisses, poignets au-delà des genoux.", "Seuls les poignets bougent.", "Charge légère, beaucoup de répétitions."] },
+  "Barre au front": { views: [side([skull(0), skull(1)], ["Barre près du front", "Bras tendus"])],
+    cue: "Allongé sur un banc, barre tenue bras tendus au-dessus du visage : plie les coudes pour descendre la barre vers le front, puis tends les bras.",
+    tips: ["Mains à largeur d’épaules (barre droite ou EZ).", "Les coudes restent fixes, pointés vers le plafond.", "Descends lentement vers le front, sans le toucher."] },
+  "Extension triceps nuque": { views: [side([ohExt(0), ohExt(1)], ["Haltère derrière la tête", "Bras tendus vers le haut"]), front([ohExtF(0), ohExtF(1)], ["Coudes vers le haut", "Bras tendus"])],
+    cue: "Haltère tenu à deux mains au-dessus de la tête : descends-le derrière la nuque en pliant les coudes, puis tends les bras vers le haut.",
+    tips: ["Coudes pointés vers le haut, près de la tête.", "Seuls les avant-bras bougent.", "Abdos serrés pour ne pas cambrer (ou assis, dos calé)."] },
+  "Extension triceps à la poulie": { views: [side([pushdownS(0), pushdownS(1)], ["Avant-bras remontés", "Bras tendus"]), front([pushdownF(0), pushdownF(1)], ["Coudes collés au corps", "Bras tendus"])],
+    cue: "Face à la poulie haute, coudes collés au corps : tends complètement les bras vers le bas, puis remonte en contrôlant.",
+    tips: ["Coudes fixes le long du corps.", "Tends complètement les bras en bas.", "Remonte lentement jusqu’aux avant-bras à l’horizontale."] },
+  "Kickback triceps": { views: [side([kickback(0), kickback(1)], ["Coude à 90°", "Bras tendu vers l’arrière"])],
+    cue: "Un genou et une main en appui sur un banc, dos plat, bras collé au corps : tends l’avant-bras vers l’arrière, puis reviens lentement.",
+    tips: ["Genou et main du même côté posés sur le banc, dos parallèle au sol.", "Le haut du bras reste collé au corps et immobile.", "Charge légère, mouvement lent."] }
+});

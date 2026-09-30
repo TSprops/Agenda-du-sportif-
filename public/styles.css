@@ -802,27 +802,7 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .how-btn{flex:none;width:44px;height:44px;margin:-7px -8px -7px -4px;display:grid;place-items:center;border-radius:50%}
 .how-btn span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:15px;color:var(--red-hi);border:1.5px solid color-mix(in srgb,var(--red) 55%,var(--line));background:var(--red-soft)}
 .how-btn:active span{transform:scale(.92)}
-.hf{display:block;width:100%;height:auto;overflow:visible}
 /* Corps : peau neutre, muscles dessinés en relief, muscles travaillés en rouge */
-.hf{--skin:color-mix(in srgb,var(--ink) 62%,var(--surface));--mu:var(--skin)}
-.hf-skin{fill:var(--skin)}
-.hf-shoe{fill:color-mix(in srgb,var(--ink) 18%,var(--surface-2))}
-.hf-hair{fill:color-mix(in srgb,var(--ink) 16%,var(--surface-2))}
-.hf-short{fill:color-mix(in srgb,var(--ink) 26%,var(--surface-2))}
-.hf-mu{fill:var(--mu)}
-.hf-mu.hf-s{fill:color-mix(in srgb,var(--red) 58%,var(--skin))}
-.hf-mu.hf-p{fill:var(--red-hi)}
-.hf-back{opacity:.55}
-.hf-ground{stroke:var(--line);stroke-width:2}
-.hf-metal{fill:color-mix(in srgb,var(--ink) 38%,var(--surface))}
-.hf-dark,.hf-plate{fill:color-mix(in srgb,var(--ink) 22%,var(--surface-2));stroke:color-mix(in srgb,var(--ink) 45%,transparent);stroke-width:1}
-.hf-plate2{fill:none;stroke:color-mix(in srgb,var(--ink) 40%,transparent);stroke-width:1}
-.hf-dot{fill:color-mix(in srgb,var(--ink) 55%,transparent)}
-.hf-pad{fill:color-mix(in srgb,var(--red) 30%,var(--surface-2));stroke:color-mix(in srgb,var(--ink) 30%,transparent);stroke-width:.8}
-.hf-line{fill:none;stroke:color-mix(in srgb,var(--ink) 60%,transparent);stroke-width:2.6;stroke-linecap:round}
-.hf-cable{stroke:color-mix(in srgb,var(--ink) 45%,transparent);stroke-width:1.2}
-.hf-rope{stroke:#B98A52;stroke-width:3.4;stroke-linecap:round}
-.hf-box{fill:color-mix(in srgb,#B98A52 45%,var(--surface-2));stroke:color-mix(in srgb,#B98A52 70%,transparent);stroke-width:1.2}
 .how-map{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:260px;margin:0 auto;width:100%}
 .how-map figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:2px}
 .how-map svg.body{max-height:150px;width:auto}
@@ -838,17 +818,8 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .how-stage{display:grid;gap:12px;background:var(--ground);border:1px solid var(--line);border-radius:18px;padding:12px}
 .how-stage figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:4px}
 .how-stage figcaption{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.how-stage.side{grid-template-columns:1fr 1fr}
-.how-stage .hf{max-width:240px;margin:0 auto}
-.how-anim{position:relative;max-width:240px;width:100%;margin:0 auto}
-.how-anim .how-b{position:absolute;inset:0;opacity:0;animation:howBoom 2.6s ease-in-out infinite}
 /* Boomerang : départ (pause) → fondu ~1 s → arrivée (pause) → fondu ~1 s → départ */
-@keyframes howBoom{0%,12%{opacity:0}50%,62%{opacity:1}100%{opacity:0}}
-.how-anim .how-a{animation:howBoomA 2.6s ease-in-out infinite}
-@keyframes howBoomA{0%,12%{opacity:1}50%,62%{opacity:0}100%{opacity:1}}
 .how-cue{margin:0;font-size:14.5px;line-height:1.45}
-@media (prefers-reduced-motion: reduce){.how-anim .how-a,.how-anim .how-b{animation:none}}
-.how-stage.two.boom{grid-template-columns:1fr 1fr}
 .how-view{min-width:0;display:flex;flex-direction:column;justify-content:flex-end;gap:4px}
 .how-vt{margin:0;text-align:center;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--red-hi)}
 .how-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -862,11 +833,6 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .hg-thumb{stroke:var(--red-hi);stroke-width:2.6;stroke-linecap:round}
 .hg-dim{fill:none;stroke:var(--muted);stroke-width:1}
 .hg-txt{fill:var(--muted);font-size:7.5px;font-family:var(--body,sans-serif)}
-.hf-mark path{fill:none;stroke:var(--ink);stroke-width:1.3}
-.hf-mark text{fill:var(--ink);font-size:8px;font-weight:800;font-family:var(--body,sans-serif)}
-.hf-slab{stroke:color-mix(in srgb,var(--red) 30%,var(--surface-2));stroke-width:6;stroke-linecap:round}
-.hf-metal-l{stroke:color-mix(in srgb,var(--ink) 38%,var(--surface));stroke-width:3}
-.hf-ball{fill:color-mix(in srgb,#B98A52 55%,var(--surface-2));stroke:color-mix(in srgb,#B98A52 80%,transparent);stroke-width:1}
 .how-tips{background:var(--surface-2);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
 .how-tips .how-vt{text-align:left}
 .how-tips ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:14px;line-height:1.4}
