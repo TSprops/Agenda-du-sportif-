@@ -510,7 +510,7 @@ html{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:10
 .dot-new.big{width:12px;height:12px;margin-left:4px;vertical-align:super}
 .pill.alert{background:var(--red);border-color:var(--red);color:var(--on-red)}
 .code-card .code-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.code-card .code-row b{font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:.06em;color:var(--red-hi);user-select:all}
+.code-card .code-row b{font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:.06em;color:var(--red-hi)}
 .code-card .code-row .btn{height:40px}
 .search-row{display:flex;gap:8px}
 .search-row input{flex:1;min-width:0;height:46px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface-2);padding-inline:12px;font-size:16px}
@@ -952,3 +952,12 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .tour-text{margin:0;font-size:15.5px;line-height:1.45}
 .tour-nav{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .tour-nav .btn{min-height:44px;white-space:nowrap;padding-inline:10px}
+/* Course (fractionné, seuil) : supprimer un bloc (confirmation au deuxième toucher) */
+.bloc-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.bl-del{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 12px;border-radius:12px;border:1px solid color-mix(in srgb,var(--danger) 55%,var(--line));background:transparent;color:var(--danger);font-weight:700;font-size:14px}
+.bl-del::before{content:"";width:17px;height:17px;flex:none;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3'/%3E%3C/svg%3E") center/contain no-repeat}
+.bl-del.armed{background:var(--danger);border-color:var(--danger);color:#fff}
+/* Texte de l'app non sélectionnable (ni copie, ni menu d'appui long) ; les zones de saisie restent utilisables */
+html{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea,select,[contenteditable="true"]{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+img{-webkit-touch-callout:default}

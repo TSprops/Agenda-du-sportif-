@@ -138,6 +138,35 @@ module.exports = async function appTests(t) {
     t("tutoriels remis à zéro (?reset-tutoriels)", await tourState(), "1/5,Suivant,hidden");
     await A.click("#tourSkip"); await A.evaluate(() => localStorage.setItem("tours-off", "1"));
 
+    // Course : supprimer un bloc (fractionné puis seuil), avec confirmation ; la séance garde les bons blocs.
+    await home(A); await A.click("[data-go=go]"); await A.click("[data-gonew]"); await A.click("#sheet [data-a=disc][data-id=course]");
+    await A.click("#sheet [data-a=runtype][data-id=frac]"); await A.click("#sheet [data-a=bl-add]"); await A.click("#sheet [data-a=bl-add]");
+    for (const [j, v] of [[0, "10"], [1, "8"], [2, "6"]]) await A.fill(`#bl-rep-${j}`, v);
+    const blocs = () => A.$$eval("#sheet .bloc .bl-rep", x => x.map(e => e.value).join());
+    await A.click('#sheet [data-a=bl-del][data-b="1"]');
+    t("bloc : premier toucher = confirmation demandée", (await blocs()) + "|" + (await A.textContent('#sheet [data-a=bl-del][data-b="1"]')), "10,8,6|Confirmer ?");
+    await A.click('#sheet [data-a=bl-del][data-b="1"]');
+    t("fractionné : bloc supprimé, les autres restent", (await blocs()) + "|" + (await A.$$eval("#sheet .bloc .ex-num", x => x.map(e => e.textContent).join())), "10,6|01,02");
+    await A.click("#sheet [data-a=runtype][data-id=seuil]"); await A.click('#sheet [data-a=bl-del][data-b="0"]'); await A.click('#sheet [data-a=bl-del][data-b="0"]');
+    t("seuil : bloc supprimé", await blocs(), "6");
+    await A.click("#sheet [data-a=close]"); await A.waitForTimeout(800); await A.click(`#list .row:has-text("Seuil")`); await A.waitForTimeout(400);
+    t("bloc supprimé aussi dans la séance enregistrée", await blocs(), "6");
+    await A.click("#sheet [data-a=close]");
+
+    // Corde : plus de propositions directes ; « Ajouter un exercice » donne exactement les trois montées de corde.
+    await home(A); await A.click("[data-go=go]"); await A.click("[data-gonew]"); await A.click("#sheet [data-a=disc][data-id=cordes]");
+    t("corde : rien de proposé avant « Ajouter un exercice »", await A.$$eval("#sheet [data-a=cd-add]", x => x.length), 0);
+    await A.click("#sheet [data-a=add-ex]"); await A.waitForSelector("#libSheet.open");
+    t("corde : liste des exercices", await A.$$eval("#libList [data-lib]", x => x.map(e => e.dataset.lib).join(" | ")), "Montée de corde | Montée de corde avec jambes | Montée de corde départ assis");
+    await A.click("#libClose"); await A.click("#sheet [data-a=close]");
+
+    // Texte non sélectionnable, sauf les zones de saisie (écrire, tout sélectionner).
+    await home(A); await A.click("#homeLinks [data-go=contact]"); await A.click("[data-go=contactform]");
+    t("texte de l’app non sélectionnable", await A.evaluate(() => [getComputedStyle(document.querySelector("#v-contactform .vtitle")).userSelect, getComputedStyle(document.querySelector("#v-contactform .btn")).userSelect].join()), "none,none");
+    await A.fill("#ctText", "Bonjour"); await A.focus("#ctText"); await A.keyboard.press("Control+A");
+    t("zone de saisie : écriture et sélection possibles", await A.$eval("#ctText", e => [e.value, getComputedStyle(e).userSelect, e.selectionEnd - e.selectionStart].join()), "Bonjour,text,7");
+    await home(A);
+
     // Social : ami, commentaire, signalement, modération.
     await A.click("[data-go=social]"); await A.click("[data-go=friends]"); const code = await A.textContent("#myCode");
     const B = await signupPage(browser, "Bruno");

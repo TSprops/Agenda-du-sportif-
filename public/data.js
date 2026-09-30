@@ -75,7 +75,8 @@ export const EXERCISES = [
   ["Curl poignets", ["avantbras"], [], "H"],
   ["Farmer walk", ["avantbras", "trapezes"], ["abdos"], "H"],
   ["Montée de corde", ["dorsaux", "biceps"], ["avantbras", "abdos"], "C"],
-  ["Montée de corde sans jambes", ["dorsaux", "biceps"], ["avantbras", "abdos"], "C"],
+  ["Montée de corde avec jambes", ["dorsaux", "biceps"], ["avantbras", "abdos", "quadriceps"], "C"],
+  ["Montée de corde départ assis", ["dorsaux", "biceps"], ["avantbras", "abdos"], "C"],
   // Jambes
   ["Squat", ["quadriceps", "fessiers"], ["ischios", "lombaires", "abdos"], "B"],
   ["Front squat", ["quadriceps"], ["fessiers", "abdos"], "B"],
@@ -129,6 +130,11 @@ export const EXERCISES = [
 ];
 
 // Mots-clés : pour reconnaître les muscles d'un exercice tapé à la main.
+// Exercices proposés dans une séance « Corde » (bouton « Ajouter un exercice »).
+export const CORDES_EX = ["Montée de corde", "Montée de corde avec jambes", "Montée de corde départ assis"];
+// Anciens noms retirés de la bibliothèque : plus proposés, mais les séances déjà enregistrées gardent leurs muscles.
+export const LEGACY_EX = [["Montée de corde sans jambes", ["dorsaux", "biceps"], ["avantbras", "abdos"]]];
+
 export const KEYWORDS = [
   [/couche|pec|butterfly|ecarte|chest|bench|pompe|push ?up|dips/, ["pecs"], ["triceps"]],
   [/traction|pull ?up|chin|tirage|lat|rowing|row\b|tbar|dos/, ["dorsaux"], ["biceps"]],

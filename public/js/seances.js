@@ -204,7 +204,6 @@ function cordesHTML(c, k) {
   const last = !(c.exercises || []).length ? lastComparable(c, k) : null;
   return `<p class="hint" style="margin-top:-6px">Pour chaque exercice : nombre de cordes, départ toutes les X secondes ou minutes, avec ou sans lest.</p>
     ${last ? `<button class="suggest" data-a="copy" data-k="${last}"><span style="flex:1"><b>Reprendre ta dernière séance Cordes</b><span>${parse(last).getDate()} ${MONTHS[parse(last).getMonth()]} · ${(S.days[last].exercises || []).length} exercice${(S.days[last].exercises || []).length > 1 ? "s" : ""}</span></span><span aria-hidden="true">›</span></button>` : ""}
-    ${(c.exercises || []).length ? "" : `<div class="chips">${["Montée de corde", "Montée de corde sans jambes"].map(n => `<button class="chip" data-a="cd-add" data-name="${esc(n)}">+ ${esc(n)}</button>`).join("")}</div>`}
     ${(c.exercises || []).map((ex, i) => cordesExHTML(ex, i)).join("")}
     <button class="add-ex" data-a="add-ex">+ Ajouter un exercice</button>
     ${(c.exercises || []).some(x => String(x.name || "").trim()) ? `<button class="btn" data-a="save-routine">☆ Enregistrer comme routine</button>` : ""}`;
@@ -232,9 +231,10 @@ function courseHTML(c) {
           <input class="num bl-rep" id="bl-rep-${j}" data-f="bl-rep" data-b="${j}" inputmode="numeric" placeholder="10" value="${val(b.rep)}" aria-label="Répétitions du bloc ${j + 1}"><span class="times">×</span>
           <input class="num" id="bl-eff-${j}" data-f="bl-eff" data-b="${j}" inputmode="decimal" placeholder="${rt.id === "seuil" ? "10" : "400"}" value="${val(b.eff)}" aria-label="Effort du bloc ${j + 1}">
           <button class="unit" data-a="bl-unit" data-b="${j}" aria-label="Changer l’unité">${esc(b.unit || (rt.id === "seuil" ? "min" : "m"))}</button>
-          <button class="icon-btn" data-a="bl-del" data-b="${j}" aria-label="Supprimer le bloc ${j + 1}">−</button></div>
+</div>
         <div class="grid2"><label class="field"><span>Allure cible</span><input id="bl-pace-${j}" data-f="bl-pace" data-b="${j}" placeholder="3:45 /km" value="${val(b.pace)}"></label><label class="field"><span>Récup</span><input id="bl-rec-${j}" data-f="bl-rec" data-b="${j}" placeholder="1:00" value="${val(b.rec)}"></label></div>
-        <button class="rest-go" data-a="bl-go" data-b="${j}" style="align-self:flex-start;margin-left:0">⏱ Lancer la récup</button>
+        <div class="bloc-foot"><button class="rest-go" data-a="bl-go" data-b="${j}" style="margin-left:0">⏱ Lancer la récup</button>
+          <button class="bl-del" data-a="bl-del" data-b="${j}" aria-label="Supprimer le bloc ${j + 1}">Supprimer</button></div>
       </div>`).join("")}
       <button class="add-set" data-a="bl-add">+ Ajouter un bloc</button></section>` : ""}
     ${effortCard(c, "Effort ressenti")}`;
@@ -417,7 +417,7 @@ $("sheet").addEventListener("click", e => {
   else if (a === "rpe") { const v = +b.dataset.v; c.exercises[i].rpe = c.exercises[i].rpe === v ? 0 : v; }
   else if (a === "srpe") { const v = +b.dataset.v; c.rpe = c.rpe === v ? 0 : v; }
   else if (a === "bl-add") { const bl = c.run.blocks, l = bl[bl.length - 1]; bl.push(l ? { ...l } : { rep: "", eff: "", unit: c.runType === "seuil" ? "min" : "m", pace: "", rec: "" }); }
-  else if (a === "bl-del") { c.run.blocks.splice(+b.dataset.b, 1); }
+  else if (a === "bl-del") { if (!armed(b, "Confirmer ?")) return; c.run.blocks.splice(+b.dataset.b, 1); }
   else if (a === "bl-unit") { const bl = c.run.blocks[+b.dataset.b], u = ["m", "km", "min", "s"]; bl.unit = u[(u.indexOf(bl.unit || "m") + 1) % u.length]; }
   else if (a === "bl-go") { const bl = c.run.blocks[+b.dataset.b]; startRest(parseClock(bl.rec) || 60, "Récup"); return; }
   else if (a === "wf") { c.wod.format = c.wod.format === b.dataset.v ? "" : b.dataset.v; }

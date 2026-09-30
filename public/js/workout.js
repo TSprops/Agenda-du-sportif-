@@ -2,6 +2,7 @@
 import { $, DISC, EQUIP, EXERCISES, GROUPS, KEYWORDS, MUSCLES, PROGRAMS, S, armed, clone, dayMeta, dayOf, discOf, esc, isEmpty,
   nf, pad, plural, runPace, runSecs, sessionsOn, show, todayK, typeOf } from "./core.js";
 import { go, refresh, saveProfile } from "./store.js";
+import { CORDES_EX, LEGACY_EX } from "../data.js";
 import { EMPTY_DAY, changed, fmtRest, forceFlush, isDone, normCordes, openDay, renderMain, renderSheet, restOf, setDisc } from "./seances.js";
 import { doneSet, ideaExercises, repsText, shortDate } from "./ideas.js";
 import { norm } from "./faq.js";
@@ -129,7 +130,11 @@ function cordesExHTML(ex, i) {
    ============================================================ */
 const LIB_ALL = EXERCISES.map(([name, m, sec, eq, hold]) => ({ name, m, s: sec, eq, hold: !!hold }));
 function libList() { return [...((S.profile && S.profile.customEx) || []).map(x => ({ name: x.name, m: x.m || [], s: x.s || [], eq: "", hold: !!x.hold, custom: true })), ...LIB_ALL]; }
-function libFind(name) { const k = exKey(name || ""); return libList().find(x => exKey(x.name) === k); }
+function libFind(name) {
+  const k = exKey(name || ""), f = libList().find(x => exKey(x.name) === k); if (f) return f;
+  const old = LEGACY_EX.find(([n]) => exKey(n) === k);
+  return old ? { name: old[0], m: old[1], s: old[2], eq: "C", hold: false } : undefined;
+}
 // Muscles d'un exercice : bibliothèque, sinon mots-clés du nom.
 function musclesOf(name) {
   const f = libFind(name); if (f && f.m.length) return { p: f.m, s: f.s || [] };
@@ -145,6 +150,8 @@ function openLib(cb, disc) {
 }
 function closeLib() { $("libSheet").classList.remove("open"); if (!$("sheet").classList.contains("open")) document.body.classList.remove("sheet-open"); }
 function renderLibChips() {
+  // Corde : uniquement les montées de corde, pas de filtre par muscle.
+  $("libChips").hidden = LIB.disc === "cordes";
   $("libChips").innerHTML = `<button type="button" class="chip" data-lg="" aria-pressed="${!LIB.g}" style="--tc:var(--red)">Tous</button>` +
     GROUPS.map(([id, n]) => `<button type="button" class="chip" data-lg="${id}" aria-pressed="${LIB.g === id}" style="--tc:var(--red)">${n}</button>`).join("");
 }
@@ -166,7 +173,10 @@ function renderLib() {
   usedNames().forEach((n, k) => { if (!byKey.has(k)) { const mu = musclesOf(n); const x = { name: n, m: mu ? mu.p : [], s: mu ? mu.s : [], eq: "", hold: false, custom: true }; all.unshift(x); byKey.set(k, x); } });
   let list = all.filter(x => (!q || exKey(x.name).includes(q)) && (!grp || (x.m || []).some(m => grp[2].includes(m))));
   if (LIB.disc === "calis" && !q && !grp) list = list.filter(x => x.eq === "C" || x.custom);
-  const recent = !q && !grp ? [...usedNames().keys()].slice(0, 8).map(k => byKey.get(k)).filter(Boolean) : [];
+  // Corde : exactement les trois montées de corde (sans « récents » ni autres exercices) ; la recherche reste possible.
+  const cordes = LIB.disc === "cordes" && !q;
+  if (cordes) list = CORDES_EX.map(n => byKey.get(exKey(n))).filter(Boolean);
+  const recent = !q && !grp && !cordes ? [...usedNames().keys()].slice(0, 8).map(k => byKey.get(k)).filter(Boolean) : [];
   const exact = q && all.some(x => exKey(x.name) === q);
   $("libList").innerHTML = `${q && !exact ? `<button type="button" class="lib-row lib-new" data-libnew="1"><span class="plus-big">+</span><span class="main"><b>Créer « ${esc(LIB.q.trim())} »</b><span>Ajouter ton propre exercice</span></span></button>` : ""}
     ${recent.length ? `<h3 class="h2">Tes exercices récents</h3><div class="lib-group">${recent.map(x => libRow(x, before)).join("")}</div>` : ""}
