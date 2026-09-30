@@ -13,7 +13,7 @@ import { streakInfo } from "./home.js";
 import { acceptedFriends, activityList, bannedStop, bestLifts, commentsHTML, monthShare, newChallenges, renderMessages,
   renderSocial, seenAct, subscribeChallenges, toggleReact, trySession } from "./social.js";
 import { figure, frameBox } from "./figure.js";
-import { HOW } from "./moves.js";
+import { HOW } from "./exercices/index.js";
 
 /* ============================================================
    Amis, séances partagées et messages
