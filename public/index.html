@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="styles.css?v=49">
+<link rel="stylesheet" href="styles.css?v=50">
 <script>
   // Déménagement : l'ancienne adresse (GitHub) renvoie vers la nouvelle (Firebase) quand MOVED vaut true.
   window.NEW_HOME = "https://agenda-du-sportif.web.app/";
@@ -31,7 +31,7 @@
     });
   }
   // Version de la page : doit correspondre à APP_VERSION dans app.js.
-  window.APP_PAGE_VERSION = "49";
+  window.APP_PAGE_VERSION = "50";
   // Comme une vraie application : pas de zoom avec deux doigts ni en tapant deux fois (Safari ignore parfois la balise viewport).
   ["gesturestart", "gesturechange", "gestureend"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
   document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -58,7 +58,7 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=49"></script>
+<script type="module" src="app.js?v=50"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->
@@ -538,20 +538,38 @@
   <button type="button" class="later" id="confirmCancel">Annuler</button>
 </div>
 
-<!-- ============ ANNONCE DE NOUVEAUTÉ (une seule fois) ============ -->
+<!-- ============ NOUVEAUTÉS (une seule fois par utilisateur) ============ -->
 <div class="install-backdrop" id="newsBackdrop" hidden></div>
-<div class="install" id="newsSheet" hidden role="dialog" aria-modal="true" aria-labelledby="newsTitle">
+<div class="install news" id="newsSheet" hidden role="dialog" aria-modal="true" aria-labelledby="newsTitle1">
   <i class="grab" aria-hidden="true"></i>
-  <span class="onair" style="align-self:flex-start"><i></i>Nouveau</span>
-  <div class="install-head"><span class="news-ico" aria-hidden="true">🚀</span><div><b id="newsTitle">La grosse mise à jour</b><span>Nouvelle version de L’agenda du sportif</span></div></div>
-  <ol class="steps">
-    <li><span class="n">1</span><span><b>Let’s go</b> : routines, programmes, bibliothèque d’exercices et tes poids de la dernière fois déjà remplis.</span></li>
-    <li><span class="n">2</span><span><b>Records en direct 🏆</b>, série de semaines 🔥, objectif hebdo et bilan du mois à partager.</span></li>
-    <li><span class="n">3</span><span><b>Social</b> : fil d’actu, commentaires, défis et classements entre amis.</span></li>
-    <li><span class="n">4</span><span><b>Carte musculaire</b> et plusieurs séances par jour.</span></li>
-  </ol>
-  <button type="button" class="btn primary" id="newsGo">Voir le tuto rapide</button>
-  <button type="button" class="later" id="newsLater">Plus tard</button>
+  <div class="news-top"><span class="onair"><i></i>Nouveautés</span><button type="button" class="news-skip" id="newsSkip">Passer</button></div>
+  <div class="news-viewport" id="newsViewport">
+    <div class="news-track" id="newsTrack">
+      <section class="news-slide" aria-roledescription="diapositive" aria-label="1 sur 2">
+        <div class="news-visual news-how" id="newsHow" aria-hidden="true"></div>
+        <h2 id="newsTitle1">Du nouveau dans l’app !</h2>
+        <p>Grâce à vos retours, l’application évolue. Nouveauté : la rubrique « Comment faire » sur chaque exercice. Retrouvez des schémas en position de départ et d’arrivée, et le bouton « Voir le mouvement » pour voir l’exercice animé. De quoi bien exécuter chaque mouvement en toute sécurité. Merci à tous ceux qui ont pris le temps de tester et de me faire leurs retours !</p>
+      </section>
+      <section class="news-slide" aria-roledescription="diapositive" aria-label="2 sur 2">
+        <div class="news-visual" aria-hidden="true">
+          <div class="mini-home">
+            <div class="mh-bar"><span class="mh-prof"><i></i>Profil</span></div>
+            <div class="mh-title">L’agenda <span>du sportif</span></div>
+            <div class="mh-toc"><b>Let’s go <i>›</i></b><b>Social <i>›</i></b><b>Nutrition <i>›</i></b></div>
+            <div class="mh-contact"><span class="mh-btn">Contact</span><span class="mh-arrow">‹ ici</span></div>
+          </div>
+          <p class="mh-cap">En bas de la page d’accueil, sous « Nutrition »</p>
+        </div>
+        <h2 id="newsTitle2">Une idée ? Un bug ? Dites-le-moi !</h2>
+        <p>N’hésitez pas à m’écrire via le bouton Contact sur la page d’accueil. Une idée d’amélioration, un exercice qui manque, un bug repéré : tous vos retours m’aident à faire évoluer l’application.</p>
+      </section>
+    </div>
+  </div>
+  <div class="tuto-dots news-dots" id="newsDots" aria-hidden="true"><i class="on"></i><i></i></div>
+  <div class="news-nav">
+    <button type="button" class="btn" id="newsPrev">Précédent</button>
+    <button type="button" class="btn primary" id="newsNext">Suivant</button>
+  </div>
 </div>
 
 <!-- ============ ASSISTANT (FAQ) ============ -->

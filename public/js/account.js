@@ -104,7 +104,7 @@ $("signup").addEventListener("submit", async e => {
   try {
     await saveProfile({
       ...f, photo: f.photo || null, email: S.email, createdAt: Date.now(), visits: 1, lastSeen: Date.now(),
-      typesV: TYPES_V, types: DEFAULT_TYPES.map(t => ({ ...t })), prefs: { creaDose: 5 }, goal: 3, seen: { amis1: true, v2: true }, termsV: TERMS_V, termsAt: Date.now()
+      typesV: TYPES_V, types: DEFAULT_TYPES.map(t => ({ ...t })), prefs: { creaDose: 5 }, goal: 3, seen: { amis1: true, v2: true, v3: true }, termsV: TERMS_V, termsAt: Date.now()
     });
     S.visitCounted = true;
     subscribeData(); ensureSocialProfile(); subscribeSocial(); go("home"); openTuto();

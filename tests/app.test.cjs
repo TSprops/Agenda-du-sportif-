@@ -92,11 +92,25 @@ module.exports = async function appTests(t) {
     t("export de mes données", /mes-donnees/.test(dl.suggestedFilename()), true);
 
     // Compte existant sans conditions acceptées : fenêtre à accepter une fois.
-    await put(`users/${A.uid}`, { pseudo: "Alice", termsV: 0, seen: { amis1: true, v2: true, tuto: true }, typesV: 2 });
+    await put(`users/${A.uid}`, { pseudo: "Alice", termsV: 0, seen: { amis1: true, v2: true, v3: true, tuto: true }, typesV: 2 });
     await home(A); await A.waitForTimeout(500);
     t("conditions demandées aux anciens comptes", await A.$eval("#termsSheet", e => !e.hidden), true);
     await A.click("#termsOk"); await home(A);
     t("conditions demandées une seule fois", await A.$eval("#termsSheet", e => !e.hidden), false);
+
+    // Nouveautés : deux diapositives (Suivant / Précédent, points), vues une seule fois, même après rechargement.
+    await put(`users/${A.uid}`, { pseudo: "Alice", termsV: 1, seen: { amis1: true, v2: true, tuto: true }, typesV: 2 });
+    await home(A); await A.waitForSelector("#newsSheet:not([hidden])", { timeout: 5000 });
+    const slide = () => A.evaluate(() => [document.getElementById("newsSheet").getAttribute("aria-labelledby"), document.querySelector("#newsDots .on") === document.querySelector("#newsDots i:nth-child(2)"), document.getElementById("newsNext").textContent].join());
+    t("nouveautés : diapo 1 (Comment faire, mannequin dessiné)", (await slide()) + "," + (await A.$$eval("#newsHow svg.fg", x => x.length)), "newsTitle1,false,Suivant,2");
+    await A.click("#newsNext");
+    t("nouveautés : diapo 2 (Contact)", await slide(), "newsTitle2,true,C’est parti\u00a0!");
+    await A.click("#newsPrev");
+    t("nouveautés : retour à la diapo 1", await slide(), "newsTitle1,false,Suivant");
+    await A.click("#newsNext"); await A.click("#newsNext");
+    t("nouveautés : fermée par « C’est parti ! »", await A.$eval("#newsSheet", e => e.hidden), true);
+    await home(A); await A.waitForTimeout(1600);
+    t("nouveautés : plus jamais affichée", await A.$eval("#newsSheet", e => e.hidden), true);
 
     // Social : ami, commentaire, signalement, modération.
     await A.click("[data-go=social]"); await A.click("[data-go=friends]"); const code = await A.textContent("#myCode");
