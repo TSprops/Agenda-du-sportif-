@@ -65,6 +65,8 @@ const FRONT = {
   head: { d: "M0 -12.6Q10 -12.6 10 0Q10 9 5 12Q2.6 13.6 0 13.6Q-2.6 13.6 -5 12Q-10 9 -10 0Q-10 -12.6 0 -12.6Z",
     lines: ["M-5.4 -0.6H-2.4", "M2.4 -0.6H5.4", "M0 1L-0.8 5H0.8", "M-2.6 8.4Q0 9.6 2.6 8.4"] },
   hair: "M-10 -1Q-10.6 -12.6 0 -12.8Q10.6 -12.6 10 -1Q8 -7.4 0 -7.6Q-8 -7.4 -10 -1Z",
+  // Tête penchée vers le sol, vue de face (pompes) : on voit le dessus du crâne (cheveux), le front juste en bas.
+  crown: "M-10 0Q-10 -12.6 0 -12.6Q10 -12.6 10 0Q10 6.4 7.6 9Q0 6.2 -7.6 9Q-10 6.4 -10 0Z", crownLines: ["M0 -12.4Q-1.4 -3 0.6 5.6", "M-6.6 -8Q-4 -1 -5.4 6", "M6.6 -8Q4 -1 5.4 6"],
   fist: SIDE.fist, flat: SIDE.flat, open: SIDE.open,
   // Main posée à plat au sol, vue de face : doigts vers nous (paume raccourcie, doigts écartés côte à côte).
   palm: { d: "M-1 -6.2Q3 -6.8 6 -5.6L6.6 5.6Q3 6.8 -1 6.2Z", lines: ["M3 -3.1L6.3 -3.1", "M3 0L6.4 0", "M3 3.1L6.3 3.1"] }
@@ -152,7 +154,7 @@ function curledTorso(P, t) {
 }
 
 /* ---------- Mannequin de face ---------- */
-// pose = { view:"front", hip:[x,y] (milieu du bassin), torso (-90 = droit), neck, R:{ua,fa,hand,th,sh,h?}, L:{…} }
+// pose = { view:"front", hip:[x,y] (milieu du bassin), torso (-90 = droit), neck, R:{ua,fa,hand,th,sh,h?}, L:{…}, crown? (dessus du crâne) }
 // R : côté droit de l'image. L (côté gauche) est par défaut le miroir de R ; ses angles se donnent tels qu'à l'écran.
 const mirrorA = a => 180 - a;
 export function solveFront(pose) {
@@ -178,7 +180,8 @@ function frontBody(P, target) {
     <path class="fg-sk fg-shoe" d="M${pt(add(o.ankle, [-4.4 * o.k, -1]))}L${pt(add(o.ankle, [4.2 * o.k, -1]))}L${pt(add(o.ankle, [7.4 * o.k, 7.4]))}Q${pt(add(o.ankle, [1 * o.k, 9.4]))} ${pt(add(o.ankle, [-4.2 * o.k, 7.4]))}Z"/>`;
   const legShort = o => o.th == null || P.nolegs ? "" : shorts(FRONT.th, o.hipJ, o.th, "M-12 -15H17Q18 0 17 15H-12Z", o.k < 0, L(o, "th"));
   const arm = o => `${seg(FRONT.ua, o.shoulder, o.ua, t, "", o.k < 0, L(o, "ua"))}${seg(FRONT.fa, o.elbow, o.fa, t, "", o.k < 0, L(o, "fa"))}${seg(FRONT[o.h || "fist"], o.wrist, o.hand, none, "", o.k < 0)}${seg(FRONT.delt, o.shoulder, o.ua, t, "", o.k < 0)}`;
-  const tr = P.torso + 180, head = `<g transform="${at(P.head, P.neck + 90)}"><path class="fg-sk" d="${FRONT.head.d}"/><path class="fg-hair" d="${FRONT.hair}"/>${FRONT.head.lines.map(l => `<path class="fg-ln" d="${l}"/>`).join("")}<path class="fg-ol" d="${FRONT.head.d}"/></g>`;
+  const face = P.crown ? `<path class="fg-hair" d="${FRONT.crown}"/>${FRONT.crownLines.map(l => `<path class="fg-ln" d="${l}"/>`).join("")}` : `<path class="fg-hair" d="${FRONT.hair}"/>${FRONT.head.lines.map(l => `<path class="fg-ln" d="${l}"/>`).join("")}`;
+  const tr = P.torso + 180, head = `<g transform="${at(P.head, P.neck + 90)}"><path class="fg-sk" d="${FRONT.head.d}"/>${face}<path class="fg-ol" d="${FRONT.head.d}"/></g>`;
   return {
     back: P.headBehind ? head : "",
     body: `${leg(P.L)}${leg(P.R)}${legShort(P.L)}${legShort(P.R)}
@@ -305,7 +308,8 @@ export const beltFront = () => E(P => { const a = add(P.hip, [0, 6]), b = add(P.
 // les angles : le mannequin bouge articulation par articulation, sans jamais changer de longueur.
 const LIMB = ["ua", "fa", "hand", "th", "sh", "ft"];
 // On garde aussi les points d'appui (main sur la barre, pied au sol) pour les suivre pendant le mouvement.
-const pick = o => { const r = { h: o.h, ls: o.ls, wristAt: o.wristAt, ankleAt: o.ankleAt, elbowBend: o.elbowBend, kneeBend: o.kneeBend, track: o.track }; LIMB.forEach(k => { if (o[k] != null && !isNaN(o[k])) r[k] = o[k]; }); return r; };
+// at : position réelle de la cheville et du poignet (même donnés par des angles) pour repérer un appui immobile.
+const pick = o => { const r = { h: o.h, ls: o.ls, wristAt: o.wristAt, ankleAt: o.ankleAt, elbowBend: o.elbowBend, kneeBend: o.kneeBend, track: o.track, wr: o.wrist, an: o.ankle }; LIMB.forEach(k => { if (o[k] != null && !isNaN(o[k])) r[k] = o[k]; }); return r; };
 export function anglesOf(pose) {
   const P = solve(pose), base = { ...pose, head: typeof pose.head === "number" ? pose.head : undefined };
   return P.front ? { ...base, R: pick(P.R), L: pick(P.L) } : { ...base, near: pick(P.near), far: pick(P.far) };
@@ -313,7 +317,7 @@ export function anglesOf(pose) {
 const turn = (a, b, t) => a + ((((b - a) % 360) + 540) % 360 - 180) * t;
 export function lerpPose(A, B, t) {
   const num = (x, y, d = 0) => (x ?? d) + ((y ?? d) - (x ?? d)) * t;
-  const limb = (a = {}, b = {}) => {
+  const limb = (a = {}, b = {}, noStep) => {
     const r = { h: t < 0.5 ? a.h : b.h, ls: {} };
     LIMB.forEach(k => { if (a[k] != null && b[k] != null) r[k] = turn(a[k], b[k], t); else if (a[k] != null || b[k] != null) r[k] = a[k] ?? b[k]; });
     ["ua", "fa", "th", "sh"].forEach(k => { const x = (a.ls || {})[k] ?? 1, y = (b.ls || {})[k] ?? 1; if (x !== 1 || y !== 1) r.ls[k] = x + (y - x) * t; });
@@ -325,11 +329,29 @@ export function lerpPose(A, B, t) {
     // « track » : la main (et ce qu'elle tient) suit la ligne droite entre les deux images (barre collée aux jambes).
     else if ((a.track || b.track) && a.wristAt && b.wristAt) { r.wristAt = [num(a.wristAt[0], b.wristAt[0]), num(a.wristAt[1], b.wristAt[1])]; r.elbowBend = a.elbowBend ?? b.elbowBend; r.track = 1; }
     if (same(a.ankleAt, b.ankleAt)) { r.ankleAt = a.ankleAt; r.kneeBend = bent(a, "th", "sh") >= bent(b, "th", "sh") ? a.kneeBend : b.kneeBend; }
+    // Pied (ou main) au même endroit dans les deux images, même s'il est donné par des angles : il ne bouge pas
+    // (sinon l'interpolation des angles ferait passer le pied sous le sol). Le pli suit l'image la plus pliée.
+    const side = (o, x, y) => Math.sign((((o[y] - o[x]) % 360) + 540) % 360 - 180) || 1;
+    // Pour le pied, un petit glissement (moins de 12) est suivi en ligne droite.
+    const near12 = a.an && b.an && Math.hypot(a.an[0] - b.an[0], a.an[1] - b.an[1]) < 12;
+    // Pied qui passe d'un appui au sol à un autre (pas, saut vers l'arrière) : ligne droite un peu levée au milieu,
+    // pour qu'il ne passe jamais sous le sol.
+    const low = q => q && q[1] > GROUND - 32;
+    if (!noStep && !same(a.ankleAt, b.ankleAt) && !near12 && low(a.an) && low(b.an) && a.th != null && b.th != null) {
+      const d = Math.hypot(a.an[0] - b.an[0], a.an[1] - b.an[1]), o2 = bent(a, "th", "sh") >= bent(b, "th", "sh") ? a : b;
+      r.ankleAt = [num(a.an[0], b.an[0]), num(a.an[1], b.an[1]) - Math.min(22, d * 0.3) * Math.sin(Math.PI * t)];
+      r.kneeBend = o2.kneeBend && o2.ankleAt ? o2.kneeBend : side(o2, "th", "sh");
+    }
+    if (!same(a.ankleAt, b.ankleAt) && near12 && a.th != null && b.th != null) { const o2 = bent(a, "th", "sh") >= bent(b, "th", "sh") ? a : b; r.ankleAt = [num(a.an[0], b.an[0]), num(a.an[1], b.an[1])]; r.kneeBend = o2.kneeBend && o2.ankleAt ? o2.kneeBend : side(o2, "th", "sh"); }
+    if (!r.wristAt && same(a.wr, b.wr) && a.ua != null && b.ua != null) { const o2 = bent(a, "ua", "fa") >= bent(b, "ua", "fa") ? a : b; r.wristAt = a.wr; r.elbowBend = o2.elbowBend && o2.wristAt ? o2.elbowBend : side(o2, "ua", "fa"); }
     return r;
   };
   const o = { ...(t < 0.5 ? A : B), hip: [num(A.hip[0], B.hip[0]), num(A.hip[1], B.hip[1])], torso: turn(A.torso, B.torso, t), neck: turn(A.neck, B.neck, t),
     shrug: num(A.shrug, B.shrug), tls: num(A.tls, B.tls, 1), curl: num(A.curl, B.curl) };
   if (A.head != null || B.head != null) o.head = num(A.head, B.head);
-  if (A.view === "front") { o.R = limb(A.R, B.R); o.L = limb(A.L, B.L); } else { o.near = limb(A.near, B.near); o.far = limb(A.far, B.far); }
+  // Marche : les deux pieds échangent leur place (un pas, puis le suivant) : pas de pied levé, sinon le corps « s'assoit ».
+  const cross = (p, q) => { const c = (u, v) => u && v && Math.hypot(u[0] - v[0], u[1] - v[1]) < 12; return c(p.a.an, q.b.an) && c(q.a.an, p.b.an) && !c(p.a.an, p.b.an); };
+  if (A.view === "front") { o.R = limb(A.R, B.R); o.L = limb(A.L, B.L); }
+  else { const x = cross({ a: A.near || {}, b: B.near || {} }, { a: A.far || {}, b: B.far || {} }); o.near = limb(A.near, B.near, x); o.far = limb(A.far, B.far, x); }
   return o;
 }
