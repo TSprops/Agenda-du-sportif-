@@ -97,7 +97,8 @@ function playViews(views, target) {
   const t0 = performance.now();
   const tick = now => {
     tracks.forEach(tr => {
-      const seg = MOVE_MS + HOLD_MS, total = tr.seq.length * seg, e = (now - t0) % total, i = Math.floor(e / seg), f = e - i * seg;
+      // L'heure passée par le navigateur peut précéder t0 de quelques ms : on garde un temps toujours positif.
+      const seg = MOVE_MS + HOLD_MS, total = tr.seq.length * seg, e = (((now - t0) % total) + total) % total, i = Math.floor(e / seg), f = e - i * seg;
       const a = tr.seq[i], b = tr.seq[(i + 1) % tr.seq.length], t = f < HOLD_MS ? 0 : ease((f - HOLD_MS) / MOVE_MS);
       const pose = { ...lerpPose(tr.poses[a], tr.poses[b], t), eq: t < 0.5 ? tr.eq[a] : tr.eq[b] };
       tr.el.innerHTML = figure(pose, target, tr.box);
