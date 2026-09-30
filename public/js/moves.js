@@ -628,7 +628,8 @@ const curlS = (up, eq, o = {}) => stand(merge({ near: up ? { ua: 86, fa: -72, ha
 const curlF = (up, eq, o = {}) => standF({ ...o, R: up ? { ua: 88, fa: -92, hand: -90, ls: { fa: 0.35 } } : { ua: 88, fa: 90, hand: 90 }, eq });
 const inclCurl = up => ({ hip: [116, 150], torso: -125, neck: -110, near: { ankleAt: [156, ANK], ft: 0, kneeBend: 1, ua: 90, fa: up ? -60 : 90, hand: up ? -60 : 90 },
   eq: [bench(40, 156, 158, 55, 118), db(P => [P.near.grip, 0], "end", { top: true })] });
-const preacher = up => ({ hip: [96, 150], torso: -80, neck: -80, near: { th: 0, sh: 92, ft: 0, ua: 40, fa: up ? -100 : 55, hand: up ? -100 : 60 },
+// En bas, on s'arrête un peu avant l'extension complète (avant-bras à 15° du bras, jamais au-delà).
+const preacher = up => ({ hip: [96, 150], torso: -80, neck: -80, near: { th: 0, sh: 92, ft: 0, ua: 40, fa: up ? -100 : 25, hand: up ? -100 : 30 },
   eq: [box(74, 158, 34, 52), raw(P => { const n = [Math.cos(rad(130)), Math.sin(rad(130))], a = add(P.sh, [n[0] * 10 + 3, n[1] * 10 + 3]), b = add(P.near.elbow, [n[0] * 8, n[1] * 8]);
     return `<line class="fg-padline" x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}"/><line class="fg-rail" x1="${((a[0] + b[0]) / 2).toFixed(1)}" y1="${((a[1] + b[1]) / 2 + 6).toFixed(1)}" x2="${((a[0] + b[0]) / 2).toFixed(1)}" y2="${GROUND}"/>`; }, { mid: true }),
     bar(P => P.near.grip, 10, { top: true })] });
@@ -655,7 +656,8 @@ Object.assign(HOW, {
       front([curlF(0, [fdb("end", { top: true })]), curlF(1, [fdb("across", { top: true })])], ["Paumes face au corps", "Rotation : paumes vers le haut"])],
     cue: "Haltères le long du corps, paumes face aux cuisses : monte en tournant le poignet pour finir paumes vers les épaules, puis redescends en tournant dans l’autre sens.",
     tips: ["Supination : le poignet tourne pendant la montée (paumes vers le haut en haut).", "Coudes fixes le long du corps.", "Monte et descends lentement, sans élan."] },
-  "Curl marteau": { views: [side([curlS(0, [db(P => [P.near.grip, 90], "side", { mid: true })]), curlS(1, [db(P => [P.near.grip, -62], "side", { top: true })])], ["Bras tendus", "Pouces vers le haut"]),
+  // Prise neutre : la poignée reste perpendiculaire à l'avant-bras (elle suit la main), l'haltère ne se retourne jamais.
+  "Curl marteau": { anim: "De profil", views: [side([curlS(0, [db(P => [P.near.grip, P.near.hand], "side", { top: true })], { box: [80, 40, 196, GROUND] }), curlS(1, [db(P => [P.near.grip, P.near.hand], "side", { top: true })])], ["Bras tendus", "Pouces vers le haut"]),
       front([curlF(0, [fdb("end", { top: true })]), curlF(1, [fdb("end", { top: true })])], ["Paumes face au corps", "Pouces vers le haut"])], ...HAMMER },
   "Curl à la poulie": { views: [side([curlS(0, [cable(186, GROUND - 8, "bar")], { near: { ua: 92, fa: 76, hand: 76 } }), curlS(1, [cable(186, GROUND - 8, "bar")])], ["Bras tendus vers la poulie", "Barre aux épaules"])],
     cue: "Face à la poulie basse, barre en main : monte la barre vers les épaules en gardant les coudes fixes, puis redescends lentement.",
