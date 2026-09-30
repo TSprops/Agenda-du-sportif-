@@ -450,11 +450,21 @@ Object.assign(HOW, {
 const SH_Y = HIPY - 52;                                   // épaule d'une personne debout (x = 120)
 const ohpS = up => stand({ near: up ? { ua: -93, fa: -91, hand: -90 } : { ua: 78, fa: -96, hand: -90 }, eq: [db(P => [P.near.grip, 0], "end", { top: true })] });
 const ohpF = up => standF({ R: up ? { ua: -68, fa: -86, hand: -90 } : { ua: 16, fa: -88, hand: -90 }, eq: [fdb("across", { top: true })] });
-const arnoldS = k => ({ hip: [120, 150], torso: -88, neck: -88, near: [{ ua: 20, fa: -98, hand: -90 }, { ua: -40, fa: -95, hand: -90 }, { ua: -93, fa: -91, hand: -90 }][k],
-  eq: [seat(104, 158, 1, 4), db(P => [P.near.grip, 0], "end", { top: true })] });
+// Développé Arnold. spin = rotation des poignets (0 : paumes vers soi, 1 : paumes vers l'avant) ; l'haltère la montre :
+// de face la poignée gauche-droite raccourcit jusqu'à pointer vers nous (paumes face à face) puis revient ; de profil c'est l'inverse.
+const spinDb = (P, c, front) => {
+  const k = Math.abs(Math.cos(Math.PI * (P.spin || 0))), w = front ? k : 1 - k, h = 11 * w, r = v => v.toFixed(1);
+  const end = w < 0.45 ? `<circle class="fg-plate" cx="${r(c[0])}" cy="${r(c[1])}" r="8"/><circle class="fg-hub" cx="${r(c[0])}" cy="${r(c[1])}" r="2.2"/>` : "";
+  return `<g class="fg-eq">${end}${w >= 0.2 ? `<line class="fg-handle" x1="${r(c[0] - h)}" y1="${r(c[1])}" x2="${r(c[0] + h)}" y2="${r(c[1])}"/><rect class="fg-plate" x="${r(c[0] - h - 3)}" y="${r(c[1] - 9)}" width="6" height="18" rx="2"/><rect class="fg-plate" x="${r(c[0] + h - 3)}" y="${r(c[1] - 9)}" width="6" height="18" rx="2"/>` : ""}</g>`;
+};
+// De profil : départ coudes devant, puis bras ouverts sur le côté (haut du bras hors du plan, donc court), puis bras tendus.
+const arnoldS = k => ({ hip: [120, 150], torso: -88, neck: -88, spin: [0, 1, 1][k], near: [{ ua: 20, fa: -98, hand: -90 }, { ua: 80, fa: -92, hand: -90, ls: { ua: 0.25 } }, { ua: -93, fa: -91, hand: -90 }][k],
+  eq: [seat(104, 158, 1, 4), raw(P => spinDb(P, P.near.grip, false), { top: true })] });
 const fixLegsSeated = p => ({ ...p, near: { th: 0, sh: 92, ft: 0, ...p.near } });
-const arnoldF = k => ({ view: "front", torso: -90, neck: -90, hip: [120, 150], R: [{ ua: 112, fa: -96, hand: -90, ls: { ua: 0.35, th: 0.3 } }, { ua: 30, fa: -92, hand: -90, ls: { ua: 0.8, th: 0.3 } }, { ua: -68, fa: -86, hand: -90, ls: { th: 0.3 } }][k],
-  eq: [fbench(158), fdb("across", { top: true })] });
+// De face (référence) : haltères devant le visage, coudes devant ; les bras s'ouvrent sur les côtés en tournant
+// les poignets (position basse du développé militaire), puis poussée vers le haut, paumes vers l'avant.
+const arnoldF = k => ({ view: "front", torso: -90, neck: -90, hip: [120, 150], spin: [0, 1, 1][k], R: { th: 90, sh: 90, ...[{ ua: 112, fa: -96, hand: -90, ls: { ua: 0.35, th: 0.3, sh: 0.86 } }, { ua: 12, fa: -88, hand: -90, ls: { th: 0.3, sh: 0.86 } }, { ua: -68, fa: -86, hand: -90, ls: { th: 0.3, sh: 0.86 } }][k] },
+  eq: [fbench(158), raw(P => spinDb(P, P.R.grip, true) + spinDb(P, P.L.grip, true), { top: true })] });
 const armsForward = (ls) => ({ ua: -4, fa: -4, hand: -4, ls });
 const latS = up => stand({ near: up ? { ua: -8, fa: -6, hand: -6, ls: { ua: 0.42, fa: 0.42 } } : { ua: 92, fa: 90, hand: 90 }, eq: [db(P => [P.near.grip, up ? 90 : 90], "side", { top: true })] });
 const latF = up => standF({ R: up ? { ua: 2, fa: -4, hand: -4 } : { ua: 86, fa: 90, hand: 90 }, eq: [fdb("end", { top: true })] });
@@ -474,8 +484,8 @@ Object.assign(HOW, {
   "Développé militaire": { views: [side([ohpS(0), ohpS(1)], ["Haltères à hauteur des épaules", "Bras tendus au-dessus de la tête"]), front([ohpF(0), ohpF(1)], ["Coudes sous les poignets", "Bras tendus"])],
     cue: "Debout, un haltère dans chaque main à hauteur des épaules, paumes vers l’avant : pousse au-dessus de la tête sans cambrer le dos, puis redescends.",
     tips: ["Départ : haltères à hauteur des oreilles, coudes sous les poignets.", "Monte jusqu’aux bras presque tendus, sans cogner les haltères.", "Abdos et fessiers serrés : le dos ne se creuse pas."] },
-  "Développé Arnold": { views: [side([0, 1, 2].map(k => fixLegsSeated(arnoldS(k))), ["Paumes vers toi", "Rotation en ouvrant les bras", "Paumes vers l’avant"], [0, 1, 2, 1]),
-      front([0, 1, 2].map(arnoldF), ["Paumes vers toi, coudes devant", "Rotation", "Paumes vers l’avant, bras tendus"], [0, 1, 2, 1])],
+  "Développé Arnold": { views: [side([0, 1, 2].map(k => fixLegsSeated(arnoldS(k))), ["Paumes vers toi, coudes devant", "Bras ouverts sur les côtés", "Paumes vers l’avant, bras tendus"], [0, 1, 2, 1]),
+      front([0, 1, 2].map(arnoldF), ["Paumes vers toi, coudes devant", "Bras ouverts en tournant les poignets", "Poussée : paumes vers l’avant, bras tendus"], [0, 1, 2, 1])],
     cue: "Assis, haltères devant le visage paumes vers toi : pousse vers le haut en tournant les poignets pour finir paumes vers l’avant, puis redescends en tournant dans l’autre sens.",
     tips: ["Assis sur un banc, dossier droit.", "En bas : paumes vers toi, coudes devant le corps.", "La rotation se fait pendant la montée : en haut, paumes vers l’avant."] },
   "Élévations latérales": { views: [side([latS(0), latS(1)], ["Bras le long du corps", "Bras à l’horizontale sur les côtés"]), front([latF(0), latF(1)], ["Bras le long du corps", "Bras à l’horizontale"])],

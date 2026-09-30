@@ -350,7 +350,7 @@ export function lerpPose(A, B, t) {
     return r;
   };
   const o = { ...(t < 0.5 ? A : B), hip: [num(A.hip[0], B.hip[0]), num(A.hip[1], B.hip[1])], torso: turn(A.torso, B.torso, t), neck: turn(A.neck, B.neck, t),
-    shrug: num(A.shrug, B.shrug), tls: num(A.tls, B.tls, 1), curl: num(A.curl, B.curl) };
+    shrug: num(A.shrug, B.shrug), tls: num(A.tls, B.tls, 1), curl: num(A.curl, B.curl), spin: num(A.spin, B.spin) };
   if (A.head != null || B.head != null) o.head = num(A.head, B.head);
   // Marche : les deux pieds échangent leur place (un pas, puis le suivant) : pas de pied levé, sinon le corps « s'assoit ».
   const cross = (p, q) => { const c = (u, v) => u && v && Math.hypot(u[0] - v[0], u[1] - v[1]) < 12; return c(p.a.an, q.b.an) && c(q.a.an, p.b.an) && !c(p.a.an, p.b.an); };
