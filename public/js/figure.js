@@ -248,7 +248,7 @@ export const db = (at, mode = "end", o) => E(P => {
 }, o);
 const at_ = (p, d) => at(p, d);
 export const kb = (at, o) => E(P => { const c = typeof at === "function" ? at(P) : at; return `<g class="fg-eq"><path class="fg-kbh" d="M${r1(c[0] - 5)} ${r1(c[1] + 4)}Q${r1(c[0] - 5)} ${r1(c[1] - 3)} ${r1(c[0])} ${r1(c[1] - 3)}Q${r1(c[0] + 5)} ${r1(c[1] - 3)} ${r1(c[0] + 5)} ${r1(c[1] + 4)}"/><circle class="fg-plate" cx="${r1(c[0])}" cy="${r1(c[1] + 11)}" r="9"/></g>`; }, o);
-export const medball = (at, o) => E(P => { const c = typeof at === "function" ? at(P) : at; return `<g class="fg-eq"><circle class="fg-ball" cx="${r1(c[0])}" cy="${r1(c[1])}" r="9"/><path class="fg-ballln" d="M${r1(c[0] - 9)} ${r1(c[1])}Q${r1(c[0])} ${r1(c[1] + 5)} ${r1(c[0] + 9)} ${r1(c[1])}M${r1(c[0])} ${r1(c[1] - 9)}Q${r1(c[0] - 4)} ${r1(c[1])} ${r1(c[0])} ${r1(c[1] + 9)}"/></g>`; }, o);
+export const medball = (at, o, r = 9) => E(P => { const c = typeof at === "function" ? at(P) : at; return `<g class="fg-eq"><circle class="fg-ball" cx="${r1(c[0])}" cy="${r1(c[1])}" r="${r}"/><path class="fg-ballln" d="M${r1(c[0] - r)} ${r1(c[1])}Q${r1(c[0])} ${r1(c[1] + r * 0.55)} ${r1(c[0] + r)} ${r1(c[1])}M${r1(c[0])} ${r1(c[1] - r)}Q${r1(c[0] - r * 0.45)} ${r1(c[1])} ${r1(c[0])} ${r1(c[1] + r)}"/></g>`; }, o);
 // Banc : plat (deg 0), incliné (deg > 0, dossier relevé côté gauche) ou décliné (deg < 0). pivot = jonction assise / dossier.
 const bench_ = (x1, x2, top, deg = 0, pivot) => E(() => {
   const legs = `<rect class="fg-frame" x="${x1 + 8}" y="${top + 5}" width="4" height="${G - top - 7}"/><rect class="fg-frame" x="${x2 - 12}" y="${top + 5}" width="4" height="${G - top - 7}"/>
@@ -348,23 +348,27 @@ export function lerpPose(A, B, t) {
     // Pied (ou main) au même endroit dans les deux images, même s'il est donné par des angles : il ne bouge pas
     // (sinon l'interpolation des angles ferait passer le pied sous le sol). Le pli suit l'image la plus pliée.
     const side = (o, x, y) => Math.sign((((o[y] - o[x]) % 360) + 540) % 360 - 180) || 1;
+    // « track » sur les pieds (saut) : la cheville suit la ligne droite entre deux cibles (elle ne passe pas dans le matériel).
+    if ((a.track || b.track) && a.ankleAt && b.ankleAt && !same(a.ankleAt, b.ankleAt)) { r.ankleAt = [num(a.ankleAt[0], b.ankleAt[0]), num(a.ankleAt[1], b.ankleAt[1])]; r.kneeBend = bent(a, "th", "sh") >= bent(b, "th", "sh") ? a.kneeBend : b.kneeBend; r.track = 1; }
     // Pour le pied, un petit glissement (moins de 12) est suivi en ligne droite.
     const near12 = a.an && b.an && Math.hypot(a.an[0] - b.an[0], a.an[1] - b.an[1]) < 12;
     // Pied qui passe d'un appui au sol à un autre (pas, saut vers l'arrière) : ligne droite un peu levée au milieu,
     // pour qu'il ne passe jamais sous le sol.
     const low = q => q && q[1] > GROUND - 32;
-    if (!noStep && !same(a.ankleAt, b.ankleAt) && !near12 && low(a.an) && low(b.an) && a.th != null && b.th != null) {
+    if (!r.ankleAt && !noStep && !same(a.ankleAt, b.ankleAt) && !near12 && low(a.an) && low(b.an) && a.th != null && b.th != null) {
       const d = Math.hypot(a.an[0] - b.an[0], a.an[1] - b.an[1]), o2 = bent(a, "th", "sh") >= bent(b, "th", "sh") ? a : b;
-      r.ankleAt = [num(a.an[0], b.an[0]), num(a.an[1], b.an[1]) - Math.min(22, d * 0.3) * Math.sin(Math.PI * t)];
+      r.ankleAt = [num(a.an[0], b.an[0]), num(a.an[1], b.an[1]) - Math.min(32, d * 0.3) * Math.sin(Math.PI * t)];
       r.kneeBend = o2.kneeBend && o2.ankleAt ? o2.kneeBend : side(o2, "th", "sh");
     }
-    if (!same(a.ankleAt, b.ankleAt) && near12 && a.th != null && b.th != null) { const o2 = bent(a, "th", "sh") >= bent(b, "th", "sh") ? a : b; r.ankleAt = [num(a.an[0], b.an[0]), num(a.an[1], b.an[1])]; r.kneeBend = o2.kneeBend && o2.ankleAt ? o2.kneeBend : side(o2, "th", "sh"); }
+    if (!r.ankleAt && !same(a.ankleAt, b.ankleAt) && near12 && a.th != null && b.th != null) { const o2 = bent(a, "th", "sh") >= bent(b, "th", "sh") ? a : b; r.ankleAt = [num(a.an[0], b.an[0]), num(a.an[1], b.an[1])]; r.kneeBend = o2.kneeBend && o2.ankleAt ? o2.kneeBend : side(o2, "th", "sh"); }
     if (!r.wristAt && same(a.wr, b.wr) && a.ua != null && b.ua != null) { const o2 = bent(a, "ua", "fa") >= bent(b, "ua", "fa") ? a : b; r.wristAt = a.wr; r.elbowBend = o2.elbowBend && o2.wristAt ? o2.elbowBend : side(o2, "ua", "fa"); }
     return r;
   };
   const o = { ...(t < 0.5 ? A : B), hip: [num(A.hip[0], B.hip[0]), num(A.hip[1], B.hip[1])], torso: turn(A.torso, B.torso, t), neck: turn(A.neck, B.neck, t),
     shrug: num(A.shrug, B.shrug), tls: num(A.tls, B.tls, 1), curl: num(A.curl, B.curl), spin: num(A.spin, B.spin) };
   if (A.head != null || B.head != null) o.head = num(A.head, B.head);
+  // obj : position d'un objet lancé (ballon), en ligne droite d'une image à l'autre.
+  if (A.obj && B.obj) o.obj = [num(A.obj[0], B.obj[0]), num(A.obj[1], B.obj[1])];
   // Marche (pieds à plat qui échangent leur place, un pas puis le suivant) : pas de pied levé, sinon le corps « s'assoit ».
   const cross = (p, q) => { const c = (u, v) => u && v && Math.hypot(u[0] - v[0], u[1] - v[1]) < 12; const flat = u => u && u[1] > GROUND - 14;
     return c(p.a.an, q.b.an) && c(q.a.an, p.b.an) && !c(p.a.an, p.b.an) && [p.a.an, p.b.an, q.a.an, q.b.an].every(flat); };

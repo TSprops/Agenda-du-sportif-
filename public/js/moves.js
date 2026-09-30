@@ -2,7 +2,7 @@
 // Une fiche = des vues (profil, face) ; une vue = des images clés (départ, arrivée…) et l'ordre de l'animation.
 // Ce fichier n'importe que figure.js (qui n'importe rien) : il peut donc être évalué à tout moment.
 import { GROUND, bar, db, kb, medball, bench, roller, pullbar, dipbars, rings, cable, cableTop, seat, box, wall, climbRope, wheel, line, pad, raw,
-  fbar, fdb, fpullbar, fdips, frings, fcables, fcableTop, fbench, pole, beltSide, beltFront, add } from "./figure.js";
+  fbar, fdb, fpullbar, fdips, frings, fcables, fcableTop, fbench, pole, beltSide, beltFront, add, solve } from "./figure.js";
 
 const ANK = GROUND - 7.2;            // cheville quand le pied est à plat au sol
 const HIPY = ANK - 90;               // hanche d'une personne debout
@@ -19,38 +19,68 @@ const front = (frames, caps, seq) => view("De face", frames, caps, seq);
 const DA = ["Départ", "Arrivée"];
 
 /* ═══ CrossFit / fonctionnel ═══ */
-const burpee = [
-  stand({ near: { ua: 95, fa: 88 } }),
-  { hip: [104, 172], torso: -20, neck: -8, near: { ankleAt: [116, ANK], ft: 0, wristAt: [150, GROUND - 3], h: "flat", hand: 0 } },
-  { hip: [70, 188], torso: -3, neck: 2, near: { ankleAt: onToes(-18, 80), ft: 80, wristAt: [118, GROUND - 3], h: "flat", hand: 0, ls: { ua: 0.75 } } },
-  stand({ hip: [120, HIPY - 12], neck: -95, near: { ua: -84, fa: -88, hand: -90, h: "open", ft: 55 } })
-];
-const wb = x => [wall(186, -20), ...x];
+// Burpee : debout, mains au sol, pieds en arrière (planche), une pompe, retour des pieds vers les mains, squat sauté.
+// Les mains restent au même endroit du sol de « mains au sol » jusqu'au retour ; les pieds sautent par-dessus le sol.
+const burpeeFrames = () => {
+  const toes = onToes(6, 75), pl = y => plank(144, y, 146, { near: y < 170 ? { ls: {} } : {} }, toes);
+  return [
+    stand({ near: { ua: 95, fa: 88 } }),
+    { hip: [104, 166], torso: -15, neck: -4, near: { ankleAt: [116, ANK], ft: 0, wristAt: [146, GROUND - 3], h: "flat", hand: 0 } },
+    pl(150), pl(186),
+    stand({ hip: [120, HIPY - 16], neck: -95, near: { ua: -84, fa: -88, hand: -90, h: "open", ft: 55 } })];
+};
+// Wall ball : personne plus loin du mur, ballon plus gros (obj = position du ballon, interpolée pendant l'animation).
+// Squat ballon contre la poitrine, lancer bras tendus, ballon sur la cible (trajectoire en pointillés) ; il revient
+// ensuite dans les mains pour le squat suivant.
+const WALL_X = 222, TARGET = [WALL_X - 13, -20], BALL_R = 12;
+const WB_BOX = [70, -60, WALL_X + 10, GROUND];
+const wbEq = extra => [wall(WALL_X, TARGET[1]), ...extra, medball(P => P.obj, { top: true }, BALL_R)];
+const withBall = (pose, at) => ({ box: WB_BOX, ...pose, obj: at(solve(pose)) });
+const wbThrow = stand({ neck: -100, near: { ua: -70, fa: -66, hand: -66, h: "open", ft: 40 }, hip: [120, HIPY - 12] });
+const wbRelease = add(solve(wbThrow).near.grip, [11, -18]), wbApex = [(wbRelease[0] + TARGET[0]) / 2, Math.min(wbRelease[1], TARGET[1]) - 18];
+// Trajectoire en pointillés : de la main à la cible, en passant par le sommet de l'arc.
+const wbPath = raw(() => `<path class="fg-path" d="M${wbRelease[0].toFixed(1)} ${wbRelease[1].toFixed(1)}Q${(2 * wbApex[0] - (wbRelease[0] + TARGET[0]) / 2).toFixed(1)} ${(2 * wbApex[1] - (wbRelease[1] + TARGET[1]) / 2).toFixed(1)} ${TARGET[0]} ${TARGET[1]}"/>`);
 const wallball = [
-  { hip: [106, 166], torso: -66, neck: -86, near: { ankleAt: [124, ANK], ft: 0, wristAt: [136, 124], hand: -40, h: "open" },
-    eq: wb([medball(P => add(P.sh, [22, 6]), { mid: true })]) },
-  stand({ neck: -100, near: { ua: -70, fa: -66, hand: -66, h: "open", ft: 40 }, hip: [120, HIPY - 12],
-    eq: wb([medball(P => add(P.near.grip, [10, -16]), { top: true })]) })
+  withBall({ hip: [106, 166], torso: -66, neck: -86, near: { ankleAt: [124, ANK], ft: 0, wristAt: [136, 124], hand: -40, h: "open" }, eq: wbEq([]) }, P => add(P.sh, [24, 6])),
+  withBall({ ...wbThrow, eq: wbEq([]) }, () => wbRelease),
+  withBall({ ...wbThrow, eq: wbEq([wbPath]) }, () => wbApex),
+  withBall({ ...wbThrow, eq: wbEq([wbPath]) }, () => TARGET)
 ];
+// Snatch et clean (animation) : la barre monte en ligne droite devant le corps (track), les mains la tiennent toujours.
+const liftBar = o => ({ eq: [bar(P => P.near.grip, 13, { top: true })], ...o });
+const pullFloor = x => liftBar({ hip: [98, 165], torso: -30, neck: -20, near: { ankleAt: [124, ANK], ft: 0, wristAt: [x, GROUND - 18.5], hand: 90, track: 1 } });
+const pullKnee = () => liftBar({ hip: [92, 128], torso: -40, neck: -28, near: { ankleAt: [124, ANK], ft: 0, wristAt: [133, 152.5], hand: 90, track: 1 } });
+// Extension : debout sur la pointe des pieds, épaules haussées, bras encore tendus, barre devant les cuisses.
+const pullExt = () => liftBar(stand({ hip: [120, HIPY - 9], shrug: 4, near: { ft: 30, wristAt: [128, 104], hand: 90, track: 1 } }));
 const snatchStart = { hip: [98, 165], torso: -30, neck: -20, near: { ankleAt: [124, ANK], ft: 0, wristAt: [128, GROUND - 18.5], hand: 90 }, eq: [bar(P => P.near.grip, 13, { mid: true })] };
 const rack = { ua: 20, fa: -150, hand: -30 };
 const boxAt = box(150, 150, 58, 60);
 
 export const HOW = {
-  "Burpees": { views: [side(burpee, ["Debout", "Mains au sol", "Poitrine au sol", "Saut, bras en l’air"], [0, 1, 2, 1, 0, 3])],
+  "Burpees": { views: [],   // images posées plus bas (elles utilisent la planche des pompes)
     cue: "Mains au sol, pieds en arrière, poitrine au sol, puis ramène les pieds, remonte et saute bras en l’air.",
     tips: ["Le corps reste tourné du même côté pendant tout le mouvement.", "En planche, corps gainé : pas de fesses en l’air.", "Saut léger, réception souple sur l’avant du pied."] },
-  "Wall balls": { views: [side(wallball, ["Squat, ballon contre la poitrine", "Lancer vers la cible"])],
+  "Wall balls": { views: [side(wallball.slice(0, 2), ["Squat, ballon contre la poitrine", "Lancer vers la cible"])],
+    animViews: [side(wallball, ["Squat, ballon contre la poitrine", "Lancer", "Ballon en vol", "Ballon sur la cible"])],
     cue: "Medecine ball contre la poitrine : descends en squat, puis remonte d’un coup et lance le ballon sur la cible au mur. Rattrape-le et enchaîne.",
     tips: ["Squat complet à chaque répétition, dos droit.", "C’est la poussée des jambes qui lance le ballon, les bras finissent le geste.", "Regarde la cible, rattrape le ballon en redescendant directement en squat."] },
   "Snatch": { views: [side([snatchStart, stand({ neck: -92, near: { ua: -96, fa: -94, hand: -92, ls: { ua: 0.9, fa: 0.9 } }, eq: [bar(P => P.near.grip, 13, { top: true })] })], ["Barre au sol, prise large", "Barre au-dessus de la tête, bras tendus"])],
+    // Tirage : coudes hauts, la barre passe devant le visage puis au-dessus de la tête (jamais dans la tête).
+    animViews: [side([pullFloor(128), pullKnee(), pullExt(),
+      liftBar(stand({ hip: [120, HIPY - 6], shrug: 4, neck: -92, near: { ft: 20, wristAt: [140, 50], hand: -60, elbowBend: 1, track: 1 } })),
+      liftBar(stand({ neck: -92, near: { wristAt: [138, 22], hand: -80, elbowBend: 1, track: 1 } })),
+      liftBar(stand({ neck: -92, near: { wristAt: [115, 9.5], hand: -92, ls: { ua: 0.9, fa: 0.9 }, track: 1 } }))],
+      ["Barre au sol, prise large", "Barre devant les genoux", "Extension, sur la pointe des pieds", "Tirage, coudes hauts", "La barre passe devant le visage", "Bras tendus au-dessus de la tête"], [0, 1, 2, 3, 4, 5, 4, 3, 2, 1])],
     cue: "Prise très large : arrache la barre du sol d’un seul mouvement et reçois-la bras tendus au-dessus de la tête.",
     tips: ["Mouvement technique : apprends-le avec un bâton ou une barre à vide.", "Barre toujours près du corps pendant la montée.", "À l’arrivée, bras verrouillés, barre au-dessus de la nuque."] },
+  // Élan, impulsion (jambes tendues, bras vers l'avant), saut genoux groupés au-dessus de la box, réception pieds posés
+  // sur la box. Les pieds suivent une ligne droite (track) qui passe au-dessus du bord. L'animation revient en arrière.
   "Box jumps": { views: [side([
-      { hip: [98, 142], torso: -52, neck: -40, near: { ankleAt: [112, ANK], ft: 0, ua: 150, fa: 150, hand: 150, h: "open" }, eq: [boxAt] },
-      { hip: [138, 96], torso: -70, neck: -80, near: { ankleAt: [150, 140], ft: 30, ua: -40, fa: -50, hand: -50, h: "open" }, eq: [boxAt] },
-      { hip: [168, 116], torso: -62, neck: -75, near: { ankleAt: [182, 150 - 7.2], ft: 0, ua: 10, fa: 0, hand: 0, h: "open" }, eq: [boxAt] }],
-      ["Élan : bras en arrière", "Saut : bras vers l’avant", "Réception sur la box"], [0, 1, 2])],
+      { hip: [98, 142], torso: -52, neck: -40, near: { ankleAt: [112, ANK], ft: 0, ua: 118, fa: 122, hand: 122, h: "open" }, eq: [boxAt] },
+      { hip: [112, 114], torso: -65, neck: -72, near: { ankleAt: onToes(122, 45), ft: 45, kneeBend: 1, ua: -38, fa: -42, hand: -42, h: "open", track: 1 }, eq: [boxAt] },
+      { hip: [140, 92], torso: -70, neck: -78, near: { ankleAt: [150, 122], ft: 20, kneeBend: 1, ua: -20, fa: -24, hand: -24, h: "open", track: 1 }, eq: [boxAt] },
+      { hip: [168, 116], torso: -62, neck: -75, near: { ankleAt: [182, 150 - 7.2], ft: 0, ua: 10, fa: 0, hand: 0, h: "open", track: 1 }, eq: [boxAt] }],
+      ["Élan : bras en arrière", "Impulsion : jambes tendues", "Saut : genoux groupés", "Réception sur la box"], [0, 1, 2, 3, 2, 1])],
     cue: "Élan des bras vers l’arrière, saute à pieds joints en lançant les bras devant, et réceptionne-toi en douceur sur la box, genoux fléchis.",
     tips: ["Les bras accompagnent le saut : arrière à l’élan, avant au décollage.", "Réception pieds entiers sur la box, genoux dans l’axe.", "Redescends en marchant plutôt qu’en sautant."] },
   "Farmer walk": { views: [
@@ -71,8 +101,13 @@ export const HOW = {
         standF({ R: { ua: -70, fa: -84, hand: -90 }, eq: [fbar(P => P.R.grip[1], { top: true })] })], ["Squat, genoux dans l’axe des pieds", "Bras tendus"])],
     cue: "Barre posée devant les épaules : descends en squat, puis remonte et pousse la barre au-dessus de la tête d’un seul mouvement.",
     tips: ["Coudes hauts devant toi pendant le squat.", "Genoux dans l’axe des pieds, talons au sol.", "Utilise l’élan des jambes pour pousser la barre."] },
+  // Réception : les coudes passent vers l'avant, sous la barre (plus de rotation de l'avant-bras vers l'arrière).
   "Clean": { views: [side([{ ...snatchStart, near: { ...snatchStart.near, wristAt: [130, GROUND - 18.5] } },
-      stand({ near: rack, eq: [bar(P => P.near.grip, 13, { top: true })] })], ["Barre au sol", "Barre reçue sur les épaules"])],
+      stand({ near: { wristAt: [131, 60], elbowBend: -1, hand: -30 }, eq: [bar(P => P.near.grip, 13, { top: true })] })], ["Barre au sol", "Barre reçue sur les épaules, coudes devant"])],
+    animViews: [side([pullFloor(130), pullKnee(), pullExt(),
+      liftBar({ hip: [114, 128], torso: -84, neck: -88, near: { ankleAt: [124, ANK], ft: 0, kneeBend: 1, wristAt: [130.4, 75.3], elbowBend: -1, hand: -30, track: 1 } }),
+      liftBar(stand({ near: { wristAt: [131, 60], elbowBend: -1, hand: -30, track: 1 } }))],
+      ["Barre au sol", "Barre devant les genoux", "Extension, sur la pointe des pieds", "Réception, coudes devant sous la barre", "Debout, barre sur les épaules"], [0, 1, 2, 3, 4, 3, 2, 1])],
     cue: "Barre près du corps : tire du sol avec les jambes, puis passe les coudes devant pour la recevoir sur l’avant des épaules.",
     tips: ["Prise à largeur d’épaules, dos plat au départ.", "La barre reste collée au corps pendant la montée.", "Réception coudes hauts, barre posée sur les clavicules."] }
 };
@@ -90,10 +125,11 @@ const pullViews = (grip, extraSide = [], extraFront = []) => [
 const PULL_TIPS = ["Pars bras complètement tendus, épaules basses.", "Tête droite, regard devant : c’est la poitrine qui monte vers la barre, la tête ne passe pas sous la barre.", "Tire les coudes vers le bas et vers l’arrière, sans balancer les jambes.", "Redescends lentement jusqu’aux bras tendus."];
 // Pompes : mains sous les épaules, pieds en appui sur la pointe.
 const TOES = onToes(-14, 75);
-const plank = (shX, shY, wristX, o = {}) => {
-  const a = Math.atan2(shY - TOES[1], shX - TOES[0]) * 180 / Math.PI, hip = [shX - 52 * Math.cos(a * Math.PI / 180), shY - 52 * Math.sin(a * Math.PI / 180)];
+const plank = (shX, shY, wristX, o = {}, toes = TOES) => {
+  const a = Math.atan2(shY - toes[1], shX - toes[0]) * 180 / Math.PI, hip = [shX - 52 * Math.cos(a * Math.PI / 180), shY - 52 * Math.sin(a * Math.PI / 180)];
   return merge({ hip, torso: a, neck: a + 8, near: { th: 180 + a, sh: 180 + a, ft: 75, wristAt: [wristX, GROUND - 3], h: "flat", hand: 0, ls: { ua: 0.62 } } }, o);
 };
+HOW["Burpees"].views = [side(burpeeFrames(), ["Debout", "Mains au sol", "Planche", "Pompe : poitrine près du sol", "Squat sauté, bras en l’air"], [0, 1, 2, 3, 2, 1, 4])];
 const pushF = (wx, down, o = {}) => ({ view: "front", nolegs: true, crown: true, tls: 0.22, torso: -90, neck: -90, hip: [120, down ? 190 : 162], R: { wristAt: [wx, GROUND - 4], hand: 90, h: "palm", ls: { ua: down ? 0.2 : 1 } }, ...o });
 // Dips : main fermée sur la barre (ou l'anneau), avant-bras toujours vertical ; en bas, coude à 90° qui part vers l'arrière.
 const dipTop = (o = {}) => merge({ hip: [124, 97.7], torso: -80, neck: -84, near: { ua: 90, fa: 90, hand: 90, th: 100, sh: 185, ft: 150 } }, o);
@@ -120,8 +156,9 @@ Object.assign(HOW, {
       front([dipF(0, { eq: [frings()] }), dipF(1, { eq: [frings()] })], ["Bras tendus, anneaux serrés", "Coudes à 90°"])],
     cue: "Anneaux tenus bras tendus près du corps : descends jusqu’aux coudes à 90°, puis remonte en gardant les anneaux serrés.",
     tips: ["Plus instable que les barres : maîtrise d’abord les dips classiques.", "Anneaux collés au corps, bras tendus en haut.", "Descends lentement sans laisser les anneaux s’écarter."] },
-  "Human flag": { views: [front([{ view: "front", torso: 0, neck: 0, hip: [66, 118],
-      R: { wristAt: [144, 176], hand: 0, th: 180, sh: 180 }, L: { wristAt: [144, 64], hand: 0, th: 180, sh: 180, elbowBend: 1 }, eq: [pole(152)] }], ["Position à tenir"])],
+  "Human flag": { views: [front([{ view: "front", torso: 0, neck: 0, hip: [52, 118],
+      // Les deux coudes orientés de la même façon (miroir) : vers l'extérieur, jamais vers l'intérieur du corps.
+      R: { wristAt: [144, 176], hand: 0, th: 180, sh: 180, elbowBend: -1 }, L: { wristAt: [144, 64], hand: 0, th: 180, sh: 180, elbowBend: 1 }, eq: [pole(152)] }], ["Position à tenir"])],
     cue: "Mains serrées sur une barre verticale, bras tendus : le bras du haut tire, celui du bas pousse, corps horizontal sur le côté.",
     tips: ["Mains écartées d’environ une largeur d’épaules et demie sur le poteau.", "Bras du haut qui tire, bras du bas qui pousse, tous les deux tendus.", "Progression : commence jambes groupées, puis une jambe tendue."] },
   // Bras tendus dans le plan : mains à plat et pointes de pieds sur la même ligne de sol.
@@ -200,7 +237,7 @@ const forearmPlank = (o = {}) => {
 };
 Object.assign(HOW, {
   // Seul le haut du dos s'enroule (curl) : le bas du dos et le bassin restent au sol.
-  "Crunch": { views: [side([backLie(0, { near: { ua: 150, fa: -60, hand: -60 } }), backLie(0, { curl: 34, neck: 222, near: { ua: 184, fa: -26, hand: -26 } })], ["Allongé, genoux pliés", "Haut du dos enroulé, bas du dos au sol"])],
+  "Crunch": { views: [side([backLie(0, { near: { ua: 225, fa: 78, hand: 78, ls: { fa: 0.53 } } }), backLie(0, { curl: 34, neck: 222, near: { ua: 184, fa: -26, hand: -26 } })], ["Allongé, genoux pliés", "Haut du dos enroulé, bas du dos au sol"])],
     cue: "Allongé sur le dos, genoux pliés et pieds à plat : enroule le haut du dos en soufflant, sans tirer sur la nuque, puis redescends.",
     tips: ["Pieds à plat au sol, talons près des fesses.", "Le bas du dos reste collé au sol : seules les épaules décollent.", "Mains contre les tempes, sans tirer sur la tête."] },
   // Mains sur la tête, coudes vers l'avant (vers les genoux), position neutre : le bras garde le même angle par rapport au buste.

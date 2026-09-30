@@ -894,3 +894,4 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .fg-ghost .fg-plate{fill-opacity:.45}.fg-ghost .fg-plate-in{opacity:.6}
 .how-lives{display:contents}
 .fg-spine,.fg-spine-o{fill:none;stroke-linecap:round;stroke-linejoin:round}.fg-spine{stroke:var(--fg-skin);stroke-width:28}.fg-spine-o{stroke:var(--fg-ol);stroke-width:30.2}
+.fg-path{fill:none;stroke:var(--fg-metal);stroke-width:1.6;stroke-dasharray:4 4;stroke-linecap:round;opacity:.8}
