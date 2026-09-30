@@ -245,10 +245,13 @@ const shOf = (hip, torso) => add(hip, [52 * Math.cos(rad(torso)), 52 * Math.sin(
 // Barre posée sur le haut du dos : un peu derrière et au-dessus de l'épaule.
 const backBarAt = (hip, torso) => add(shOf(hip, torso), add([9 * Math.cos(rad(torso - 90)), 9 * Math.sin(rad(torso - 90))], [2 * Math.cos(rad(torso)), 2 * Math.sin(rad(torso))]));
 // Mains sur la barre derrière la nuque : coude vers le bas et l'arrière, avant-bras vertical.
-const backSquat = (hip, torso, ank) => { const b = backBarAt(hip, torso), r = torso + 90; return { hip, torso, neck: torso > -80 ? -70 : -88, near: { ankleAt: ank, ft: 0, ua: 100 + r, fa: -88 + r, hand: -90 + r }, eq: [bar(b, 13)] }; };
+const backSquat = (hip, torso, ank) => { const r = torso + 90; return { hip, torso, neck: torso > -80 ? -70 : -88, near: { ankleAt: ank, ft: 0, ua: 100 + r, fa: -88 + r, hand: -90 + r }, eq: [bar(P => backBarAt(P.hip, P.torso), 13)] }; };
 // Squat vu de face : cuisses qui avancent vers nous (raccourcies), genoux au-dessus des pieds.
 const squatF = (down, o = {}) => ({ view: "front", torso: -90, neck: -90, tls: down ? 0.86 : 1, hip: [120, down ? ANK - 44 * 0.97 - 46 * 0.3 : HIPY],
   R: { th: down ? 84 : 90, sh: down ? 92 : 90, ls: down ? { th: 0.3 } : {}, ...(o.R || {}) }, ...o, R: { th: down ? 84 : 90, sh: down ? 92 : 90, ls: down ? { th: 0.3 } : {}, ...(o.R || {}) } });
+// Front squat : barre posée sur l'avant des épaules (au contact des clavicules), coudes hauts devant.
+const frontRack = (hip, torso, ank) => { const sh = shOf(hip, torso), r = rad(torso + 90), w = add(sh, [6.2 * Math.cos(r) - 3.75 * Math.sin(r), 6.2 * Math.sin(r) + 3.75 * Math.cos(r)]);
+  return { hip, torso, neck: torso + (torso > -80 ? -14 : 0), near: { ankleAt: ank, ft: 0, wristAt: w, elbowBend: 1, hand: -30 + torso + 90 }, eq: [bar(P => P.near.grip, 13, { top: true })] }; };
 const SQUAT_TIPS = ["Pieds largeur d’épaules, pointes légèrement vers l’extérieur.", "Genoux dans l’axe des pieds : ils ne rentrent pas et ne partent pas vers l’extérieur.", "Descends au moins jusqu’aux cuisses parallèles au sol, dos droit, talons au sol.", "Pousse dans les talons pour remonter."];
 // Pied posé par la plante (bord d'une marche) : cheville placée pour que la plante reste au point « ball ».
 const ankleFromBall = (ball, ft) => add(ball, [-(18 * Math.cos(rad(ft)) - 7.2 * Math.sin(rad(ft))), -(18 * Math.sin(rad(ft)) + 7.2 * Math.cos(rad(ft)))]);
@@ -260,11 +263,14 @@ const hackEq = [
 const pressEq = ank => [line([30, 202], [196, 36], "fg-rail"), raw(() => `<rect class="fg-pad" x="30" y="150" width="70" height="8" rx="3.5"/><rect class="fg-pad" x="18" y="118" width="46" height="8" rx="3.5" transform="rotate(32 64 122)"/><rect class="fg-frame" x="56" y="158" width="4" height="${GROUND - 158}"/><rect class="fg-frame" x="30" y="${GROUND - 3}" width="60" height="4" rx="1.5"/>`),
   raw(P => { const a = P.near.ankle; return `<g transform="translate(${(a[0] + 5).toFixed(1)} ${(a[1] - 4).toFixed(1)}) rotate(45)"><rect class="fg-plate" x="-24" y="-3" width="48" height="7" rx="2"/><rect class="fg-frame" x="-6" y="4" width="12" height="16"/></g>`; }, { top: true })];
 const legExt = ext => ({ hip: [100, 142], torso: -95, neck: -90, near: { th: -4, sh: ext ? -8 : 92, ft: ext ? -20 : 10, wristAt: [104, 150], hand: 0 },
-  eq: [seat(86, 150, 1, 8), roller(P => add(P.near.ankle, ext ? [3, 8] : [8, 2]), 6, { top: true })] });
+  // Boudin sur l'avant du bas du tibia, juste au-dessus de la cheville, pendant tout le mouvement.
+  eq: [seat(86, 150, 1, 8), roller(P => { const a = rad(P.near.sh); return add(P.near.ankle, [-6 * Math.cos(a) + 6.5 * Math.sin(a), -6 * Math.sin(a) - 6.5 * Math.cos(a)]); }, 6, { top: true })] });
 const legCurl = up => ({ hip: [100, 150], torso: 0, neck: 4, near: { th: 180, sh: up ? -60 : 180, ft: up ? -60 : 180, wristAt: [168, 166], hand: 90 },
   eq: [bench(30, 176, 163), roller(P => add(P.near.ankle, up ? [4, -6] : [0, -8]), 6, { top: true })] });
-const seatCalf = ft => { const a = ankleFromBall([148, 194], ft); return { hip: [100, 142], torso: -88, neck: -88, near: { ankleAt: a, ft, kneeBend: -1, wristAt: [132, 132], hand: 0 },
-  eq: [seat(86, 150, 0), box(140, 194, 36, 16), roller(P => add(P.near.knee, [2, -9]), 6, { top: true })] }; };
+// Assis, cuisses à l'horizontale, coussin sur le bas des cuisses près des genoux, avant du pied sur la cale :
+// seules les chevilles bougent (le talon monte et descend, le genou suit un peu).
+const seatCalf = ft => { const a = ankleFromBall([166, 190], ft); return { hip: [100, 142], torso: -88, neck: -88, near: { ankleAt: a, ft, kneeBend: 1, wristAt: [134, 130], hand: 0 },
+  eq: [seat(86, 150, 0), box(150, 190, 40, 20), roller(P => add(P.near.knee, [-8, -10]), 6.5, { top: true }), roller(P => add(P.near.knee, [-18, -10]), 6.5, { top: true })] }; };
 const lunge = (front, o = {}) => stand({ hip: [118, 150], ...o, near: front === "near" ? { ankleAt: [160, ANK], ft: 0, ua: 92, fa: 88, hand: 90 } : { ankleAt: [72, ANK - 1], ft: 62, ua: 92, fa: 88, hand: 90 },
   far: front === "near" ? { ankleAt: [72, ANK - 1], ft: 62 } : { ankleAt: [160, ANK], ft: 0 }, eq: [db(P => [P.near.grip, 90], "side", { mid: true })] });
 const BENCH_HT = 163;
@@ -274,7 +280,8 @@ const ht = (sh, hipUp) => { const hip = hipUp ? add(sh, [52, 0]) : add(sh, [52 *
 Object.assign(HOW, {
   "Squat": { views: [
       side([backSquat([120, HIPY], -90, [124, ANK]), backSquat([104, 166], -58, [124, ANK])], ["Debout, barre sur le haut du dos", "Cuisses parallèles au sol"]),
-      front([squatF(0, { R: { wristAt: [150, 72], hand: -90 }, eq: [fbar(() => 70)] }), squatF(1, { R: { wristAt: [150, 118], hand: -90 }, eq: [fbar(() => 116)] })], ["Debout", "Genoux dans l’axe des pieds"])],
+      // Coudes vers le bas, sous la barre ; la barre repose sur le haut du dos (derrière la nuque).
+      front([squatF(0, { R: { ua: 75, fa: -70, hand: -90, ls: { ua: 0.6 } }, eq: [fbar(P => P.R.grip[1])] }), squatF(1, { R: { ua: 75, fa: -70, hand: -90, ls: { ua: 0.6, th: 0.3 } }, eq: [fbar(P => P.R.grip[1])] })], ["Debout, coudes sous la barre", "Genoux dans l’axe des pieds"])],
     cue: "Barre sur le haut du dos, dos droit : descends les hanches jusqu’aux cuisses parallèles au sol, genoux dans l’axe des pieds, puis pousse dans les talons.", tips: SQUAT_TIPS },
   "Squats (poids du corps)": { views: [
       side([stand({ near: { ua: -2, fa: -2, hand: -2, h: "open" } }), { hip: [104, 166], torso: -58, neck: -76, near: { ankleAt: [124, ANK], ft: 0, ua: -2, fa: -2, hand: -2, h: "open" } }], ["Debout, bras devant", "Cuisses parallèles au sol"]),
@@ -288,8 +295,8 @@ Object.assign(HOW, {
     cue: "Haltère tenu à deux mains contre la poitrine : descends entre tes genoux en gardant le buste droit, genoux dans l’axe des pieds, puis remonte.",
     tips: ["Haltère tenu verticalement contre la poitrine, coudes vers le bas.", "Pieds un peu plus larges que les épaules, genoux dans l’axe des pieds.", "En bas, les coudes passent entre les genoux."] },
   "Front squat": { views: [
-      side([stand({ near: rack, eq: [bar(P => P.near.grip, 13, { top: true })] }), { hip: [106, 166], torso: -72, neck: -86, near: { ankleAt: [124, ANK], ft: 0, ...rack }, eq: [bar(P => P.near.grip, 13, { top: true })] }], ["Barre sur l’avant des épaules", "Buste droit, cuisses parallèles"]),
-      front([squatF(0, { R: { ua: 60, fa: -100, hand: -90, ls: { ua: 0.45 } }, eq: [fbar(P => P.R.grip[1], { top: true })] }), squatF(1, { R: { ua: 60, fa: -100, hand: -90, ls: { ua: 0.45, th: 0.3 } }, eq: [fbar(P => P.R.grip[1], { top: true })] })], ["Coudes hauts", "Genoux dans l’axe des pieds"])],
+      side([frontRack([120, HIPY], -90, [124, ANK]), frontRack([106, 166], -72, [124, ANK])], ["Barre sur l’avant des épaules", "Buste droit, cuisses parallèles"]),
+      front([squatF(0, { R: { ua: 60, fa: -100, hand: -90, ls: { ua: 0.45, fa: 0.3 } }, eq: [fbar(P => P.R.shoulder[1] + 2, { top: true })] }), squatF(1, { R: { ua: 60, fa: -100, hand: -90, ls: { ua: 0.45, fa: 0.3, th: 0.3 } }, eq: [fbar(P => P.R.shoulder[1] + 2, { top: true })] })], ["Barre sur l’avant des épaules, coudes hauts", "Genoux dans l’axe des pieds"])],
     cue: "Barre posée devant, sur le haut des épaules et les clavicules, coudes hauts : descends en gardant le buste droit, puis remonte.",
     tips: ["La barre repose sur l’avant des épaules, contre la gorge, pas dans les mains.", "Coudes hauts et pointés devant toi pendant toute la descente.", "Genoux dans l’axe des pieds, buste plus droit qu’au squat classique."] },
   "Pistol squat": { views: [side([
@@ -303,8 +310,8 @@ Object.assign(HOW, {
     cue: "Dos collé au dossier, épaules sous les coussins, pieds sur la plateforme : descends le chariot en pliant les genoux, puis pousse.",
     tips: ["Dos et bassin collés au dossier.", "Pieds largeur d’épaules au milieu de la plateforme.", "Ne verrouille pas les genoux en haut."] },
   "Presse à cuisses": { views: [side([
-      { hip: [92, 150], torso: -148, neck: -130, near: { ankleAt: [134, 104], ft: -45, kneeBend: -1, wristAt: [100, 158], hand: 0 }, eq: pressEq() },
-      { hip: [92, 150], torso: -148, neck: -130, near: { ankleAt: [158, 80], ft: -45, kneeBend: -1, wristAt: [100, 158], hand: 0 }, eq: pressEq() }], ["Genoux pliés", "Jambes presque tendues"])],
+      { hip: [92, 150], torso: -148, neck: -148, near: { ankleAt: [134, 104], ft: -45, kneeBend: 1, wristAt: [100, 158], hand: 0 }, eq: pressEq() },
+      { hip: [92, 150], torso: -148, neck: -148, near: { ankleAt: [158, 80], ft: -45, kneeBend: 1, wristAt: [100, 158], hand: 0 }, eq: pressEq() }], ["Genoux pliés", "Jambes presque tendues"])],
     cue: "Dos et bassin collés au siège, pieds sur la plateforme : pousse sans verrouiller les genoux, puis redescends lentement.",
     tips: ["Pieds largeur de hanches au milieu de la plateforme.", "Descends jusqu’à avoir les genoux à 90°, sans décoller le bassin.", "Ne verrouille pas les genoux en haut."] },
   "Leg extension": { views: [side([legExt(0), legExt(1)], ["Genoux à 90°", "Jambes tendues"])],
