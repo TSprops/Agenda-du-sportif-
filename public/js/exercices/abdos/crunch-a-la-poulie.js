@@ -1,6 +1,6 @@
 // Fiche « Comment faire » : Crunch à la poulie.
 import { side } from "../_communs.js";
-import { cable } from "../../figure.js";
+import { cable } from "../../silhouette/index.js";
 
 export default { views: [side([
       // Hanches fixes au-dessus des genoux ; le dos s'enroule (curl). Mains contre la tête, coudes toujours vers le bas :

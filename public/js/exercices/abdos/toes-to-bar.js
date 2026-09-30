@@ -2,7 +2,7 @@
 import { side } from "../_communs.js";
 import { hangLeg } from "./_communs.js";
 import { BY, onBar } from "../calisthenie/_communs.js";
-import { pullbar } from "../../figure.js";
+import { pullbar } from "../../silhouette/index.js";
 
 // Les jambes montent par l'avant (étape « à l'horizontale ») jusqu'à toucher la barre, pointes de pieds vers la barre.
 export default { views: [side([hangLeg({ eq: [pullbar(120, BY)] }), hangLeg({ near: { th: -2, sh: -2, ft: -20 }, eq: [pullbar(120, BY)] }),

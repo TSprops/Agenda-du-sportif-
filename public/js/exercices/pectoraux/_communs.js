@@ -2,7 +2,7 @@
 // Ce fichier n'importe que la silhouette et d'autres fichiers communs : il peut être évalué à tout moment.
 import { ANK, HIPY, merge, onToes, stand, standF } from "../_communs.js";
 import { rad, shOf } from "../jambes/_communs.js";
-import { GROUND, add, bar, bench, db, fbar, fbench, fcables, fdb, raw, roller, seat } from "../../figure.js";
+import { GROUND, add, bar, bench, db, fbar, fbench, fcables, fdb, raw, roller, seat } from "../../silhouette/index.js";
 
 export const BT = 163;   // dessus du banc
 export const lieHip = [114, BT - 13];

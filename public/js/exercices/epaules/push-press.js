@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Push press.
 import { ANK, side, stand } from "../_communs.js";
 import { rack } from "../crossfit/_communs.js";
-import { bar } from "../../figure.js";
+import { bar } from "../../silhouette/index.js";
 
 export default { views: [side([stand({ near: rack, eq: [bar(P => P.near.grip, 13, { top: true })] }), { hip: [114, 124], torso: -88, neck: -88, near: { ankleAt: [124, ANK], ft: 0, ...rack }, eq: [bar(P => P.near.grip, 13, { top: true })] },
       stand({ near: { ua: -88, fa: -88, hand: -90 }, eq: [bar(P => P.near.grip, 13, { top: true })] })], ["Barre sur les épaules", "Petite flexion des genoux", "Poussée au-dessus de la tête"], [0, 1, 2, 1])],

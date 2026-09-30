@@ -1,6 +1,6 @@
 // Fiche « Comment faire » : Kettlebell swings.
 import { ANK, DA, side, stand } from "../_communs.js";
-import { add, kb } from "../../figure.js";
+import { add, kb } from "../../silhouette/index.js";
 
 export default { views: [side([
       { hip: [100, 120], torso: -35, neck: -20, near: { ankleAt: [124, ANK], ft: 0, wristAt: [122, 142], hand: 110 }, eq: [kb(P => P.near.grip, { mid: true })] },

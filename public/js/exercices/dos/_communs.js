@@ -1,7 +1,7 @@
 // Fonctions communes du groupe Dos / lombaires : positions et matériel partagés par ses fiches.
 // Ce fichier n'importe que la silhouette et d'autres fichiers communs : il peut être évalué à tout moment.
 import { ANK, merge, stand } from "../_communs.js";
-import { GROUND, add, bar, bench, cable, cableTop, db, fbench, fcableTop, line, pad, raw, roller, seat } from "../../figure.js";
+import { GROUND, add, bar, bench, cable, cableTop, db, fbench, fcableTop, line, pad, raw, roller, seat } from "../../silhouette/index.js";
 
 export const dlStart = (wx = 128, o = {}) => merge({ hip: [98, 165], torso: -30, neck: -20, near: { ankleAt: [124, ANK], ft: 0, wristAt: [wx, GROUND - 18.5], hand: 90, track: 1 }, eq: [bar(P => P.near.grip, 13, { top: true })] }, o);
 export const dlTop = (o = {}) => stand(merge({ near: { wristAt: [117.8, 118.7], hand: 90, track: 1 }, eq: [bar(P => P.near.grip, 13, { top: true })] }, o));

@@ -2,7 +2,7 @@
 // Ce fichier n'importe que la silhouette et d'autres fichiers communs : il peut être évalué à tout moment.
 import { ANK, merge, onToes } from "../_communs.js";
 import { BY, TOES, onBar, plank } from "../calisthenie/_communs.js";
-import { GROUND } from "../../figure.js";
+import { GROUND } from "../../silhouette/index.js";
 
 // Allongé sur le dos : tête à gauche, genoux pliés, pieds à plat (orteils vers la droite).
 export const backLie = (lift, o = {}) => {

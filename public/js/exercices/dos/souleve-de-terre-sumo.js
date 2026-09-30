@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Soulevé de terre sumo.
 import { front, side } from "../_communs.js";
 import { dlKnee, dlStart, dlTop } from "./_communs.js";
-import { fbar } from "../../figure.js";
+import { fbar } from "../../silhouette/index.js";
 
 export default { animViews: [side([dlStart(126, { hip: [102, 180], torso: -62, near: { ls: { th: 0.8 } } }), dlKnee(), dlTop()], ["Barre au sol, buste plus droit", "Barre devant les genoux", "Debout"], [0, 1, 2, 1]), "De face"], views: [
       side([dlStart(126, { hip: [102, 180], torso: -62, near: { ls: { th: 0.8 } } }), dlTop()], ["Barre au sol, buste plus droit", "Debout"]),

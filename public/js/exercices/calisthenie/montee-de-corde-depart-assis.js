@@ -1,6 +1,6 @@
 // Fiche « Comment faire » : Montée de corde départ assis.
 import { side } from "../_communs.js";
-import { GROUND, climbRope } from "../../figure.js";
+import { GROUND, climbRope } from "../../silhouette/index.js";
 
 // Départ assis au sol, jambes tendues devant : on décolle et on monte avec les bras seuls.
 export default { views: [side([

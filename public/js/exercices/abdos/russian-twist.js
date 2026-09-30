@@ -1,6 +1,6 @@
 // Fiche « Comment faire » : Russian twist.
 import { front, side } from "../_communs.js";
-import { GROUND, add, medball } from "../../figure.js";
+import { GROUND, add, medball } from "../../silhouette/index.js";
 
 export default { views: [
       side([{ hip: [110, GROUND - 10], torso: -125, neck: -110, near: { th: -40, sh: 25, ft: 10, wristAt: [116, 164], hand: -10 }, eq: [medball(P => add(P.near.grip, [4, 0]), { top: true })] }], ["Assis, buste penché en arrière"]),

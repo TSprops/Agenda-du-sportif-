@@ -1,6 +1,6 @@
 // Fiche « Comment faire » : Pompes pike.
 import { onToes, side } from "../_communs.js";
-import { GROUND } from "../../figure.js";
+import { GROUND } from "../../silhouette/index.js";
 
 export default { views: [side([
       { hip: [88, 126], torso: 33.7, neck: 50, near: { ankleAt: onToes(44, 70), ft: 70, wristAt: [134, GROUND - 3], h: "flat", hand: 0 } },

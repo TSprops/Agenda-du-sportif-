@@ -3,7 +3,7 @@
 import { ANK, merge, stand, standF } from "../_communs.js";
 import { rad } from "../jambes/_communs.js";
 import { BT, benchLie } from "../pectoraux/_communs.js";
-import { GROUND, add, bar, bench, box, cable, db, raw } from "../../figure.js";
+import { GROUND, add, bar, bench, box, cable, db, raw } from "../../silhouette/index.js";
 
 export const curlS = (up, eq, o = {}) => stand(merge({ near: up ? { ua: 86, fa: -72, hand: -62 } : { ua: 93, fa: 86, hand: 88 }, eq }, o));
 export const curlF = (up, eq, o = {}) => standF({ ...o, R: up ? { ua: 88, fa: -92, hand: -90, ls: { fa: 0.35 } } : { ua: 88, fa: 90, hand: 90 }, eq });

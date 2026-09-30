@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Dips.
 import { front, side } from "../_communs.js";
 import { dipF, dipLow, dipTop } from "./_communs.js";
-import { dipbars, fdips } from "../../figure.js";
+import { dipbars, fdips } from "../../silhouette/index.js";
 
 export default { grip: "dips", views: [side([dipTop({ eq: [dipbars(96, 176, 110)] }), dipLow({ eq: [dipbars(96, 176, 110)] })], ["Bras tendus", "Coudes à 90°"]),
       front([dipF(0, { eq: [fdips(110)] }), dipF(1, { eq: [fdips(110)] })], ["Bras tendus", "Coudes à 90°"])],

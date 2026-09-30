@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Thrusters.
 import { ANK, HIPY, front, side, stand, standF } from "../_communs.js";
 import { rack } from "./_communs.js";
-import { bar, fbar } from "../../figure.js";
+import { bar, fbar } from "../../silhouette/index.js";
 
 export default { views: [
       side([{ hip: [108, 165], torso: -70, neck: -84, near: { ankleAt: [124, ANK], ft: 0, ...rack }, eq: [bar(P => P.near.grip, 13, { top: true })] },

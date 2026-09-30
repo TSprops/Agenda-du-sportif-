@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Dips aux anneaux.
 import { front, side } from "../_communs.js";
 import { dipF, dipLow, dipTop } from "./_communs.js";
-import { frings, rings } from "../../figure.js";
+import { frings, rings } from "../../silhouette/index.js";
 
 // Anneaux : descente plus verticale, buste moins penché, mains près des hanches.
 export default { grip: null, views: [side([dipTop({ eq: [rings("near", { top: true })] }), dipLow({ hip: [128, 124], torso: -74, neck: -78, near: { wristAt: [127, 106], hand: 90 }, eq: [rings("near", { top: true })] })], ["Bras tendus", "Coudes à 90°"]),

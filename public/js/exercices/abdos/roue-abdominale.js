@@ -1,6 +1,6 @@
 // Fiche « Comment faire » : Roue abdominale.
 import { side } from "../_communs.js";
-import { wheel } from "../../figure.js";
+import { wheel } from "../../silhouette/index.js";
 
 export default { views: [side([
       { hip: [78, 158], torso: -30, neck: -20, near: { th: 102, sh: 180, ft: 180, wristAt: [126, 190], hand: 90 }, eq: [wheel()] },

@@ -1,6 +1,6 @@
 // Fiche « Comment faire » : Montée de corde.
 import { side } from "../_communs.js";
-import { climbRope } from "../../figure.js";
+import { climbRope } from "../../silhouette/index.js";
 
 // Montée de corde : la version sans les jambes (bras seuls).
 export default { views: [side([

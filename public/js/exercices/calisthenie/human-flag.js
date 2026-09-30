@@ -1,6 +1,6 @@
 // Fiche « Comment faire » : Human flag.
 import { front } from "../_communs.js";
-import { pole } from "../../figure.js";
+import { pole } from "../../silhouette/index.js";
 
 export default { views: [front([{ view: "front", torso: 0, neck: 0, hip: [52, 118],
       // Les deux coudes orientés de la même façon (miroir) : vers l'extérieur, jamais vers l'intérieur du corps.

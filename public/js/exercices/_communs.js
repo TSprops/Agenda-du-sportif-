@@ -1,6 +1,6 @@
 // Fonctions communes à toutes les fiches : poses de base (debout, de face), vues, sol.
 // Ce fichier n'importe que la silhouette et d'autres fichiers communs : il peut être évalué à tout moment.
-import { GROUND } from "../figure.js";
+import { GROUND } from "../silhouette/index.js";
 
 export const ANK = GROUND - 7.2;   // cheville quand le pied est à plat au sol
 export const HIPY = ANK - 90;   // hanche d'une personne debout

@@ -1,6 +1,6 @@
 // Fiche « Comment faire » : Montée de corde avec jambes.
 import { side } from "../_communs.js";
-import { climbRope } from "../../figure.js";
+import { climbRope } from "../../silhouette/index.js";
 
 export default { views: [side([
       { hip: [112, 142], torso: -90, neck: -94, near: { wristAt: [117, 42], hand: -90, ankleAt: [116, 176], ft: 20 }, far: { wristAt: [117, 60] }, eq: [climbRope(120)] },

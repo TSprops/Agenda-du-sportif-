@@ -2,7 +2,7 @@
 // Ce fichier n'importe que la silhouette et d'autres fichiers communs : il peut être évalué à tout moment.
 import { ANK, HIPY, onToes, stand } from "../_communs.js";
 import { plank } from "../calisthenie/_communs.js";
-import { GROUND, add, bar, box, medball, raw, solve, wall } from "../../figure.js";
+import { GROUND, add, bar, box, medball, raw, solve, wall } from "../../silhouette/index.js";
 
 // Burpee : debout, mains au sol, pieds en arrière (planche), une pompe, retour des pieds vers les mains, squat sauté.
 // Les mains restent au même endroit du sol de « mains au sol » jusqu'au retour ; les pieds sautent par-dessus le sol.

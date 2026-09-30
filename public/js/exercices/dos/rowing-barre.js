@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Rowing barre.
 import { front, side } from "../_communs.js";
 import { bentF, rowSide } from "./_communs.js";
-import { bar, fbar } from "../../figure.js";
+import { bar, fbar } from "../../silhouette/index.js";
 
 export default { grip: "row", views: [
       side([rowSide(0, { eq: [bar(P => P.near.grip, 13, { top: true })] }), rowSide(1, { eq: [bar(P => P.near.grip, 13, { top: true })] })], ["Bras tendus", "Barre au nombril, coudes près du corps"]),

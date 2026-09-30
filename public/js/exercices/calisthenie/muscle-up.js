@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Muscle-up.
 import { side, stand } from "../_communs.js";
 import { BY, hang, pullTop } from "./_communs.js";
-import { pullbar } from "../../figure.js";
+import { pullbar } from "../../silhouette/index.js";
 
 export default { grip: "pro", views: [side([
       hang({ hip: [118, BY + 112], eq: [pullbar(120, BY)] }),

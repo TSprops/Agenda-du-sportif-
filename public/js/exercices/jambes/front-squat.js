@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Front squat.
 import { ANK, HIPY, front, side } from "../_communs.js";
 import { frontRack, squatF } from "./_communs.js";
-import { fbar } from "../../figure.js";
+import { fbar } from "../../silhouette/index.js";
 
 export default { views: [
       side([frontRack([120, HIPY], -90, [124, ANK]), frontRack([106, 166], -72, [124, ANK])], ["Barre sur l’avant des épaules", "Buste droit, cuisses parallèles"]),

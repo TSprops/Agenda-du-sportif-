@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Pull-over.
 import { side } from "../_communs.js";
 import { BT, benchLie } from "./_communs.js";
-import { bench, db } from "../../figure.js";
+import { bench, db } from "../../silhouette/index.js";
 
 export default { views: [side([benchLie(0, () => ({ ua: 176, fa: 188, hand: 188 }), [bench(18, 150, BT), db(P => [P.near.grip, 90], "side", { top: true })]),
       // En haut : bras quasi tendus au-dessus de la poitrine, coudes légèrement fléchis vers les pieds (jamais vers la tête).

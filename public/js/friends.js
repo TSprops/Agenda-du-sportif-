@@ -12,7 +12,7 @@ import { cordesText, toast } from "./workout.js";
 import { streakInfo } from "./home.js";
 import { acceptedFriends, activityList, bannedStop, bestLifts, commentsHTML, monthShare, newChallenges, renderMessages,
   renderSocial, seenAct, subscribeChallenges, toggleReact, trySession } from "./social.js";
-import { figure, frameBox } from "./figure.js";
+import { figure, frameBox } from "./silhouette/index.js";
 import { HOW } from "./exercices/index.js";
 
 /* ============================================================

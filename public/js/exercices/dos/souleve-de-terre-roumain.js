@@ -1,6 +1,6 @@
 // Fiche « Comment faire » : Soulevé de terre roumain.
 import { ANK, HIPY, side } from "../_communs.js";
-import { bar } from "../../figure.js";
+import { bar } from "../../silhouette/index.js";
 
 export default { views: [side([
       // En haut, jambes tendues ; les genoux se fléchissent un peu pendant la descente (hanche à 87 de la cheville en bas).

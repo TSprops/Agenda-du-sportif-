@@ -1,7 +1,7 @@
 // Fonctions communes du groupe Calisthénie : positions et matériel partagés par ses fiches.
 // Ce fichier n'importe que la silhouette et d'autres fichiers communs : il peut être évalué à tout moment.
 import { front, merge, onToes, side } from "../_communs.js";
-import { GROUND, fpullbar, pullbar } from "../../figure.js";
+import { GROUND, fpullbar, pullbar } from "../../silhouette/index.js";
 
 export const BY = -14;   // hauteur de la barre de traction
 export const onBar = [120, BY + 5.5];   // poignet quand la main entoure la barre par-dessous

@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Curl barre.
 import { front, side } from "../_communs.js";
 import { curlF, curlS } from "./_communs.js";
-import { bar, fbar } from "../../figure.js";
+import { bar, fbar } from "../../silhouette/index.js";
 
 export default { views: [side([curlS(0, [bar(P => P.near.grip, 11, { top: true })]), curlS(1, [bar(P => P.near.grip, 11, { top: true })])], ["Bras tendus", "Barre aux épaules, coudes fixes"]),
       front([curlF(0, [fbar(P => P.R.grip[1], { top: true, ez: 1 })]), curlF(1, [fbar(P => P.R.grip[1], { top: true, ez: 1 })])], ["Barre EZ, mains à largeur d’épaules", "Coudes le long du corps"])],

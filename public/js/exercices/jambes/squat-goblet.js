@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Squat goblet.
 import { ANK, front, side, stand } from "../_communs.js";
 import { squatF } from "./_communs.js";
-import { add, db } from "../../figure.js";
+import { add, db } from "../../silhouette/index.js";
 
 export default { views: [
       side([stand({ near: { wristAt: [136, 96], hand: -80 }, eq: [db(P => [add(P.near.grip, [3, 0]), 0], "side", { top: true })] }),

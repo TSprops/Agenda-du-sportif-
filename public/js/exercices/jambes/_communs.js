@@ -1,7 +1,7 @@
 // Fonctions communes du groupe Jambes / fessiers : positions et matériel partagés par ses fiches.
 // Ce fichier n'importe que la silhouette et d'autres fichiers communs : il peut être évalué à tout moment.
 import { ANK, HIPY, onToes, stand } from "../_communs.js";
-import { GROUND, add, bar, bench, box, db, line, raw, roller, seat } from "../../figure.js";
+import { GROUND, add, bar, bench, box, db, line, raw, roller, seat } from "../../silhouette/index.js";
 
 export const rad = d => d * Math.PI / 180, dirA = d => [Math.cos(rad(d)), Math.sin(rad(d))];
 export const shOf = (hip, torso) => add(hip, [52 * Math.cos(rad(torso)), 52 * Math.sin(rad(torso))]);

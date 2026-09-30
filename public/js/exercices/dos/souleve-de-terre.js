@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Soulevé de terre.
 import { front, side, standF } from "../_communs.js";
 import { bentF, dlKnee, dlStart, dlTop } from "./_communs.js";
-import { fbar } from "../../figure.js";
+import { fbar } from "../../silhouette/index.js";
 
 export default { animViews: [side([dlStart(), dlKnee(), dlTop()], ["Barre au sol, dos plat", "Barre devant les genoux", "Debout, barre contre les cuisses"], [0, 1, 2, 1]), "De face"], views: [
       side([dlStart(), dlTop()], ["Barre au sol, dos plat", "Debout, barre contre les cuisses"]),

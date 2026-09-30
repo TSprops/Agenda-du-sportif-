@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Shrugs.
 import { front, side, standF } from "../_communs.js";
 import { shrugStand } from "./_communs.js";
-import { fdb } from "../../figure.js";
+import { fdb } from "../../silhouette/index.js";
 
 export default { views: [side([shrugStand(0), shrugStand(1)], ["Épaules basses", "Épaules haussées"]),
       front([standF({ R: { ua: 86, fa: 90 }, eq: [fdb("end", { top: true })] }), standF({ shrug: 7, R: { ua: 86, fa: 90 }, eq: [fdb("end", { top: true })] })], ["Bras tendus", "Épaules vers les oreilles"])],

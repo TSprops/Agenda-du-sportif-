@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Squat.
 import { ANK, HIPY, front, side } from "../_communs.js";
 import { SQUAT_TIPS, backSquat, squatF } from "./_communs.js";
-import { fbar } from "../../figure.js";
+import { fbar } from "../../silhouette/index.js";
 
 export default { views: [
       side([backSquat([120, HIPY], -90, [124, ANK]), backSquat([104, 166], -58, [124, ANK])], ["Debout, barre sur le haut du dos", "Cuisses parallèles au sol"]),

@@ -1,6 +1,6 @@
 // Fiche « Comment faire » : Tractions australiennes.
 import { side } from "../_communs.js";
-import { pullbar } from "../../figure.js";
+import { pullbar } from "../../silhouette/index.js";
 
 export default { grip: "row", views: [side([
       // Talons au même point. En haut, la barre arrive au milieu de la poitrine (épaules au-delà de la barre) :

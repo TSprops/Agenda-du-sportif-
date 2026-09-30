@@ -1,10 +1,10 @@
-// « Comment faire » : bouton « ? » et fenêtre qui montre le mouvement (mannequin de figure.js, fiches de exercices/).
+// « Comment faire » : bouton « ? » et fenêtre qui montre le mouvement (mannequin de silhouette/, fiches de exercices/).
 // Départ et arrivée côte à côte, bouton « Voir le mouvement » pour l'animation, repères pour débuter, placement des mains.
 import { esc } from "./core.js";
 import { norm } from "./faq.js";
 import { musclesOf } from "./workout.js";
 import { bodySVG } from "./muscles.js";
-import { figure, frameBox, anglesOf, lerpPose } from "./figure.js";
+import { figure, frameBox, anglesOf, lerpPose } from "./silhouette/index.js";
 import { HOW } from "./exercices/index.js";
 
 // Noms tapés à la main : on retrouve la fiche grâce à quelques mots-clés.

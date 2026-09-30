@@ -1,7 +1,7 @@
 // Fonctions communes du groupe Épaules : positions et matériel partagés par ses fiches.
 // Ce fichier n'importe que la silhouette et d'autres fichiers communs : il peut être évalué à tout moment.
 import { ANK, HIPY, stand, standF } from "../_communs.js";
-import { GROUND, bar, bench, cable, db, fbar, fbench, fdb, raw, seat } from "../../figure.js";
+import { GROUND, bar, bench, cable, db, fbar, fbench, fdb, raw, seat } from "../../silhouette/index.js";
 
 export const SH_Y = HIPY - 52;   // épaule d'une personne debout (x = 120)
 export const ohpS = up => stand({ near: up ? { ua: -93, fa: -91, hand: -90 } : { ua: 78, fa: -96, hand: -90 }, eq: [db(P => [P.near.grip, 0], "end", { top: true })] });

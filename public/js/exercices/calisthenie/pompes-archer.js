@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Pompes archer.
 import { front } from "../_communs.js";
 import { pushF } from "./_communs.js";
-import { GROUND } from "../../figure.js";
+import { GROUND } from "../../silhouette/index.js";
 
 export default { grip: "wide", views: [front([
       pushF(164, 0),

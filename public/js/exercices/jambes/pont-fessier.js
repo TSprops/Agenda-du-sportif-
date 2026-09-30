@@ -1,6 +1,6 @@
 // Fiche « Comment faire » : Pont fessier.
 import { ANK, side } from "../_communs.js";
-import { GROUND } from "../../figure.js";
+import { GROUND } from "../../silhouette/index.js";
 
 export default { views: [side([
       { hip: [124, GROUND - 13], torso: 180, neck: 182, near: { ankleAt: [162, ANK], ft: 0, kneeBend: 1, ua: 8, fa: 2, hand: 0, h: "flat" } },

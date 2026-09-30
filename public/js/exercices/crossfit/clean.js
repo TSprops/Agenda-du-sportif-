@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Clean.
 import { ANK, side, stand } from "../_communs.js";
 import { liftBar, pullExt, pullFloor, pullKnee, snatchStart } from "./_communs.js";
-import { GROUND, bar } from "../../figure.js";
+import { GROUND, bar } from "../../silhouette/index.js";
 
 // Réception : les coudes passent vers l'avant, sous la barre (plus de rotation de l'avant-bras vers l'arrière).
 export default { views: [side([{ ...snatchStart, near: { ...snatchStart.near, wristAt: [130, GROUND - 18.5] } },

@@ -1,7 +1,7 @@
 // Fiche « Comment faire » : Snatch.
 import { HIPY, side, stand } from "../_communs.js";
 import { liftBar, pullExt, pullFloor, pullKnee, snatchStart } from "./_communs.js";
-import { bar } from "../../figure.js";
+import { bar } from "../../silhouette/index.js";
 
 export default { views: [side([snatchStart, stand({ neck: -92, near: { ua: -96, fa: -94, hand: -92, ls: { ua: 0.9, fa: 0.9 } }, eq: [bar(P => P.near.grip, 13, { top: true })] })], ["Barre au sol, prise large", "Barre au-dessus de la tête, bras tendus"])],
     // Tirage : coudes hauts, la barre passe devant le visage puis au-dessus de la tête (jamais dans la tête).
