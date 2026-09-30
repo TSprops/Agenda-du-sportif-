@@ -197,18 +197,26 @@ Object.assign(HOW, {
       { hip: [99.4, 151.6], torso: -145.3, neck: -150, near: { wristAt: [80, 115.5], hand: -90, elbowBend: -1, th: 34.7, sh: 34.7, ft: -55 }, eq: [pullbar(80, 110)] }], ["Bras tendus", "Poitrine à la barre"])],
     cue: "Sous une barre basse, corps gainé et droit, talons au sol : tire la poitrine jusqu’à la barre, coudes près du corps, puis redescends.",
     tips: ["Corps droit des épaules aux talons.", "Coudes près du corps, poitrine vers la barre.", "Plus les pieds sont loin, plus c’est dur."] },
-  "Montée de corde": { views: [side([
+  "Montée de corde avec jambes": { views: [side([
       { hip: [112, 142], torso: -90, neck: -94, near: { wristAt: [117, 42], hand: -90, ankleAt: [116, 176], ft: 20 }, far: { wristAt: [117, 60] }, eq: [climbRope(120)] },
       { hip: [114, 104], torso: -92, neck: -92, near: { wristAt: [117, 60], hand: -90, ankleAt: [117, 190], ft: 20 }, far: { wristAt: [117, 44] }, eq: [climbRope(120)] }],
       ["Mains en haut, pieds qui serrent la corde", "Jambes qui poussent, une main puis l’autre"])],
     cue: "Mains serrées en haut, pieds qui bloquent la corde : pousse sur les jambes, puis avance une main après l’autre plus haut.",
     tips: ["Les pieds pincent la corde (une cheville sur l’autre).", "Ce sont les jambes qui font monter, les bras tiennent.", "Redescends main après main, jamais en glissant."] },
-  "Montée de corde sans jambes": { views: [side([
+  // Montée de corde : la version sans les jambes (bras seuls).
+  "Montée de corde": { views: [side([
       { hip: [114, 106], torso: -90, neck: -94, near: { wristAt: [117, 8], hand: -90, th: 60, sh: 85, ft: 20 }, far: { wristAt: [117, 34] }, eq: [climbRope(120)] },
       { hip: [114, 92], torso: -90, neck: -94, near: { wristAt: [117, 24], hand: -90, th: 60, sh: 85, ft: 20 }, far: { wristAt: [117, -2] }, eq: [climbRope(120)] }],
       ["Main droite en haut", "Main gauche en haut"])],
     cue: "Uniquement avec les bras, jambes légèrement relevées : monte une main après l’autre.",
     tips: ["Jambes relevées devant toi, sans balancer.", "Une main après l’autre, bras qui tirent.", "Redescends aussi main après main."] },
+  // Départ assis au sol, jambes tendues devant : on décolle et on monte avec les bras seuls.
+  "Montée de corde départ assis": { views: [side([
+      { hip: [114, GROUND - 12], torso: -90, neck: -94, near: { wristAt: [117, 92], hand: -90, th: 0, sh: 0, ft: -60 }, far: { wristAt: [117, 112] }, eq: [climbRope(120)] },
+      { hip: [114, 150], torso: -90, neck: -94, near: { wristAt: [117, 66], hand: -90, th: 4, sh: 4, ft: -40 }, far: { wristAt: [117, 88] }, eq: [climbRope(120)] }],
+      ["Assis au sol, jambes tendues, mains sur la corde", "Décolle des fesses, bras seuls"])],
+    cue: "Assis au sol, jambes tendues devant toi, mains sur la corde : tire avec les bras pour décoller, puis monte une main après l’autre sans t’aider des jambes.",
+    tips: ["Départ assis : aucun élan des jambes pour décoller.", "Jambes tendues devant toi, gainées, pendant toute la montée.", "Redescends main après main jusqu’à te reposer assis."] },
   "L-sit": { views: [side([{ hip: [120, 118], torso: -90, neck: -90, near: { wristAt: [121, 122], hand: 0, th: 0, sh: 0, ft: 0 }, eq: [dipbars(96, 150, 127.5)] }], ["Position à tenir"])],
     cue: "Bras tendus en appui sur des barres, épaules basses : jambes tendues à l’horizontale.", tips: ["Épaules basses, loin des oreilles.", "Jambes serrées et tendues, pointes de pieds tirées.", "Progression : un genou plié, puis les deux jambes tendues."] },
   "Handstand": { views: [side([{ hip: [118, 99], torso: 91, neck: 78, near: { wristAt: [121, GROUND - 3], h: "flat", hand: 0, th: -90, sh: -90, ft: -90 } }], ["Position à tenir"])],
@@ -677,6 +685,7 @@ Object.assign(HOW, {
     tips: ["Coudes légèrement fléchis et fixes.", "Descends jusqu’à sentir l’étirement, sans douleur à l’épaule.", "Bassin et bas du dos restent posés sur le banc."] }
 });
 HOW["Écarté à la poulie"] = HOW["Écarté poulie haute"];   // ancien nom
+HOW["Montée de corde sans jambes"] = HOW["Montée de corde"];   // ancien nom (séances déjà enregistrées)
 
 /* ═══ Bras ═══ */
 const curlS = (up, eq, o = {}) => stand(merge({ near: up ? { ua: 86, fa: -72, hand: -62 } : { ua: 93, fa: 86, hand: 88 }, eq }, o));

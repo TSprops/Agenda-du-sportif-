@@ -29,7 +29,7 @@ const MOVE_WORDS = [
   [/toes to bar/, "Toes to bar"], [/relev/, "Relevés de jambes"], [/crunch.*poulie/, "Crunch à la poulie"], [/sit ?up/, "Sit-ups"], [/twist/, "Russian twist"], [/crunch/, "Crunch"],
   [/gainage lateral|side plank/, "Gainage latéral"], [/gainage|plank/, "Gainage"], [/roue|ab wheel/, "Roue abdominale"], [/hollow/, "Hollow hold"], [/climber/, "Mountain climbers"],
   [/l ?sit/, "L-sit"], [/handstand push|hspu/, "Handstand push-up"], [/handstand|poirier/, "Handstand"], [/front lever/, "Front lever"], [/back lever/, "Back lever"], [/drapeau|human flag/, "Human flag"], [/planche/, "Planche"],
-  [/corde.*sans jambe/, "Montée de corde sans jambes"], [/corde|rope/, "Montée de corde"],
+  [/corde.*avec jambe/, "Montée de corde avec jambes"], [/corde.*assis/, "Montée de corde départ assis"], [/corde|rope/, "Montée de corde"],
   [/swing/, "Kettlebell swings"], [/wall ?ball/, "Wall balls"], [/thruster/, "Thrusters"], [/snatch|arrache/, "Snatch"], [/clean|epaule jete/, "Clean"], [/box/, "Box jumps"], [/burpee/, "Burpees"],
   [/farmer|marche/, "Farmer walk"]
 ];
