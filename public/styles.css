@@ -936,3 +936,19 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .mh-cap{margin:0;text-align:center;font-size:12px;color:var(--muted)}
 /* Petits écrans (iPhone SE) : tout tient sans défilement */
 @media (max-height:640px){.news-slide h2{font-size:22px}.news-slide p{font-size:13px;line-height:1.38}.nh-figs .fg{max-height:52px}.news-visual{padding:8px}.nh-play{display:none}.install.news{gap:9px;padding-top:6px}.mh-toc b{padding:2px 0;font-size:12.5px}.mh-title{font-size:16px}}
+/* Accueil : boutons Tutoriel et Contact, côte à côte, bien visibles */
+.home-links{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:76px}
+.home-link{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 14px;border-radius:16px;border:1.5px solid color-mix(in srgb,var(--red) 60%,var(--line));background:var(--red-soft);color:var(--ink);font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:.04em;text-transform:uppercase}
+.home-link svg{width:22px;height:22px;flex:none;fill:none;stroke:var(--red-hi);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.home-link:active{transform:scale(.97)}
+/* Tutoriel guidé : écran assombri sauf l'élément expliqué, bulle à côté */
+.tour{position:fixed;inset:0;z-index:70}
+.tour-hole{position:fixed;border-radius:14px;border:2px solid var(--red-hi);box-shadow:0 0 0 200vmax rgba(0,0,0,.74),0 0 22px color-mix(in srgb,var(--red-hi) 60%,transparent);transition:top .25s,left .25s,width .25s,height .25s;pointer-events:none}
+.tour-bubble{position:fixed;background:var(--surface);border:1.5px solid var(--red);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 12px 40px rgba(0,0,0,.6);transition:top .25s,left .25s}
+@media (prefers-reduced-motion: reduce){.tour-hole,.tour-bubble{transition:none}}
+.tour-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tour-step{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.08em;color:var(--red-hi)}
+.tour-skip{font-size:13px;font-weight:600;color:var(--muted);padding:8px 10px;margin:-8px -6px -8px 0;border-radius:12px}
+.tour-text{margin:0;font-size:15.5px;line-height:1.45}
+.tour-nav{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tour-nav .btn{min-height:44px;white-space:nowrap;padding-inline:10px}

@@ -32,13 +32,14 @@ async function signupPage(browser, pseudo) {
   const p = await ctx.newPage(); p.errs = [];
   p.on("pageerror", e => p.errs.push(e.message));
   await p.goto(BASE); await p.waitForSelector("#v-login:not([hidden])");
-  await p.evaluate(() => localStorage.setItem("help-hint-off", "1"));
+  // Tutoriels guidés coupés pour les parcours de test (ils ont leur propre test).
+  await p.evaluate(() => { localStorage.setItem("help-hint-off", "1"); localStorage.setItem("tours-off", "1"); });
   p.email = pseudo.toLowerCase() + Date.now() + "@test.fr";
   await p.click("#tabUp"); await p.fill("#auEmail", p.email); await p.fill("#auPass", "secret123"); await p.click("#auSubmit");
   await p.waitForSelector("#v-onboard:not([hidden])"); await p.fill("#su-pseudo", pseudo);
   await p.click("#signup button[type=submit]");
   if (!(await p.$eval("#suErr", e => e.hidden))) { await p.check("#suTerms"); await p.click("#signup button[type=submit]"); }
-  await p.waitForSelector("#tuto:not([hidden])"); await p.click("#tutoSkip"); await p.waitForSelector("#v-home:not([hidden])");
+  await p.waitForSelector("#v-home:not([hidden])");
   p.uid = await uidOf(p.email);
   return p;
 }

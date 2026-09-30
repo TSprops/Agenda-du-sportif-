@@ -8,7 +8,6 @@ import { blobToData, compress } from "./seances.js";
 import { renderSound } from "./timer.js";
 import { refreshInstallBtn } from "./install.js";
 import { ensureSocialProfile, subscribeSocial } from "./friends.js";
-import { openTuto } from "./extras.js";
 import { stopSubscriptions, subscribeData } from "./main.js";
 
 /* ============================================================
@@ -107,7 +106,7 @@ $("signup").addEventListener("submit", async e => {
       typesV: TYPES_V, types: DEFAULT_TYPES.map(t => ({ ...t })), prefs: { creaDose: 5 }, goal: 3, seen: { amis1: true, v2: true, v3: true }, termsV: TERMS_V, termsAt: Date.now()
     });
     S.visitCounted = true;
-    subscribeData(); ensureSocialProfile(); subscribeSocial(); go("home"); openTuto();
+    subscribeData(); ensureSocialProfile(); subscribeSocial(); go("home");
   } catch (err) { S.profile = null; show($("suErr"), "Impossible d’enregistrer ton profil. Vérifie ta connexion et réessaie."); }
 });
 

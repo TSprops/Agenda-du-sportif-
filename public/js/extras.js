@@ -1,39 +1,10 @@
-// Tutoriel, export de mes données, sauvegarde admin et état du réseau.
-import { $, S, collection, db, esc, getDocs, limitToLast, orderBy, query, todayK } from "./core.js";
-import { saveProfile, subCol } from "./store.js";
+// Export de mes données, sauvegarde admin et état du réseau.
+import { $, S, collection, db, getDocs, limitToLast, orderBy, query, todayK } from "./core.js";
+import { subCol } from "./store.js";
 import { renderAdmin } from "./admin.js";
-import { lsSet, maybeWelcomeInstall } from "./install.js";
+import { lsSet } from "./install.js";
 import { SOC, otherOf } from "./friends.js";
 import { acceptedFriends, loadFeed } from "./social.js";
-
-/* ============================================================
-   Mini tutoriel (passable) et annonce de la mise à jour
-   ============================================================ */
-const TUTO = [
-  ["👋", "Bienvenue !", "Ton carnet d’entraînement : musculation, CrossFit, callisthénie et course à pied, au même endroit."],
-  ["▶", "Let’s go", "Lance ta séance, une routine ou un programme. Tes poids de la dernière fois sont déjà remplis : tu n’as plus qu’à battre ton record."],
-  ["🏆", "Valide tes séries", "Touche « Série finie » : le minuteur de repos démarre tout seul, et l’app te prévient dès que tu bats un record."],
-  ["🔥", "Garde ta série", "Choisis ton objectif de séances par semaine sur l’accueil. Chaque semaine réussie fait grandir ta série."],
-  ["👥", "Social", "Ajoute tes amis, suis leurs séances dans le fil d’actu, commente, et lance des défis entre potes."]
-];
-let tutoI = 0;
-function openTuto() { tutoI = 0; renderTuto(); $("tuto").hidden = false; document.body.classList.add("sheet-open"); }
-function closeTuto() {
-  $("tuto").hidden = true; if (!$("sheet").classList.contains("open")) document.body.classList.remove("sheet-open");
-  lsSet("seen-tuto", 1); if (S.profile) saveProfile({ seen: { ...(S.profile.seen || {}), tuto: true } });
-  if (S.screen === "home") maybeWelcomeInstall();
-}
-function renderTuto() {
-  const [ico, t, d] = TUTO[tutoI], last = tutoI === TUTO.length - 1;
-  $("tutoBody").innerHTML = `<span class="tuto-ico" aria-hidden="true">${ico}</span><h2>${esc(t)}</h2><p>${esc(d)}</p>`;
-  $("tutoDots").innerHTML = TUTO.map((_, i) => `<i class="${i === tutoI ? "on" : ""}"></i>`).join("");
-  $("tutoNext").textContent = last ? "C’est parti !" : "Suivant";
-  $("tutoPrev").style.visibility = tutoI ? "visible" : "hidden";
-}
-$("tutoNext").onclick = () => { if (tutoI === TUTO.length - 1) closeTuto(); else { tutoI++; renderTuto(); } };
-$("tutoPrev").onclick = () => { if (tutoI) { tutoI--; renderTuto(); } };
-$("tutoSkip").onclick = closeTuto;
-$("tutoAgain").onclick = openTuto;
 
 /* ============================================================
    Mes données : export (droit d'accès et de portabilité)
@@ -87,11 +58,4 @@ function netState() { $("offlinePill").hidden = navigator.onLine; if (S.screen =
 window.addEventListener("online", () => { netState(); if (S.screen === "feed") loadFeed(true); });
 window.addEventListener("offline", netState);
 netState();
-let tx0 = null;
-$("tuto").addEventListener("touchstart", e => { tx0 = e.touches[0].clientX; }, { passive: true });
-$("tuto").addEventListener("touchend", e => {
-  if (tx0 == null) return; const dx = e.changedTouches[0].clientX - tx0; tx0 = null;
-  if (dx < -50 && tutoI < TUTO.length - 1) { tutoI++; renderTuto(); } else if (dx > 50 && tutoI) { tutoI--; renderTuto(); }
-});
-
-export { adminBackup, openTuto };
+export { adminBackup };

@@ -352,7 +352,7 @@ let newsTimer = null;
 function maybeNews() {
   clearTimeout(newsTimer);
   if (!newsPending()) return;
-  newsTimer = setTimeout(() => { if (S.screen === "home" && newsPending() && !document.body.classList.contains("sheet-open") && $("tuto").hidden && $("newsSheet").hidden) openNews(); }, 1200);
+  newsTimer = setTimeout(() => { if (S.screen === "home" && newsPending() && !document.body.classList.contains("sheet-open") && !document.body.classList.contains("tour-on") && $("newsSheet").hidden) openNews(); }, 1200);
 }
 function openNews() {
   closeInstall();

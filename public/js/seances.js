@@ -11,6 +11,7 @@ import { addExercise, announcePRs, cordesExHTML, cordesOf, freshKey, lastLineHTM
   sessionPRs, toast } from "./workout.js";
 import { myCommentsHTML } from "./social.js";
 import { howBtnHTML } from "./howto.js";
+import { tourCheck } from "./tour.js";
 
 /* ============================================================
    Séances : calendrier
@@ -296,6 +297,7 @@ function renderSheet() {
   <div class="sheet-body" style="--tc:${mt ? mt.color : "var(--red-hi)"}">${body}</div>`;
   el.scrollTop = y;
   if (disc) loadPhotos(c.photos || []);
+  tourCheck(disc ? "seance" : "seance-choix");
 }
 const EMPTY_DAY = () => ({ disc: null, title: "", typeId: null, exercises: [], mood: null, note: "", photos: [] });
 function setDisc(c, disc) {

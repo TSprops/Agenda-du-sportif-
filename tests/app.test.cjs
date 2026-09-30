@@ -112,6 +112,32 @@ module.exports = async function appTests(t) {
     await home(A); await A.waitForTimeout(1600);
     t("nouveautés : plus jamais affichée", await A.$eval("#newsSheet", e => e.hidden), true);
 
+    // Tutoriel guidé : une fois par page et par compte ; page « Tutoriel » pour le revoir sans changer le suivi.
+    await A.evaluate(() => localStorage.removeItem("tours-off"));
+    await home(A); await A.waitForSelector("#tour:not([hidden])", { timeout: 6000 });
+    const tourState = () => A.evaluate(() => [document.getElementById("tourStep").textContent, document.getElementById("tourNext").textContent, getComputedStyle(document.getElementById("tourPrev")).visibility].join());
+    t("tutoriel accueil : lancé à la première ouverture", await tourState(), "1/5,Suivant,hidden");
+    await A.click("#tourNext");
+    t("tutoriel : étape suivante", await tourState(), "2/5,Suivant,visible");
+    await A.click("#tourPrev");
+    t("tutoriel : étape précédente", await tourState(), "1/5,Suivant,hidden");
+    await A.click("#tourSkip");
+    t("tutoriel : passé", await A.$eval("#tour", e => e.hidden), true);
+    await home(A); await A.waitForTimeout(1500);
+    t("tutoriel accueil : plus jamais relancé", await A.$eval("#tour", e => e.hidden), true);
+    t("boutons Tutoriel et Contact sur l’accueil", await A.$$eval("#homeLinks [data-go]", x => x.map(b => b.dataset.go).join()), "tutos,contact");
+    await A.click("#homeLinks [data-go=tutos]"); await A.click('#tutosList [data-tour="home"]');
+    await A.waitForSelector("#tour:not([hidden])", { timeout: 6000 });
+    t("revoir le tutoriel de l’accueil depuis la page Tutoriel", await tourState(), "1/5,Suivant,hidden");
+    for (let k = 0; k < 5; k++) await A.click("#tourNext");
+    t("tutoriel terminé", await A.$eval("#tour", e => e.hidden), true);
+    await A.click("[data-go=go]"); await A.waitForSelector("#tour:not([hidden])", { timeout: 6000 });
+    t("tutoriel Let’s go à la première ouverture (fil rouge : Calendrier)", (await A.textContent("#tourText")).length > 10, true);
+    await A.click("#tourSkip");
+    await A.goto(BASE + "?reset-tutoriels"); await A.waitForSelector("#v-home:not([hidden])"); await A.waitForSelector("#tour:not([hidden])", { timeout: 6000 });
+    t("tutoriels remis à zéro (?reset-tutoriels)", await tourState(), "1/5,Suivant,hidden");
+    await A.click("#tourSkip"); await A.evaluate(() => localStorage.setItem("tours-off", "1"));
+
     // Social : ami, commentaire, signalement, modération.
     await A.click("[data-go=social]"); await A.click("[data-go=friends]"); const code = await A.textContent("#myCode");
     const B = await signupPage(browser, "Bruno");

@@ -81,7 +81,7 @@ function maybeWelcomeInstall() {
   if (lsGet("welcome-install") || !canInstall() || /github\.io$/.test(location.hostname)) return false;
   clearTimeout(installTimer);
   installTimer = setTimeout(() => {
-    if (S.screen !== "home" || document.body.classList.contains("sheet-open") || !$("termsSheet").hidden || !$("newsSheet").hidden || !$("tuto").hidden) return;
+    if (S.screen !== "home" || document.body.classList.contains("sheet-open") || !$("termsSheet").hidden || !$("newsSheet").hidden || document.body.classList.contains("tour-on")) return;
     lsSet("welcome-install", 1); openInstall(true);
   }, 900);
   return true;
@@ -91,7 +91,7 @@ function maybeOldIconTip() {
   if (!standalone() || !hadOldIcon() || lsGet("old-icon-tip") || (S.profile.seen || {}).oldIcon) return false;
   clearTimeout(installTimer);
   installTimer = setTimeout(() => {
-    if (S.screen !== "home" || document.body.classList.contains("sheet-open") || !$("termsSheet").hidden || !$("newsSheet").hidden || !$("tuto").hidden) return;
+    if (S.screen !== "home" || document.body.classList.contains("sheet-open") || !$("termsSheet").hidden || !$("newsSheet").hidden || document.body.classList.contains("tour-on")) return;
     $("oldIconSteps").innerHTML = OLD_ICON_STEP().replace('class="warn"', "");
     $("oldIconBackdrop").hidden = false; $("oldIconSheet").hidden = false;
   }, 900);
