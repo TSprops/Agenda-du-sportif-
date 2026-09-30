@@ -121,7 +121,7 @@ Object.assign(HOW, {
       R: { wristAt: [144, 176], hand: 0, th: 180, sh: 180 }, L: { wristAt: [144, 64], hand: 0, th: 180, sh: 180, elbowBend: 1 }, eq: [pole(152)] }], ["Position à tenir"])],
     cue: "Mains serrées sur une barre verticale, bras tendus : le bras du haut tire, celui du bas pousse, corps horizontal sur le côté.",
     tips: ["Mains écartées d’environ une largeur d’épaules et demie sur le poteau.", "Bras du haut qui tire, bras du bas qui pousse, tous les deux tendus.", "Progression : commence jambes groupées, puis une jambe tendue."] },
-  "Planche": { views: [side([plank(122, 150, 124), plank(140, 156, 120)], ["Épaules au-dessus des mains", "Penché : épaules devant les mains"])],
+  "Planche": { views: [side([plank(140, 156, 120)], ["Position à tenir : épaules devant les mains"])],
     cue: "Version pieds au sol (planche penchée) : en appui sur les mains, bras tendus, avance les épaules devant les mains en gardant le corps gainé.",
     tips: ["Bras bien tendus, épaules qui poussent le sol.", "Doigts tournés vers l’extérieur ou vers l’arrière pour protéger les poignets.", "Corps gainé du début à la fin, pointes de pieds au sol."] },
   "Back lever": { views: [side([{ hip: [96, 80], torso: 0, neck: 2, near: { wristAt: [120, BY + 4], hand: -140, th: 180, sh: 180, ft: 180 }, eq: [pullbar(120, BY)] }], ["Position à tenir"])],
@@ -189,7 +189,8 @@ const forearmPlank = (o = {}) => {
     near: { th: 180 + a, sh: 180 + a, ft: 75, ua: 90, fa: 0, hand: 0 } }, o);
 };
 Object.assign(HOW, {
-  "Crunch": { views: [side([backLie(0, { near: { ua: 150, fa: -60, hand: -60 } }), backLie(28, { near: { ua: 150, fa: -40, hand: -40 } })], ["Allongé, genoux pliés", "Haut du dos enroulé"])],
+  // Seul le haut du dos s'enroule (curl) : le bas du dos et le bassin restent au sol.
+  "Crunch": { views: [side([backLie(0, { near: { ua: 150, fa: -60, hand: -60 } }), backLie(0, { curl: 34, neck: 222, near: { ua: 184, fa: -26, hand: -26 } })], ["Allongé, genoux pliés", "Haut du dos enroulé, bas du dos au sol"])],
     cue: "Allongé sur le dos, genoux pliés et pieds à plat : enroule le haut du dos en soufflant, sans tirer sur la nuque, puis redescends.",
     tips: ["Pieds à plat au sol, talons près des fesses.", "Le bas du dos reste collé au sol : seules les épaules décollent.", "Mains contre les tempes, sans tirer sur la tête."] },
   "Sit-ups": { views: [side([backLie(0, { near: { ua: 150, fa: -60, hand: -60 } }), backLie(72, { neck: 250, near: { ua: 170, fa: -30, hand: -30 } })], ["Allongé, genoux pliés", "Buste relevé jusqu’aux genoux"])],
@@ -230,8 +231,9 @@ Object.assign(HOW, {
   "Relevés de jambes": { views: [side([hangLeg({ eq: [pullbar(120, BY)] }), hangLeg({ near: { th: -2, sh: -2, ft: -20 }, eq: [pullbar(120, BY)] })], ["Suspendu, jambes tendues", "Jambes à l’horizontale"])],
     cue: "Suspendu à la barre sans balancer : monte les jambes tendues jusqu’à l’horizontale, puis redescends lentement.",
     tips: ["Bras tendus, épaules actives.", "Pas d’élan : les jambes montent et descendent lentement.", "Trop dur ? Monte les genoux pliés."] },
-  "Toes to bar": { views: [side([hangLeg({ eq: [pullbar(120, BY)] }),
-      { hip: [148, BY + 93], torso: -140, neck: -120, near: { wristAt: onBar, hand: -90, ankleAt: [132, BY + 6], ft: -40 }, eq: [pullbar(120, BY)] }], ["Suspendu", "Pieds qui touchent la barre"])],
+  // Les jambes montent par l'avant (étape « à l'horizontale ») jusqu'à toucher la barre, pointes de pieds vers la barre.
+  "Toes to bar": { views: [side([hangLeg({ eq: [pullbar(120, BY)] }), hangLeg({ near: { th: -2, sh: -2, ft: -20 }, eq: [pullbar(120, BY)] }),
+      { hip: [148, BY + 93], torso: -140, neck: -140, near: { wristAt: onBar, hand: -90, ankleAt: [140, BY + 12], ft: -150 }, eq: [pullbar(120, BY)] }], ["Suspendu", "Jambes à l’horizontale", "Pointes de pieds à la barre"], [0, 1, 2, 1])],
     cue: "Suspendu à la barre : monte les pieds jusqu’à toucher la barre, jambes tendues, puis redescends en contrôlant.",
     tips: ["Les pointes de pieds touchent la barre, entre les mains.", "Bras tendus, épaules qui tirent vers le bas.", "Contrôle la descente pour ne pas te balancer."] },
   "Hollow hold": { views: [side([{ hip: [124, GROUND - 13], torso: -172, neck: -170, near: { ua: -168, fa: -170, hand: -170, th: -12, sh: -12, ft: -12 } }], ["Position à tenir"])],

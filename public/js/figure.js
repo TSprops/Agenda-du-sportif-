@@ -108,7 +108,9 @@ function shorts(S, p, d, rect, flip, sx = 1) {
 // h : "fist" (main fermée, par défaut), "flat" (à plat), "open" (ouverte).
 export function solveSide(pose) {
   // shrug : épaules haussées (la tête ne bouge pas, le cou raccourcit).
-  const hip = pose.hip, sh = add(hip, mul(dir(pose.torso), LEN.torso + (pose.shrug || 0)));
+  // curl : le haut du dos s'enroule à partir de la taille (crunch) ; le bas du buste garde l'angle « torso ».
+  const hip = pose.hip, waist = add(hip, mul(dir(pose.torso), LEN.torso / 2));
+  const sh = pose.curl ? add(waist, mul(dir(pose.torso + pose.curl), LEN.torso / 2 + (pose.shrug || 0))) : add(hip, mul(dir(pose.torso), LEN.torso + (pose.shrug || 0)));
   const side = o0 => {
     const o = limbAngles(o0, sh, hip), ls = o.ls || {};
     const elbow = add(sh, mul(dir(o.ua), LEN.ua * (ls.ua || 1))), wrist = add(elbow, mul(dir(o.fa), LEN.fa * (ls.fa || 1)));
@@ -122,7 +124,7 @@ export function solveSide(pose) {
   if (pf.ua != null && !pf.wristAt) delete fo.wristAt;
   const near = side(pose.near), far = side(fo);
   const neckEnd = add(sh, mul(dir(pose.neck), LEN.neck - (pose.shrug || 0))), headRot = pose.neck + 90 + (pose.head || 0);
-  return { ...pose, sh, neckEnd, headRot, head: add(neckEnd, rot([2, -9.4], headRot)), near, far };
+  return { ...pose, sh, waist, neckEnd, headRot, head: add(neckEnd, rot([2, -9.4], headRot)), near, far };
 }
 function sideBody(P, target) {
   const t = target, none = [];
@@ -133,11 +135,20 @@ function sideBody(P, target) {
   return {
     back: `${arm(P.far, "fg-far", farT)}${leg(P.far, "fg-far", farT)}`,
     body: `${leg(P.near, "", t)}${shorts(SIDE.th, P.hip, P.near.th, "M-12 -15H16Q17 0 16 15H-12Z", 0, L(P.near, "th"))}
-      ${seg(SIDE.torso, P.sh, P.torso + 180, t, "", 0, 1 + (P.shrug || 0) / LEN.torso)}${shorts(SIDE.torso, P.sh, P.torso + 180, "M42 -22H66V22H42Z", 0, 1 + (P.shrug || 0) / LEN.torso)}
+      ${P.curl ? curledTorso(P, t) : `${seg(SIDE.torso, P.sh, P.torso + 180, t, "", 0, 1 + (P.shrug || 0) / LEN.torso)}${shorts(SIDE.torso, P.sh, P.torso + 180, "M42 -22H66V22H42Z", 0, 1 + (P.shrug || 0) / LEN.torso)}`}
       ${seg(SIDE.neck, P.sh, P.neck, none, "")}
       <g transform="${at(P.head, P.headRot)}"><path class="fg-sk" d="${SIDE.head.d}"/><path class="fg-hair" d="${SIDE.hair}"/>${SIDE.head.lines.map(l => `<path class="fg-ln" d="${l}"/>`).join("")}<path class="fg-ol" d="${SIDE.head.d}"/></g>`,
     arm: arm(P.near, "", t)
   };
+}
+
+// Buste enroulé : moitié basse (taille → hanche) posée selon « torso », moitié haute tournée de « curl » autour de la taille.
+function curledTorso(P, t) {
+  const half = LEN.torso / 2, lowSh = add(P.waist, mul(dir(P.torso), half)), upA = P.torso + P.curl + 180, loA = P.torso + 180;
+  const clip = (p, d, x1, x2) => { const id = "fc" + (++uid); return [id, `<clipPath id="${id}"><rect x="${x1}" y="-40" width="${x2 - x1}" height="80" transform="${at(p, d)}"/></clipPath>`]; };
+  const [lo, loDef] = clip(lowSh, loA, half - 1, 80), [up, upDef] = clip(P.sh, upA, -30, half + 1.5);
+  return `${loDef}${upDef}<g clip-path="url(#${lo})">${seg(SIDE.torso, lowSh, loA, t, "")}${shorts(SIDE.torso, lowSh, loA, "M42 -22H66V22H42Z")}</g>
+    <g clip-path="url(#${up})">${seg(SIDE.torso, P.sh, upA, t, "")}</g>`;
 }
 
 /* ---------- Mannequin de face ---------- */
@@ -315,7 +326,7 @@ export function lerpPose(A, B, t) {
     return r;
   };
   const o = { ...(t < 0.5 ? A : B), hip: [num(A.hip[0], B.hip[0]), num(A.hip[1], B.hip[1])], torso: turn(A.torso, B.torso, t), neck: turn(A.neck, B.neck, t),
-    shrug: num(A.shrug, B.shrug), tls: num(A.tls, B.tls, 1) };
+    shrug: num(A.shrug, B.shrug), tls: num(A.tls, B.tls, 1), curl: num(A.curl, B.curl) };
   if (A.head != null || B.head != null) o.head = num(A.head, B.head);
   if (A.view === "front") { o.R = limb(A.R, B.R); o.L = limb(A.L, B.L); } else { o.near = limb(A.near, B.near); o.far = limb(A.far, B.far); }
   return o;
