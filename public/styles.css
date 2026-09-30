@@ -925,3 +925,7 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 @keyframes hs6{0%,14%{opacity:1}20%,97%{opacity:0}100%{opacity:1}}
 @media (prefers-reduced-motion: reduce){.how-f{animation:none!important}.how-play{display:none}}
 .fg-chain{stroke:#8E8E95;stroke-width:1.6;stroke-dasharray:2 1.2}
+.fg-padline{stroke:var(--fg-pad);stroke-width:9;stroke-linecap:round}
+.fg-rail{stroke:var(--fg-metal);stroke-width:3;stroke-linecap:round}
+.fg-plat{stroke:var(--fg-plate);stroke-width:7;stroke-linecap:round}
+.fg-ghost .fg-plate{fill-opacity:.45}.fg-ghost .fg-plate-in{opacity:.6}

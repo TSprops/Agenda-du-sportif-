@@ -112,7 +112,11 @@ export function solveSide(pose) {
     // grip : point tenu par la main (centre du poing), toe : bout du pied, sole : dessous du talon.
     return { ...o, elbow, wrist, knee, ankle, grip: add(wrist, mul(dir(o.hand), 5.5)), toe: add(ankle, rot([23, 5], o.ft)), heel: add(ankle, rot([-4, 7], o.ft)) };
   };
-  const near = side(pose.near), far = side({ ...pose.near, ...(pose.far || {}) });
+  // Côté éloigné : reprend le côté proche, sauf ce qui est redonné (un angle redonné remplace la cible héritée).
+  const fo = { ...pose.near, ...(pose.far || {}) }, pf = pose.far || {};
+  if (pf.th != null && !pf.ankleAt) delete fo.ankleAt;
+  if (pf.ua != null && !pf.wristAt) delete fo.wristAt;
+  const near = side(pose.near), far = side(fo);
   const neckEnd = add(sh, mul(dir(pose.neck), LEN.neck)), headRot = pose.neck + 90 + (pose.head || 0);
   return { ...pose, sh, neckEnd, headRot, head: add(neckEnd, rot([2, -9.4], headRot)), near, far };
 }
@@ -199,7 +203,7 @@ const E = (f, o = {}) => ({ f, ...o });
 const BB = (e, bb) => ({ ...e, bb });
 const G = GROUND;
 // Barre vue en coupe (bout de la barre avec ses disques) ; r = rayon du disque.
-export const bar = (at, r = 13, o) => E(P => { const c = typeof at === "function" ? at(P) : at; return `<g class="fg-eq"><circle class="fg-plate" cx="${r1(c[0])}" cy="${r1(c[1])}" r="${r}"/><circle class="fg-plate-in" cx="${r1(c[0])}" cy="${r1(c[1])}" r="${r * 0.62}"/><circle class="fg-hub" cx="${r1(c[0])}" cy="${r1(c[1])}" r="2.6"/></g>`; }, o);
+export const bar = (at, r = 13, o) => E(P => { const c = typeof at === "function" ? at(P) : at; return `<g class="fg-eq${o && o.top ? " fg-ghost" : ""}"><circle class="fg-plate" cx="${r1(c[0])}" cy="${r1(c[1])}" r="${r}"/><circle class="fg-plate-in" cx="${r1(c[0])}" cy="${r1(c[1])}" r="${r * 0.62}"/><circle class="fg-hub" cx="${r1(c[0])}" cy="${r1(c[1])}" r="2.6"/></g>`; }, o);
 // Haltère. mode "end" : poignée vers nous (on voit un disque) ; "side" : poignée dans le plan, perpendiculaire à l'avant-bras.
 export const db = (at, mode = "end", o) => E(P => {
   const [c, a] = typeof at === "function" ? at(P) : at;
