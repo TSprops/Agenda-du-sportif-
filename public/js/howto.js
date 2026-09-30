@@ -678,7 +678,9 @@ let opener = null, inerted = [];
 // Fiche dessinée avec le nouveau mannequin (moves.js), retrouvée aussi pour un nom tapé à la main.
 let HOW_KEYS = null;
 // Nom tapé à la main → famille reconnue par mots-clés → fiche dessinée correspondante.
-const FAM_HOW = { burpee: "Burpees", wallball: "Wall balls", snatch: "Snatch", boxjump: "Box jumps", walk: "Farmer walk", swing: "Kettlebell swings", thruster: "Thrusters", clean: "Clean" };
+const FAM_HOW = { burpee: "Burpees", wallball: "Wall balls", snatch: "Snatch", boxjump: "Box jumps", walk: "Farmer walk", swing: "Kettlebell swings", thruster: "Thrusters", clean: "Clean",
+  pushup: "Pompes", pushdiamond: "Pompes diamant", pike: "Pompes pike", dips: "Dips", pullup: "Tractions", invrow: "Tractions australiennes", rope: "Montée de corde",
+  lsit: "L-sit", handstand: "Handstand", hspu: "Handstand push-up", planche: "Planche" };
 function howOf(name) {
   HOW_KEYS = HOW_KEYS || Object.fromEntries(Object.keys(HOW).map(n => [key(n), n]));
   const mv = HOW_KEYS[key(name)] ? null : moveOf(name), n = HOW_KEYS[key(name)] || (mv && FAM_HOW[mv.id]);

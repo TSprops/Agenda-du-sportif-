@@ -137,15 +137,15 @@ function sideBody(P, target) {
 // R : côté droit de l'image. L (côté gauche) est par défaut le miroir de R ; ses angles se donnent tels qu'à l'écran.
 const mirrorA = a => 180 - a;
 export function solveFront(pose) {
-  const up = dir(pose.torso), across = dir(pose.torso + 90), neckBase = add(pose.hip, mul(up, LEN.torsoF));
+  const up = dir(pose.torso), across = dir(pose.torso + 90), neckBase = add(pose.hip, mul(up, LEN.torsoF * (pose.tls || 1)));
   const cx = pose.hip[0], mx = p => p && [2 * cx - p[0], p[1]], R = pose.R;
   const L = { ua: R.ua != null ? mirrorA(R.ua) : null, fa: R.fa != null ? mirrorA(R.fa) : null, hand: mirrorA(R.hand || 90), th: R.th != null ? mirrorA(R.th) : null, sh: R.sh != null ? mirrorA(R.sh) : null,
     h: R.h, ls: R.ls, wristAt: mx(R.wristAt), ankleAt: mx(R.ankleAt), elbowBend: -(R.elbowBend ?? 1), kneeBend: -(R.kneeBend ?? -1), ...(pose.L || {}) };
   const side = (o0, k) => {
     const shoulder = add(add(neckBase, mul(across, 18 * k)), mul(up, -4)), hipJ = add(pose.hip, mul(across, 9 * k));
     const o = limbAngles(o0, shoulder, hipJ);
-    const elbow = add(shoulder, mul(dir(o.ua), LEN.ua)), wrist = add(elbow, mul(dir(o.fa), LEN.fa));
-    const knee = add(hipJ, mul(dir(o.th), LEN.th)), ankle = add(knee, mul(dir(o.sh), LEN.sh));
+    const ls = o.ls || {}, elbow = add(shoulder, mul(dir(o.ua), LEN.ua * (ls.ua || 1))), wrist = add(elbow, mul(dir(o.fa), LEN.fa * (ls.fa || 1)));
+    const knee = add(hipJ, mul(dir(o.th), LEN.th * (ls.th || 1))), ankle = add(knee, mul(dir(o.sh), LEN.sh * (ls.sh || 1)));
     return { ...o, k, shoulder, hipJ, elbow, wrist, knee, ankle, grip: add(wrist, mul(dir(o.hand), 5.5)) };
   };
   const neckEnd = add(neckBase, mul(dir(pose.neck), LEN.neck));
@@ -154,15 +154,16 @@ export function solveFront(pose) {
 function frontBody(P, target) {
   const t = target, none = [];
   // Côté gauche : repère retourné pour que +y reste « vers l'intérieur » des deux côtés.
-  const leg = o => o.th == null || P.nolegs ? "" : `${seg(FRONT.th, o.hipJ, o.th, t, "", o.k < 0)}${seg(FRONT.sh, o.knee, o.sh, t, "", o.k < 0)}
+  const L = (o, k) => (o.ls || {})[k] || 1;
+  const leg = o => o.th == null || P.nolegs ? "" : `${seg(FRONT.th, o.hipJ, o.th, t, "", o.k < 0, L(o, "th"))}${seg(FRONT.sh, o.knee, o.sh, t, "", o.k < 0, L(o, "sh"))}
     <path class="fg-sk fg-shoe" d="M${pt(add(o.ankle, [-4.4 * o.k, -1]))}L${pt(add(o.ankle, [4.2 * o.k, -1]))}L${pt(add(o.ankle, [7.4 * o.k, 7.4]))}Q${pt(add(o.ankle, [1 * o.k, 9.4]))} ${pt(add(o.ankle, [-4.2 * o.k, 7.4]))}Z"/>`;
-  const legShort = o => o.th == null || P.nolegs ? "" : shorts(FRONT.th, o.hipJ, o.th, "M-12 -15H17Q18 0 17 15H-12Z", o.k < 0);
-  const arm = o => `${seg(FRONT.ua, o.shoulder, o.ua, t, "", o.k < 0)}${seg(FRONT.fa, o.elbow, o.fa, t, "", o.k < 0)}${seg(FRONT[o.h || "fist"], o.wrist, o.hand, none, "", o.k < 0)}${seg(FRONT.delt, o.shoulder, o.ua, t, "", o.k < 0)}`;
+  const legShort = o => o.th == null || P.nolegs ? "" : shorts(FRONT.th, o.hipJ, o.th, "M-12 -15H17Q18 0 17 15H-12Z", o.k < 0, L(o, "th"));
+  const arm = o => `${seg(FRONT.ua, o.shoulder, o.ua, t, "", o.k < 0, L(o, "ua"))}${seg(FRONT.fa, o.elbow, o.fa, t, "", o.k < 0, L(o, "fa"))}${seg(FRONT[o.h || "fist"], o.wrist, o.hand, none, "", o.k < 0)}${seg(FRONT.delt, o.shoulder, o.ua, t, "", o.k < 0)}`;
   const tr = P.torso + 180, head = `<g transform="${at(P.head, P.neck + 90)}"><path class="fg-sk" d="${FRONT.head.d}"/><path class="fg-hair" d="${FRONT.hair}"/>${FRONT.head.lines.map(l => `<path class="fg-ln" d="${l}"/>`).join("")}<path class="fg-ol" d="${FRONT.head.d}"/></g>`;
   return {
     back: P.headBehind ? head : "",
     body: `${leg(P.L)}${leg(P.R)}${legShort(P.L)}${legShort(P.R)}
-      ${seg(FRONT.torso, P.neckBase, tr, t, "")}${shorts(FRONT.torso, P.neckBase, tr, "M47 -22H64V22H47Z")}
+      ${seg(FRONT.torso, P.neckBase, tr, t, "", 0, P.tls || 1)}${shorts(FRONT.torso, P.neckBase, tr, "M47 -22H64V22H47Z", 0, P.tls || 1)}
       ${seg(FRONT.neck, P.neckBase, P.neck, none, "")}${P.headBehind ? "" : head}`,
     arm: `${arm(P.L)}${arm(P.R)}`
   };
@@ -183,7 +184,7 @@ export function figure(pose, target, box) {
 export const GROUND = 210;
 export function frameBox(poses) {
   let x1 = 1e9, y1 = 1e9, x2 = -1e9, y2 = GROUND + 6;
-  const see = (p, m = 14) => { x1 = Math.min(x1, p[0] - m); x2 = Math.max(x2, p[0] + m); y1 = Math.min(y1, p[1] - m); y2 = Math.max(y2, p[1] + m); };
+  const see = (p, m = 14) => { if (!p || isNaN(p[0]) || isNaN(p[1])) return; x1 = Math.min(x1, p[0] - m); x2 = Math.max(x2, p[0] + m); y1 = Math.min(y1, p[1] - m); y2 = Math.max(y2, p[1] + m); };
   poses.forEach(q => {
     const P = solve(q);
     if (P.front) { see(P.head, 16); ["R", "L"].forEach(s => ["shoulder", "elbow", "wrist", "knee", "ankle"].forEach(j => P[s][j] && see(P[s][j]))); }
@@ -248,7 +249,7 @@ export const cableTop = (x, topY, towerX, who = "near") => E(P => {
 const seat_ = (x, y, back = 1, deg = 12) => E(() => `<g class="fg-eq"><rect class="fg-frame" x="${x + 10}" y="${y + 6}" width="4" height="${G - y - 6}"/><rect class="fg-frame" x="${x - 4}" y="${G - 3}" width="32" height="4" rx="1.5"/>
   <rect class="fg-pad" x="${x - 4}" y="${y}" width="30" height="8" rx="3.5"/>${back ? `<rect class="fg-pad" x="${x - 8}" y="${y - 44}" width="8" height="48" rx="3.5" transform="rotate(${-deg} ${x - 4} ${y + 2})"/>` : ""}</g>`);
 const box_ = (x, y, w, h) => E(() => `<g class="fg-eq"><rect class="fg-box" x="${x}" y="${y}" width="${w}" height="${h}" rx="2.5"/><path class="fg-boxln" d="M${x + 4} ${y + 5}H${x + w - 4}"/></g>`);
-const wall_ = (x, targetY) => E(() => `<g class="fg-eq"><rect class="fg-wall" x="${x}" y="-60" width="8" height="${G + 60}"/><circle class="fg-target" cx="${x - 1}" cy="${targetY}" r="7"/><circle class="fg-target-in" cx="${x - 1}" cy="${targetY}" r="3"/></g>`);
+const wall_ = (x, targetY) => E(() => `<g class="fg-eq"><rect class="fg-wall" x="${x}" y="-60" width="8" height="${G + 60}"/>${targetY != null ? `<circle class="fg-target" cx="${x - 1}" cy="${targetY}" r="7"/><circle class="fg-target-in" cx="${x - 1}" cy="${targetY}" r="3"/>` : ""}</g>`);
 export const climbRope = x => E(() => `<g class="fg-eq"><line class="fg-climb" x1="${x}" y1="-60" x2="${x}" y2="${G}"/></g>`);
 export const wheel = (who = "near") => E(P => { const c = add(P[who].grip, [0, 3]); return `<g class="fg-eq"><circle class="fg-plate" cx="${r1(c[0])}" cy="${r1(c[1])}" r="8.5"/><circle class="fg-hub" cx="${r1(c[0])}" cy="${r1(c[1])}" r="2.4"/></g>`; }, { top: true });
 export const line = (a, b, cls = "fg-frame-l") => E(() => `<line class="${cls}" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}"/>`);
@@ -272,4 +273,8 @@ export const pullbar = (x, y) => BB(pullbar_(x, y), [x - 12, y - 4, x + 12, GROU
 export const dipbars = (x1, x2, y) => BB(dipbars_(x1, x2, y), [x1 - 6, y - 3, x2 + 6, GROUND]);
 export const seat = (x, y, back = 1, deg = 12) => BB(seat_(x, y, back, deg), [x - 12, y - (back ? 46 : 0), x + 28, GROUND]);
 export const box = (x, y, w, h) => BB(box_(x, y, w, h), [x, y, x + w, y + h]);
-export const wall = (x, targetY) => BB(wall_(x, targetY), [x - 10, targetY - 10, x + 8, GROUND]);
+export const wall = (x, targetY) => BB(wall_(x, targetY), [x - 2, targetY != null ? targetY - 10 : GROUND - 20, x + 8, GROUND]);
+// Poteau vertical (drapeau) et ceinture de lest (chaîne + disque qui pend entre les jambes).
+export const pole = x => BB(E(() => `<g class="fg-eq"><rect class="fg-frame" x="${x - 3}" y="-60" width="6" height="${G + 60}"/><rect class="fg-frame" x="${x - 14}" y="${G - 3}" width="28" height="4" rx="1.5"/></g>`), [x - 14, GROUND - 10, x + 14, GROUND]);
+export const beltSide = () => E(P => { const a = add(P.hip, [7, 9]), b = add(P.hip, [9, 36]); return `<g class="fg-eq"><line class="fg-chain" x1="${r1(a[0])}" y1="${r1(a[1])}" x2="${r1(b[0])}" y2="${r1(b[1])}"/><rect class="fg-plate" x="${r1(b[0] - 3)}" y="${r1(b[1])}" width="6" height="24" rx="2"/></g>`; }, { top: true });
+export const beltFront = () => E(P => { const a = add(P.hip, [0, 6]), b = add(P.hip, [0, 30]); return `<g class="fg-eq"><line class="fg-chain" x1="${r1(a[0])}" y1="${r1(a[1])}" x2="${r1(b[0])}" y2="${r1(b[1])}"/><circle class="fg-plate" cx="${r1(b[0])}" cy="${r1(b[1] + 11)}" r="11"/><circle class="fg-hub" cx="${r1(b[0])}" cy="${r1(b[1] + 11)}" r="2.6"/></g>`; }, { top: true });
