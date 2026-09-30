@@ -3,12 +3,12 @@ import { $, DAYS, DEFAULT_TYPES, S, addDoc, ago, armed, arrayRemove, avatarHTML,
   dayVolume, db, deleteDoc, discOf, doc, esc, getDoc, getDocs, isEmpty, key, limit, nf, onSnapshot, orderBy, parse, plural,
   query, runKm, setDoc, show, titleOf, todayK, updateDoc, where } from "./core.js";
 import { go, saveProfile } from "./store.js";
-import { openDay, renderMain, restOf, sessionSummary } from "./seances.js";
+import { openDay, renderMain, restOf, sessionSummary } from "./seances/index.js";
 import { MONTHS_S, doneSet, shortDate, tryIdea } from "./ideas.js";
 import { lsGet, lsSet } from "./install.js";
 import { REACTS, SOC, dirOf, friendSessionDetail, openChat, otherOf, refreshSocial, renderFriend, reportContent, socialCounts,
   unreadOf, who } from "./friends.js";
-import { bestSets, cordesOf, exKey, toast } from "./workout.js";
+import { bestSets, cordesOf, exKey, toast } from "./entrainement/index.js";
 import { addDays, counts, streakInfo } from "./home.js";
 
 /* ============================================================

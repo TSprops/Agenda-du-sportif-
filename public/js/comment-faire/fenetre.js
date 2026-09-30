@@ -5,7 +5,7 @@ import { moveOf } from "./recherche.js";
 import { esc } from "../core.js";
 import { bodySVG } from "../muscles.js";
 import { figure, frameBox } from "../silhouette/index.js";
-import { musclesOf } from "../workout.js";
+import { musclesOf } from "../entrainement/index.js";
 
 /* ---------- Bouton « ? » et fenêtre ---------- */
 // i : numéro de l'exercice dans la séance, ou "lib" dans la recherche d'exercices.

@@ -1,7 +1,7 @@
 // Carte musculaire.
 import { $, MUSCLES, S, dayOf, discOf, esc, isEmpty, key, nf } from "./core.js";
 import { doneSet } from "./ideas.js";
-import { musclesOf } from "./workout.js";
+import { musclesOf } from "./entrainement/index.js";
 import { addDays } from "./home.js";
 
 /* ============================================================

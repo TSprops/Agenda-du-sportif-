@@ -3,12 +3,12 @@ import { $, BENCH, DAYS, DEFAULT_TYPES, LIFTS, S, TERMS_V, addDoc, armed, avatar
   deleteDoc, discOf, doc, esc, fmtDur, getDoc, getDocs, isEmpty, key, limit, limitToLast, nf, onSnapshot, orderBy, pad, parse,
   plural, query, runKm, runPace, runSecs, setDoc, titleOf, todayK, updateDoc, where, wodScore } from "./core.js";
 import { go, saveProfile } from "./store.js";
-import { sessionSummary } from "./seances.js";
+import { sessionSummary } from "./seances/index.js";
 import { CALIS_PRS, MONTHS_S, MUSCU_LIFTS, RUN_PRS, benchEntries, benchText, benchValue, cfData, prBest, prText, prsData,
   shortDate } from "./ideas.js";
 import { closeInstall, lsGet, lsSet, maybeWelcomeInstall } from "./install.js";
 import { norm } from "./faq.js";
-import { cordesText, toast } from "./workout.js";
+import { cordesText, toast } from "./entrainement/index.js";
 import { streakInfo } from "./home.js";
 import { acceptedFriends, activityList, bannedStop, bestLifts, commentsHTML, monthShare, newChallenges, renderMessages,
   renderSocial, seenAct, subscribeChallenges, toggleReact, trySession } from "./social.js";

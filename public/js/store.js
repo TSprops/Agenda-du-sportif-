@@ -2,7 +2,7 @@
 import { $, DEFAULT_TYPES, S, TYPES_V, clone, collection, dayMeta, dayVolume, db, deleteDoc, doc, runKm, setDoc, todayK } from "./core.js";
 import { applyTheme, currentTheme } from "./theme.js";
 import { renderOnboard, renderPfStats, renderProfile } from "./account.js";
-import { renderMain, setSave } from "./seances.js";
+import { renderMain, setSave } from "./seances/index.js";
 import { renderNutrition } from "./nutrition.js";
 import { renderContact, renderObjets } from "./contact.js";
 import { renderAdmin } from "./admin.js";
@@ -10,7 +10,7 @@ import { renderCrossfit, renderHub, renderProg, renderProgHub, renderRec, render
 import { maybeInvite, maybeWelcomeInstall } from "./install.js";
 import { FAB_SCREENS, updateFab } from "./faq.js";
 import { leaveChat, maybeNews, maybeTerms, newsPending, renderChat, renderFriend, renderFriends, syncShare } from "./friends.js";
-import { renderPrograms, renderRoutine, renderRoutines } from "./workout.js";
+import { renderPrograms, renderRoutine, renderRoutines } from "./entrainement/index.js";
 import { renderGo, renderHome, renderRecap } from "./home.js";
 import { loadFeed, renderChallenge, renderChallenges, renderMessages, renderRanks, renderSocial, syncChallenges } from "./social.js";
 import { renderMuscles } from "./muscles.js";

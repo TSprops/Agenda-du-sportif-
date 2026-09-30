@@ -4,7 +4,7 @@ import { $, DEFAULT_TYPES, EmailAuthProvider, OBJECTIFS, S, TERMS_V, TYPES_V, ar
   reauthenticateWithCredential, sendPasswordResetEmail, show, signInWithEmailAndPassword, signOut, updateDoc, where, writeBatch } from "./core.js";
 import { renderTheme } from "./theme.js";
 import { go, saveProfile, subCol, userRef } from "./store.js";
-import { blobToData, compress } from "./seances.js";
+import { blobToData, compress } from "./seances/index.js";
 import { renderSound } from "./timer.js";
 import { refreshInstallBtn } from "./install.js";
 import { ensureSocialProfile, subscribeSocial } from "./friends.js";

@@ -7,8 +7,8 @@ import { $, S, esc, todayK } from "./core.js";
 import { go, saveProfile } from "./store.js";
 import { lsGet } from "./install.js";
 import { newsPending, termsPending } from "./friends.js";
-import { openDay } from "./seances.js";
-import { freshKey, toast } from "./workout.js";
+import { openDay } from "./seances/index.js";
+import { freshKey, toast } from "./entrainement/index.js";
 
 // sel : sélecteur CSS (ou fonction qui renvoie l'élément). Une étape dont l'élément est absent est sautée.
 // Le fil rouge : une séance libre = Let's go › Calendrier › le jour › choisir son sport › ajouter ses exercices.

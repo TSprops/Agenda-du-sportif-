@@ -2,10 +2,10 @@
 import { $, DAYS, DEFAULT_TYPES, S, TYPES_V, ago, armed, avatarHTML, dayMeta, db, deleteDoc, doc, esc, fmtDate, getDocs,
   nameColor, nf, parse, plural, setDoc, titleOf, updateDoc } from "./core.js";
 import { go, subCol } from "./store.js";
-import { sessionSummary } from "./seances.js";
+import { sessionSummary } from "./seances/index.js";
 import { MONTHS_S } from "./ideas.js";
 import { lsGet } from "./install.js";
-import { toast } from "./workout.js";
+import { toast } from "./entrainement/index.js";
 import { adminBackup } from "./extras.js";
 
 /* ============================================================

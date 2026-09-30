@@ -4,7 +4,7 @@
 // Même ordre de chargement que l'ancien fichier unique.
 import "../core.js";
 import "../faq.js";
-import "../workout.js";
+import "../entrainement/index.js";
 import "../muscles.js";
 import "../silhouette/index.js";
 import "../exercices/index.js";

@@ -2,11 +2,11 @@
 import { $, DAYS, DISC, MONTHS, MUSCLES, S, avatarHTML, cap, dayMeta, dayOf, dayVolume, discOf, esc, fmtDur, isEmpty, key, nf,
   pad, parse, runKm, runSecs, sessionsOn, titleOf, todayK } from "./core.js";
 import { go, refresh, saveProfile } from "./store.js";
-import { openDay } from "./seances.js";
+import { openDay } from "./seances/index.js";
 import { nutOf } from "./nutrition.js";
 import { refreshInstallBtn } from "./install.js";
 import { refreshSocial } from "./friends.js";
-import { freshKey, programCardHTML, programState, routines, startWorkout, toTuple } from "./workout.js";
+import { freshKey, programCardHTML, programState, routines, startWorkout, toTuple } from "./entrainement/index.js";
 import { muscleLoad } from "./muscles.js";
 
 /* ============================================================

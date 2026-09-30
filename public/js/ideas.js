@@ -2,9 +2,9 @@
 import { $, BENCH, DEFAULT_TYPES, DISC, LIFTS, MAIN_DISC, RUN_TYPES, S, armed, clone, discOf, esc, fmtDur, isEmpty, key, nf,
   numOr, pad, parse, runPace, runSecs, sessionsOn, todayK, typeOf } from "./core.js";
 import { go, saveProfile } from "./store.js";
-import { EMPTY_DAY, fmtRest, forceFlush, intOr, normCordes, openDay, renderMain, renderSheet, setDisc } from "./seances.js";
+import { EMPTY_DAY, fmtRest, forceFlush, intOr, normCordes, openDay, renderMain, renderSheet, setDisc } from "./seances/index.js";
 import { norm } from "./faq.js";
-import { freshKey, prefillKg, toast } from "./workout.js";
+import { freshKey, prefillKg, toast } from "./entrainement/index.js";
 
 /* ============================================================
    CrossFit : records (1RM) et WOD de référence
