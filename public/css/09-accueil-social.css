@@ -85,19 +85,10 @@
 .rank-row .rv small{font-family:var(--body);font-size:11px;color:var(--muted);font-weight:600}
 
 /* ===== Tutoriel ===== */
-.tuto{position:fixed;inset:0;z-index:50;background:var(--ground);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:calc(env(safe-area-inset-top,0px) + 60px) 24px calc(env(safe-area-inset-bottom,0px) + 30px);animation:toastIn .3s}
-.tuto-skip{position:absolute;top:calc(env(safe-area-inset-top,0px) + 14px);right:16px;font-weight:600;color:var(--muted);padding:8px 14px;border-radius:18px;border:1px solid var(--line)}
-.tuto-body{max-width:400px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px}
-.tuto-ico{width:120px;height:120px;border-radius:32px;display:grid;place-items:center;font-size:58px;background:var(--surface);border:1.5px solid var(--red);box-shadow:var(--glow)}
-.tuto-body h2{font-family:var(--display);font-weight:800;font-style:italic;font-size:44px;line-height:1;text-transform:uppercase;margin:6px 0 0}
-.tuto-body p{margin:0;font-size:16px;line-height:1.5;color:var(--muted)}
 .tuto-dots{display:flex;gap:8px}
 .tuto-dots i{width:8px;height:8px;border-radius:4px;background:var(--line);transition:width .2s}
 .tuto-dots i.on{width:24px;background:var(--red-hi)}
-.tuto-nav{display:flex;gap:10px;width:100%;max-width:400px}
-.tuto-nav .btn:first-child{width:56px;flex:none;font-size:22px}
-.tuto-nav .primary{flex:1}
-@media (prefers-reduced-motion: reduce){.toast,.tuto{animation:none}.ring-fg{transition:none}}
+@media (prefers-reduced-motion: reduce){.toast{animation:none}.ring-fg{transition:none}}
 .go-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 .go-tile{min-width:0}
 .go-tile b{font-size:18px;overflow-wrap:anywhere;hyphens:auto}

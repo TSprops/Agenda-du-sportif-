@@ -21,7 +21,6 @@ export const fixLegsSeated = p => ({ ...p, near: { th: 0, sh: 92, ft: 0, ...p.ne
 // les poignets (position basse du développé militaire), puis poussée vers le haut, paumes vers l'avant.
 export const arnoldF = k => ({ view: "front", torso: -90, neck: -90, hip: [120, 150], spin: [0, 1, 1][k], R: { th: 90, sh: 90, ...[{ ua: 112, fa: -96, hand: -90, ls: { ua: 0.35, th: 0.3, sh: 0.86 } }, { ua: 12, fa: -88, hand: -90, ls: { th: 0.3, sh: 0.86 } }, { ua: -68, fa: -86, hand: -90, ls: { th: 0.3, sh: 0.86 } }][k] },
   eq: [fbench(158), raw(P => spinDb(P, P.R.grip, true) + spinDb(P, P.L.grip, true), { top: true })] });
-export const armsForward = (ls) => ({ ua: -4, fa: -4, hand: -4, ls });
 export const latS = up => stand({ near: up ? { ua: -8, fa: -6, hand: -6, ls: { ua: 0.42, fa: 0.42 } } : { ua: 92, fa: 90, hand: 90 }, eq: [db(P => [P.near.grip, up ? 90 : 90], "side", { top: true })] });
 export const latF = up => standF({ R: up ? { ua: 2, fa: -4, hand: -4 } : { ua: 86, fa: 90, hand: 90 }, eq: [fdb("end", { top: true })] });
 export const cableLat = up => ({ view: "front", torso: -90, neck: -90, hip: [120, HIPY], box: [30, 30, 200, GROUND], R: { th: 90, sh: 90, ...(up ? { ua: 2, fa: -4, hand: -4 } : { ua: 110, fa: 120, hand: 120 }) }, L: { ua: 100, fa: 95, hand: 90, th: 90, sh: 90 },

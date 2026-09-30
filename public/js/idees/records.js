@@ -1,7 +1,7 @@
 // Records par activité (liste, ajout, suppression).
-import { benchEntries, cfData, shortDate } from "./crossfit.js";
+import { shortDate } from "./crossfit.js";
 import { CALIS_PRS, MUSCU_LIFTS, RUN_PRS, fmtTime, prsData } from "./idees-seances.js";
-import { $, BENCH, DISC, S, armed, esc, nf, numOr, runPace, todayK } from "../commun/core.js";
+import { $, DISC, S, armed, esc, nf, numOr, runPace, todayK } from "../commun/core.js";
 import { intOr } from "../seances/index.js";
 import { saveProfile } from "../commun/store.js";
 
@@ -23,11 +23,6 @@ function prRows(items, data, defKind) {
         ${list.length ? `<ul class="hist">${list.map((e, idx) => ({ ...e, idx })).sort((a, b) => a.date < b.date ? 1 : -1).map(e => `<li><span>${esc(shortDate(e.date))}</span><b>${prText(kind, e)}</b><button class="icon-btn" data-rdel="${id}:${e.idx}">Retirer</button></li>`).join("")}</ul>` : ""}` : ""}
     </div>`;
   }).join("");
-}
-function countRecords() {
-  const pd = prsData(), cf = cfData();
-  return [pd.muscu, pd.course, pd.calis, cf.prs].reduce((a, o) => a + Object.values(o).filter(l => l.length).length, 0)
-    + BENCH.filter(bm => benchEntries(bm).length).length;
 }
 export function renderRec() {
   const d = S.rec, x = DISC[d]; if (!x) return;
