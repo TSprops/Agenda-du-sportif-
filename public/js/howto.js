@@ -5,6 +5,8 @@ import { esc } from "./core.js";
 import { norm } from "./faq.js";
 import { musclesOf } from "./workout.js";
 import { bodySVG } from "./muscles.js";
+import { figure, frameBox } from "./figure.js";
+import { HOW } from "./moves.js";
 
 // Petits calculs de géométrie (utilisés par les poses et le dessin).
 const sub = (a, b) => [a[0] - b[0], a[1] - b[1]], add = (a, b) => [a[0] + b[0], a[1] + b[1]], mul = (a, k) => [a[0] * k, a[1] * k];
@@ -669,33 +671,56 @@ export function gripSVG(id) {
 /* ---------- Bouton « ? » et fenêtre ---------- */
 // i : numéro de l'exercice dans la séance, ou "lib" dans la recherche d'exercices.
 export function howBtnHTML(name, i) {
-  if (!moveOf(name)) return "";
+  if (!moveOf(name) && !howOf(name)) return "";
   return `<button type="button" class="how-btn" data-how="${i}" data-name="${esc(name)}" aria-label="Comment faire : ${esc(name)}"><span aria-hidden="true">?</span></button>`;
 }
 let opener = null, inerted = [];
+// Fiche dessinée avec le nouveau mannequin (moves.js), retrouvée aussi pour un nom tapé à la main.
+let HOW_KEYS = null;
+// Nom tapé à la main → famille reconnue par mots-clés → fiche dessinée correspondante.
+const FAM_HOW = { burpee: "Burpees", wallball: "Wall balls", snatch: "Snatch", boxjump: "Box jumps", walk: "Farmer walk", swing: "Kettlebell swings", thruster: "Thrusters", clean: "Clean" };
+function howOf(name) {
+  HOW_KEYS = HOW_KEYS || Object.fromEntries(Object.keys(HOW).map(n => [key(n), n]));
+  const mv = HOW_KEYS[key(name)] ? null : moveOf(name), n = HOW_KEYS[key(name)] || (mv && FAM_HOW[mv.id]);
+  return n ? HOW[n] : null;
+}
+// Une vue : les images clés côte à côte (Départ / Arrivée…) et, cachée, la même vue animée (bouton « Voir le mouvement »).
+// L'animation redessine chaque image (identifiants de découpe uniques : un doublon caché casserait l'affichage).
+function viewHTML(v, draw, many) {
+  const n = v.frames.length, caps = v.caps || (n === 1 ? ["Position à tenir"] : n === 2 ? ["Départ", "Arrivée"] : []);
+  const figs = v.frames.map(draw), seq = v.seq || v.frames.map((_, i) => i), D = seq.length * 1.1;
+  return `<div class="how-view">${many ? `<p class="how-vt">${v.label}</p>` : ""}
+    <div class="how-frames${n > 1 ? " multi" : ""}">${figs.map((f, i) => `<figure>${f}<figcaption>${caps[i] || ""}</figcaption></figure>`).join("")}</div>
+    ${n > 1 ? `<div class="how-anim" role="img" aria-label="Animation ${v.label.toLowerCase()}, en boucle">${seq.map((k, i) => `<div class="how-f" style="animation:hs${Math.min(seq.length, 6)} ${D.toFixed(1)}s ease-in-out infinite;animation-delay:${(-((seq.length - i) % seq.length) * 1.1).toFixed(1)}s">${draw(v.frames[k])}</div>`).join("")}</div>` : ""}</div>`;
+}
 function openHow(name, btn) {
-  const mv = moveOf(name); if (!mv) return;
+  const mv = moveOf(name), def = howOf(name); if (!mv && !def) return;
   opener = btn;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   // Muscles de l'exercice (bibliothèque ou exercice perso), sinon ceux du mouvement.
-  const found = musclesOf(name), mus = found && found.p.length ? found : mv.mus;
+  const found = musclesOf(name), mus = found && found.p.length ? found : (def && def.mus) || mv.mus;
   const lv = {}; (mus.s || []).forEach(m => { lv[m] = 2; }); mus.p.forEach(m => { lv[m] = 4; });
-  // Les silhouettes ne sont dessinées qu'ici, à l'ouverture. Deux vues quand il y en a : profil et face.
-  const views = [["De profil", mv.poses], ["De face", mv.front]].filter(v => v[1] && v[1].length), moving = mv.poses.length > 1;
-  const view = ([label, poses]) => { const [a, b] = poses, top = frameTop(poses), fig = q => figureSVG(q, mus, top); return `<div class="how-view">${views.length > 1 ? `<p class="how-vt">${label}</p>` : ""}${!b
-    ? `<figure>${fig(a)}<figcaption>Position à tenir</figcaption></figure>`
-    : reduce
-      ? `<div class="how-pair"><figure>${fig(a)}<figcaption>Départ</figcaption></figure><figure>${fig(b)}<figcaption>Arrivée</figcaption></figure></div>`
-      : `<div class="how-anim" role="img" aria-label="Animation ${label.toLowerCase()} : départ puis arrivée, en boucle"><div class="how-a">${fig(a)}</div><div class="how-b">${fig(b)}</div></div>`}</div>`; };
+  // Les silhouettes ne sont dessinées qu'ici, à l'ouverture.
+  let html, moving;
+  if (def) {
+    const target = def.t || mus.p;
+    moving = def.views.some(v => v.frames.length > 1);
+    html = def.views.map(v => { const b = frameBox(v.frames); return viewHTML(v, p => figure(p, target, b), def.views.length > 1); }).join("");
+  } else {
+    const views = [{ label: "De profil", frames: mv.poses }, mv.front && { label: "De face", frames: mv.front }].filter(Boolean);
+    moving = mv.poses.length > 1;
+    html = views.map(v => { const top = frameTop(v.frames); return viewHTML(v, p => figureSVG(p, mus, top), views.length > 1); }).join("");
+  }
+  const info = { ...(mv || {}), ...(def || {}) };
   $h("howTitle").textContent = name;
-  $h("howStage").className = "how-stage" + (moving ? (reduce ? " side" : " boom") : " still") + (views.length > 1 ? " two" : "");
-  $h("howStage").innerHTML = views.map(view).join("");
-  $h("howTips").hidden = !mv.tips;
-  $h("howTips").innerHTML = mv.tips ? `<p class="how-vt">Repères pour débuter</p><ul>${mv.tips.map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : "";
-  const grip = GRIPS[mv.grip];
+  $h("howStage").className = "how-stage";
+  $h("howStage").innerHTML = html + (moving && !reduce ? `<button type="button" class="btn how-play" id="howPlay" aria-pressed="false"><span aria-hidden="true">▶</span> Voir le mouvement</button>` : "");
+  $h("howTips").hidden = !info.tips;
+  $h("howTips").innerHTML = info.tips ? `<p class="how-vt">Repères pour débuter</p><ul>${info.tips.map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : "";
+  const grip = GRIPS[info.grip];
   $h("howGrip").hidden = !grip;
-  $h("howGrip").innerHTML = grip ? `<p class="how-vt">Placement des mains</p>${gripSVG(mv.grip)}<p>${grip.txt}</p>` : "";
-  $h("howCue").textContent = mv.cue;
+  $h("howGrip").innerHTML = grip ? `<p class="how-vt">Placement des mains</p>${gripSVG(info.grip)}<p>${grip.txt}</p>` : "";
+  $h("howCue").textContent = info.cue;
   $h("howMap").innerHTML = `<figure>${bodySVG("front", lv)}<figcaption>Face</figcaption></figure><figure>${bodySVG("back", lv)}<figcaption>Dos</figcaption></figure>
     <p class="how-legend"><span><i class="lp"></i>Muscles principaux</span><span><i class="ls"></i>Muscles qui aident</span></p>`;
   // Le reste de l'app devient inerte tant que la fenêtre est ouverte.
@@ -727,6 +752,13 @@ document.addEventListener("click", e => {
   openHow(inp ? inp.value : b.dataset.name, b);
 }, true);
 $h("howClose").onclick = closeHow;
+// « Voir le mouvement » : passe des images côte à côte à l'animation (et inversement).
+$h("howStage").addEventListener("click", e => {
+  const b = e.target.closest("#howPlay"); if (!b) return;
+  const on = $h("howStage").classList.toggle("playing");
+  b.setAttribute("aria-pressed", on);
+  b.innerHTML = on ? `<span aria-hidden="true">■</span> Revoir départ et arrivée` : `<span aria-hidden="true">▶</span> Voir le mouvement`;
+});
 $h("howBackdrop").onclick = closeHow;
 
 export { FAMILIES };

@@ -30,7 +30,9 @@ module.exports = async function appTests(t) {
     t("comment faire : zone tactile ≥ 44 px", await A.$eval("[data-how='0']", e => e.getBoundingClientRect().width >= 44 && e.getBoundingClientRect().height >= 44), true);
     await A.click("[data-how='0']"); await A.waitForSelector("#howSheet:not([hidden])");
     t("comment faire : focus sur la croix", await A.evaluate(() => document.activeElement.id), "howClose");
-    t("comment faire : profil et face en boomerang", await A.$$eval("#howStage .how-anim svg", x => x.length), 4);
+    t("comment faire : départ et arrivée côte à côte (profil et face)", await A.$$eval("#howStage .how-frames figure", x => x.length), 4);
+    await A.click("#howPlay");
+    t("comment faire : le bouton lance l'animation", await A.evaluate(() => [document.getElementById("howStage").classList.contains("playing"), document.getElementById("howPlay").getAttribute("aria-pressed"), document.querySelectorAll("#howStage .how-anim svg").length].join()), "true,true,4");
     t("comment faire : fond inerte", await A.$eval("#sheet", e => e.inert), true);
     await A.keyboard.press("Escape");
     t("comment faire : fermé par Échap", await A.$eval("#howSheet", e => e.hidden), true);
@@ -39,7 +41,7 @@ module.exports = async function appTests(t) {
     await A.click("[data-how='0']"); await A.click("#howBackdrop", { position: { x: 20, y: 20 } });
     t("comment faire : fermé par un toucher sur le fond", await A.$eval("#howSheet", e => e.hidden), true);
     await A.emulateMedia({ reducedMotion: "reduce" }); await A.click("[data-how='0']");
-    t("comment faire : sans animation, poses côte à côte", await A.$$eval("#howStage.side figure", x => x.length), 4);
+    t("comment faire : sans animation, poses côte à côte et pas de bouton", await A.evaluate(() => document.querySelectorAll("#howStage .how-frames figure").length + "," + !!document.getElementById("howPlay")), "4,false");
     await A.click("#howClose"); await A.emulateMedia({ reducedMotion: "no-preference" });
     await A.fill("#r-0-0", "6"); await A.fill("#k-0-0", "85"); await A.click("#go-0"); await A.waitForTimeout(300);
     t("record en direct", /Nouveau record/.test(await A.textContent("#toast")), true);

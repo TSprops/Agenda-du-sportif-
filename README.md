@@ -137,6 +137,9 @@ dans `public/index.html` y affiche la page « L'app déménage ».
 | `ideas.js` | CrossFit, idées, records, courbes de progression |
 | `home.js` | Accueil, Let's go, série, objectif, bilan du mois |
 | `muscles.js` | Carte musculaire |
+| `howto.js` | Bouton « ? » et fenêtre « Comment faire » (départ / arrivée, bouton d'animation, repères, placement des mains) |
+| `figure.js` | Mannequin articulé (profil et face) et matériel dessinés en SVG : longueurs fixes, poses données par des angles |
+| `moves.js` | Positions de chaque exercice pour « Comment faire » (n'importe que `figure.js`) |
 | `nutrition.js` | Compléments et créatine |
 | `friends.js` | Amis, séances partagées, messages |
 | `social.js` | Activité, fil d'actu, commentaires, défis, classements |
@@ -144,4 +147,4 @@ dans `public/index.html` y affiche la page « L'app déménage ».
 | `contact.js`, `faq.js`, `install.js`, `extras.js` | Contact, assistant, installation, tutoriel / export / sauvegarde |
 | `main.js` | Abonnements temps réel et démarrage |
 
-Règles à respecter : `core.js` n'importe jamais les autres fichiers (il doit être prêt en premier), et au chargement d'un fichier (hors fonctions) on n'utilise que des éléments de `core.js`.
+Règles à respecter : `core.js` n'importe jamais les autres fichiers (il doit être prêt en premier), et au chargement d'un fichier (hors fonctions) on n'utilise que des éléments de `core.js` (ou de `figure.js`, qui n'importe rien).

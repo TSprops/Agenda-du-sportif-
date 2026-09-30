@@ -871,3 +871,56 @@ body.sheet-open .offline-pill{bottom:calc(env(safe-area-inset-bottom,0px) + 12px
 .how-tips .how-vt{text-align:left}
 .how-tips ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:14px;line-height:1.4}
 .how-tips li::marker{color:var(--red-hi)}
+/* Silhouettes « Comment faire » (js/figure.js) : mannequin gris, muscles aux couleurs du thème. */
+.fg{display:block;width:100%;height:auto;overflow:hidden;--fg-skin:#B9B9BD;--fg-far:#8E8E93;--fg-ol:#4E4E54;--fg-ln:#7C7C82;--fg-metal:#9A9AA1;--fg-plate:#2A2A2E;--fg-pad:#34343A}
+:root[data-bg="clair"] .fg{--fg-skin:#C9C9CD;--fg-far:#A9A9AE;--fg-ol:#6A6A70;--fg-ln:#96969C;--fg-metal:#B4B4BA;--fg-plate:#35353A;--fg-pad:#3E3E44}
+.fg-sk{fill:var(--fg-skin)}.fg-far .fg-sk{fill:var(--fg-far)}
+.fg-ol{fill:none;stroke:var(--fg-ol);stroke-width:1.1;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.fg-ln{fill:none;stroke:var(--fg-ln);stroke-width:.75;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.fg-far .fg-ln{stroke:#707076}
+.fg-mu{fill:var(--red-hi)}
+.fg-far .fg-mu{fill:color-mix(in srgb,var(--red-hi) 70%,#000)}
+.fg-hair{fill:#5E5E64}
+.fg-short{fill:#3B3B41}
+.fg-shoe{fill:#5E5E64}
+.fg-shadow{fill:#000;opacity:.35}
+.fg-plate{fill:var(--fg-plate);stroke:#6E6E75;stroke-width:.9}
+.fg-plate-in{fill:none;stroke:#55555C;stroke-width:.9}
+.fg-hub,.fg-barcut{fill:var(--fg-metal);stroke:#5A5A60;stroke-width:.6}
+.fg-handle,.fg-barline{stroke:var(--fg-metal);stroke-width:3;stroke-linecap:round;fill:none}
+.fg-kbh{fill:none;stroke:var(--fg-plate);stroke-width:3.4;stroke-linecap:round}
+.fg-frame{fill:var(--fg-metal);stroke:#5A5A60;stroke-width:.6}
+.fg-frame-l{stroke:var(--fg-metal);stroke-width:4;stroke-linecap:round}
+.fg-dim{opacity:.55}
+.fg-pad{fill:var(--fg-pad);stroke:#707078;stroke-width:.9}
+.fg-padhi{stroke:#5C5C64;stroke-width:1.1}
+.fg-grip{fill:var(--fg-metal);stroke:#5A5A60;stroke-width:.6}
+.fg-strap{stroke:#8A7A62;stroke-width:2.4}
+.fg-ring{fill:none;stroke:var(--fg-metal);stroke-width:2.6}
+.fg-rope,.fg-cable{fill:none;stroke:#C8C8CE;stroke-width:1;stroke-linecap:round}
+.fg-rope{stroke-width:2.6;stroke:#A08868}
+.fg-dhandle{fill:var(--fg-plate);stroke:var(--fg-metal);stroke-width:1.2}
+.fg-stack{fill:#2A2A2E;stroke:#6E6E75;stroke-width:.8}
+.fg-stackln{stroke:#6E6E75;stroke-width:.7}
+.fg-pulley{fill:#2A2A2E;stroke:var(--fg-metal);stroke-width:1.6}
+.fg-box{fill:#6B5234;stroke:#9C7A50;stroke-width:1.2}
+.fg-boxln{stroke:#9C7A50;stroke-width:.8}
+.fg-wall{fill:#2C2C31;stroke:#4A4A50;stroke-width:1}
+.fg-target{fill:none;stroke:var(--red-hi);stroke-width:1.6}.fg-target-in{fill:var(--red-hi)}
+.fg-climb{stroke:#A08868;stroke-width:4;stroke-linecap:round}
+.fg-ball{fill:#6B5234;stroke:#9C7A50;stroke-width:1.2}.fg-ballln{fill:none;stroke:#9C7A50;stroke-width:.9}
+.how-frames{display:grid;gap:8px}
+.how-frames.multi{grid-template-columns:1fr 1fr}
+.how-frames figure{margin:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;min-width:0}
+.how-frames .fg,.how-anim .fg{max-height:230px;width:auto;max-width:100%}
+.how-anim{display:none;justify-items:center}
+.how-anim>.how-f{grid-area:1/1;display:flex;justify-content:center;align-items:flex-end;width:100%}
+.how-stage.playing .how-frames{display:none}
+.how-stage.playing .how-anim{display:grid}
+.how-play{justify-self:center;min-height:44px;padding:0 18px;font-size:14px}
+@keyframes hs2{0%,47%{opacity:1}53%,97%{opacity:0}100%{opacity:1}}
+@keyframes hs3{0%,30%{opacity:1}36%,97%{opacity:0}100%{opacity:1}}
+@keyframes hs4{0%,22%{opacity:1}28%,97%{opacity:0}100%{opacity:1}}
+@keyframes hs5{0%,17%{opacity:1}23%,97%{opacity:0}100%{opacity:1}}
+@keyframes hs6{0%,14%{opacity:1}20%,97%{opacity:0}100%{opacity:1}}
+@media (prefers-reduced-motion: reduce){.how-f{animation:none!important}.how-play{display:none}}
