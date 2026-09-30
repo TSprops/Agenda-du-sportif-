@@ -417,3 +417,60 @@ Object.assign(HOW, {
     cue: "Bras tendus, charges en main : monte les épaules vers les oreilles, marque une pause, puis redescends lentement.",
     tips: ["Bras tendus : ce ne sont pas les bras qui tirent.", "Monte droit vers les oreilles, sans rouler les épaules.", "Pause d’une seconde en haut."] }
 });
+
+/* ═══ Épaules ═══ */
+const SH_Y = HIPY - 52;                                   // épaule d'une personne debout (x = 120)
+const ohpS = up => stand({ near: up ? { ua: -93, fa: -91, hand: -90 } : { ua: 78, fa: -96, hand: -90 }, eq: [db(P => [P.near.grip, 0], "end", { top: true })] });
+const ohpF = up => standF({ R: up ? { ua: -68, fa: -86, hand: -90 } : { ua: 16, fa: -88, hand: -90 }, eq: [fdb("across", { top: true })] });
+const arnoldS = k => ({ hip: [120, 150], torso: -88, neck: -88, near: [{ ua: 20, fa: -98, hand: -90 }, { ua: -40, fa: -95, hand: -90 }, { ua: -93, fa: -91, hand: -90 }][k],
+  eq: [seat(104, 158, 1, 4), db(P => [P.near.grip, 0], "end", { top: true })] });
+const fixLegsSeated = p => ({ ...p, near: { th: 0, sh: 92, ft: 0, ...p.near } });
+const arnoldF = k => ({ view: "front", torso: -90, neck: -90, hip: [120, 150], R: [{ ua: 112, fa: -96, hand: -90, ls: { ua: 0.35, th: 0.3 } }, { ua: 30, fa: -92, hand: -90, ls: { ua: 0.8, th: 0.3 } }, { ua: -68, fa: -86, hand: -90, ls: { th: 0.3 } }][k],
+  eq: [fbench(158), fdb("across", { top: true })] });
+const armsForward = (ls) => ({ ua: -4, fa: -4, hand: -4, ls });
+const latS = up => stand({ near: up ? { ua: -8, fa: -6, hand: -6, ls: { ua: 0.42, fa: 0.42 } } : { ua: 92, fa: 90, hand: 90 }, eq: [db(P => [P.near.grip, up ? 90 : 90], "side", { top: true })] });
+const latF = up => standF({ R: up ? { ua: 2, fa: -4, hand: -4 } : { ua: 86, fa: 90, hand: 90 }, eq: [fdb("end", { top: true })] });
+const cableLat = up => ({ view: "front", torso: -90, neck: -90, hip: [120, HIPY], box: [30, 30, 200, GROUND], R: { th: 90, sh: 90, ...(up ? { ua: 2, fa: -4, hand: -4 } : { ua: 110, fa: 120, hand: 120 }) }, L: { ua: 100, fa: 95, hand: 90, th: 90, sh: 90 },
+  eq: [raw(P => { const g = P.R.grip; return `<g class="fg-eq"><rect class="fg-frame" x="36" y="-30" width="10" height="${GROUND + 30}"/><rect class="fg-stack" x="37.5" y="${GROUND - 58}" width="7" height="50"/><circle class="fg-pulley" cx="50" cy="${GROUND - 8}" r="4.4"/><line class="fg-cable" x1="50" y1="${GROUND - 8}" x2="${g[0].toFixed(1)}" y2="${g[1].toFixed(1)}"/></g>`; })] });
+const rearS = up => ({ hip: [92, 160], torso: -24, neck: -14, near: { ankleAt: [146, ANK], ft: 0, kneeBend: 1, ...(up ? { ua: 86, fa: 86, hand: 86, ls: { ua: 0.4, fa: 0.4 } } : { ua: 92, fa: 90, hand: 90 }) },
+  eq: [bench(52, 120, 168), db(P => [P.near.grip, 90], "side", { top: true })] });
+const rearF = up => ({ view: "front", torso: -90, neck: -70, tls: 0.4, hip: [120, 162], R: { th: 70, sh: 95, ls: { th: 0.4 }, ...(up ? { ua: 4, fa: 2, hand: 2 } : { ua: 92, fa: 92, hand: 90 }) },
+  eq: [fbench(168), fdb("end", { top: true })] });
+const uprowS = up => stand({ near: up ? { wristAt: [130, SH_Y + 8], hand: 0, elbowBend: 1, ls: { ua: 0.45 } } : { ua: 94, fa: 88, hand: 90 }, eq: [bar(P => P.near.grip, 13, { top: true })] });
+const uprowF = up => standF({ R: up ? { wristAt: [128, SH_Y + 12], hand: 90 } : { wristAt: [130, 124], hand: 90 }, eq: [fbar(P => P.R.grip[1], { top: true })] });
+const facepullS = back => stand({ near: back ? { wristAt: [136, SH_Y - 12], hand: -10, ls: { ua: 0.55 } } : { ua: -6, fa: -8, hand: -8 }, eq: [cable(186, SH_Y - 12, "rope")] });
+
+Object.assign(HOW, {
+  "Développé militaire": { views: [side([ohpS(0), ohpS(1)], ["Haltères à hauteur des épaules", "Bras tendus au-dessus de la tête"]), front([ohpF(0), ohpF(1)], ["Coudes sous les poignets", "Bras tendus"])],
+    cue: "Debout, un haltère dans chaque main à hauteur des épaules, paumes vers l’avant : pousse au-dessus de la tête sans cambrer le dos, puis redescends.",
+    tips: ["Départ : haltères à hauteur des oreilles, coudes sous les poignets.", "Monte jusqu’aux bras presque tendus, sans cogner les haltères.", "Abdos et fessiers serrés : le dos ne se creuse pas."] },
+  "Développé Arnold": { views: [side([0, 1, 2].map(k => fixLegsSeated(arnoldS(k))), ["Paumes vers toi", "Rotation en ouvrant les bras", "Paumes vers l’avant"], [0, 1, 2, 1]),
+      front([0, 1, 2].map(arnoldF), ["Paumes vers toi, coudes devant", "Rotation", "Paumes vers l’avant, bras tendus"], [0, 1, 2, 1])],
+    cue: "Assis, haltères devant le visage paumes vers toi : pousse vers le haut en tournant les poignets pour finir paumes vers l’avant, puis redescends en tournant dans l’autre sens.",
+    tips: ["Assis sur un banc, dossier droit.", "En bas : paumes vers toi, coudes devant le corps.", "La rotation se fait pendant la montée : en haut, paumes vers l’avant."] },
+  "Élévations latérales": { views: [side([latS(0), latS(1)], ["Bras le long du corps", "Bras à l’horizontale sur les côtés"]), front([latF(0), latF(1)], ["Bras le long du corps", "Bras à l’horizontale"])],
+    cue: "Bras presque tendus : monte les haltères sur les côtés jusqu’à l’horizontale, sans hausser les épaules, puis redescends lentement.",
+    tips: ["Charges légères, coudes légèrement fléchis.", "Monte jusqu’à l’horizontale, pas plus haut.", "Épaules basses : ce ne sont pas les trapèzes qui travaillent."] },
+  "Élévations latérales à la poulie": { views: [front([cableLat(0), cableLat(1)], ["Poignée devant la hanche opposée", "Bras à l’horizontale"])],
+    cue: "Poulie basse à côté de toi, poignée tenue avec la main opposée : monte le bras sur le côté jusqu’à l’horizontale, puis redescends lentement.",
+    tips: ["Le câble passe devant le corps.", "Bras presque tendu, monte jusqu’à l’horizontale.", "Fais toutes les répétitions d’un côté, puis change."] },
+  "Élévations frontales": { views: [side([stand({ near: { ua: 92, fa: 88, hand: 88 }, eq: [db(P => [P.near.grip, 0], "end", { top: true })] }), stand({ near: { ua: -4, fa: -4, hand: -4 }, eq: [db(P => [P.near.grip, 0], "end", { top: true })] })], ["Haltères devant les cuisses", "Bras devant, à hauteur des épaules"]),
+      front([standF({ R: { wristAt: [134, 128], hand: 90 }, eq: [fdb("across", { top: true })] }), standF({ R: { ua: -80, fa: -80, hand: -80, ls: { ua: 0.25, fa: 0.25 } }, eq: [fdb("across", { top: true })] })], ["Haltères à l’horizontale", "Bras devant"])],
+    cue: "Haltères tenues à l’horizontale devant les cuisses : monte les bras presque tendus devant toi jusqu’à hauteur des épaules, puis redescends lentement.",
+    tips: ["Haltères tenues à l’horizontale, paumes vers le sol.", "Monte jusqu’à hauteur des yeux maximum.", "Sans élan : le buste ne bouge pas."] },
+  "Oiseau (arrière d’épaule)": { views: [side([rearS(0), rearS(1)], ["Assis penché, bras pendants", "Bras ouverts sur les côtés"]), front([rearF(0), rearF(1)], ["Bras pendants", "Bras à l’horizontale"])],
+    cue: "Assis au bout d’un banc, buste penché en avant sur les cuisses, dos plat : ouvre les bras sur les côtés jusqu’à l’horizontale, puis redescends.",
+    tips: ["Buste penché presque sur les cuisses (ou appuyé sur un banc incliné).", "Coudes légèrement fléchis et fixes.", "Charges légères : pense « écarter », pas « tirer »."] },
+  "Rowing menton": { views: [side([uprowS(0), uprowS(1)], ["Barre contre les cuisses", "Barre sous le menton, coudes hauts"]), front([uprowF(0), uprowF(1)], ["Mains à largeur d’épaules", "Coudes plus hauts que les mains"])],
+    cue: "Barre contre les cuisses : monte-la le long du corps en levant les coudes sur les côtés, jusqu’en bas de la poitrine, puis redescends.",
+    tips: ["Mains à largeur d’épaules (pas collées).", "Les coudes montent plus haut que les mains.", "Arrête-toi au bas de la poitrine."] },
+  "Face pull": { views: [side([facepullS(0), facepullS(1)], ["Bras tendus vers la poulie", "Corde vers le visage, coudes hauts"]),
+      front([standF({ R: { ua: -86, fa: -86, hand: -86, ls: { ua: 0.25, fa: 0.25 } } }), standF({ R: { ua: -8, fa: -96, hand: -90 } })], ["Bras devant", "Mains à côté des oreilles"])],
+    cue: "Poulie à hauteur du visage, corde en main : tire vers les yeux en écartant les mains, coudes hauts, puis reviens bras tendus.",
+    tips: ["Coudes à hauteur des épaules ou plus haut.", "Écarte les mains de chaque côté de la tête en fin de mouvement.", "Charge légère, mouvement lent."] },
+  "Push press": { views: [side([stand({ near: rack, eq: [bar(P => P.near.grip, 13, { top: true })] }), { hip: [114, 124], torso: -88, neck: -88, near: { ankleAt: [124, ANK], ft: 0, ...rack }, eq: [bar(P => P.near.grip, 13, { top: true })] },
+      stand({ near: { ua: -88, fa: -88, hand: -90 }, eq: [bar(P => P.near.grip, 13, { top: true })] })], ["Barre sur les épaules", "Petite flexion des genoux", "Poussée au-dessus de la tête"], [0, 1, 2, 1])],
+    cue: "Barre sur l’avant des épaules : fléchis un peu les genoux, puis pousse avec les jambes et termine avec les bras pour amener la barre au-dessus de la tête.",
+    tips: ["Petite flexion des genoux, buste droit.", "L’élan des jambes lance la barre, les bras finissent.", "Bras verrouillés en haut, barre au-dessus de la nuque."] }
+});
+HOW["Développé épaules haltères"] = HOW["Développé militaire"];   // ancien nom (doublon supprimé de la bibliothèque)

@@ -50,8 +50,7 @@ export const EXERCISES = [
   ["Extension lombaire", ["lombaires"], ["fessiers", "ischios"], "M"],
   ["Good morning", ["ischios", "lombaires"], ["fessiers"], "B"],
   // Épaules
-  ["Développé militaire", ["epaules"], ["triceps", "trapezes"], "B"],
-  ["Développé épaules haltères", ["epaules"], ["triceps"], "H"],
+  ["Développé militaire", ["epaules"], ["triceps", "trapezes"], "H"],
   ["Développé Arnold", ["epaules"], ["triceps"], "H"],
   ["Élévations latérales", ["epaules"], ["trapezes"], "H"],
   ["Élévations latérales à la poulie", ["epaules"], [], "P"],
@@ -158,7 +157,7 @@ export const PROGRAMS = [
     desc: "Tout le corps à chaque séance, 3 fois par semaine. Idéal pour débuter ou reprendre.",
     tip: "Ajoute un peu de poids dès que tu réussis toutes tes séries avec une bonne technique.",
     plan: () => [
-      W("Full body A", "haut", [["Squat", 3, 10, 120], ["Développé couché", 3, 10, 120], ["Rowing haltère", 3, 10, 90], ["Développé épaules haltères", 3, 10, 90], ["Gainage", 3, 40, 60, 1]]),
+      W("Full body A", "haut", [["Squat", 3, 10, 120], ["Développé couché", 3, 10, 120], ["Rowing haltère", 3, 10, 90], ["Développé militaire", 3, 10, 90], ["Gainage", 3, 40, 60, 1]]),
       W("Full body B", "bas", [["Soulevé de terre roumain", 3, 10, 120], ["Développé incliné haltères", 3, 10, 90], ["Tirage vertical", 3, 10, 90], ["Fentes", 3, 10, 90], ["Crunch", 3, 15, 60]]),
       W("Full body C", "haut", [["Presse à cuisses", 3, 12, 120], ["Pompes", 3, 12, 90], ["Tirage horizontal", 3, 12, 90], ["Élévations latérales", 3, 15, 60], ["Curl haltères", 3, 12, 60]])
     ]
