@@ -442,13 +442,15 @@ const latS = up => stand({ near: up ? { ua: -8, fa: -6, hand: -6, ls: { ua: 0.42
 const latF = up => standF({ R: up ? { ua: 2, fa: -4, hand: -4 } : { ua: 86, fa: 90, hand: 90 }, eq: [fdb("end", { top: true })] });
 const cableLat = up => ({ view: "front", torso: -90, neck: -90, hip: [120, HIPY], box: [30, 30, 200, GROUND], R: { th: 90, sh: 90, ...(up ? { ua: 2, fa: -4, hand: -4 } : { ua: 110, fa: 120, hand: 120 }) }, L: { ua: 100, fa: 95, hand: 90, th: 90, sh: 90 },
   eq: [raw(P => { const g = P.R.grip; return `<g class="fg-eq"><rect class="fg-frame" x="36" y="-30" width="10" height="${GROUND + 30}"/><rect class="fg-stack" x="37.5" y="${GROUND - 58}" width="7" height="50"/><circle class="fg-pulley" cx="50" cy="${GROUND - 8}" r="4.4"/><line class="fg-cable" x1="50" y1="${GROUND - 8}" x2="${g[0].toFixed(1)}" y2="${g[1].toFixed(1)}"/></g>`; })] });
-const rearS = up => ({ hip: [92, 160], torso: -24, neck: -14, near: { ankleAt: [146, ANK], ft: 0, kneeBend: 1, ...(up ? { ua: 86, fa: 86, hand: 86, ls: { ua: 0.4, fa: 0.4 } } : { ua: 92, fa: 90, hand: 90 }) },
+const rearS = up => ({ hip: [92, 160], torso: -24, neck: -24, near: { ankleAt: [146, ANK], ft: 0, kneeBend: 1, ...(up ? { ua: 86, fa: 86, hand: 86, ls: { ua: 0.4, fa: 0.4 } } : { ua: 92, fa: 90, hand: 90 }) },
   eq: [bench(52, 120, 168), db(P => [P.near.grip, 90], "side", { top: true })] });
-const rearF = up => ({ view: "front", torso: -90, neck: -70, tls: 0.4, hip: [120, 162], R: { th: 70, sh: 95, ls: { th: 0.4 }, ...(up ? { ua: 4, fa: 2, hand: 2 } : { ua: 92, fa: 92, hand: 90 }) },
+const rearF = up => ({ view: "front", torso: -90, neck: -90, tls: 0.4, hip: [120, 162], R: { th: 70, sh: 95, ls: { th: 0.4 }, ...(up ? { ua: 4, fa: 2, hand: 2 } : { ua: 92, fa: 92, hand: 90 }) },
   eq: [fbench(168), fdb("end", { top: true })] });
 const uprowS = up => stand({ near: up ? { wristAt: [130, SH_Y + 8], hand: 0, elbowBend: 1, ls: { ua: 0.45 } } : { ua: 94, fa: 88, hand: 90 }, eq: [bar(P => P.near.grip, 13, { top: true })] });
-const uprowF = up => standF({ R: up ? { wristAt: [128, SH_Y + 12], hand: 90 } : { wristAt: [130, 124], hand: 90 }, eq: [fbar(P => P.R.grip[1], { top: true })] });
-const facepullS = back => stand({ near: back ? { wristAt: [136, SH_Y - 12], hand: -10, ls: { ua: 0.55 } } : { ua: -6, fa: -8, hand: -8 }, eq: [cable(186, SH_Y - 12, "rope")] });
+// En haut : coudes écartés, plus hauts que les mains (au-dessus des épaules), mains sous le menton.
+const uprowF = up => standF({ R: up ? { ua: -12, fa: 150, hand: 90, ls: { ua: 0.6 } } : { wristAt: [130, 124], hand: 90 }, eq: [fbar(P => P.R.grip[1], { top: true })] });
+// Fin du face pull : coude haut à hauteur d'épaule, écarté (donc raccourci de profil), mains qui tirent la corde vers le visage.
+const facepullS = back => stand({ near: back ? { ua: 0, fa: -38, hand: -30, ls: { ua: -0.3 } } : { ua: -8, fa: -8, hand: -8 }, eq: [cable(186, SH_Y - 12, "rope")] });
 
 Object.assign(HOW, {
   "Développé militaire": { views: [side([ohpS(0), ohpS(1)], ["Haltères à hauteur des épaules", "Bras tendus au-dessus de la tête"]), front([ohpF(0), ohpF(1)], ["Coudes sous les poignets", "Bras tendus"])],
@@ -475,7 +477,7 @@ Object.assign(HOW, {
     cue: "Barre contre les cuisses : monte-la le long du corps en levant les coudes sur les côtés, jusqu’en bas de la poitrine, puis redescends.",
     tips: ["Mains à largeur d’épaules (pas collées).", "Les coudes montent plus haut que les mains.", "Arrête-toi au bas de la poitrine."] },
   "Face pull": { views: [side([facepullS(0), facepullS(1)], ["Bras tendus vers la poulie", "Corde vers le visage, coudes hauts"]),
-      front([standF({ R: { ua: -86, fa: -86, hand: -86, ls: { ua: 0.25, fa: 0.25 } } }), standF({ R: { ua: -8, fa: -96, hand: -90 } })], ["Bras devant", "Mains à côté des oreilles"])],
+      front([standF({ R: { ua: -20, fa: -60, hand: -60, ls: { ua: 0.12, fa: 0.2 } } }), standF({ R: { ua: 0, fa: -135, hand: -120 } })], ["Bras tendus vers la poulie", "Coudes hauts et écartés, mains au visage"])],
     cue: "Poulie à hauteur du visage, corde en main : tire vers les yeux en écartant les mains, coudes hauts, puis reviens bras tendus.",
     tips: ["Coudes à hauteur des épaules ou plus haut.", "Écarte les mains de chaque côté de la tête en fin de mouvement.", "Charge légère, mouvement lent."] },
   "Push press": { views: [side([stand({ near: rack, eq: [bar(P => P.near.grip, 13, { top: true })] }), { hip: [114, 124], torso: -88, neck: -88, near: { ankleAt: [124, ANK], ft: 0, ...rack }, eq: [bar(P => P.near.grip, 13, { top: true })] },
