@@ -27,10 +27,3 @@ body.tabbar-on .home-links{margin-bottom:0}
 /* Titres des onglets : plus de bouton « ‹ Accueil » au-dessus */
 #v-go>.vtitle:first-child,#v-social>.vtitle:first-child,#v-profile>.vtitle:first-child{margin-top:0}
 
-/* Accueil en cartes, comme un fil Strava */
-.toc{border-top:0;gap:12px}
-.toc-item{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 16px;gap:10px}
-.toc-item.go-item{border-color:color-mix(in srgb,var(--red) 55%,var(--line));background:linear-gradient(160deg,var(--red-soft),var(--surface) 70%)}
-.toc-name{font-size:36px}
-.toc-item .pill,.toc-item .week span:not(.on){background:var(--surface-2)}
-@media (max-width:380px){.toc-name{font-size:32px}}

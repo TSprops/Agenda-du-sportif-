@@ -1,0 +1,90 @@
+/* Accueil en tableau de bord, page Séances, Social (en-tête façon Strava), profil façon Instagram, partage du profil */
+
+/* ---------- Accueil : tableau de bord ---------- */
+.dash{display:flex;flex-direction:column;gap:12px}
+.dash-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.dash-card{display:flex;flex-direction:column;gap:8px;width:100%;min-width:0;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;-webkit-tap-highlight-color:transparent}
+.dash-card:active{transform:scale(.98)}
+.dc-top{display:flex;align-items:center;gap:8px}
+.dc-top b{flex:1;min-width:0;font-family:var(--display);font-weight:800;font-size:19px;line-height:1;text-transform:uppercase;overflow-wrap:break-word}
+.dash-row .dc-top b{font-size:17px}
+.dash-row .dc-top .arrow{display:none}
+.dc-top em{font-style:normal;font-size:11.5px;font-weight:700;color:var(--muted)}
+.dc-top .arrow{color:var(--muted)}
+.dc-sub{font-size:12.5px;line-height:1.3;color:var(--muted);overflow-wrap:anywhere}
+.dc-big{font-family:var(--display);font-weight:800;font-size:40px;line-height:.9;color:var(--red-hi)}
+.dc-empty{font-size:26px;line-height:44px}
+.dc-bodies{display:flex;justify-content:center;gap:18px}
+.dc-bodies svg.body.dash-body{width:auto;height:150px}
+.spark{display:block;width:100%;height:44px;overflow:visible}
+.spark polyline{fill:none;stroke:var(--red-hi);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.spark polygon{fill:color-mix(in srgb,var(--red) 18%,transparent);stroke:none}
+.dc-nut{display:flex;flex-direction:column;gap:6px;font-size:13.5px;font-weight:600;color:var(--muted);overflow-wrap:break-word}
+.dc-nut .ok{color:var(--ink)}
+.dc-nut b{font-family:var(--display);font-size:20px;color:var(--red-hi)}
+.dash-card .week{max-width:none}
+.dash-card .week span:not(.on){background:var(--surface-2)}
+.dash .trophy-strip{margin:0}
+
+/* ---------- Page Séances ---------- */
+.seance-list{display:flex;flex-direction:column;gap:10px}
+.seance-tile{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 14px}
+.seance-tile:active{transform:scale(.98)}
+.seance-tile .mc{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.seance-tile b{font-family:var(--display);font-weight:800;font-size:22px;line-height:1;text-transform:uppercase}
+.seance-tile .mc span{font-size:13px;color:var(--muted)}
+.seance-tile .arrow{color:var(--muted)}
+.seance-tile.hl{border-color:color-mix(in srgb,var(--red) 55%,var(--line));background:linear-gradient(160deg,var(--red-soft),var(--surface) 70%)}
+
+/* ---------- Social ---------- */
+.soc-head{display:flex;align-items:center;gap:8px;margin-top:-12px}
+.soc-head .vtitle{flex:1;margin:0}
+.round-btn{position:relative;flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+.round-btn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.round-btn .tab-dot{top:2px;left:auto;right:2px}
+.soc-pills{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-inline:-2px;padding:2px}
+.soc-pills::-webkit-scrollbar{display:none}
+.soc-pill{flex:none;display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-weight:600;font-size:14px;white-space:nowrap}
+.soc-pill small{font-size:12px;font-weight:700;color:var(--muted)}
+.soc-pill.hot{border-color:var(--red)}
+.soc-act summary{cursor:pointer;font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:4px 0 10px}
+
+/* ---------- Profil (« Vous ») ---------- */
+.tab-av{display:grid;place-items:center;width:25px;height:25px}
+.tab-av .avatar{font-size:13px}
+.tab[aria-current="page"] .tab-av .avatar{box-shadow:0 0 0 2px var(--red-hi)}
+.pf-head{display:flex;flex-direction:column;gap:12px;margin-top:-4px}
+.pf-head .pf-top{gap:18px}
+.pf-counts{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.pf-counts button{display:flex;flex-direction:column;align-items:center;gap:2px}
+.pf-counts b{font-family:var(--display);font-weight:800;font-size:30px;line-height:1}
+.pf-counts span{font-size:13px;color:var(--muted)}
+.pf-id{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.pf-id b{font-family:var(--display);font-weight:800;font-size:26px;line-height:1;text-transform:uppercase;overflow-wrap:anywhere}
+.pf-id .tag{margin-top:4px}
+.pf-head .btn,.share-card .btn{padding-inline:8px;font-size:14px;white-space:nowrap}
+.pf-list{display:flex;flex-direction:column;margin-block:-4px}
+.pf-list button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:13px 2px;border-bottom:1px solid var(--line);font-weight:600;font-size:15px}
+.pf-list button[hidden]{display:none}
+.pf-list button:last-child{border-bottom:0}
+.pf-list .arrow{margin-left:auto;color:var(--muted)}
+.pf-list .danger{color:var(--danger)}
+
+/* ---------- Partager mon profil ---------- */
+.share-card{align-items:center;text-align:center;gap:8px}
+.share-name{font-family:var(--display);font-weight:800;font-size:28px;line-height:1;text-transform:uppercase;overflow-wrap:anywhere}
+.qr-box{width:min(230px,70vw);margin:10px auto 4px;padding:12px;border-radius:16px;background:#fff}
+.qr-box svg{display:block;width:100%;height:auto}
+.share-code{font-family:var(--display);font-weight:800;font-size:32px;letter-spacing:.08em;line-height:1}
+.share-card .grid2{width:100%;margin-top:6px}
+
+/* Scanner de QR code */
+.scan-sheet{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:20px 16px calc(env(safe-area-inset-bottom,0px) + 20px);background:color-mix(in srgb,#000 88%,transparent)}
+.scan-box{position:relative;width:min(340px,100%);aspect-ratio:1;margin:0 auto;border-radius:20px;overflow:hidden;background:#000}
+.scan-box[hidden]{display:none}
+.scan-box video{width:100%;height:100%;object-fit:cover;display:block}
+.scan-frame{position:absolute;inset:18%;border:3px solid var(--red-hi);border-radius:16px;box-shadow:0 0 0 999px rgba(0,0,0,.35)}
+.scan-msg{margin:0;text-align:center;color:#F4F1EE;font-weight:600;line-height:1.4}
+body.scan-open .tabbar{display:none}
+
+@media (max-width:380px){.dc-top b{font-size:17px}.dash-row .dc-top b{font-size:15px}.dc-big{font-size:34px}.dc-bodies svg.body.dash-body{height:130px}}

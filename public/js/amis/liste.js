@@ -2,6 +2,7 @@
 import { openChat } from "./conversation.js";
 import { SOC, otherOf, pairId, pairOf, syncShare, unreadOf, who } from "./etat.js";
 import { openFriend } from "./page-ami.js";
+import { openScanner } from "./partage-profil.js";
 import { $, S, armed, avatarHTML, collection, db, deleteDoc, doc, esc, getDocs, limit, query, setDoc, updateDoc, where } from "../commun/core.js";
 import { norm } from "../pages/faq.js";
 import { bannedStop } from "../social/index.js";
@@ -19,11 +20,13 @@ export function renderFriends() {
       <div class="lbl">Mon code ami</div>
       <div class="code-row"><b id="myCode">${esc(code)}</b><button class="btn" id="copyCode">Copier</button></div>
       <p class="hint">Donne ce code à tes amis pour qu’ils t’ajoutent.</p>
+      <button type="button" class="btn" data-go="share">🔳 Mon QR code</button>
       <button type="button" class="chip" id="shareToggle" style="--tc:var(--red);align-self:flex-start" aria-pressed="${share}">${share ? "✓ Mes séances sont partagées" : "Mes séances ne sont pas partagées"}</button>
     </section>
     <form class="card" id="friendSearch" autocomplete="off">
       <div class="lbl">Ajouter un ami</div>
       <div class="search-row"><input id="fsInput" placeholder="Code ami ou pseudo" aria-label="Code ami ou pseudo"><button class="btn primary" type="submit">Chercher</button></div>
+      <button type="button" class="btn" id="scanFriend">📷 Scanner un QR code</button>
       ${SOC.searchMsg ? `<p class="hint">${esc(SOC.searchMsg)}</p>` : ""}
       ${(SOC.results || []).map(u => { const r = rel(u.uid); return `<div class="frow">${avatarHTML(u, 40)}<span class="main"><b>${esc(u.pseudo)}</b><span>${esc(u.code || "")}</span></span>
         ${r === "none" ? `<button type="button" class="btn primary sm" data-fadd="${u.uid}">Ajouter</button>` : r === "sent" ? `<span class="tag done">Demande envoyée</span>` : r === "recv" ? `<button type="button" class="btn primary sm" data-faccept="${pairId(S.uid, u.uid)}">Accepter</button>` : r === "friend" ? `<span class="tag done">Ami</span>` : `<span class="tag done">Bloqué</span>`}</div>`; }).join("")}
@@ -39,7 +42,7 @@ export function renderFriends() {
     ${blocked.length ? `<section><h2 class="h2">Personnes bloquées</h2><div class="card" style="gap:0;padding-block:4px">${blocked.map(([pid, f]) => { const w = who(otherOf(f), 40); return `<div class="frow">${w.av}<span class="main"><b>${esc(w.d.pseudo)}</b></span><button type="button" class="icon-btn" data-fdel="${pid}">Débloquer</button></div>`; }).join("")}</div></section>` : ""}`;
   const inp = $("fsInput"); if (inp && SOC.lastQuery) inp.value = SOC.lastQuery;
 }
-async function searchUsers(q) {
+export async function searchUsers(q) {
   q = q.trim(); SOC.lastQuery = q; SOC.results = []; SOC.searchMsg = "Recherche…"; renderFriends();
   try {
     let docs;
@@ -71,6 +74,7 @@ $("friendsBody").addEventListener("submit", e => { e.preventDefault(); if (e.tar
 $("friendsBody").addEventListener("click", e => {
   const t = e.target.closest("button"); if (!t) return;
   if (t.id === "copyCode") { const c = S.profile.friendCode; (navigator.clipboard ? navigator.clipboard.writeText(c) : Promise.reject()).then(() => { t.textContent = "Copié ✓"; }, () => { const r = document.createRange(); r.selectNodeContents($("myCode")); getSelection().removeAllRanges(); getSelection().addRange(r); }); return; }
+  if (t.id === "scanFriend") { openScanner(); return; }
   if (t.id === "shareToggle") { saveProfile({ shareSessions: S.profile.shareSessions === false }); syncShare(); renderFriends(); return; }
   if (t.dataset.fadd) { addFriend(t.dataset.fadd); t.disabled = true; t.textContent = "Envoi…"; return; }
   if (t.dataset.faccept) { acceptFriend(t.dataset.faccept); t.disabled = true; return; }

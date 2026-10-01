@@ -9,10 +9,10 @@ import { renderAdmin } from "../pages/admin.js";
 import { renderCrossfit, renderHub, renderProg, renderProgHub, renderRec, renderRecordsHub, renderTypesHub } from "../idees/index.js";
 import { maybeInvite, maybeWelcomeInstall } from "./install.js";
 import { FAB_SCREENS, updateFab } from "../pages/faq.js";
-import { leaveChat, maybeNews, maybeTerms, newsPending, renderChat, renderFriend, renderFriends, syncShare } from "../amis/index.js";
+import { leaveChat, maybeFriendInvite, maybeNews, maybeTerms, newsPending, renderChat, renderFriend, renderFriends, renderShare, syncShare } from "../amis/index.js";
 import { renderPrograms, renderRoutine, renderRoutines } from "../entrainement/index.js";
 import { renderGo, renderHome, renderRecap } from "../pages/accueil.js";
-import { loadFeed, renderChallenge, renderChallenges, renderMessages, renderRanks, renderSocial, syncChallenges } from "../social/index.js";
+import { renderChallenge, renderChallenges, renderMessages, renderRanks, renderSocial, syncChallenges } from "../social/index.js";
 import { renderMuscles } from "../pages/muscles.js";
 import { renderTrophees } from "../pages/trophees.js";
 import { maybeResetTours, renderTutos, tourCheck } from "./tutoriel.js";
@@ -79,9 +79,10 @@ function syncStats() {
    ============================================================ */
 const RENDER = {
   home: renderHome, seances: renderMain, nutrition: renderNutrition, complements: renderNutrition, creatine: renderNutrition,
-  contact: renderContact, profile: renderProfile, admin: renderAdmin, onboard: renderOnboard, friends: renderFriends, friend: renderFriend, chat: renderChat, go: renderGo, trophees: renderTrophees, social: renderSocial, messages: renderMessages, feed: () => loadFeed(false), challenges: renderChallenges, challenge: renderChallenge, ranks: renderRanks, muscles: renderMuscles, recap: renderRecap, routines: renderRoutines, routine: renderRoutine, tutos: renderTutos, programs: renderPrograms, crossfit: renderCrossfit, types: renderTypesHub, hub: renderHub, records: renderRecordsHub, rec: renderRec, progress: renderProgHub, prog: renderProg
+  contact: renderContact, profile: renderProfile, admin: renderAdmin, onboard: renderOnboard, friends: renderFriends, friend: renderFriend, chat: renderChat, go: renderGo, trophees: renderTrophees, social: renderSocial, messages: renderMessages, share: renderShare, challenges: renderChallenges, challenge: renderChallenge, ranks: renderRanks, muscles: renderMuscles, recap: renderRecap, routines: renderRoutines, routine: renderRoutine, tutos: renderTutos, programs: renderPrograms, crossfit: renderCrossfit, types: renderTypesHub, hub: renderHub, records: renderRecordsHub, rec: renderRec, progress: renderProgHub, prog: renderProg
 };
 function go(v) {
+  if (v === "feed") v = "social"; // le fil d'actu est maintenant sur la page Social
   if (v === "complements" && !S.cpDay) S.cpDay = todayK();
   if (v === "creatine" && !S.crView) { const t = new Date(); S.crView = new Date(t.getFullYear(), t.getMonth(), 1); }
   if (v === "contactform") { $("ctForm").hidden = false; $("ctDone").hidden = true; $("ctErr").hidden = true; renderObjets(); }
@@ -93,6 +94,7 @@ function go(v) {
   if (!$("helpPanel").hidden && !FAB_SCREENS.includes(v)) $("helpPanel").hidden = true;
   updateFab(); updateTabbar(v);
   if (v !== "chat") leaveChat();
+  if (v === "home" && maybeFriendInvite()) return;
   if (v === "home") { if (!maybeTerms()) { maybeNews(); if (newsPending() || !maybeWelcomeInstall()) maybeInvite(); } }
 }
 function refresh() {

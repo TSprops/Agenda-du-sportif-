@@ -1,13 +1,14 @@
-// Accueil, Let's go, série de semaines, objectif et bilan du mois.
-import { $, DAYS, DISC, MONTHS, MUSCLES, S, avatarHTML, cap, dayMeta, dayOf, dayVolume, discOf, esc, fmtDur, isEmpty, key, nf,
-  pad, parse, runKm, runSecs, sessionsOn, titleOf, todayK } from "../commun/core.js";
+// Accueil (tableau de bord), page Séances, série de semaines, objectif et bilan du mois.
+import { $, DAYS, DISC, MONTHS, MUSCLES, S, cap, dayMeta, dayOf, dayVolume, discOf, esc, fmtDur, isEmpty, key, nf,
+  pad, parse, plural, runKm, runSecs, sessionsOn, titleOf, todayK } from "../commun/core.js";
 import { go, refresh, saveProfile } from "../commun/store.js";
 import { openDay } from "../seances/index.js";
 import { nutOf } from "./nutrition.js";
 import { refreshInstallBtn } from "../commun/install.js";
 import { refreshSocial } from "../amis/index.js";
 import { freshKey, programCardHTML, programState, routines, startWorkout, toTuple } from "../entrainement/index.js";
-import { muscleLoad } from "./muscles.js";
+import { bodySVG, levelOf, muscleLoad } from "./muscles.js";
+import { doneSet } from "../idees/index.js";
 import { trophyStripHTML } from "./trophees.js";
 
 /* ============================================================
@@ -61,46 +62,87 @@ function todaySummary() {
   const ks = sessionsOn(todayK()).filter(k => !isEmpty(S.days[k]));
   return ks.map(k => titleOf(S.days[k])).join(" + ");
 }
+// Petite courbe pour les aperçus de l'accueil.
+function sparkSVG(vals) {
+  if (vals.length < 2) return "";
+  const mn = Math.min(...vals), mx = Math.max(...vals), W = 120, H = 44, sp = mx - mn || 1;
+  const pts = vals.map((v, i) => [(i / (vals.length - 1) * W).toFixed(1), (H - 4 - (v - mn) / sp * (H - 10)).toFixed(1)]);
+  const line = pts.map(p => p.join(",")).join(" ");
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,${H} ${line} ${W},${H}"/><polyline points="${line}"/></svg>`;
+}
+// Aperçu de la progression : l'exercice de muscu le plus suivi (charge max par séance), sinon les séances par semaine.
+function progPreview() {
+  const map = new Map();
+  Object.keys(S.days).filter(k => discOf(S.days[k]) === "muscu").sort().forEach(k => (S.days[k].exercises || []).forEach(ex => {
+    const n = String(ex.name || "").trim(), v = ex.hold ? 0 : Math.max(0, ...(ex.sets || []).filter(doneSet).map(st => +st.kg || 0));
+    if (!n || !v) return;
+    const id = n.toLowerCase(), it = map.get(id) || { n, pts: [] }, last = it.pts[it.pts.length - 1];
+    if (last && last.k === dayOf(k)) last.v = Math.max(last.v, v); else it.pts.push({ k: dayOf(k), v });
+    map.set(id, it);
+  }));
+  const best = [...map.values()].filter(x => x.pts.length > 1).sort((a, b) => b.pts.length - a.pts.length)[0];
+  if (best) { const v = best.pts.slice(-10).map(p => p.v); return { svg: sparkSVG(v), txt: `${best.n} : ${nf.format(v[0])} → ${nf.format(v[v.length - 1])} kg` }; }
+  const m = weekCounts(), mon = mondayOf(new Date()), v = [];
+  for (let i = 7; i >= 0; i--) v.push(m.get(key(addDays(mon, -7 * i))) || 0);
+  return { svg: v.some(Boolean) ? sparkSVG(v) : "", txt: v.some(Boolean) ? "Séances par semaine (8 sem.)" : "Tes courbes apparaîtront après tes premières séances." };
+}
+function lastRecord() {
+  const ks = Object.keys(S.days).filter(k => (S.days[k].prs || []).length).sort();
+  const n = ks.reduce((a, k) => a + S.days[k].prs.length, 0), k = ks[ks.length - 1];
+  return k ? { n, txt: S.days[k].prs[S.days[k].prs.length - 1], k } : { n: 0 };
+}
+const dashTop = (t, extra) => `<span class="dc-top"><b>${t}</b>${extra || ""}<span class="arrow" aria-hidden="true">›</span></span>`;
 function renderHome() {
   refreshInstallBtn(); refreshSocial();
   const t = new Date(), tk = key(t);
   $("homeDate").innerHTML = `<span>${cap(DAYS[t.getDay()])}</span>${t.getDate()} ${MONTHS[t.getMonth()]} ${t.getFullYear()}`;
-  $("homeAvatar").innerHTML = avatarHTML(S.profile, 34);
   $("homeStreak").innerHTML = streakCardHTML();
+  // Carte musculaire : 7 derniers jours.
+  const from = key(addDays(t, -6)), load = muscleLoad(Object.keys(S.days).filter(k => dayOf(k) >= from)), lv = {};
+  Object.keys(MUSCLES).forEach(m => { lv[m] = levelOf(load[m] || 0, 7); });
+  const topMu = Object.entries(load).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([m]) => MUSCLES[m]);
+  // Semaine en cours (calendrier).
   const mon = mondayOf(t);
-  let h = "";
+  let wk = "";
   for (let i = 0; i < 7; i++) {
     const k = key(addDays(mon, i)), ks = sessionsOn(k).filter(x => counts(S.days[x])), ty = ks.length && dayMeta(S.days[ks[0]]);
-    h += `<span class="${ks.length ? "on" : ""}${k === tk ? " now" : ""}" style="--tc:${ty ? ty.color : "#8A847E"}">${"LMMJVSD"[i]}${ks.length > 1 ? "<sup>" + ks.length + "</sup>" : ""}</span>`;
+    wk += `<span class="${ks.length ? "on" : ""}${k === tk ? " now" : ""}" style="--tc:${ty ? ty.color : "#8A847E"}">${"LMMJVSD"[i]}${ks.length > 1 ? "<sup>" + ks.length + "</sup>" : ""}</span>`;
   }
-  $("homeWeek").innerHTML = h;
-  const today = todaySummary(), ps = programState();
-  $("homeGoSub").textContent = today ? "Aujourd’hui : " + today : ps && !ps.finished ? "Prochaine séance : " + ps.next.name : "Lance ta séance";
-  const n = nutOf(tk), c = (n.complements || []).length;
-  $("homeNut").innerHTML = `<span class="pill${n.creatine ? " ok" : ""}">${n.creatine ? "✓ Créatine prise" : "Créatine à prendre"}</span><span class="pill${c ? " ok" : ""}">${c} complément${c > 1 ? "s" : ""} aujourd’hui</span>`;
+  const today = todaySummary(), ps = programState(), pg = progPreview(), rec = lastRecord();
+  const n = nutOf(tk), c = (n.complements || []).length, ms = monthStats(tk.slice(0, 7));
+  $("homeDash").innerHTML = `
+    <button class="dash-card dash-mus" data-go="muscles">${dashTop("Carte musculaire", `<em>7 jours</em>`)}
+      <span class="dc-bodies">${bodySVG("front", lv, { cls: "dash-body" })}${bodySVG("back", lv, { cls: "dash-body" })}</span>
+      <span class="dc-sub">${topMu.length ? "Plus travaillés : " + esc(topMu.join(", ")) : "Aucune séance ces 7 derniers jours"}</span></button>
+    <div class="dash-row">
+      <button class="dash-card dash-prog" data-go="progress">${dashTop("Progression")}${pg.svg || `<span class="dc-empty">📈</span>`}<span class="dc-sub">${esc(pg.txt)}</span></button>
+      <button class="dash-card" data-go="nutrition">${dashTop("Nutrition")}
+        <span class="dc-nut"><span class="${n.creatine ? "ok" : ""}">${n.creatine ? "✓" : "○"} Créatine</span><span class="${c ? "ok" : ""}"><b>${c}</b> complément${c > 1 ? "s" : ""}</span></span>
+        <span class="dc-sub">Aujourd’hui</span></button>
+    </div>
+    ${trophyStripHTML()}
+    <div class="dash-row">
+      <button class="dash-card" data-go="records">${dashTop("Records")}<span class="dc-big">${rec.n}</span><span class="dc-sub">${rec.n ? "Dernier : " + esc(rec.txt) : "Bats ton premier record !"}</span></button>
+      <button class="dash-card" data-go="recap">${dashTop("Bilan du mois")}<span class="dc-big">${ms.n}</span><span class="dc-sub">séance${ms.n > 1 ? "s" : ""} en ${MONTHS[t.getMonth()]}${ms.km ? " · " + nf.format(Math.round(ms.km * 10) / 10) + " km" : ms.vol ? " · " + (ms.vol >= 10000 ? nf.format(Math.round(ms.vol / 100) / 10) + " t" : nf.format(Math.round(ms.vol)) + " kg") : ""}</span></button>
+    </div>
+    <button class="dash-card" data-go="seances">${dashTop("Calendrier")}<span class="week">${wk}</span>
+      <span class="dc-sub">${today ? "Aujourd’hui : " + esc(today) : ps && !ps.finished ? "Prochaine séance : " + esc(ps.next.name) : "Toutes tes séances, jour par jour"}</span></button>`;
 }
-const GO_TILES = [
-  ["seances", "Calendrier", "Toutes tes séances, jour par jour", '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>'],
+const SEANCE_TILES = [
+  ["seances", "Séance libre", "Crée ta séance dans le calendrier", '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>'],
   ["routines", "Mes routines", "Tes séances enregistrées, prêtes à lancer", '<path d="M5 4h14v17l-7-4-7 4z"/>'],
   ["programs", "Programmes", "Des plans sur plusieurs semaines", '<path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/>'],
-  ["types", "Idées de séances", "Muscu, CrossFit, callisthénie, course", '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.5h6c0-1.1.4-1.9 1-2.5A6 6 0 0 0 12 3z"/>'],
-  ["records", "Mes records", "Tes meilleures perfs", '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>'],
-  ["progress", "Ma progression", "Tes courbes séance après séance", '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>'],
-  ["muscles", "Carte musculaire", "Les muscles travaillés cette semaine", '<circle cx="12" cy="4.5" r="2"/><path d="M7 21l2-8-3-4 6-2 6 2-3 4 2 8M9 13h6"/>'],
-  ["recap", "Bilan du mois", "Tes chiffres à partager en story", '<rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 18h4M9 12l2-3 2 2 2-3"/>']
+  ["types", "Idées de séances", "Muscu, CrossFit, callisthénie, course", '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.5h6c0-1.1.4-1.9 1-2.5A6 6 0 0 0 12 3z"/>']
 ];
 function renderGo() {
   const ks = sessionsOn(todayK()).filter(k => !isEmpty(S.days[k])), ps = programState(), rs = routines();
+  const sub = { routines: rs.length ? plural(rs.length, "routine") + " enregistrée" + (rs.length > 1 ? "s" : "") : "", programs: ps && !ps.finished ? "En cours : " + ps.next.name : "" };
   $("goBody").innerHTML = `
-    <section class="go-hero">
-      ${ks.length ? `<span class="sc-lbl">Aujourd’hui</span><b class="go-today">${esc(todaySummary())}</b>
-        <div class="grid2"><button class="btn" data-goopen="${ks[ks.length - 1]}">Continuer</button><button class="btn primary" data-gonew="1">+ Nouvelle</button></div>`
-      : `<span class="sc-lbl">Pas encore de séance aujourd’hui</span><button class="btn primary go-start" data-gonew="1">▶ Démarrer ma séance</button>`}
-    </section>
+    ${ks.length ? `<section class="go-hero"><span class="sc-lbl">Aujourd’hui</span><b class="go-today">${esc(todaySummary())}</b>
+        <div class="grid2"><button class="btn" data-goopen="${ks[ks.length - 1]}">Continuer</button><button class="btn primary" data-gonew="1">+ Nouvelle</button></div></section>` : ""}
+    <div class="seance-list">${SEANCE_TILES.map(([v, n, d, ic], i) => `<button class="seance-tile${i ? "" : " hl"}" data-go="${v}"><span class="disc-ico" aria-hidden="true" style="--tc:var(--red-hi)"><svg viewBox="0 0 24 24">${ic}</svg></span><span class="mc"><b>${n}</b><span>${esc(sub[v] || d)}</span></span><span class="arrow" aria-hidden="true">›</span></button>`).join("")}</div>
     ${programCardHTML(ps, true)}
-    ${rs.length ? `<section><h2 class="h2">Lancer une routine</h2><div class="chips">${rs.slice(0, 6).map(r => `<button class="chip" data-rgo2="${r.id}" style="--tc:var(--red)">▶ ${esc(r.name)}</button>`).join("")}</div></section>` : ""}
-    ${trophyStripHTML()}
-    <div class="go-grid">${GO_TILES.map(([v, n, d, ic]) => `<button class="go-tile" data-go="${v}"><span class="disc-ico" aria-hidden="true" style="--tc:var(--red-hi)"><svg viewBox="0 0 24 24">${ic}</svg></span><b>${n}</b><span>${d}</span></button>`).join("")}</div>`;
+    ${rs.length ? `<section><h2 class="h2">Lancer une routine</h2><div class="chips">${rs.slice(0, 6).map(r => `<button class="chip" data-rgo2="${r.id}" style="--tc:var(--red)">▶ ${esc(r.name)}</button>`).join("")}</div></section>` : ""}`;
 }
 $("goBody").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;

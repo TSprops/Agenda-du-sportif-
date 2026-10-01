@@ -1,13 +1,13 @@
 // Connexion, inscription, champs du profil et page Profil.
 import { $, DEFAULT_TYPES, EmailAuthProvider, OBJECTIFS, S, TERMS_V, TYPES_V, arrayRemove, auth, avatarHTML, collection,
-  createUserWithEmailAndPassword, db, deleteDoc, deleteUser, doc, esc, fmtDate, getDocs, nf, numOr, query,
+  createUserWithEmailAndPassword, db, deleteDoc, deleteUser, doc, esc, fmtDate, getDocs, isEmpty, nf, numOr, query,
   reauthenticateWithCredential, sendPasswordResetEmail, show, signInWithEmailAndPassword, signOut, updateDoc, where, writeBatch } from "../commun/core.js";
 import { renderTheme } from "../commun/theme.js";
 import { go, saveProfile, subCol, userRef } from "../commun/store.js";
 import { blobToData, compress } from "../seances/index.js";
 import { renderSound } from "../commun/timer.js";
 import { refreshInstallBtn } from "../commun/install.js";
-import { ensureSocialProfile, subscribeSocial } from "../amis/index.js";
+import { SOC, ensureSocialProfile, subscribeSocial } from "../amis/index.js";
 import { stopSubscriptions, subscribeData } from "../commun/main.js";
 
 /* ============================================================
@@ -113,18 +113,23 @@ $("signup").addEventListener("submit", async e => {
 /* ============================================================
    Page profil
    ============================================================ */
+// En-tête façon Instagram : photo, puis nombre d'activités et d'amis.
 function renderPfStats() {
-  const p = S.profile || {}, ks = Object.keys(S.days);
-  const cd = Object.keys(S.nut).filter(k => S.nut[k].creatine).length;
-  $("pfStats").innerHTML = `<div class="stat"><b>${ks.length}</b><span>séance${ks.length > 1 ? "s" : ""}</span></div><div class="stat"><b>${cd}</b><span>jour${cd > 1 ? "s" : ""} de créatine</span></div><div class="stat"><b style="font-size:17px;line-height:1.6">${p.createdAt ? esc(fmtDate(p.createdAt)) : "–"}</b><span>membre depuis</span></div>`;
+  const n = Object.keys(S.days).filter(k => !isEmpty(S.days[k])).length;
+  const f = Object.values(SOC.friends).filter(x => x.status === "accepted").length;
+  const el = $("pfCounts"); if (!el) return;
+  el.innerHTML = `<button type="button" data-go="seances"><b>${n}</b><span>activité${n > 1 ? "s" : ""}</span></button><button type="button" data-go="friends"><b>${f}</b><span>ami${f > 1 ? "s" : ""}</span></button>`;
 }
 function renderPfView(msg) {
-  const p = S.profile || {}, dash = v => (v === "" || v == null) ? `<dd class="none">Non renseigné</dd>` : `<dd>${esc(v)}</dd>`;
-  $("pfView").innerHTML = `<div class="pf-top">${avatarHTML(p, 72)}<div><b>${esc(p.pseudo || "")}</b>${p.objectif ? `<span class="tag">${esc(p.objectif)}</span>` : ""}</div></div>
-    <dl class="kv"><dt>Prénom</dt>${dash(p.prenom)}<dt>Nom</dt>${dash(p.nom)}<dt>Âge</dt>${dash(p.age ? p.age + " ans" : "")}<dt>Taille</dt>${dash(p.taille ? p.taille + " cm" : "")}<dt>Poids</dt>${dash(p.poids ? nf.format(p.poids) + " kg" : "")}<dt>Objectif</dt>${dash(p.objectif)}</dl>
+  const p = S.profile || {}, name = [p.prenom, p.nom].filter(Boolean).join(" ");
+  const body = [p.age ? p.age + " ans" : "", p.taille ? p.taille + " cm" : "", p.poids ? nf.format(p.poids) + " kg" : ""].filter(Boolean).join(" · ");
+  $("pfView").innerHTML = `<div class="pf-top">${avatarHTML(p, 84)}<div class="pf-counts" id="pfCounts"></div></div>
+    <div class="pf-id"><b>${esc(p.pseudo || "")}</b>${name ? `<span>${esc(name)}</span>` : ""}${body ? `<span class="hint">${esc(body)}</span>` : ""}${p.objectif ? `<span class="tag">${esc(p.objectif)}</span>` : ""}
+      ${p.createdAt ? `<span class="hint">Membre depuis ${esc(fmtDate(p.createdAt))}</span>` : ""}</div>
     ${msg ? `<p class="ok-msg">${esc(msg)}</p>` : ""}
-    <button type="button" class="btn" id="pfEdit">Modifier</button>`;
+    <div class="grid2"><button type="button" class="btn" id="pfEdit">Modifier le profil</button><button type="button" class="btn primary" data-go="share">📤 Partager</button></div>`;
   $("pfView").hidden = false; $("pfForm").hidden = true;
+  renderPfStats();
   $("pfEdit").onclick = () => {
     S.formPhoto.pf = undefined; $("pfFields").innerHTML = fieldsHTML("pf", S.profile); $("pfMsg").hidden = true;
     $("pfView").hidden = true; $("pfForm").hidden = false; $("pfForm").scrollIntoView({ block: "start", behavior: "smooth" });
@@ -135,7 +140,7 @@ function renderProfile() {
   renderPfView(); refreshInstallBtn(); renderTheme(); renderSound();
   $("pfEmail").textContent = "Connecté avec " + (S.email || "ton e-mail");
   $("pwMsg").hidden = true; $("delForm").hidden = true; $("delAccount").hidden = false; $("delErr").hidden = true;
-  $("adminBtn").hidden = !S.admin; renderPfStats();
+  $("adminBtn").hidden = !S.admin;
 }
 $("pfForm").addEventListener("submit", e => {
   e.preventDefault();

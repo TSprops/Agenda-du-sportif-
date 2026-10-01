@@ -11,19 +11,19 @@ import { openDay } from "../seances/index.js";
 import { freshKey, toast } from "../entrainement/index.js";
 
 // sel : sélecteur CSS (ou fonction qui renvoie l'élément). Une étape dont l'élément est absent est sautée.
-// Le fil rouge : une séance libre = Let's go › Calendrier › le jour › choisir son sport › ajouter ses exercices.
+// Le fil rouge : une séance libre = Séances › Séance libre › le jour › choisir son sport › ajouter ses exercices.
 const TOURS = {
-  home: { name: "Accueil", sub: "Ta semaine et les grandes parties de l’app", steps: [
+  home: { name: "Accueil", sub: "Ton tableau de bord et la barre du bas", steps: [
     ["#homeStreak", "Choisis combien de séances tu veux faire par semaine : chaque semaine réussie fait grandir ta série 🔥."],
-    ["#v-home .go-item", "Let’s go : c’est ici que tu crées tes séances et que tu t’entraînes."],
-    ["#v-home .toc-item[data-go=social]", "Social : tes amis, leurs séances, les défis et les classements."],
-    ["#v-home .toc-item[data-go=nutrition]", "Nutrition : coche ta créatine et tes compléments du jour."],
+    ["#homeDash .dash-mus", "Ton tableau de bord en direct : carte musculaire, progression, nutrition, trophées, records, bilan, calendrier. Touche une carte pour l’ouvrir."],
+    ["#tabbar .tab-go", "Le bouton + ouvre directement ta séance du jour."],
+    ["#tabbar", "En bas : Séances (routines, programmes, idées, séance libre), Social et ton profil (« Vous »)."],
     ["#homeLinks", "Revois ces explications quand tu veux avec « Tutoriel ». Une question ? « Contact »."]] },
-  go: { name: "Let’s go", sub: "Lancer une séance, routines, programmes…", steps: [
-    ["#goBody .go-hero", "Ta séance du jour en un toucher : tu choisis ton sport et tu ajoutes tes exercices."],
-    ["#goBody .go-tile[data-go=types]", "Des séances toutes prêtes si tu manques d’idées. C’est facultatif !"],
-    ["#goBody .go-grid", "Routines, programmes, records, progression, carte musculaire : tout est ici."],
-    ["#goBody .go-tile[data-go=seances]", "Crée ta propre séance, n’importe quel jour : touche « Calendrier », puis le jour, puis ajoute tes exercices."]] },
+  go: { name: "Séances", sub: "Séance libre, routines, programmes, idées", steps: [
+    ["#goBody .seance-tile[data-go=seances]", "Séance libre : crée ta propre séance n’importe quel jour. Touche le jour dans le calendrier, puis ajoute tes exercices."],
+    ["#goBody .seance-tile[data-go=routines]", "Tes séances enregistrées, à relancer en un toucher."],
+    ["#goBody .seance-tile[data-go=programs]", "Des plans sur plusieurs semaines : l’app te propose la bonne séance à chaque fois."],
+    ["#goBody .seance-tile[data-go=types]", "Des séances toutes prêtes si tu manques d’idées. C’est facultatif !"]] },
   seances: { name: "Calendrier", sub: "Créer une séance libre, n’importe quel jour", steps: [
     ["#grid", "Touche le jour de ta séance : aujourd’hui, un jour passé ou à venir."],
     ["#today", "Ou ce raccourci pour la séance d’aujourd’hui."],
@@ -42,7 +42,7 @@ const TOURS = {
     ["#programsBody .list .idea", "Un plan sur plusieurs semaines : l’app te propose la bonne séance à chaque fois."],
     ["#programsBody [data-pgstart]", "Choisis-en un pour commencer."]] },
   types: { name: "Idées de séances", sub: "Des séances toutes prêtes (facultatif)", steps: [
-    ["#typesGrid", "Des séances toutes prêtes, par activité. C’est facultatif : tu peux créer les tiennes depuis le Calendrier."]] },
+    ["#typesGrid", "Des séances toutes prêtes, par activité. C’est facultatif : tu peux créer les tiennes avec « Séance libre »."]] },
   hub: { steps: [
     ["#hubBody [data-try]", "« Essayer aujourd’hui » copie cette séance dans ton calendrier du jour."]] },
   records: { name: "Mes records", sub: "Tes meilleures perfs", steps: [
@@ -55,9 +55,10 @@ const TOURS = {
   recap: { name: "Bilan du mois", sub: "Tes chiffres à partager", steps: [
     ["#recapBody", "Ton mois en chiffres."],
     ["#recapShare", "Crée une image à partager en story."]] },
-  social: { name: "Social", sub: "Fil d’actu, amis, messages, défis", steps: [
-    ["#socialBody .menu", "Fil d’actu, amis, messages, défis et classements : tout le social est ici."],
-    ["#socialBody [data-go=friends]", "Commence par ajouter tes amis."]] },
+  social: { name: "Social", sub: "Fil d’actu, amis, défis, messages", steps: [
+    ["#socialBody .soc-pills", "Tes amis, les défis et les classements."],
+    ["#v-social .soc-head", "Cherche des amis 🔍 ou ouvre tes messages 💬."],
+    ["#feedBody", "Le fil d’actu : les dernières séances de tes amis. Réagis et commente !"]] },
   friends: { name: "Amis", sub: "Ajouter des amis avec leur code", steps: [
     ["#friendsBody .code-card", "Donne ton code ami pour qu’on t’ajoute."],
     ["#friendSearch", "Ou entre le code d’un ami pour l’ajouter."]] },
@@ -74,7 +75,7 @@ const TOURS = {
   contact: { name: "Contact", sub: "M’écrire une idée, un bug…", steps: [
     ["#v-contact [data-go=contactform]", "Une idée, un bug, une question : écris-moi ici."]] },
   profile: { name: "Profil", sub: "Tes infos, couleurs et réglages", steps: [
-    ["#pfView", "Tes infos : pseudo, photo…"],
+    ["#pfView", "Ton profil : tes activités, tes amis. « Partager » affiche ton QR code pour qu’on t’ajoute."],
     ["#themeCard", "Choisis ta couleur et le mode d’affichage."],
     ["#tutoAgain", "Revois les tutoriels quand tu veux."]] }
 };

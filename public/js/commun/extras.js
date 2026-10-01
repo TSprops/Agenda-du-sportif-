@@ -55,7 +55,7 @@ async function adminBackup(btn) {
 }
 // Hors connexion : petit bandeau discret sur tous les écrans (les données restent enregistrées sur le téléphone).
 function netState() { $("offlinePill").hidden = navigator.onLine; if (S.screen === "home") $("mode").textContent = ""; }
-window.addEventListener("online", () => { netState(); if (S.screen === "feed") loadFeed(true); });
+window.addEventListener("online", () => { netState(); if (S.screen === "social") loadFeed(true); });
 window.addEventListener("offline", netState);
 netState();
 export { adminBackup };

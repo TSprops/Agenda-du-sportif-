@@ -35,6 +35,9 @@ PWA en JavaScript sans framework (modules ES), Firebase (Auth + Firestore). Rép
 - **Nouveautés** : `js/commun/nouveautes.js`, avec les diapositives dans `index.html` (`#news…`).
 - **Célébration** (confettis, son, message) : `js/commun/fete.js`. **Trophées** : `js/pages/trophees.js`.
 - **Contact** : `js/pages/contact.js`. Le bouton est sur l'accueil (`#homeLinks` dans `index.html`).
+- **Barre du bas** : `js/commun/barre-onglets.js` (Accueil, Séances, « + » = séance du jour, Social, Vous).
+- **Accueil (tableau de bord) et page Séances** : `js/pages/accueil.js`. Styles avec Social et profil dans `css/13-accueil-profil-social.css`.
+- **Partager mon profil** (QR code, code ami, lien `?ami=CODE`, scanner) : `js/amis/partage-profil.js`, avec `vendor/qrcode.js`.
 - **Styles** : « Comment faire » dans `css/10-comment-faire.css`, Nouveautés et tutoriel dans `css/11-nouveautes-tutoriel.css`.
 
 ## Ajouter ou renommer un fichier

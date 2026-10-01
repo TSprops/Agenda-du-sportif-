@@ -10,7 +10,11 @@ module.exports = async function appTests(t) {
     t("inscription avec conditions acceptées", await screen(A), "v-home");
 
     // Séance : bibliothèque, dernière fois, record en direct.
-    await A.click("[data-go=go]"); await A.click("[data-gonew]"); await A.click("[data-a=disc][data-id=muscu]"); await A.click("[data-a=type][data-id=push]");
+    t("accueil : tableau de bord (cartes vers les pages)", await A.$$eval("#homeDash [data-go]", x => x.map(b => b.dataset.go).join()), "muscles,progress,nutrition,trophees,records,recap,seances");
+    t("barre du bas : Accueil, Séances, +, Social, Vous", await A.$$eval("#tabbar [data-tab]", x => x.map(b => b.dataset.tab + ":" + b.querySelector(":scope > span:not(.tab-av)").textContent).join()), "home:Accueil,seances:Séances,go:Let’s go,social:Social,profile:Vous");
+    await A.click("[data-tab=go]"); await A.waitForSelector("#sheet.open");
+    t("bouton + : séance du jour ouverte", await screen(A), "v-seances");
+    await A.click("[data-a=disc][data-id=muscu]"); await A.click("[data-a=type][data-id=push]");
     await A.click("[data-a=add-ex]"); await A.fill("#libQ", "couch"); await A.waitForTimeout(200); await A.click('#libList [data-lib="Développé couché"]');
     await A.fill("#r-0-0", "8"); await A.fill("#k-0-0", "80"); await A.click("#go-0"); await A.click("#rtSkip");
     await A.click("[data-a=close]"); await A.waitForTimeout(500);
@@ -65,15 +69,16 @@ module.exports = async function appTests(t) {
     await A.click("#rtSkip"); await A.click("[data-a=close]"); await A.waitForTimeout(500);
 
     // 1RM estimé (80 kg × 8 ≈ 101,5 ; 85 kg × 6 = 102) et trophées.
-    await home(A); await A.click("[data-go=go]");
-    t("trophées : bandeau sur Let's go", /Mes trophées · [1-9]/.test(await A.textContent(".trophy-strip")), true);
-    await A.click(".go-tile[data-go=records]"); await A.click("[data-cat='rec:muscu']");
+    await home(A);
+    t("trophées : aperçu sur l’accueil", /Mes trophées · [1-9]/.test(await A.textContent("#homeDash .trophy-strip")), true);
+    t("accueil : aperçus records et progression", (await A.textContent("#homeDash [data-go=records] .dc-big")) + "|" + !!(await A.$("#homeDash [data-go=progress] .spark")), "1|true");
+    await A.click("#homeDash [data-go=records]"); await A.click("[data-cat='rec:muscu']");
     t("1RM estimé dans les records", /1RM estimé : 102 kg \(85 kg × 6/.test(await A.textContent("#recBody")), true);
-    await home(A); await A.click("[data-go=go]"); await A.click(".go-tile[data-go=progress]"); await A.click("[data-cat='prog:muscu']");
+    await home(A); await A.click("#homeDash [data-go=progress]"); await A.click("[data-cat='prog:muscu']");
     t("progression : charge max par défaut", /85 kg/.test(await A.textContent("#progBody")), true);
     await A.click("[data-pmetric='1rm']");
     t("progression : 1RM estimé", /102 kg/.test(await A.textContent("#progBody")) && await A.getAttribute("[data-pmetric='1rm']", "aria-pressed"), "true");
-    await home(A); await A.click("[data-go=go]"); await A.click(".trophy-strip");
+    await home(A); await A.click("#homeDash .trophy-strip");
     t("trophées : page avec « Premier pas » débloqué", await A.$$eval("#trophyBody .tbadge.on .tb-n", x => x.map(e => e.textContent).includes("Premier pas")), true);
     t("trophées : rangés par famille, les autres restent à débloquer", await A.evaluate(() => [document.querySelectorAll("#trophyBody .tfam").length, document.querySelectorAll("#trophyBody .tbadge:not(.on)").length > 5].join()), "6,true");
     await A.click("#trophyBody .tbadge:not(.on)");
@@ -87,25 +92,25 @@ module.exports = async function appTests(t) {
     await A.evaluate(() => localStorage.setItem("fete-off", "1"));
 
     // Programme et routine : la séance se prépare toute seule.
-    await home(A); await A.click("[data-go=go]"); await A.click(".go-tile[data-go=programs]"); await A.click("[data-pgstart=ppl]"); await A.waitForTimeout(300);
+    await home(A); await A.click("[data-tab=seances]"); await A.click(".seance-tile[data-go=programs]"); await A.click("[data-pgstart=ppl]"); await A.waitForTimeout(300);
     await A.click("[data-pgnext]"); await A.waitForSelector("#f-title", { timeout: 8000 });
     t("programme : séance prête", await A.inputValue("#f-title"), "Push");
     t("programme : noms d'exercices verrouillés", await A.$eval("#exn-0", e => e.readOnly), true);
     await A.click("[data-a=save-routine]"); await A.click("[data-a=close]"); await A.waitForTimeout(400);
-    await home(A); await A.click("[data-go=go]"); await A.click("[data-rgo2]"); await A.waitForSelector("#f-title", { timeout: 8000 });
+    await home(A); await A.click("[data-tab=seances]"); await A.click("[data-rgo2]"); await A.waitForSelector("#f-title", { timeout: 8000 });
     t("routine : séance lancée", await A.$$eval("[id^=exn-]", x => x.length), 5);
     await A.click("[data-a=close]"); await A.waitForTimeout(400);
 
     // Séance ancienne (plus de 90 jours) : chargée par morceaux.
     const old = new Date(Date.now() - 200 * 864e5), ok = old.getFullYear() + "-" + String(old.getMonth() + 1).padStart(2, "0") + "-" + String(old.getDate()).padStart(2, "0");
     await put(`users/${A.uid}/seances/${ok}`, { disc: "course", runType: "ef", title: "Vieille sortie", run: { dist: 12, h: "", m: 70, s: "", blocks: [] }, updatedAt: 1 });
-    await home(A); await A.click("[data-go=go]"); await A.click(".go-tile[data-go=seances]");
+    await home(A); await A.click("[data-tab=seances]"); await A.click(".seance-tile[data-go=seances]");
     await A.waitForFunction(k => !!document.querySelector("#list") && true, ok);
     const hasOld = await A.evaluate(async k => { for (let i = 0; i < 12; i++) { if ([...document.querySelectorAll("#list .row")].some(r => r.dataset.k === k)) return true; document.getElementById("prev").click(); await new Promise(r => setTimeout(r, 50)); } return false; }, ok);
     t("ancienne séance chargée", hasOld, true);
 
     // Glisser pour supprimer.
-    await home(A); await A.click("[data-go=go]"); await A.click(".go-tile[data-go=seances]"); await A.waitForTimeout(300);
+    await home(A); await A.click("[data-tab=seances]"); await A.click(".seance-tile[data-go=seances]"); await A.waitForTimeout(300);
     const n0 = await A.$$eval("#list .row", x => x.length);
     await A.$eval("#list .row", e => e.scrollIntoView({ block: "center" })); await A.waitForTimeout(200);
     const bb = await (await A.$("#list .row")).boundingBox();
@@ -114,9 +119,12 @@ module.exports = async function appTests(t) {
     t("glisser supprime la séance", await A.$$eval("#list .row", x => x.length), n0 - 1);
 
     // Export de mes données.
-    await home(A); await A.click("[data-go=profile]");
+    await home(A); await A.click("[data-tab=profile]");
     const [dl] = await Promise.all([A.waitForEvent("download", { timeout: 15000 }), A.click("#exportBtn")]);
     t("export de mes données", /mes-donnees/.test(dl.suggestedFilename()), true);
+    t("profil : nombre d’activités et d’amis", await A.$$eval("#pfCounts button", x => x.map(b => b.textContent).join(" ")), "4activités 0ami");
+    await A.click("#pfView [data-go=share]");
+    t("partager : QR code et code ami", await A.$eval("#shareBody", e => !!e.querySelector(".qr-box svg") && /^[A-Z]+-\d{4}$/.test(e.querySelector("#shareCode").textContent)), true);
 
     // Compte existant sans conditions acceptées : fenêtre à accepter une fois.
     await put(`users/${A.uid}`, { pseudo: "Alice", termsV: 0, seen: { amis1: true, v2: true, v3: true, tuto: true }, typesV: 2 });
@@ -158,15 +166,15 @@ module.exports = async function appTests(t) {
     t("revoir le tutoriel de l’accueil depuis la page Tutoriel", await tourState(), "1/5,Suivant,hidden");
     for (let k = 0; k < 5; k++) await A.click("#tourNext");
     t("tutoriel terminé", await A.$eval("#tour", e => e.hidden), true);
-    await A.click("[data-go=go]"); await A.waitForSelector("#tour:not([hidden])", { timeout: 6000 });
-    t("tutoriel Let’s go à la première ouverture (fil rouge : Calendrier)", (await A.textContent("#tourText")).length > 10, true);
+    await A.click("[data-tab=seances]"); await A.waitForSelector("#tour:not([hidden])", { timeout: 6000 });
+    t("tutoriel Séances à la première ouverture (fil rouge : Séance libre)", (await A.textContent("#tourText")).length > 10, true);
     await A.click("#tourSkip");
     await A.goto(BASE + "?reset-tutoriels"); await A.waitForSelector("#v-home:not([hidden])"); await A.waitForSelector("#tour:not([hidden])", { timeout: 6000 });
     t("tutoriels remis à zéro (?reset-tutoriels)", await tourState(), "1/5,Suivant,hidden");
     await A.click("#tourSkip"); await A.evaluate(() => localStorage.setItem("tours-off", "1"));
 
     // Course : supprimer un bloc (fractionné puis seuil), avec confirmation ; la séance garde les bons blocs.
-    await home(A); await A.click("[data-go=go]"); await A.click("[data-gonew]"); await A.click("#sheet [data-a=disc][data-id=course]");
+    await home(A); await A.click("[data-tab=seances]"); await A.click("[data-gonew]"); await A.click("#sheet [data-a=disc][data-id=course]");
     await A.click("#sheet [data-a=runtype][data-id=frac]"); await A.click("#sheet [data-a=bl-add]"); await A.click("#sheet [data-a=bl-add]");
     for (const [j, v] of [[0, "10"], [1, "8"], [2, "6"]]) await A.fill(`#bl-rep-${j}`, v);
     const blocs = () => A.$$eval("#sheet .bloc .bl-rep", x => x.map(e => e.value).join());
@@ -181,7 +189,7 @@ module.exports = async function appTests(t) {
     await A.click("#sheet [data-a=close]");
 
     // Corde : plus de propositions directes ; « Ajouter un exercice » donne exactement les trois montées de corde.
-    await home(A); await A.click("[data-go=go]"); await A.click("[data-gonew]"); await A.click("#sheet [data-a=disc][data-id=cordes]");
+    await home(A); await A.click("[data-tab=seances]"); await A.click("[data-gonew]"); await A.click("#sheet [data-a=disc][data-id=cordes]");
     t("corde : rien de proposé avant « Ajouter un exercice »", await A.$$eval("#sheet [data-a=cd-add]", x => x.length), 0);
     await A.click("#sheet [data-a=add-ex]"); await A.waitForSelector("#libSheet.open");
     t("corde : liste des exercices", await A.$$eval("#libList [data-lib]", x => x.map(e => e.dataset.lib).join(" | ")), "Montée de corde | Montée de corde avec jambes | Montée de corde départ assis");
@@ -195,21 +203,23 @@ module.exports = async function appTests(t) {
     await home(A);
 
     // Social : ami, commentaire, signalement, modération.
-    await A.click("[data-go=social]"); await A.click("[data-go=friends]"); const code = await A.textContent("#myCode");
+    await A.click("[data-tab=social]"); await A.click("[data-go=friends]"); const code = await A.textContent("#myCode");
     const B = await signupPage(browser, "Bruno");
-    await B.click("[data-go=social]"); await B.click("[data-go=friends]"); await B.fill("#fsInput", code); await B.click("#friendSearch button[type=submit]"); await B.waitForTimeout(600);
+    // Lien d'invitation (celui du QR code) : ouvre la page Amis avec le profil trouvé.
+    await B.goto(BASE + "?ami=" + code); await B.waitForSelector("#v-friends:not([hidden]) [data-fadd]", { timeout: 10000 });
+    t("lien d’invitation : profil de l’ami trouvé", (await B.inputValue("#fsInput")) + "|" + new URL(B.url()).search, code + "|");
     await B.click("[data-fadd]"); await A.waitForTimeout(900); await A.click("[data-faccept]"); await A.waitForTimeout(900);
-    await home(B); await B.click("[data-go=social]"); await B.click("[data-go=feed]"); await B.waitForSelector(".feed-card .c-form input", { timeout: 10000 });
+    await home(B); await B.click("[data-tab=social]"); await B.waitForSelector(".feed-card .c-form input", { timeout: 10000 });
     const bad = "Commentaire à modérer " + Date.now();
     const inp = await B.$(".feed-card .c-form input"); await inp.fill(bad); await inp.press("Enter"); await B.waitForTimeout(800);
-    await home(A); await A.click("[data-go=go]"); await A.click(".go-tile[data-go=seances]"); await A.click("#list .row"); await A.waitForTimeout(500);
+    await home(A); await A.click("[data-tab=seances]"); await A.click(".seance-tile[data-go=seances]"); await A.click("#list .row"); await A.waitForTimeout(500);
     t("commentaire reçu dans la séance", (await A.textContent("#myComments")).includes(bad), true);
     await A.click("#myComments [data-crep]"); await A.click("#myComments [data-crep]"); await A.waitForTimeout(600);
     t("commentaire signalé", /signalé/.test(await A.textContent("#toast")), true);
     await A.click("[data-a=close]");
     // A devient admin : supprime le contenu et bannit B.
     await put("admins/" + A.uid, { ok: true });
-    await home(A); await A.click("[data-go=profile]"); await A.click("#adminBtn"); await A.waitForTimeout(800);
+    await home(A); await A.click("[data-tab=profile]"); await A.click("#adminBtn"); await A.waitForTimeout(800);
     t("signalement visible par l'admin", (await A.textContent("#adminBody")).includes(bad), true);
     const del = `.msg:has-text("${bad}") [data-repdel]`;
     // L'écran admin se redessine à chaque nouveauté : on confirme jusqu'à ce que la suppression passe.
@@ -217,7 +227,7 @@ module.exports = async function appTests(t) {
     await A.waitForFunction(t => !document.getElementById("adminBody").textContent.includes(t), bad, { timeout: 8000 }).catch(() => {});
     t("contenu supprimé par l'admin", (await A.textContent("#adminBody")).includes(bad), false);
     await A.click(`#adminBody [data-uid="${B.uid}"]`); await A.waitForTimeout(500); await A.click("#auserBody [data-ban]"); await A.click("#auserBody [data-ban]"); await A.waitForTimeout(800);
-    await home(B); await B.click("[data-go=social]");
+    await home(B); await B.click("[data-tab=social]");
     t("le banni voit la suspension", await B.$(".ban-card") !== null, true);
 
     t("aucune erreur JavaScript (A)", A.errs.join(" | "), "");

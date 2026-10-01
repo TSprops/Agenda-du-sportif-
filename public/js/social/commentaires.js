@@ -67,7 +67,7 @@ document.addEventListener("click", async e => {
   } catch (x) { toast("Suppression impossible."); }
 });
 function rerenderComments() {
-  if (S.screen === "feed") renderFeed();
+  if (S.screen === "social") renderFeed();
   if (S.screen === "friend") renderFriend();
   if (S.open) { const el = $("myComments"); if (el) el.innerHTML = myCommentsHTML(S.open); }
 }

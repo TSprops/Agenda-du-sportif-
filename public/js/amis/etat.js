@@ -88,14 +88,9 @@ export function socialCounts() {
   return { requests: F.filter(([, f]) => f.status === "pending" && f.to === S.uid).length, unread: F.filter(([pid, f]) => f.status === "accepted" && unreadOf(pid)).length };
 }
 export function refreshSocial() {
-  const c = socialCounts(), el = $("homeSocial");
-  if (el) {
-    const nf2 = acceptedFriends().length, act = activityList().filter(a => a.at > seenAct()).length, live = (SOC.challenges || []).filter(ch => ch.end >= todayK()).length;
-    el.innerHTML = `<span class="pill${nf2 ? " ok" : ""}">${nf2} ami${nf2 > 1 ? "s" : ""}</span>${c.requests ? `<span class="pill alert">${plural(c.requests, "demande")}</span>` : ""}${c.unread ? `<span class="pill alert">${c.unread} message${c.unread > 1 ? "s" : ""} non lu${c.unread > 1 ? "s" : ""}</span>` : ""}${act ? `<span class="pill alert">${plural(act, "nouveauté")}</span>` : ""}${live ? `<span class="pill">${plural(live, "défi")} en cours</span>` : ""}`;
-    const nc = newChallenges().length;
-    if (nc) el.insertAdjacentHTML("beforeend", `<span class="pill alert">${plural(nc, "nouveau défi")}</span>`);
-    $("socialDot").hidden = $("tabSocialDot").hidden = !(c.requests || c.unread || act || nc);
-  }
+  const c = socialCounts(), act = activityList().filter(a => a.at > seenAct()).length, nc = newChallenges().length;
+  $("tabSocialDot").hidden = !(c.requests || c.unread || act || nc);
+  $("socMsgDot").hidden = !c.unread;
   if (S.screen === "friends") renderFriends();
   if (S.screen === "messages") renderMessages();
   if (S.screen === "social") renderSocial();

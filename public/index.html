@@ -17,18 +17,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
 <!-- Styles : dossier css/, chargés dans cet ordre (l'ordre compte). -->
-<link rel="stylesheet" href="css/01-theme.css?v=60">
-<link rel="stylesheet" href="css/02-accueil-seances.css?v=60">
-<link rel="stylesheet" href="css/03-nutrition-contact.css?v=60">
-<link rel="stylesheet" href="css/04-general.css?v=60">
-<link rel="stylesheet" href="css/05-course-crossfit.css?v=60">
-<link rel="stylesheet" href="css/06-apparence-progression.css?v=60">
-<link rel="stylesheet" href="css/07-amis.css?v=60">
-<link rel="stylesheet" href="css/08-bibliotheque-corps.css?v=60">
-<link rel="stylesheet" href="css/09-accueil-social.css?v=60">
-<link rel="stylesheet" href="css/10-comment-faire.css?v=60">
-<link rel="stylesheet" href="css/11-nouveautes-tutoriel.css?v=60">
-<link rel="stylesheet" href="css/12-barre-onglets.css?v=60">
+<link rel="stylesheet" href="css/01-theme.css?v=61">
+<link rel="stylesheet" href="css/02-accueil-seances.css?v=61">
+<link rel="stylesheet" href="css/03-nutrition-contact.css?v=61">
+<link rel="stylesheet" href="css/04-general.css?v=61">
+<link rel="stylesheet" href="css/05-course-crossfit.css?v=61">
+<link rel="stylesheet" href="css/06-apparence-progression.css?v=61">
+<link rel="stylesheet" href="css/07-amis.css?v=61">
+<link rel="stylesheet" href="css/08-bibliotheque-corps.css?v=61">
+<link rel="stylesheet" href="css/09-accueil-social.css?v=61">
+<link rel="stylesheet" href="css/10-comment-faire.css?v=61">
+<link rel="stylesheet" href="css/11-nouveautes-tutoriel.css?v=61">
+<link rel="stylesheet" href="css/12-barre-onglets.css?v=61">
+<link rel="stylesheet" href="css/13-accueil-profil-social.css?v=61">
 <script>
   // Déménagement : l'ancienne adresse (GitHub) renvoie vers la nouvelle (Firebase) quand MOVED vaut true.
   window.NEW_HOME = "https://agenda-du-sportif.web.app/";
@@ -43,7 +44,7 @@
     });
   }
   // Version de la page : doit correspondre à APP_VERSION dans js/commun/boot.js.
-  window.APP_PAGE_VERSION = "60";
+  window.APP_PAGE_VERSION = "61";
   // Comme une vraie application : pas de zoom avec deux doigts ni en tapant deux fois (Safari ignore parfois la balise viewport).
   ["gesturestart", "gesturechange", "gestureend"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
   document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -70,7 +71,7 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=60"></script>
+<script type="module" src="app.js?v=61"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->
@@ -122,7 +123,6 @@
 
 <!-- ============ ACCUEIL ============ -->
 <main class="app home view" id="v-home" hidden>
-  <div class="home-bar"><button class="profile-btn" data-go="profile" aria-label="Mon profil"><span id="homeAvatar"></span><span>Profil</span></button></div>
   <div class="install-banner" id="installBanner" hidden>
     <button type="button" class="ib-open" id="installBannerOpen"><span aria-hidden="true">📲</span><span><b>Installe l’app sur ton téléphone</b><small>Accès en 1 toucher, en plein écran</small></span></button>
     <button type="button" class="ib-x" id="installBannerClose" aria-label="Masquer ce message">✕</button>
@@ -132,23 +132,7 @@
     <h1 class="brand-title">L’agenda <span>du sportif</span></h1>
   </header>
   <section id="homeStreak" class="home-streak"></section>
-  <nav class="toc" aria-label="Sommaire">
-    <button class="toc-item go-item" data-go="go">
-      <span class="toc-top"><span class="toc-name">Let’s go</span><span class="arrow" aria-hidden="true">›</span></span>
-      <span class="toc-sub" id="homeGoSub">Lance ta séance</span>
-      <span class="week" id="homeWeek" aria-label="Séances de la semaine"></span>
-    </button>
-    <button class="toc-item" data-go="social">
-      <span class="toc-top"><span class="toc-name">Social <i class="dot-new big" id="socialDot" hidden></i></span><span class="arrow" aria-hidden="true">›</span></span>
-      <span class="toc-sub">Fil d’actu, amis, défis et classements</span>
-      <span class="pills" id="homeSocial"></span>
-    </button>
-    <button class="toc-item" data-go="nutrition">
-      <span class="toc-top"><span class="toc-name">Nutrition</span><span class="arrow" aria-hidden="true">›</span></span>
-      <span class="toc-sub">Compléments et créatine</span>
-      <span class="pills" id="homeNut"></span>
-    </button>
-  </nav>
+  <div class="dash" id="homeDash"></div>
   <div class="home-links" id="homeLinks">
     <button class="home-link" data-go="tutos"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.6M12 16.8h.01"/></svg>Tutoriel</button>
     <button class="home-link" data-go="contact"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>Contact</button>
@@ -158,7 +142,7 @@
 
 <!-- ============ SÉANCES ============ -->
 <main class="app view" id="v-seances" hidden>
-  <button class="back" data-go="go">‹ Let’s go</button>
+  <button class="back" data-go="go">‹ Séances</button>
   <header class="top" style="margin-top:-14px">
     <div><div class="eyebrow-s">Séances</div><h1 class="month" id="monthTitle"></h1></div>
     <div class="nav"><button id="prev" aria-label="Mois précédent">‹</button><button id="next" aria-label="Mois suivant">›</button></div>
@@ -226,7 +210,7 @@
 <!-- ============ CROSSFIT ============ -->
 <!-- ============ SÉANCES TYPES ============ -->
 <main class="app view" id="v-types" hidden>
-  <button class="back" data-go="go">‹ Let’s go</button>
+  <button class="back" data-go="go">‹ Séances</button>
   <h1 class="vtitle">Idées de séances</h1>
   <p class="hint" style="margin-top:-8px">Choisis une activité pour voir des idées de séances à essayer.</p>
   <div class="disc-grid" id="typesGrid"></div>
@@ -239,12 +223,11 @@
 
 <!-- ============ LET'S GO ============ -->
 <main class="app view" id="v-go" hidden>
-  <h1 class="vtitle go-title">Let’s go</h1>
-  <p class="hint" style="margin-top:-12px">Lance ta séance</p>
+  <h1 class="vtitle">Séances</h1>
   <div id="goBody" style="display:flex;flex-direction:column;gap:18px"></div>
 </main>
 <main class="app view" id="v-routines" hidden>
-  <button class="back" data-go="go">‹ Let’s go</button>
+  <button class="back" data-go="go">‹ Séances</button>
   <h1 class="vtitle">Mes routines</h1>
   <div id="routinesBody" style="display:flex;flex-direction:column;gap:14px"></div>
 </main>
@@ -254,41 +237,41 @@
   <div id="routineBody" style="display:flex;flex-direction:column;gap:14px"></div>
 </main>
 <main class="app view" id="v-programs" hidden>
-  <button class="back" data-go="go">‹ Let’s go</button>
+  <button class="back" data-go="go">‹ Séances</button>
   <h1 class="vtitle">Programmes</h1>
   <div id="programsBody" style="display:flex;flex-direction:column;gap:16px"></div>
 </main>
 <main class="app view" id="v-muscles" hidden>
-  <button class="back" data-go="go">‹ Let’s go</button>
+  <button class="back" data-go="home">‹ Accueil</button>
   <h1 class="vtitle">Carte musculaire</h1>
   <div id="musBody" style="display:flex;flex-direction:column;gap:16px"></div>
 </main>
 <main class="app view" id="v-recap" hidden>
-  <button class="back" data-go="go">‹ Let’s go</button>
+  <button class="back" data-go="home">‹ Accueil</button>
   <h1 class="vtitle">Bilan du mois</h1>
   <div class="daynav"><button id="recapPrev" aria-label="Mois précédent">‹</button><span id="recapMonth"></span><button id="recapNext" aria-label="Mois suivant">›</button></div>
   <div id="recapBody" style="display:flex;flex-direction:column;gap:12px"></div>
 </main>
 <main class="app view" id="v-trophees" hidden>
-  <button class="back" data-go="go">‹ Let’s go</button>
+  <button class="back" data-go="home">‹ Accueil</button>
   <h1 class="vtitle">Mes trophées</h1>
   <div id="trophyBody" style="display:flex;flex-direction:column;gap:16px"></div>
 </main>
 
 <!-- ============ SOCIAL ============ -->
 <main class="app view" id="v-social" hidden>
-  <h1 class="vtitle">Social</h1>
-  <div id="socialBody" style="display:flex;flex-direction:column;gap:22px"></div>
+  <header class="soc-head">
+    <h1 class="vtitle">Social</h1>
+    <button type="button" class="round-btn" data-go="friends" aria-label="Rechercher des amis"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
+    <button type="button" class="round-btn" data-go="messages" aria-label="Messages"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><b class="tab-dot" id="socMsgDot" hidden></b></button>
+  </header>
+  <div id="socialBody" style="display:flex;flex-direction:column;gap:18px"></div>
+  <div id="feedBody" style="display:flex;flex-direction:column;gap:14px"></div>
 </main>
 <main class="app view" id="v-messages" hidden>
   <button class="back" data-go="social">‹ Social</button>
   <h1 class="vtitle">Messages</h1>
   <div id="msgsBody" style="display:flex;flex-direction:column;gap:18px"></div>
-</main>
-<main class="app view" id="v-feed" hidden>
-  <button class="back" data-go="social">‹ Social</button>
-  <h1 class="vtitle">Fil d’actu</h1>
-  <div id="feedBody" style="display:flex;flex-direction:column;gap:14px"></div>
 </main>
 <main class="app view" id="v-challenges" hidden>
   <button class="back" data-go="social">‹ Social</button>
@@ -337,7 +320,7 @@
 
 <!-- ============ MES RECORDS ============ -->
 <main class="app view" id="v-records" hidden>
-  <button class="back" data-go="go">‹ Let’s go</button>
+  <button class="back" data-go="home">‹ Accueil</button>
   <h1 class="vtitle">Mes records</h1>
   <p class="hint" style="margin-top:-8px">Choisis une catégorie pour voir et ajouter tes records.</p>
   <div class="disc-grid" id="recGrid"></div>
@@ -350,7 +333,7 @@
 
 <!-- ============ MA PROGRESSION ============ -->
 <main class="app view" id="v-progress" hidden>
-  <button class="back" data-go="go">‹ Let’s go</button>
+  <button class="back" data-go="home">‹ Accueil</button>
   <h1 class="vtitle">Ma progression</h1>
   <p class="hint" style="margin-top:-8px">Choisis une catégorie pour voir tes courbes, séance après séance.</p>
   <div class="disc-grid" id="progGrid"></div>
@@ -415,10 +398,15 @@
 </main>
 
 <!-- ============ PROFIL ============ -->
+<!-- ============ PARTAGER MON PROFIL (code ami et QR code) ============ -->
+<main class="app view" id="v-share" hidden>
+  <button class="back" data-go="profile">‹ Profil</button>
+  <h1 class="vtitle">Partager mon profil</h1>
+  <div id="shareBody" style="display:flex;flex-direction:column;gap:16px"></div>
+</main>
+
 <main class="app view" id="v-profile" hidden>
-  <h1 class="vtitle">Mon profil</h1>
-  <div class="stats" id="pfStats"></div>
-  <section class="card" id="pfView"></section>
+  <section class="pf-head" id="pfView"></section>
   <form class="card" id="pfForm" autocomplete="off" hidden>
     <div class="lbl">Modifier mes informations</div>
     <div id="pfFields"></div>
@@ -442,13 +430,16 @@
   <section class="card">
     <div class="lbl">Mon compte</div>
     <p class="hint" id="pfEmail"></p>
-    <button class="btn" id="installBtn" hidden>Installer l’app sur mon téléphone</button>
-    <button class="btn" id="tutoAgain" data-go="tutos">Revoir le tutoriel</button>
-    <button class="btn" id="exportBtn">📦 Télécharger mes données</button>
-    <p class="legal-links" style="margin:0"><a href="conditions.html">Conditions d’utilisation</a> · <a href="confidentialite.html">Confidentialité</a></p>
-    <button class="btn" id="pwReset">Changer mon mot de passe</button>
+    <div class="pf-list">
+      <button id="installBtn" hidden>📲 Installer l’app sur mon téléphone<span class="arrow" aria-hidden="true">›</span></button>
+      <button id="tutoAgain" data-go="tutos">🎓 Revoir le tutoriel<span class="arrow" aria-hidden="true">›</span></button>
+      <button data-go="contact">✉️ Contact<span class="arrow" aria-hidden="true">›</span></button>
+      <button id="exportBtn">📦 Télécharger mes données<span class="arrow" aria-hidden="true">›</span></button>
+      <button id="pwReset">🔑 Changer mon mot de passe<span class="arrow" aria-hidden="true">›</span></button>
+      <button id="logout" class="danger">Se déconnecter</button>
+    </div>
     <p class="ok-msg" id="pwMsg" hidden></p>
-    <button class="btn" id="logout">Se déconnecter</button>
+    <p class="legal-links" style="margin:0"><a href="conditions.html">Conditions d’utilisation</a> · <a href="confidentialite.html">Confidentialité</a></p>
   </section>
   <section class="card">
     <div class="lbl">Zone sensible</div>
@@ -606,7 +597,7 @@
   <button type="button" class="tab" data-tab="seances"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Séances</span></button>
   <button type="button" class="tab tab-go" data-tab="go"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></i><span>Let’s go</span></button>
   <button type="button" class="tab" data-tab="social"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.6-3.2 3-5 6-5s5.4 1.8 6 5"/><circle cx="17" cy="9.5" r="2.4"/><path d="M16.5 14.6c2.3.2 4 1.7 4.5 4.4"/></svg><span>Social</span><b class="tab-dot" id="tabSocialDot" hidden></b></button>
-  <button type="button" class="tab" data-tab="profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c.8-3.8 3.8-6 7.5-6s6.7 2.2 7.5 6"/></svg><span>Profil</span></button>
+  <button type="button" class="tab" data-tab="profile"><span class="tab-av" id="tabAvatar"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c.8-3.8 3.8-6 7.5-6s6.7 2.2 7.5 6"/></svg></span><span>Vous</span></button>
 </nav>
 
 <!-- ============ ASSISTANT (FAQ) ============ -->
