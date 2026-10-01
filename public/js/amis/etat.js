@@ -94,7 +94,7 @@ export function refreshSocial() {
     el.innerHTML = `<span class="pill${nf2 ? " ok" : ""}">${nf2} ami${nf2 > 1 ? "s" : ""}</span>${c.requests ? `<span class="pill alert">${plural(c.requests, "demande")}</span>` : ""}${c.unread ? `<span class="pill alert">${c.unread} message${c.unread > 1 ? "s" : ""} non lu${c.unread > 1 ? "s" : ""}</span>` : ""}${act ? `<span class="pill alert">${plural(act, "nouveauté")}</span>` : ""}${live ? `<span class="pill">${plural(live, "défi")} en cours</span>` : ""}`;
     const nc = newChallenges().length;
     if (nc) el.insertAdjacentHTML("beforeend", `<span class="pill alert">${plural(nc, "nouveau défi")}</span>`);
-    $("socialDot").hidden = !(c.requests || c.unread || act || nc);
+    $("socialDot").hidden = $("tabSocialDot").hidden = !(c.requests || c.unread || act || nc);
   }
   if (S.screen === "friends") renderFriends();
   if (S.screen === "messages") renderMessages();

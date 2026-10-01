@@ -1,0 +1,36 @@
+/* Barre d'onglets en bas de l'écran (présentation inspirée de Strava) */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:8;display:grid;grid-template-columns:repeat(5,1fr);align-items:end;max-width:560px;margin:0 auto;padding:6px 6px calc(env(safe-area-inset-bottom,0px) + 6px);background:color-mix(in srgb,var(--surface) 92%,transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-top:1px solid var(--line)}
+@media (min-width:561px){.tabbar{border-inline:1px solid var(--line);border-radius:18px 18px 0 0}}
+.tab{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:52px;padding:6px 2px 2px;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.01em;-webkit-tap-highlight-color:transparent}
+.tab svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab span{white-space:nowrap}
+.tab[aria-current="page"]{color:var(--red-hi)}
+.tab[aria-current="page"] svg{stroke-width:2.3}
+.tab:active{transform:scale(.94)}
+.tab-go i{display:grid;place-items:center;width:52px;height:52px;margin-top:-26px;border-radius:50%;background:var(--red);color:var(--on-red);border:4px solid var(--ground);box-shadow:0 6px 18px color-mix(in srgb,var(--red) 40%,transparent)}
+.tab-go i svg{width:26px;height:26px;stroke-width:2.6}
+.tab-go[aria-current="page"] i{background:var(--red-hi)}
+.tab-dot{position:absolute;top:5px;left:calc(50% + 8px);width:9px;height:9px;border-radius:50%;background:var(--red-hi);border:2px solid var(--surface)}
+
+/* Quand la barre est là : le contenu et les éléments flottants passent au-dessus */
+body.tabbar-on{--tb:calc(env(safe-area-inset-bottom,0px) + 66px)}
+body.tabbar-on:has(.sheet.open){--tb:0px}
+body:has(.sheet.open) .tabbar{display:none}
+body.tabbar-on .app{padding-bottom:calc(var(--tb) + 90px)}
+body.tabbar-on .help-fab{bottom:calc(var(--tb) + 14px);width:52px;height:52px}
+body.tabbar-on .help-hint{bottom:calc(var(--tb) + 22px);right:78px}
+body.tabbar-on .help-panel{bottom:calc(var(--tb) + 10px)}
+body.tabbar-on .rest-timer{bottom:calc(var(--tb) + 10px)}
+body.tabbar-on .offline-pill{bottom:calc(var(--tb) + 76px)}
+body.tabbar-on .home-links{margin-bottom:0}
+
+/* Titres des onglets : plus de bouton « ‹ Accueil » au-dessus */
+#v-go>.vtitle:first-child,#v-social>.vtitle:first-child,#v-profile>.vtitle:first-child{margin-top:0}
+
+/* Accueil en cartes, comme un fil Strava */
+.toc{border-top:0;gap:12px}
+.toc-item{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 16px;gap:10px}
+.toc-item.go-item{border-color:color-mix(in srgb,var(--red) 55%,var(--line));background:linear-gradient(160deg,var(--red-soft),var(--surface) 70%)}
+.toc-name{font-size:36px}
+.toc-item .pill,.toc-item .week span:not(.on){background:var(--surface-2)}
+@media (max-width:380px){.toc-name{font-size:32px}}

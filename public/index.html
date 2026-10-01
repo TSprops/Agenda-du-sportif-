@@ -17,17 +17,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
 <!-- Styles : dossier css/, chargés dans cet ordre (l'ordre compte). -->
-<link rel="stylesheet" href="css/01-theme.css?v=59">
-<link rel="stylesheet" href="css/02-accueil-seances.css?v=59">
-<link rel="stylesheet" href="css/03-nutrition-contact.css?v=59">
-<link rel="stylesheet" href="css/04-general.css?v=59">
-<link rel="stylesheet" href="css/05-course-crossfit.css?v=59">
-<link rel="stylesheet" href="css/06-apparence-progression.css?v=59">
-<link rel="stylesheet" href="css/07-amis.css?v=59">
-<link rel="stylesheet" href="css/08-bibliotheque-corps.css?v=59">
-<link rel="stylesheet" href="css/09-accueil-social.css?v=59">
-<link rel="stylesheet" href="css/10-comment-faire.css?v=59">
-<link rel="stylesheet" href="css/11-nouveautes-tutoriel.css?v=59">
+<link rel="stylesheet" href="css/01-theme.css?v=60">
+<link rel="stylesheet" href="css/02-accueil-seances.css?v=60">
+<link rel="stylesheet" href="css/03-nutrition-contact.css?v=60">
+<link rel="stylesheet" href="css/04-general.css?v=60">
+<link rel="stylesheet" href="css/05-course-crossfit.css?v=60">
+<link rel="stylesheet" href="css/06-apparence-progression.css?v=60">
+<link rel="stylesheet" href="css/07-amis.css?v=60">
+<link rel="stylesheet" href="css/08-bibliotheque-corps.css?v=60">
+<link rel="stylesheet" href="css/09-accueil-social.css?v=60">
+<link rel="stylesheet" href="css/10-comment-faire.css?v=60">
+<link rel="stylesheet" href="css/11-nouveautes-tutoriel.css?v=60">
+<link rel="stylesheet" href="css/12-barre-onglets.css?v=60">
 <script>
   // Déménagement : l'ancienne adresse (GitHub) renvoie vers la nouvelle (Firebase) quand MOVED vaut true.
   window.NEW_HOME = "https://agenda-du-sportif.web.app/";
@@ -42,7 +43,7 @@
     });
   }
   // Version de la page : doit correspondre à APP_VERSION dans js/commun/boot.js.
-  window.APP_PAGE_VERSION = "59";
+  window.APP_PAGE_VERSION = "60";
   // Comme une vraie application : pas de zoom avec deux doigts ni en tapant deux fois (Safari ignore parfois la balise viewport).
   ["gesturestart", "gesturechange", "gestureend"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
   document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -69,7 +70,7 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=59"></script>
+<script type="module" src="app.js?v=60"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->
@@ -238,7 +239,6 @@
 
 <!-- ============ LET'S GO ============ -->
 <main class="app view" id="v-go" hidden>
-  <button class="back" data-go="home">‹ Accueil</button>
   <h1 class="vtitle go-title">Let’s go</h1>
   <p class="hint" style="margin-top:-12px">Lance ta séance</p>
   <div id="goBody" style="display:flex;flex-direction:column;gap:18px"></div>
@@ -277,7 +277,6 @@
 
 <!-- ============ SOCIAL ============ -->
 <main class="app view" id="v-social" hidden>
-  <button class="back" data-go="home">‹ Accueil</button>
   <h1 class="vtitle">Social</h1>
   <div id="socialBody" style="display:flex;flex-direction:column;gap:22px"></div>
 </main>
@@ -417,7 +416,6 @@
 
 <!-- ============ PROFIL ============ -->
 <main class="app view" id="v-profile" hidden>
-  <button class="back" data-go="home">‹ Accueil</button>
   <h1 class="vtitle">Mon profil</h1>
   <div class="stats" id="pfStats"></div>
   <section class="card" id="pfView"></section>
@@ -601,6 +599,15 @@
     <button type="button" class="btn primary" id="newsNext">Suivant</button>
   </div>
 </div>
+
+<!-- ============ BARRE D’ONGLETS (en bas de l’écran) ============ -->
+<nav class="tabbar" id="tabbar" aria-label="Navigation principale" hidden>
+  <button type="button" class="tab" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/></svg><span>Accueil</span></button>
+  <button type="button" class="tab" data-tab="seances"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Séances</span></button>
+  <button type="button" class="tab tab-go" data-tab="go"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></i><span>Let’s go</span></button>
+  <button type="button" class="tab" data-tab="social"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.6-3.2 3-5 6-5s5.4 1.8 6 5"/><circle cx="17" cy="9.5" r="2.4"/><path d="M16.5 14.6c2.3.2 4 1.7 4.5 4.4"/></svg><span>Social</span><b class="tab-dot" id="tabSocialDot" hidden></b></button>
+  <button type="button" class="tab" data-tab="profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c.8-3.8 3.8-6 7.5-6s6.7 2.2 7.5 6"/></svg><span>Profil</span></button>
+</nav>
 
 <!-- ============ ASSISTANT (FAQ) ============ -->
 <button type="button" class="help-fab" id="helpFab" hidden aria-label="Ouvrir l’assistant">

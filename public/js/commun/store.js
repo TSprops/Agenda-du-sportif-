@@ -16,6 +16,7 @@ import { loadFeed, renderChallenge, renderChallenges, renderMessages, renderRank
 import { renderMuscles } from "../pages/muscles.js";
 import { renderTrophees } from "../pages/trophees.js";
 import { maybeResetTours, renderTutos, tourCheck } from "./tutoriel.js";
+import { updateTabbar } from "./barre-onglets.js";
 
 /* ============================================================
    Accès aux données
@@ -90,7 +91,7 @@ function go(v) {
   window.scrollTo(0, 0);
   maybeResetTours(); tourCheck(v);
   if (!$("helpPanel").hidden && !FAB_SCREENS.includes(v)) $("helpPanel").hidden = true;
-  updateFab();
+  updateFab(); updateTabbar(v);
   if (v !== "chat") leaveChat();
   if (v === "home") { if (!maybeTerms()) { maybeNews(); if (newsPending() || !maybeWelcomeInstall()) maybeInvite(); } }
 }
