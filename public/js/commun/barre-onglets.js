@@ -37,4 +37,26 @@ $("tabbar").addEventListener("click", e => {
   if (t === "go") openToday(); else go(t === "seances" ? "go" : t);
 });
 
+/* ============================================================
+   Barre bloquée en bas (iPhone)
+   ============================================================ */
+// Safari garde parfois une hauteur d'écran périmée (clavier fermé, retour dans l'app) et pose la barre
+// au milieu de la page. On lui fait recalculer sa place dès que la taille de l'écran peut avoir changé.
+let replaceT = 0;
+function replaceTabbar() {
+  clearTimeout(replaceT);
+  replaceT = setTimeout(() => {
+    const bar = $("tabbar"); if (bar.hidden) return;
+    bar.style.display = "none"; void bar.offsetHeight; bar.style.display = "";
+  }, 120);
+}
+if (window.visualViewport) window.visualViewport.addEventListener("resize", replaceTabbar);
+window.addEventListener("resize", replaceTabbar);
+window.addEventListener("orientationchange", replaceTabbar);
+window.addEventListener("pageshow", replaceTabbar);
+document.addEventListener("focusout", replaceTabbar);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) replaceTabbar(); });
+// Fiche d'une séance fermée : la barre réapparaît, à la bonne place.
+new MutationObserver(replaceTabbar).observe($("sheet"), { attributes: true, attributeFilter: ["class"] });
+
 export { updateTabbar };
