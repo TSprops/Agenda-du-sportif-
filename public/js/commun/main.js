@@ -8,10 +8,12 @@ import { lsGet, lsSet } from "./install.js";
 import { ensureSocialProfile, resetSocial, subscribeSocial } from "../amis/index.js";
 import { renderHome } from "../pages/accueil.js";
 import { checkTrophies } from "../pages/trophees.js";
+import { LANGUE, LANGUES, changerLangue, t } from "./i18n.js";
 
 /* ============================================================
    Abonnements temps réel et démarrage
    ============================================================ */
+const LANGUES_OK = code => LANGUES.some(l => l.code === code);
 function stopSubscriptions() { S.unsubs.forEach(u => { try { u(); } catch (e) { /* déjà arrêté */ } }); S.unsubs = []; S.dataSubscribed = false; }
 /* Chargement de l'historique par morceaux (moins de lectures = l'app reste gratuite plus longtemps) :
    - les 90 derniers jours sont suivis en direct ;
@@ -91,6 +93,9 @@ onAuthStateChanged(auth, async user => {
     if (first) {
       first = false;
       if (S.profile) {
+        // Langue : celle du compte l'emporte (la même sur tous les appareils) ; sinon on y enregistre celle de cet appareil.
+        if (S.profile.lang && S.profile.lang !== LANGUE && LANGUES_OK(S.profile.lang)) { changerLangue(S.profile.lang); return; }
+        if (!S.profile.lang) saveProfile({ lang: LANGUE });
         subscribeData(); ensureSocialProfile(); subscribeSocial();
         if (!S.visitCounted) { S.visitCounted = true; saveProfile({ visits: (S.profile.visits || 0) + 1, lastSeen: Date.now(), email: S.email }); }
         go("home");
@@ -100,7 +105,7 @@ onAuthStateChanged(auth, async user => {
     else if (S.screen === "profile" && !$("pfView").hidden) renderPfView();
   }, err => {
     console.error("profil", err && err.code, err && err.message);
-    go("login"); show($("auErr"), "Impossible de charger ton compte. Vérifie ta connexion puis réessaie.");
+    go("login"); show($("auErr"), t("connexion.erreurChargement"));
   }));
 });
 

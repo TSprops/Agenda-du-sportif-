@@ -2,6 +2,7 @@
 import { $, S, TERMS_V } from "./core.js";
 import { closeInstall, iosApp, lsGet, lsSet, maybeWelcomeInstall } from "./install.js";
 import { saveProfile } from "./store.js";
+import { t } from "./i18n.js";
 
 /* ---------- Nouveautés (une seule fois par utilisateur) ---------- */
 // Diapositives : nouveau nom et logo (AS Sport), changement d'icône en deux diapos (seulement dans l'app installée sur iPhone),
@@ -34,7 +35,7 @@ function openNews() {
   // L'iPhone garde l'ancienne icône d'une app déjà ajoutée : deux diapos expliquent comment ajouter la nouvelle, puis supprimer l'ancienne.
   if (!(iosApp() || NEWS_PARAM === "ios")) document.querySelectorAll("#newsTrack .news-ios").forEach(el => el.remove());
   const n = $("newsTrack").children.length;
-  [...$("newsTrack").children].forEach((el, k) => el.setAttribute("aria-label", (k + 1) + " sur " + n));
+  [...$("newsTrack").children].forEach((el, k) => el.setAttribute("aria-label", t("nouveautes.position", { i: k + 1, n })));
   $("newsDots").innerHTML = "<i></i>".repeat(n);
   newsGoTo(0);
   $("newsBackdrop").hidden = false; $("newsSheet").hidden = false;
@@ -50,7 +51,7 @@ function newsGoTo(i) {
   $("newsSheet").setAttribute("aria-labelledby", slides[newsI].querySelector("h2").id);
   const last = newsI === slides.length - 1;
   $("newsPrev").style.visibility = newsI ? "visible" : "hidden";
-  $("newsNext").textContent = last ? "C’est parti\u00a0!" : "Suivant";
+  $("newsNext").textContent = t(last ? "nouveautes.cestParti" : "commun.suivant");
 }
 function closeNews() {
   newsClosed = true;
@@ -67,8 +68,8 @@ $("newsSkip").onclick = closeNews;
 // Copier l'adresse de l'app (diapo iPhone) : rien à retenir pour la rouvrir dans Safari.
 $("newsCopy").onclick = async () => {
   const url = window.NEW_HOME || location.origin + "/";
-  try { await navigator.clipboard.writeText(url); $("newsCopy").textContent = "Copié ✓"; }
-  catch (e) { const r = document.createRange(); r.selectNodeContents($("newsAddr")); getSelection().removeAllRanges(); getSelection().addRange(r); $("newsCopy").textContent = "Sélectionnée : copie-la"; }
+  try { await navigator.clipboard.writeText(url); $("newsCopy").textContent = t("nouveautes.copie"); }
+  catch (e) { const r = document.createRange(); r.selectNodeContents($("newsAddr")); getSelection().removeAllRanges(); getSelection().addRange(r); $("newsCopy").textContent = t("nouveautes.selectionnee"); }
 };
 $("newsPrev").onclick = () => newsGoTo(newsI - 1);
 $("newsNext").onclick = () => { if (newsI === $("newsTrack").children.length - 1) closeNews(); else newsGoTo(newsI + 1); };

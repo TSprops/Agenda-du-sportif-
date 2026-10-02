@@ -8,29 +8,25 @@ import {
   arrayRemove, documentId, getDocsFromCache
 } from "../../vendor/firebase.js";
 import { firebaseConfig } from "../../firebase-config.js";
+import { LANGUE, LOCALE, dateFormat, dateLongue, majuscule, relatif, t, tFr, valeur } from "./i18n.js";
 import { CF_LIB, MUSCLES, GROUPS, EQUIP, EXERCISES, KEYWORDS, PROGRAMS } from "../../data.js";
 /* ============================================================
    Constantes
    ============================================================ */
 const TYPES_V = 2;
 const TERMS_V = 1; // version des conditions d'utilisation acceptées
-const DEFAULT_TYPES = [
-  { id: "push", name: "Push", color: "#FF3B30" },
-  { id: "pull", name: "Pull", color: "#3D8BFF" },
-  { id: "jambes", name: "Jambes", color: "#2FBF71" },
-  { id: "haut", name: "Haut du corps", color: "#A56BFF" },
-  { id: "bas", name: "Bas du corps", color: "#FF9F0A" },
-  { id: "cardio", name: "Cardio", color: "#19C3C3" },
-  { id: "cordes", name: "Cordes", color: "#FF5FA2" },
-  { id: "repos", name: "Repos", color: "#8A847E" }
-];
+/* Valeurs enregistrées en base en français (identifiants historiques) : affichées avec valeur("valeurs.…", v).
+   Leur texte de référence est aussi dans langues/fr.json, avec les traductions. */
+const DEFAULT_TYPES = [["push", "#FF3B30"], ["pull", "#3D8BFF"], ["jambes", "#2FBF71"], ["haut", "#A56BFF"], ["bas", "#FF9F0A"], ["cardio", "#19C3C3"],
+  ["cordes", "#FF5FA2"], ["repos", "#8A847E"]].map(([id, color]) => ({ id, name: tFr("valeurs.types." + id), color }));
+// Nom d'un type de séance à l'affichage (types par défaut traduits, types créés par l'utilisateur tels quels).
+const nomType = n => valeur("valeurs.types", n);
 const PALETTE = ["#FF3B30", "#3D8BFF", "#2FBF71", "#A56BFF", "#FF9F0A", "#19C3C3", "#FF5FA2", "#8A847E", "#C9D63A"];
-const MOODS = ["En forme", "Normal", "Fatigué", "Douleur"];
-const OBJECTIFS = ["Prise de masse", "Sèche", "Force", "Maintien de force", "Remise en forme", "Endurance"];
-const OBJETS = ["Aide", "Réclamation", "Amélioration à suggérer", "Problème sur l’application"];
-const MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-const DAYS = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
-const DEFAULT_SUPPS = [["Whey", "30 g"], ["Oméga-3", "2 gélules"], ["Vitamine D", "1000 UI"], ["Magnésium", "300 mg"], ["Multivitamines", "1 comprimé"], ["Caféine", "200 mg"]];
+const MOODS = ["forme", "normal", "fatigue", "douleur"].map(id => tFr("valeurs.humeurs." + id));
+const OBJECTIFS = ["masse", "seche", "force", "maintien", "forme", "endurance"].map(id => tFr("valeurs.objectifs." + id));
+const OBJETS = ["aide", "reclamation", "amelioration", "probleme"].map(id => tFr("valeurs.objets." + id));
+const DEFAULT_SUPPS = [["whey", "30 g"], ["omega3", "doses.gelules2"], ["vitd", "doses.ui1000"], ["magnesium", "300 mg"], ["multi", "doses.comprime1"], ["cafeine", "200 mg"]]
+  .map(([id, dose]) => [tFr("valeurs.complements." + id), dose.startsWith("doses.") ? tFr("valeurs." + dose) : dose]); // i18n-cles : valeurs.doses.
 
 /* ============================================================
    Firebase
@@ -42,13 +38,13 @@ const $ = id => document.getElementById(id);
 if (!configured && !LOCAL) {
   document.querySelectorAll(".view").forEach(v => { v.hidden = true; });
   $("v-setup").hidden = false;
-  throw new Error("firebase-config.js est vide");
+  throw new Error("firebase-config.js est vide"); // i18n-ignore (console)
 }
 // Tests en local : les émulateurs Firebase (port 5000) au lieu de la vraie base.
 const EMU = LOCAL && (!configured || location.port === "5000");
 const fbApp = initializeApp(EMU ? { apiKey: "demo-key", authDomain: "localhost", projectId: "demo-agenda" } : firebaseConfig);
 const auth = getAuth(fbApp);
-auth.languageCode = "fr"; // e-mails (mot de passe oublié…) envoyés en français
+auth.languageCode = LANGUE; // e-mails de Firebase (mot de passe oublié…) dans la langue choisie
 const db = initializeFirestore(fbApp, EMU ? {} : { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) });
 if (EMU) {
   connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true });
@@ -76,90 +72,97 @@ const dayOf = k => k.slice(0, 10);
 const sessionsOn = d => Object.keys(S.days).filter(k => dayOf(k) === d).sort();
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 const typeOf = id => S.types.find(t => t.id === id);
-const nf = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 1 });
+const nf = new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 1 });
 const numOr = v => { const n = parseFloat(String(v).replace(",", ".")); return isFinite(n) ? n : ""; };
 const todayK = () => key(new Date());
 const hm = () => { const d = new Date(); return pad(d.getHours()) + ":" + pad(d.getMinutes()); };
-function fmtDate(ts) { const d = new Date(ts); return d.getDate() + " " + MONTHS[d.getMonth()] + " " + d.getFullYear(); }
+/* Dates selon la langue : « 2 octobre 2026 », « lundi 2 octobre », « octobre 2026 », « 2 oct. », « lun. ». */
+const fmtDate = ts => dateLongue(ts);
+const fmtJour = d => dateFormat(d, { weekday: "long", day: "numeric", month: "long" });
+const fmtJourAn = d => dateFormat(d, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+const fmtJourMois = d => dateFormat(d, { day: "numeric", month: "long" });
+const fmtMoisAn = d => majuscule(dateFormat(d, { month: "long", year: "numeric" }));
+const fmtMois = d => dateFormat(d, { month: "long" });
+const fmtCourt = (d, an) => dateFormat(d, an ? { day: "numeric", month: "short", year: "numeric" } : { day: "numeric", month: "short" });
+const jourCourt = d => dateFormat(d, { weekday: "short" }).replace(".", "");
 function ago(ts) {
-  if (!ts) return "jamais";
+  if (!ts) return t("commun.jamais");
   const days = Math.floor((new Date(todayK()) - new Date(key(new Date(ts)))) / 864e5);
-  return days <= 0 ? "aujourd’hui" : days === 1 ? "hier" : days < 30 ? "il y a " + days + " jours" : fmtDate(ts);
+  return days < 30 ? relatif(-Math.max(0, days), "day") : fmtDate(ts);
 }
 /* Activités proposées quand on touche un jour du calendrier */
 const DISC = {
-  muscu: { name: "Musculation", color: "var(--red-hi)", desc: "Push, pull, jambes… séries, reps et charges",
+  muscu: { name: t("valeurs.seances.muscu"), color: "var(--red-hi)", desc: t("disciplines.muscu"),
     icon: '<path d="M6 7v10M18 7v10M3 9.5v5M21 9.5v5M6 12h12"/>' },
-  crossfit: { name: "CrossFit", color: "#FFD60A", desc: "WOD, AMRAP, EMOM, For Time, records",
+  crossfit: { name: t("valeurs.seances.crossfit"), color: "#FFD60A", desc: t("disciplines.crossfit"),
     icon: '<path d="M9 8a3 3 0 1 1 6 0"/><path d="M7 10h10l1.4 8.2A2 2 0 0 1 16.4 20.5H7.6a2 2 0 0 1-2-2.3z"/>' },
-  calis: { name: "Callisthénie", color: "#C9D63A", desc: "Poids du corps : tractions, dips, figures…",
+  calis: { name: t("valeurs.seances.calis"), color: "#C9D63A", desc: t("disciplines.calis"),
     icon: '<path d="M3 4h18M8 4v3M16 4v3"/><circle cx="12" cy="10" r="2"/><path d="M8 7l4 4.5L16 7M12 12v4.5M9 21l3-4.5 3 4.5"/>' },
-  course: { name: "Course à pied", color: "#5AC8FA", desc: "Endurance fondamentale, seuil, fractionné",
+  course: { name: t("valeurs.seances.course"), color: "#5AC8FA", desc: t("disciplines.course"),
     icon: '<circle cx="14.5" cy="4.5" r="2"/><path d="M7 21l3.5-6 3 2.5V22M5.5 11.5l3.5-3 4 1 2.5 3.5h3.5M10.5 15l-1.5-4.5"/>' },
-  cordes: { name: "Cordes", color: "#FF5FA2", desc: "Montées de corde : nombre, départs, lest",
+  cordes: { name: t("valeurs.seances.cordes"), color: "#FF5FA2", desc: t("disciplines.cordes"),
     icon: '<path d="M8 2h8"/><path d="M12 2c-3 2.5 3 4.5 0 7s3 4.5 0 7 3 4.5 0 6"/>' },
-  hyrox: { name: "Hyrox", color: "#2EE6C5", desc: "Course + SkiErg, RowErg, sled, fentes, wall balls…",
+  hyrox: { name: t("valeurs.seances.hyrox"), color: "#2EE6C5", desc: t("disciplines.hyrox"),
     icon: '<path d="M5 4v16M19 4v16M5 12h14"/><path d="M9 8l6 8M15 8l-6 8"/>' }
 };
 // Activités qui ont leurs pages Idées, Records et Progression.
 const MAIN_DISC = ["muscu", "crossfit", "calis", "course"];
 const RUN_TYPES = [
-  { id: "ef", name: "Endurance fondamentale", short: "EF", color: "#5AC8FA", hint: "Allure facile : tu dois pouvoir parler en courant (60 à 75 % de ta FC max)." },
-  { id: "seuil", name: "Seuil", short: "Seuil", color: "#FF7A45", hint: "Allure soutenue mais contrôlée, tenable 30 à 60 min en course (85 à 90 % de ta FC max)." },
-  { id: "frac", name: "Fractionné", short: "Fract.", color: "#E040FB", hint: "Efforts courts et rapides entrecoupés de récupérations (VMA, côtes, 30/30…)." }
-];
-const WOD_FORMATS = ["For Time", "AMRAP", "EMOM", "Tabata", "Chipper", "Force"];
-const WOD_HINTS = {
-  "For Time": "Termine le travail le plus vite possible. Ton score = ton temps.",
-  "AMRAP": "« As Many Rounds As Possible » : un maximum de tours dans le temps donné.",
-  "EMOM": "« Every Minute On the Minute » : un bloc au début de chaque minute, repos le reste de la minute.",
-  "Tabata": "8 tours de 20 s d’effort / 10 s de repos par mouvement.",
-  "Chipper": "Une longue liste de mouvements à « grignoter » une seule fois, pour le temps.",
-  "Force": "Travail de charge lourde (ex. 5×5, 1RM). Ton score = ta charge max."
-};
+  { id: "ef", color: "#5AC8FA" }, { id: "seuil", color: "#FF7A45" }, { id: "frac", color: "#E040FB" }
+].map(r => ({ ...r, ref: tFr("valeurs.seances." + r.id), name: t("valeurs.seances." + r.id), short: t("course.court." + r.id), hint: t("course.aide." + r.id) }));
+
+// Formats de WOD : identifiants enregistrés (« Force » compris), affichés avec nomFormat().
+const WOD_FORMATS = ["For Time", "AMRAP", "EMOM", "Tabata", "Chipper", "Force"]; // i18n-ignore (identifiants)
+const FORMAT_ID = { "For Time": "fortime", AMRAP: "amrap", EMOM: "emom", Tabata: "tabata", Chipper: "chipper", Force: "force" }; // i18n-ignore
+const nomFormat = f => FORMAT_ID[f] ? t("crossfit.formats." + FORMAT_ID[f]) : f;
+const WOD_HINTS = Object.fromEntries(WOD_FORMATS.map(f => [f, t("crossfit.formatsAide." + FORMAT_ID[f])]));
+// Noms d'exercices : identifiants enregistrés en français, affichés avec nomEx() (traduction dans « exercices.noms »).
+const nomEx = n => valeur("exercices.noms", n);
 const CALIS_MOVES = [["Tractions"], ["Dips"], ["Pompes"], ["Muscle-up"], ["Squats"], ["Pistol squat"], ["Tractions australiennes"], ["Handstand push-up"],
   ["Front lever", 1], ["Back lever", 1], ["Planche", 1], ["Handstand", 1], ["L-sit", 1], ["Human flag", 1], ["Gainage", 1]];
 const CF_MOVES = CF_LIB.map(x => x[0]);
-// WOD de référence (« Girls » et « Hero WODs ») : charges homme / femme.
+// WOD de référence (« Girls » et « Hero WODs ») : charges homme / femme. Description traduite dans « crossfit.bench ».
 const BENCH = [
-  { id: "fran", name: "Fran", type: "time", desc: "21-15-9 : Thrusters (43/29 kg), Tractions",
+  { id: "fran", name: "Fran", type: "time", desc: t("crossfit.bench.fran"),
     moves: [{ reps: "21-15-9", name: "Thrusters", kg: 43 }, { reps: "21-15-9", name: "Tractions", kg: "" }] },
-  { id: "grace", name: "Grace", type: "time", desc: "30 Clean & jerks (61/43 kg)", moves: [{ reps: "30", name: "Clean & jerk", kg: 61 }] },
-  { id: "isabel", name: "Isabel", type: "time", desc: "30 Snatchs (61/43 kg)", moves: [{ reps: "30", name: "Snatch", kg: 61 }] },
-  { id: "diane", name: "Diane", type: "time", desc: "21-15-9 : Soulevé de terre (102/70 kg), Handstand push-ups",
+  { id: "grace", name: "Grace", type: "time", desc: t("crossfit.bench.grace"), moves: [{ reps: "30", name: "Clean & jerk", kg: 61 }] },
+  { id: "isabel", name: "Isabel", type: "time", desc: t("crossfit.bench.isabel"), moves: [{ reps: "30", name: "Snatch", kg: 61 }] },
+  { id: "diane", name: "Diane", type: "time", desc: t("crossfit.bench.diane"),
     moves: [{ reps: "21-15-9", name: "Soulevé de terre", kg: 102 }, { reps: "21-15-9", name: "Handstand push-ups", kg: "" }] },
-  { id: "elizabeth", name: "Elizabeth", type: "time", desc: "21-15-9 : Squat cleans (61/43 kg), Dips aux anneaux",
+  { id: "elizabeth", name: "Elizabeth", type: "time", desc: t("crossfit.bench.elizabeth"),
     moves: [{ reps: "21-15-9", name: "Squat clean", kg: 61 }, { reps: "21-15-9", name: "Dips aux anneaux", kg: "" }] },
-  { id: "helen", name: "Helen", type: "time", desc: "3 tours : 400 m course, 21 KB swings (24/16 kg), 12 tractions",
-    moves: [{ reps: "3 tours", name: "Course (m) 400", kg: "" }, { reps: "21", name: "Kettlebell swings", kg: 24 }, { reps: "12", name: "Tractions", kg: "" }] },
-  { id: "karen", name: "Karen", type: "time", desc: "150 Wall balls (9/6 kg)", moves: [{ reps: "150", name: "Wall balls", kg: 9 }] },
-  { id: "annie", name: "Annie", type: "time", desc: "50-40-30-20-10 : Double unders, Sit-ups",
+  { id: "helen", name: "Helen", type: "time", desc: t("crossfit.bench.helen"),
+    moves: [{ reps: t("crossfit.bench.tours", { n: 3 }), name: "Course (m) 400", kg: "" }, { reps: "21", name: "Kettlebell swings", kg: 24 }, { reps: "12", name: "Tractions", kg: "" }] },
+  { id: "karen", name: "Karen", type: "time", desc: t("crossfit.bench.karen"), moves: [{ reps: "150", name: "Wall balls", kg: 9 }] },
+  { id: "annie", name: "Annie", type: "time", desc: t("crossfit.bench.annie"),
     moves: [{ reps: "50-40-30-20-10", name: "Double unders", kg: "" }, { reps: "50-40-30-20-10", name: "Sit-ups", kg: "" }] },
-  { id: "jackie", name: "Jackie", type: "time", desc: "1000 m rameur, 50 Thrusters (20/15 kg), 30 Tractions",
+  { id: "jackie", name: "Jackie", type: "time", desc: t("crossfit.bench.jackie"),
     moves: [{ reps: "1000 m", name: "Rameur (m)", kg: "" }, { reps: "50", name: "Thrusters", kg: 20 }, { reps: "30", name: "Tractions", kg: "" }] },
-  { id: "cindy", name: "Cindy", type: "amrap", cap: 20, desc: "AMRAP 20 min : 5 Tractions, 10 Pompes, 15 Air squats",
+  { id: "cindy", name: "Cindy", type: "amrap", cap: 20, desc: t("crossfit.bench.cindy"),
     moves: [{ reps: "5", name: "Tractions", kg: "" }, { reps: "10", name: "Pompes", kg: "" }, { reps: "15", name: "Air squats", kg: "" }] },
-  { id: "murph", name: "Murph", type: "time", desc: "1,6 km course, 100 tractions, 200 pompes, 300 squats, 1,6 km course (gilet 9/6 kg)",
+  { id: "murph", name: "Murph", type: "time", desc: t("crossfit.bench.murph"),
     moves: [{ reps: "1600 m", name: "Course (m)", kg: 9 }, { reps: "100", name: "Tractions", kg: 9 }, { reps: "200", name: "Pompes", kg: 9 }, { reps: "300", name: "Air squats", kg: 9 }, { reps: "1600 m", name: "Course (m)", kg: 9 }] }
 ];
-const LIFTS = [["bsquat", "Back squat"], ["fsquat", "Front squat"], ["dl", "Soulevé de terre"], ["clean", "Clean"], ["cj", "Clean & jerk"],
-  ["snatch", "Snatch"], ["spress", "Strict press"], ["ppress", "Push press"], ["bench", "Développé couché"]];
+const LIFTS = ["bsquat", "fsquat", "dl", "clean", "cj", "snatch", "spress", "ppress", "bench"].map(id => [id, t("crossfit.lifts." + id)]);
 
 function discOf(d) { return d && d.disc ? d.disc : "muscu"; }
+// Nom et couleur d'une séance. name / short : affichés (traduits) ; ref : nom de référence en français (statistiques).
 function dayMeta(d, types) {
-  const disc = discOf(d);
-  if (disc === "course") { const r = RUN_TYPES.find(x => x.id === d.runType); return { disc, name: r ? r.name : "Course à pied", short: r ? r.short : "Course", color: r ? r.color : DISC.course.color }; }
-  if (disc === "crossfit") return { disc, name: "CrossFit", short: "CrossFit", color: DISC.crossfit.color };
-  if (disc === "calis") return { disc, name: "Callisthénie", short: "Calis", color: DISC.calis.color };
-  if (disc === "hyrox") return { disc, name: "Hyrox", short: "Hyrox", color: DISC.hyrox.color };
-  if (disc === "cordes" || d.typeId === "cordes") return { disc: "cordes", name: "Cordes", short: "Cordes", color: DISC.cordes.color };
-  const t = (types || S.types).find(x => x.id === d.typeId);
-  return { disc, name: t ? t.name : "Musculation", short: t ? t.name : "Muscu", color: t ? t.color : "#8A847E" };
+  const disc = discOf(d), ref = id => tFr("valeurs.seances." + id);
+  if (disc === "course") { const r = RUN_TYPES.find(x => x.id === d.runType); return { disc, ref: r ? r.ref : ref("course"), name: r ? r.name : DISC.course.name, short: r ? r.short : t("seances.court.course"), color: r ? r.color : DISC.course.color }; }
+  if (disc === "crossfit") return { disc, ref: ref("crossfit"), name: DISC.crossfit.name, short: DISC.crossfit.name, color: DISC.crossfit.color };
+  if (disc === "calis") return { disc, ref: ref("calis"), name: DISC.calis.name, short: t("seances.court.calis"), color: DISC.calis.color };
+  if (disc === "hyrox") return { disc, ref: ref("hyrox"), name: DISC.hyrox.name, short: DISC.hyrox.name, color: DISC.hyrox.color };
+  if (disc === "cordes" || d.typeId === "cordes") return { disc: "cordes", ref: ref("cordes"), name: DISC.cordes.name, short: DISC.cordes.name, color: DISC.cordes.color };
+  const ty = (types || S.types).find(x => x.id === d.typeId);
+  return { disc, ref: ty ? ty.name : ref("muscu"), name: ty ? nomType(ty.name) : DISC.muscu.name, short: ty ? nomType(ty.name) : t("seances.court.muscu"), color: ty ? ty.color : "#8A847E" };
 }
+// Couleur d'un nom de référence (statistiques), et ce nom à l'affichage.
 function nameColor(n) {
-  const all = [...DEFAULT_TYPES.map(t => [t.name, t.color]), ...RUN_TYPES.map(r => [r.name, r.color]), ["CrossFit", DISC.crossfit.color], ["Callisthénie", DISC.calis.color], ["Cordes", DISC.cordes.color], ["Hyrox", DISC.hyrox.color]];
+  const all = [...DEFAULT_TYPES.map(x => [x.name, x.color]), ...RUN_TYPES.map(r => [r.ref, r.color]), ...["crossfit", "calis", "cordes", "hyrox"].map(id => [tFr("valeurs.seances." + id), DISC[id].color])];
   const f = all.find(x => x[0] === n); return f ? f[1] : "#8A847E";
 }
+const nomRef = n => valeur("valeurs.seances", valeur("valeurs.types", n));
 function exVolume(ex) { return (ex.sets || []).reduce((a, s) => a + ((+s.reps || 0) * (+s.kg || 0)), 0); }
 function dayVolume(d) { return discOf(d) !== "muscu" ? 0 : (d.exercises || []).reduce((a, e) => a + exVolume(e), 0); }
 function runSecs(r) { return r ? (+r.h || 0) * 3600 + (+r.m || 0) * 60 + (+r.s || 0) : 0; }
@@ -187,12 +190,12 @@ function runKm(d) {
 }
 // 800 m, 1 km, 6,4 km
 function fmtKm(km) { const m = Math.round(km * 1000); return m < 1000 ? m + " m" : nf.format(Math.round(m / 100) / 10) + " km"; }
-function fmtDur(sec) { const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = Math.round(sec % 60); return h ? `${h} h ${pad(m)}` : `${m}:${pad(s)}`; }
+function fmtDur(sec) { const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = Math.round(sec % 60); return h ? t("commun.dureeHeures", { h: String(h), m: pad(m) }) : `${m}:${pad(s)}`; }
 function runPace(r) { const t = runSecs(r), dist = +r.dist || 0; if (!t || !dist) return ""; const p = t / dist; return Math.floor(p / 60) + ":" + pad(Math.round(p % 60)); }
 function runCalcHTML(r) {
-  const t = runSecs(r), dist = +(r && r.dist) || 0;
-  if (!t || !dist) return `<span class="hint">Entre la distance et la durée : ton allure et ta vitesse se calculent toutes seules.</span>`;
-  return `<span><b>${runPace(r)}</b> /km</span><span><b>${nf.format(dist / (t / 3600))}</b> km/h</span><span><b>${fmtDur(t)}</b> au total</span>`;
+  const sec = runSecs(r), dist = +(r && r.dist) || 0;
+  if (!sec || !dist) return `<span class="hint">${t("course.calculAide")}</span>`;
+  return `<span><b>${runPace(r)}</b> /km</span><span><b>${nf.format(dist / (sec / 3600))}</b> km/h</span><span>${t("course.auTotal", { duree: `<b>${fmtDur(sec)}</b>` })}</span>`;
 }
 // "1:30" -> 90, "90" -> 90, "2 min" -> 120
 function parseClock(v) {
@@ -204,9 +207,9 @@ function parseClock(v) {
 function wodScore(w) {
   if (!w) return "";
   const f = w.format;
-  if (f === "AMRAP") return w.rounds !== "" && w.rounds != null ? `${w.rounds} tours${w.reps ? " + " + w.reps : ""}` : "";
-  if (f === "EMOM") return w.rounds ? `${w.rounds} min réussies` : "";
-  if (f === "Tabata") return w.rounds ? `${w.rounds} reps` : "";
+  if (f === "AMRAP") return w.rounds !== "" && w.rounds != null ? t(w.reps ? "crossfit.score.toursReps" : "crossfit.score.tours", { n: +w.rounds || 0, reps: w.reps }) : "";
+  if (f === "EMOM") return w.rounds ? t("crossfit.score.emom", { n: +w.rounds || 0 }) : "";
+  if (f === "Tabata") return w.rounds ? t("crossfit.score.reps", { n: +w.rounds || 0 }) : "";
   if (f === "Force") return w.kg ? `${nf.format(w.kg)} kg` : "";
   return (w.sMin !== "" && w.sMin != null) || w.sSec ? `${+w.sMin || 0}:${pad(+w.sSec || 0)}` : "";
 }
@@ -219,7 +222,7 @@ function isEmpty(d) {
     && !w.format && !String(w.name || "").trim() && !w.cap && !(w.moves || []).some(m => m.name || m.reps) && !String(w.strength || "").trim()
     && !wodScore({ ...w, format: w.format || "For Time" }) && !w.rounds && !w.kg && w.rx == null;
 }
-function titleOf(d, types) {
+function titleOf(d, types) { // titre tapé par l'utilisateur, nom du WOD, sinon nom de la séance (traduit)
   const t = String(d.title || "").trim(); if (t) return t;
   if (discOf(d) === "crossfit" && d.wod && String(d.wod.name || "").trim()) return d.wod.name.trim();
   return dayMeta(d, types).name;
@@ -235,14 +238,13 @@ function armed(btn, label) {
   setTimeout(() => { if (btn.isConnected) { btn.classList.remove("armed"); btn.textContent = old; } }, 3000);
   return false;
 }
-const plural = (n, w) => n + " " + w + (n > 1 ? "s" : "");
 function show(el, text) { el.textContent = text; el.hidden = false; }
 
-export { $, BENCH, CALIS_MOVES, CF_MOVES, DAYS, DEFAULT_SUPPS, DEFAULT_TYPES, DISC, EQUIP, EXERCISES, EmailAuthProvider, GROUPS,
-  KEYWORDS, LIFTS, LOCAL, MAIN_DISC, MONTHS, MOODS, MUSCLES, OBJECTIFS, OBJETS, PALETTE, PROGRAMS, RUN_TYPES, S, TERMS_V,
+export { $, BENCH, CALIS_MOVES, CF_MOVES, DEFAULT_SUPPS, DEFAULT_TYPES, DISC, EQUIP, EXERCISES, EmailAuthProvider, GROUPS,
+  KEYWORDS, LIFTS, LOCAL, MAIN_DISC, MOODS, MUSCLES, OBJECTIFS, OBJETS, PALETTE, PROGRAMS, RUN_TYPES, S, TERMS_V,
   TYPES_V, WOD_FORMATS, WOD_HINTS, addDoc, ago, armed, arrayRemove, auth, avatarHTML, cap, clone, collection,
   createUserWithEmailAndPassword, dayMeta, dayOf, dayVolume, db, deleteDoc, deleteUser, discOf, doc, documentId, esc, exVolume,
-  fmtDate, fmtDur, getDoc, getDocs, getDocsFromCache, hm, isEmpty, key, limit, limitToLast, nameColor, nf, numOr,
-  onAuthStateChanged, onSnapshot, orderBy, pad, parse, parseClock, plural, query, reauthenticateWithCredential, runCalcHTML,
+  fmtCourt, fmtDate, fmtDur, fmtJour, fmtJourAn, fmtJourMois, fmtMois, fmtMoisAn, getDoc, getDocs, getDocsFromCache, hm, isEmpty, key, limit, limitToLast, nameColor, nf, numOr,
+  jourCourt, nomEx, nomFormat, nomRef, nomType, onAuthStateChanged, onSnapshot, orderBy, pad, parse, parseClock, query, reauthenticateWithCredential, runCalcHTML,
   blocDone, blocKm, blocsLegacy, blocsRun, fmtKm, runKm, sortieKm, runPace, runSecs, sendPasswordResetEmail, sessionsOn, setDoc, show, signInWithEmailAndPassword, signOut, titleOf,
   todayK, typeOf, updateDoc, where, wodScore, writeBatch };

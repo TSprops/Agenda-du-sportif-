@@ -1,5 +1,6 @@
 // Point d'entrée : charge chaque partie de l'app dans le bon ordre (le détail est dans le dossier js/).
 import "./js/commun/boot.js";
+import "./js/commun/i18n.js"; // langue choisie et textes traduits, avant tous les autres modules
 import "./js/commun/core.js";
 import "./js/commun/theme.js";
 import "./js/commun/store.js";

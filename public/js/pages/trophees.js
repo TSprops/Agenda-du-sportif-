@@ -6,6 +6,7 @@ import { $, DISC, S, dayVolume, discOf, esc, key, nf, runKm } from "../commun/co
 import { saveProfile } from "../commun/store.js";
 import { showBadge } from "../commun/fete.js";
 import { counts, streakInfo } from "./accueil.js";
+import { dateFormat, t } from "../commun/i18n.js";
 
 // Icônes au trait (même style que les tuiles de Let's go).
 const ICO = {
@@ -38,22 +39,15 @@ const ICO = {
 };
 const svg = (ico, cls = "hex-ic") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICO[ico]}</svg>`;
 const NDISC = Object.keys(DISC).length;
-// Familles : [nom, trophées [id, icône, nom, description, mesure, objectif]]
+// Familles : [identifiant, trophées [id, icône, mesure, objectif]]. Noms et descriptions : « trophees.liste.<id> ».
 const FAMILIES = [
-  ["Séances", [["s1", "flag", "Premier pas", "Ta première séance notée", "sessions", 1], ["s10", "dumbbell", "Habitué", "10 séances", "sessions", 10],
-    ["s25", "flame", "Assidu", "25 séances", "sessions", 25], ["s50", "bolt", "Machine", "50 séances", "sessions", 50], ["s100", "crown", "Légende", "100 séances", "sessions", 100]]],
-  ["Régularité", [["w2", "calCheck", "C'est lancé", "Objectif de la semaine atteint 2 semaines d'affilée", "streak", 2], ["w4", "calLines", "Un mois", "4 semaines d'affilée", "streak", 4],
-    ["w8", "shield", "Discipline", "8 semaines d'affilée", "streak", 8], ["w12", "rocket", "Inarrêtable", "12 semaines d'affilée", "streak", 12]]],
-  ["Records", [["r1", "trophy", "Premier record", "Un record battu pendant une séance", "records", 1], ["r10", "target", "Chasseur", "10 records battus", "records", 10],
-    ["r25", "gem", "Collectionneur", "25 records battus", "records", 25]]],
-  ["Variété", [["d3", "compass", "Touche-à-tout", "3 activités différentes pratiquées", "disc", 3], ["d5", "star", "Complet", `Les ${NDISC} activités de l'app pratiquées`, "disc", NDISC]]],
-  ["Course", [["k10", "runner", "Premiers km", "10 km courus au total", "km", 10], ["k25", "wind", "Endurant", "25 km courus au total", "km", 25],
-    ["k50", "pin", "Grand fond", "50 km courus au total", "km", 50], ["k100", "road", "Centurion", "100 km courus au total", "km", 100],
-    ["k200", "route", "Ultra", "200 km courus au total", "km", 200], ["k500", "globe", "Globe-trotteur", "500 km courus au total", "km", 500]]],
-  ["Volume", [["t10", "plate", "10 tonnes", "10 tonnes soulevées au total en musculation", "tons", 10], ["t25", "bar", "Costaud", "25 tonnes soulevées au total", "tons", 25],
-    ["t50", "anvil", "Force brute", "50 tonnes soulevées au total", "tons", 50], ["t100", "mountain", "Titan", "100 tonnes soulevées au total", "tons", 100],
-    ["t200", "temple", "Colosse", "200 tonnes soulevées au total", "tons", 200], ["t500", "sun", "Hercule", "500 tonnes soulevées au total", "tons", 500]]]
-].map(([name, list]) => ({ name, list: list.map(([id, ico, n, desc, m, goal]) => ({ id, ico, name: n, desc, m, goal })) }));
+  ["seances", [["s1", "flag", "sessions", 1], ["s10", "dumbbell", "sessions", 10], ["s25", "flame", "sessions", 25], ["s50", "bolt", "sessions", 50], ["s100", "crown", "sessions", 100]]],
+  ["regularite", [["w2", "calCheck", "streak", 2], ["w4", "calLines", "streak", 4], ["w8", "shield", "streak", 8], ["w12", "rocket", "streak", 12]]],
+  ["records", [["r1", "trophy", "records", 1], ["r10", "target", "records", 10], ["r25", "gem", "records", 25]]],
+  ["variete", [["d3", "compass", "disc", 3], ["d5", "star", "disc", NDISC]]],
+  ["course", [["k10", "runner", "km", 10], ["k25", "wind", "km", 25], ["k50", "pin", "km", 50], ["k100", "road", "km", 100], ["k200", "route", "km", 200], ["k500", "globe", "km", 500]]],
+  ["volume", [["t10", "plate", "tons", 10], ["t25", "bar", "tons", 25], ["t50", "anvil", "tons", 50], ["t100", "mountain", "tons", 100], ["t200", "temple", "tons", 200], ["t500", "sun", "tons", 500]]]
+].map(([id, list]) => ({ name: t("trophees.familles." + id), list: list.map(([tid, ico, m, goal]) => ({ id: tid, ico, name: t(`trophees.liste.${tid}.nom`), desc: t(`trophees.liste.${tid}.desc`, { n: goal }), m, goal })) }));
 const TROPHIES = FAMILIES.flatMap(f => f.list);
 
 function measures() {
@@ -70,7 +64,7 @@ function measures() {
 const got = () => (S.profile && S.profile.trophies) || {};
 function statusMap() {
   const m = measures(), g = got(), out = {};
-  TROPHIES.forEach(t => { out[t.id] = { ...t, v: m[t.m], on: !!g[t.id] || m[t.m] >= t.goal, at: g[t.id] || 0 }; });
+  TROPHIES.forEach(tr => { out[tr.id] = { ...tr, v: m[tr.m], on: !!g[tr.id] || m[tr.m] >= tr.goal, at: g[tr.id] || 0 }; });
   return out;
 }
 const mondayKey = () => { const d = new Date(); d.setDate(d.getDate() - (d.getDay() + 6) % 7); return key(d); };
@@ -80,43 +74,43 @@ const mondayKey = () => { const d = new Date(); d.setDate(d.getDate() - (d.getDa
 export function checkTrophies(save) {
   if (!S.profile || !S.oldReady || !S.recentReady) return;
   const first = !S.profile.trophies, g = got(), now = Date.now();
-  const fresh = Object.values(statusMap()).filter(t => t.v >= t.goal && !g[t.id]);
+  const fresh = Object.values(statusMap()).filter(tr => tr.v >= tr.goal && !g[tr.id]);
   const st = streakInfo(), wk = mondayKey(), goalNew = st.thisWeek >= st.G && S.profile.goalWeek !== wk;
   if (!fresh.length && !goalNew && !first) return;
   const patch = {};
-  if (fresh.length || first) patch.trophies = { ...g, ...Object.fromEntries(fresh.map(t => [t.id, now])) };
+  if (fresh.length || first) patch.trophies = { ...g, ...Object.fromEntries(fresh.map(tr => [tr.id, now])) };
   if (goalNew) patch.goalWeek = wk;
   saveProfile(patch);
   if (!save || first) return;
-  if (goalNew) showBadge({ ico: ICO.target, kicker: "Objectif de la semaine", title: "Atteint !", sub: `${st.thisWeek} séance${st.thisWeek > 1 ? "s" : ""} cette semaine, bravo.` });
-  fresh.forEach(t => showBadge({ ico: ICO[t.ico], kicker: "Trophée débloqué", title: t.name, sub: t.desc }));
+  if (goalNew) showBadge({ ico: ICO.target, kicker: t("accueil.serie.objectif"), title: t("trophees.atteint"), sub: t("trophees.bravo", { n: st.thisWeek }) });
+  fresh.forEach(tr => showBadge({ ico: ICO[tr.ico], kicker: t("trophees.debloque"), title: tr.name, sub: tr.desc }));
 }
 
-const fmtV = (t, v) => t.m === "km" || t.m === "tons" ? nf.format(Math.floor(v * 10) / 10) : String(Math.floor(v));
-const unit = t => t.m === "km" ? " km" : t.m === "tons" ? " t" : t.m === "streak" ? " sem." : "";
-const date = ms => new Date(ms).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" });
+const fmtV = (tr, v) => tr.m === "km" || tr.m === "tons" ? nf.format(Math.floor(v * 10) / 10) : String(Math.floor(v));
+const unit = tr => tr.m === "km" ? " km" : tr.m === "tons" ? " t" : tr.m === "streak" ? " " + t("trophees.semAbrege") : "";
+const date = ms => dateFormat(ms, { day: "numeric", month: "short", year: "numeric" });
 // Bandeau de Let's go : trophées débloqués et le prochain à portée.
 export function trophyStripHTML() {
-  const list = Object.values(statusMap()), n = list.filter(t => t.on).length;
-  const next = list.filter(t => !t.on).sort((a, b) => b.v / b.goal - a.v / a.goal)[0];
+  const list = Object.values(statusMap()), n = list.filter(tr => tr.on).length;
+  const next = list.filter(tr => !tr.on).sort((a, b) => b.v / b.goal - a.v / a.goal)[0];
   return `<button class="trophy-strip" data-go="trophees"><span class="hex on sm" aria-hidden="true">${svg("trophy")}</span>
-    <span class="ts-main"><b>Mes trophées · ${n}/${list.length}</b><span>${next ? `Prochain : ${esc(next.name)} (${fmtV(next, next.v)}/${next.goal}${unit(next)})` : "Tous débloqués, respect !"}</span></span>
+    <span class="ts-main"><b>${t("trophees.bandeau", { n, total: list.length })}</b><span>${next ? esc(t("trophees.prochain", { nom: next.name, etat: `${fmtV(next, next.v)}/${next.goal}${unit(next)}` })) : t("trophees.tous")}</span></span>
     <span class="arrow" aria-hidden="true">›</span></button>`;
 }
 // Page « Mes trophées » : une vitrine par famille. Toucher un badge affiche son détail sous la rangée.
 export function renderTrophees() {
-  const st = statusMap(), n = Object.values(st).filter(t => t.on).length;
-  $("trophyBody").innerHTML = `<p class="hint" style="margin-top:-10px">${n} débloqué${n > 1 ? "s" : ""} sur ${TROPHIES.length}, rangés par famille. Touche un badge pour le détail.</p>
+  const st = statusMap(), n = Object.values(st).filter(tr => tr.on).length;
+  $("trophyBody").innerHTML = `<p class="hint" style="margin-top:-10px">${t("trophees.intro", { n, total: TROPHIES.length })}</p>
     ${FAMILIES.map((f, fi) => {
-      const l = f.list.map(t => st[t.id]), k = l.filter(t => t.on).length, next = l.find(t => !t.on);
+      const l = f.list.map(tr => st[tr.id]), k = l.filter(tr => tr.on).length, next = l.find(tr => !tr.on);
       const sel = st[(S.trSel || {})[fi]] || next || l[l.length - 1];
-      const detail = sel.on ? `<b>${esc(sel.name)}</b> · ${esc(sel.desc)}<span class="tf-ok">Obtenu${sel.at ? " le " + esc(date(sel.at)) : ""}</span>`
+      const detail = sel.on ? `<b>${esc(sel.name)}</b> · ${esc(sel.desc)}<span class="tf-ok">${esc(sel.at ? t("trophees.obtenuLe", { date: date(sel.at) }) : t("trophees.obtenu"))}</span>`
         : `<b>${esc(sel.name)}</b> · ${esc(sel.desc)}<span>${fmtV(sel, sel.v)} / ${sel.goal}${unit(sel)}</span>`;
       return `<section class="tfam"><div class="tfam-top"><span class="lbl">${esc(f.name)}</span><em>${k}/${l.length}</em></div>
-        <div class="tfam-row${l.length === 6 ? " six" : ""}">${l.map(t => `<button type="button" class="tbadge${t.on ? " on" : ""}${t === sel ? " sel" : ""}" data-trsel="${fi}:${t.id}" aria-label="${esc(t.name)} : ${t.on ? "obtenu" : "à débloquer"}">
-          <span class="hex${t.on ? " on" : ""}">${svg(t.ico)}</span><span class="tb-n">${esc(t.name)}</span></button>`).join("")}</div>
+        <div class="tfam-row${l.length === 6 ? " six" : ""}">${l.map(tr => `<button type="button" class="tbadge${tr.on ? " on" : ""}${tr === sel ? " sel" : ""}" data-trsel="${fi}:${tr.id}" aria-label="${esc(t(tr.on ? "trophees.ariaObtenu" : "trophees.ariaADebloquer", { nom: tr.name }))}">
+          <span class="hex${tr.on ? " on" : ""}">${svg(tr.ico)}</span><span class="tb-n">${esc(tr.name)}</span></button>`).join("")}</div>
         <div class="tfam-detail">${detail}</div>
-        ${!sel.on ? `<div class="tfam-bar" role="img" aria-label="${fmtV(sel, sel.v)} sur ${sel.goal}"><i style="width:${Math.min(100, Math.round(sel.v / sel.goal * 100))}%"></i></div>` : ""}
+        ${!sel.on ? `<div class="tfam-bar" role="img" aria-label="${esc(t("trophees.ariaBarre", { v: fmtV(sel, sel.v), objectif: sel.goal }))}"><i style="width:${Math.min(100, Math.round(sel.v / sel.goal * 100))}%"></i></div>` : ""}
       </section>`;
     }).join("")}`;
 }

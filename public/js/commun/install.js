@@ -2,6 +2,7 @@
 import { $, S, esc } from "./core.js";
 import { go, saveProfile } from "./store.js";
 import { newsPending, termsPending } from "../amis/index.js";
+import { t } from "./i18n.js";
 
 /* ============================================================
    Installation sur l'écran d'accueil
@@ -29,39 +30,35 @@ const ICON_PLUS = '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height=
 // Comptes créés avant le déménagement (30 sept. 2026) : ils ont peut-être encore l'ancienne icône.
 const MOVED_AT = Date.UTC(2026, 8, 30);
 const hadOldIcon = () => !!(S.profile && (S.profile.createdAt || 0) < MOVED_AT) && !/github\.io$/.test(location.hostname);
-const OLD_ICON_STEP = () => IS_IOS
-  ? `<li class="warn"><span class="n">!</span><span><b>Supprime l’ancienne icône</b> : appui long dessus › <b>Supprimer le signet</b> (ou « Supprimer l’app »).</span></li>`
-  : `<li class="warn"><span class="n">!</span><span><b>Supprime l’ancienne icône</b> : appui long dessus › <b>Supprimer</b> (ou « Désinstaller »).</span></li>`;
-const INSTALL_LEAD = "Ajoute l’app à ton écran d’accueil : elle s’ouvre en plein écran, en un toucher, comme une vraie application.";
+const OLD_ICON_STEP = () => `<li class="warn"><span class="n">!</span><span>${t(IS_IOS ? "installation.ancienneIos" : "installation.ancienneAndroid")}</span></li>`;
+const INSTALL_LEAD = t("installation.texte");
 function openInstall(welcome) {
   if (!canInstall()) return;
-  $("installTitle").textContent = welcome ? "Mets l’app sur ton téléphone" : "Installe l’app";
+  $("installTitle").textContent = t(welcome ? "installation.titreBienvenue" : "installation.titre");
   const old = welcome && hadOldIcon();
-  $("installLead").innerHTML = old
-    ? "L’app a une nouvelle adresse ! 🏠 Ajoute la nouvelle icône à ton écran d’accueil, puis <b>supprime l’ancienne</b> : elle ne marche plus."
-    : welcome ? "Bienvenue ! 🏠 Ajoute l’app à ton écran d’accueil pour l’ouvrir en un toucher, en plein écran." : INSTALL_LEAD;
+  $("installLead").innerHTML = old ? t("installation.nouvelleAdresse") : welcome ? t("installation.bienvenue") : INSTALL_LEAD;
   const link = location.origin + location.pathname;
   $("installBody").innerHTML = IN_APP
-    ? `<ol class="steps"><li><span class="n">1</span><span>Tu as ouvert le lien depuis une autre app (Snapchat, Instagram…). Il faut l’ouvrir dans <b>${IS_IOS ? "Safari" : "Chrome"}</b>.</span></li>
-         <li><span class="n">2</span><span>Touche <b>•••</b> ou l’icône <b>${IS_IOS ? "boussole" : "navigateur"}</b>, puis <b>Ouvrir dans ${IS_IOS ? "Safari" : "le navigateur"}</b>.</span></li>
-         <li><span class="n">3</span><span>Tu ne trouves pas ? Copie le lien et colle-le dans ${IS_IOS ? "Safari" : "Chrome"}.</span></li></ol>
-       <button type="button" class="btn primary" id="installCopy" style="width:100%">Copier le lien</button>
+    ? `<ol class="steps"><li><span class="n">1</span><span>${t("installation.autreApp1", { nav: IS_IOS ? "Safari" : "Chrome" })}</span></li>
+         <li><span class="n">2</span><span>${t(IS_IOS ? "installation.autreApp2Ios" : "installation.autreApp2Android")}</span></li>
+         <li><span class="n">3</span><span>${t("installation.autreApp3", { nav: IS_IOS ? "Safari" : "Chrome" })}</span></li></ol>
+       <button type="button" class="btn primary" id="installCopy" style="width:100%">${t("installation.copierLien")}</button>
        <p class="hint" id="installLink" style="text-align:center;user-select:all;word-break:break-all">${esc(link)}</p>`
     : deferredInstall
-    ? `<button type="button" class="btn primary" id="installGo" style="width:100%">Installer l’application</button>`
+    ? `<button type="button" class="btn primary" id="installGo" style="width:100%">${t("installation.installer")}</button>`
     : IS_IOS
-      ? `<ol class="steps"><li><span class="n">1</span><span>Touche <b>Partager</b> en bas de Safari</span><span class="ico">${ICON_SHARE}</span></li>
-         <li><span class="n">2</span><span>Choisis <b>Sur l’écran d’accueil</b></span><span class="ico">${ICON_PLUS}</span></li>
-         <li><span class="n">3</span><span>Touche <b>Ajouter</b>, c’est fait&nbsp;!</span></li></ol>
-         <p class="hint" style="margin-top:6px">Tu ne vois pas « Partager » ? Il est parfois dans le menu <b>•••</b>. Sur un autre navigateur que Safari, ouvre d’abord ce lien dans Safari.</p>`
-      : `<ol class="steps"><li><span class="n">1</span><span>Touche le menu <b>⋮</b> en haut à droite</span></li>
-         <li><span class="n">2</span><span>Choisis <b>Installer l’application</b> ou <b>Ajouter à l’écran d’accueil</b></span><span class="ico">${ICON_PLUS}</span></li></ol>`;
+      ? `<ol class="steps"><li><span class="n">1</span><span>${t("installation.ios1")}</span><span class="ico">${ICON_SHARE}</span></li>
+         <li><span class="n">2</span><span>${t("installation.ios2")}</span><span class="ico">${ICON_PLUS}</span></li>
+         <li><span class="n">3</span><span>${t("installation.ios3")}</span></li></ol>
+         <p class="hint" style="margin-top:6px">${t("installation.iosAide")}</p>`
+      : `<ol class="steps"><li><span class="n">1</span><span>${t("installation.android1")}</span></li>
+         <li><span class="n">2</span><span>${t("installation.android2")}</span><span class="ico">${ICON_PLUS}</span></li></ol>`;
   if (old && !IN_APP) { const ol = $("installBody").querySelector("ol.steps"); if (ol) ol.insertAdjacentHTML("beforeend", OLD_ICON_STEP()); else $("installBody").insertAdjacentHTML("beforeend", `<ol class="steps">${OLD_ICON_STEP()}</ol>`); }
   $("installBackdrop").hidden = false; $("installSheet").hidden = false;
   const cp = $("installCopy");
   if (cp) cp.onclick = async () => {
-    try { await navigator.clipboard.writeText(link); cp.textContent = "Lien copié ✓"; }
-    catch (e) { const r = document.createRange(); r.selectNodeContents($("installLink")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); cp.textContent = "Lien sélectionné : copie-le"; }
+    try { await navigator.clipboard.writeText(link); cp.textContent = t("installation.lienCopie"); }
+    catch (e) { const r = document.createRange(); r.selectNodeContents($("installLink")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); cp.textContent = t("installation.lienSelectionne"); }
   };
   const go = $("installGo");
   if (go) go.onclick = async () => {

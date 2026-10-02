@@ -9,75 +9,77 @@ import { lsGet } from "./install.js";
 import { newsPending, termsPending } from "../amis/index.js";
 import { openDay } from "../seances/index.js";
 import { freshKey, toast } from "../entrainement/index.js";
+import { LANGUE, t } from "./i18n.js";
 
 // sel : sélecteur CSS (ou fonction qui renvoie l'élément). Une étape dont l'élément est absent est sautée.
 // Le fil rouge : une séance libre = Séances › Séance libre › le jour › choisir son sport › ajouter ses exercices.
 const TOURS = {
-  home: { name: "Accueil", sub: "Ton tableau de bord et la barre du bas", steps: [
-    ["#homeStreak", "Choisis combien de séances tu veux faire par semaine : chaque semaine réussie fait grandir ta série 🔥."],
-    ["#homeDash .dash-mus", "Ton tableau de bord en direct : carte musculaire, progression, nutrition, trophées, records, bilan, calendrier. Touche une carte pour l’ouvrir."],
-    ["#tabbar .tab-go", "Le bouton + ouvre directement ta séance du jour."],
-    ["#tabbar", "En bas : Séances (routines, programmes, idées, séance libre), Social et ton profil (« Vous »)."],
-    ["#homeLinks", "Revois ces explications quand tu veux avec « Tutoriel ». Une question ? « Contact »."]] },
-  go: { name: "Séances", sub: "Séance libre, routines, programmes, idées", steps: [
-    ["#goBody .seance-tile[data-go=seances]", "Séance libre : crée ta propre séance n’importe quel jour. Touche le jour dans le calendrier, puis ajoute tes exercices."],
-    ["#goBody .seance-tile[data-go=routines]", "Tes séances enregistrées, à relancer en un toucher."],
-    ["#goBody .seance-tile[data-go=programs]", "Des plans sur plusieurs semaines : l’app te propose la bonne séance à chaque fois."],
-    ["#goBody .seance-tile[data-go=types]", "Des séances toutes prêtes si tu manques d’idées. C’est facultatif !"]] },
-  seances: { name: "Calendrier", sub: "Créer une séance libre, n’importe quel jour", steps: [
-    ["#grid", "Touche le jour de ta séance : aujourd’hui, un jour passé ou à venir."],
-    ["#today", "Ou ce raccourci pour la séance d’aujourd’hui."],
-    ["#list .row", "Pour supprimer une séance, glisse-la vers la droite."]] },
-  "seance-choix": { name: "Créer une séance", sub: "Choisir son sport et ajouter ses exercices", steps: [
-    ["#sheet .disc-grid", "Choisis ton sport. Pas besoin d’idée toute faite : tu construis ta séance toi-même."]] },
+  home: { name: t("tutoriel.pages.home.nom"), sub: t("tutoriel.pages.home.sous"), steps: [
+    ["#homeStreak", t("tutoriel.pages.home.e1")],
+    ["#homeDash .dash-mus", t("tutoriel.pages.home.e2")],
+    ["#tabbar .tab-go", t("tutoriel.pages.home.e3")],
+    ["#tabbar", t("tutoriel.pages.home.e4")],
+    ["#homeLinks", t("tutoriel.pages.home.e5")]] },
+  go: { name: t("tutoriel.pages.go.nom"), sub: t("tutoriel.pages.go.sous"), steps: [
+    ["#goBody .seance-tile[data-go=seances]", t("tutoriel.pages.go.e1")],
+    ["#goBody .seance-tile[data-go=routines]", t("tutoriel.pages.go.e2")],
+    ["#goBody .seance-tile[data-go=programs]", t("tutoriel.pages.go.e3")],
+    ["#goBody .seance-tile[data-go=types]", t("tutoriel.pages.go.e4")]] },
+  seances: { name: t("tutoriel.pages.seances.nom"), sub: t("tutoriel.pages.seances.sous"), steps: [
+    ["#grid", t("tutoriel.pages.seances.e1")],
+    ["#today", t("tutoriel.pages.seances.e2")],
+    ["#list .row", t("tutoriel.pages.seances.e3")]] },
+  "seance-choix": { name: t("tutoriel.pages.seance-choix.nom"), sub: t("tutoriel.pages.seance-choix.sous"), steps: [
+    ["#sheet .disc-grid", t("tutoriel.pages.seance-choix.e1")]] },
   seance: { steps: [
-    ["#sheet [data-a=add-ex]", "Ajoute tes exercices un par un, avec tes séries et tes poids : c’est ta séance, à ta façon."],
-    [() => { const c = document.querySelector("#sheet [data-a=type]"); return c && c.parentElement; }, "Choisis le type (Push, Pull, Jambes…) pour t’y retrouver dans le calendrier."],
-    ["#sheet [data-a=change-disc]", "Pas le bon sport ? Reviens au choix de l’activité ici."],
-    ["#sheet [data-a=close]", "Tout s’enregistre tout seul. Pour effacer la séance : « Supprimer la séance », tout en bas."]] },
-  routines: { name: "Mes routines", sub: "Tes séances enregistrées, prêtes à lancer", steps: [
-    ["#routinesBody [data-rnew]", "Enregistre tes séances préférées pour les relancer en un toucher."],
-    ["#routinesBody [data-rgo]", "Lance une routine : tes poids de la dernière fois sont déjà remplis."]] },
-  programs: { name: "Programmes", sub: "Des plans sur plusieurs semaines", steps: [
-    ["#programsBody .list .idea", "Un plan sur plusieurs semaines : l’app te propose la bonne séance à chaque fois."],
-    ["#programsBody [data-pgstart]", "Choisis-en un pour commencer."]] },
-  types: { name: "Idées de séances", sub: "Des séances toutes prêtes (facultatif)", steps: [
-    ["#typesGrid", "Des séances toutes prêtes, par activité. C’est facultatif : tu peux créer les tiennes avec « Séance libre »."]] },
+    ["#sheet [data-a=add-ex]", t("tutoriel.pages.seance.e1")],
+    [() => { const c = document.querySelector("#sheet [data-a=type]"); return c && c.parentElement; }, t("tutoriel.pages.seance.e2")],
+    ["#sheet [data-a=change-disc]", t("tutoriel.pages.seance.e3")],
+    ["#sheet [data-a=close]", t("tutoriel.pages.seance.e4")]] },
+  routines: { name: t("tutoriel.pages.routines.nom"), sub: t("tutoriel.pages.routines.sous"), steps: [
+    ["#routinesBody [data-rnew]", t("tutoriel.pages.routines.e1")],
+    ["#routinesBody [data-rgo]", t("tutoriel.pages.routines.e2")]] },
+  programs: { name: t("tutoriel.pages.programs.nom"), sub: t("tutoriel.pages.programs.sous"), steps: [
+    ["#programsBody .list .idea", t("tutoriel.pages.programs.e1")],
+    ["#programsBody [data-pgstart]", t("tutoriel.pages.programs.e2")]] },
+  types: { name: t("tutoriel.pages.types.nom"), sub: t("tutoriel.pages.types.sous"), steps: [
+    ["#typesGrid", t("tutoriel.pages.types.e1")]] },
   hub: { steps: [
-    ["#hubBody [data-try]", "« Essayer aujourd’hui » copie cette séance dans ton calendrier du jour."]] },
-  records: { name: "Mes records", sub: "Tes meilleures perfs", steps: [
-    ["#recGrid", "Choisis une catégorie pour voir et ajouter tes records."]] },
-  progress: { name: "Ma progression", sub: "Tes courbes séance après séance", steps: [
-    ["#progGrid", "Choisis une catégorie pour voir tes courbes, séance après séance."]] },
-  muscles: { name: "Carte musculaire", sub: "Les muscles travaillés", steps: [
-    ["#musBody .chips", "Regarde les 7 ou les 30 derniers jours."],
-    ["#musBody .bodies", "Plus c’est rouge, plus le muscle a travaillé. Touche un muscle pour voir ses séries."]] },
-  recap: { name: "Bilan du mois", sub: "Tes chiffres à partager", steps: [
-    ["#recapBody", "Ton mois en chiffres."],
-    ["#recapShare", "Crée une image à partager en story."]] },
-  social: { name: "Social", sub: "Fil d’actu, amis, défis, messages", steps: [
-    ["#socialBody .soc-pills", "Tes amis, les défis et les classements."],
-    ["#v-social .soc-head", "Cherche des amis 🔍 ou ouvre tes messages 💬."],
-    ["#feedBody", "Le fil d’actu : les dernières séances de tes amis. Réagis et commente !"]] },
-  friends: { name: "Amis", sub: "Ajouter des amis avec leur code", steps: [
-    ["#friendsBody .code-card", "Donne ton code ami pour qu’on t’ajoute."],
-    ["#friendSearch", "Ou entre le code d’un ami pour l’ajouter."]] },
-  challenges: { name: "Défis", sub: "Se lancer des défis entre amis", steps: [
-    ["#chBody [data-chnew]", "Lance un défi à tes amis : séances, km, volume…"]] },
-  nutrition: { name: "Nutrition", sub: "Compléments et créatine", steps: [
-    ["#v-nutrition .menu", "Note tes compléments et coche ta créatine."]] },
-  creatine: { name: "Créatine", sub: "Cocher sa prise du jour", steps: [
-    ["#creaBtn", "Touche ce bouton quand tu as pris ta créatine du jour."],
-    ["#creaGrid", "Oublié un jour ? Touche la date pour la cocher."]] },
-  complements: { name: "Compléments", sub: "Noter ce que tu prends", steps: [
-    ["#cpChips", "Un toucher pour ajouter un complément."],
-    ["#cpForm", "Ou ajoute-en un autre, avec sa dose."]] },
-  contact: { name: "Contact", sub: "M’écrire une idée, un bug…", steps: [
-    ["#v-contact [data-go=contactform]", "Une idée, un bug, une question : écris-moi ici."]] },
-  profile: { name: "Profil", sub: "Tes infos, couleurs et réglages", steps: [
-    ["#pfView", "Ton profil : tes activités, tes amis. « Partager » affiche ton QR code pour qu’on t’ajoute."],
-    ["#themeCard", "Choisis ta couleur et le mode d’affichage."],
-    ["#tutoAgain", "Revois les tutoriels quand tu veux."]] }
+    ["#hubBody [data-try]", t("tutoriel.pages.hub.e1")]] },
+  records: { name: t("tutoriel.pages.records.nom"), sub: t("tutoriel.pages.records.sous"), steps: [
+    ["#recGrid", t("tutoriel.pages.records.e1")]] },
+  progress: { name: t("tutoriel.pages.progress.nom"), sub: t("tutoriel.pages.progress.sous"), steps: [
+    ["#progGrid", t("tutoriel.pages.progress.e1")]] },
+  muscles: { name: t("tutoriel.pages.muscles.nom"), sub: t("tutoriel.pages.muscles.sous"), steps: [
+    ["#musBody .chips", t("tutoriel.pages.muscles.e1")],
+    ["#musBody .bodies", t("tutoriel.pages.muscles.e2")]] },
+  recap: { name: t("tutoriel.pages.recap.nom"), sub: t("tutoriel.pages.recap.sous"), steps: [
+    ["#recapBody", t("tutoriel.pages.recap.e1")],
+    ["#recapShare", t("tutoriel.pages.recap.e2")]] },
+  social: { name: t("tutoriel.pages.social.nom"), sub: t("tutoriel.pages.social.sous"), steps: [
+    ["#socialBody .soc-pills", t("tutoriel.pages.social.e1")],
+    ["#v-social .soc-head", t("tutoriel.pages.social.e2")],
+    ["#feedBody", t("tutoriel.pages.social.e3")]] },
+  friends: { name: t("tutoriel.pages.friends.nom"), sub: t("tutoriel.pages.friends.sous"), steps: [
+    ["#friendsBody .code-card", t("tutoriel.pages.friends.e1")],
+    ["#friendSearch", t("tutoriel.pages.friends.e2")]] },
+  challenges: { name: t("tutoriel.pages.challenges.nom"), sub: t("tutoriel.pages.challenges.sous"), steps: [
+    ["#chBody [data-chnew]", t("tutoriel.pages.challenges.e1")]] },
+  nutrition: { name: t("tutoriel.pages.nutrition.nom"), sub: t("tutoriel.pages.nutrition.sous"), steps: [
+    ["#v-nutrition .menu", t("tutoriel.pages.nutrition.e1")]] },
+  creatine: { name: t("tutoriel.pages.creatine.nom"), sub: t("tutoriel.pages.creatine.sous"), steps: [
+    ["#creaBtn", t("tutoriel.pages.creatine.e1")],
+    ["#creaGrid", t("tutoriel.pages.creatine.e2")]] },
+  complements: { name: t("tutoriel.pages.complements.nom"), sub: t("tutoriel.pages.complements.sous"), steps: [
+    ["#cpChips", t("tutoriel.pages.complements.e1")],
+    ["#cpForm", t("tutoriel.pages.complements.e2")]] },
+  contact: { name: t("tutoriel.pages.contact.nom"), sub: t("tutoriel.pages.contact.sous"), steps: [
+    ["#v-contact [data-go=contactform]", t("tutoriel.pages.contact.e1")]] },
+  profile: { name: t("tutoriel.pages.profile.nom"), sub: t("tutoriel.pages.profile.sous"), steps: [
+    ["#pfView", t("tutoriel.pages.profile.e1")],
+    ["#themeCard", t("tutoriel.pages.profile.e2")],
+    ["#langCard", t("tutoriel.pages.profile.langue")],
+    ["#tutoAgain", t("tutoriel.pages.profile.e3")]] }
 };
 // Ordre de la page « Tutoriel » ; « seance-choix » ouvre la séance du jour (fiche vide) puis enchaîne sur « seance ».
 const LIST = ["home", "go", "seances", "seance-choix", "routines", "programs", "types", "records", "progress", "muscles", "recap",
@@ -85,7 +87,7 @@ const LIST = ["home", "go", "seances", "seance-choix", "routines", "programs", "
 
 const off = () => !!lsGet("tours-off");           // tests automatiques uniquement
 // tours[id] = heure où le tutoriel a été vu ; une remise à zéro (toursReset) rend tout « pas encore vu ».
-const seen = id => { const p = S.profile || {}, t = (p.tours || {})[id]; return !!t && (t === true ? 1 : t) > (p.toursReset || 0); };
+const seen = id => { const p = S.profile || {}, vu = (p.tours || {})[id]; return !!vu && (vu === true ? 1 : vu) > (p.toursReset || 0); };
 let T = null, waitTimer = null, replay = new Set();
 
 // Une autre fenêtre est ouverte (Nouveautés, conditions, installation, assistant…) : on attend qu'elle se ferme.
@@ -103,7 +105,7 @@ function stillHere(id) {
   return S.screen === id;
 }
 function want(id) {
-  const t = TOURS[id]; if (!t || T || !S.profile || off()) return false;
+  const tour = TOURS[id]; if (!tour || T || !S.profile || off()) return false;
   return replay.has(id) || !seen(id);
 }
 // Appelé à chaque ouverture de page et à chaque affichage de la fiche séance.
@@ -136,10 +138,10 @@ function show() {
   if (!el) { if (T.i < T.steps.length - 1) { T.steps.splice(T.i, 1); show(); } else end(); return; }
   el.scrollIntoView({ block: "center", inline: "nearest" });
   $("tourStep").textContent = `${T.i + 1}/${T.steps.length}`;
-  // Espaces insécables : un guillemet ou un « ! » ne se retrouve jamais seul en début de ligne.
-  $("tourText").textContent = st.text.replace(/« /g, "«\u00a0").replace(/ ([»!?:;])/g, "\u00a0$1");
+  // Français : espaces insécables, un guillemet ou un « ! » ne se retrouve jamais seul en début de ligne.
+  $("tourText").textContent = LANGUE === "fr" ? st.text.replace(/« /g, "«\u00a0").replace(/ ([»!?:;])/g, "\u00a0$1") : st.text;
   $("tourPrev").style.visibility = T.i ? "visible" : "hidden";
-  $("tourNext").textContent = T.i === T.steps.length - 1 ? "Terminer" : "Suivant";
+  $("tourNext").textContent = t(T.i === T.steps.length - 1 ? "tutoriel.terminer" : "commun.suivant");
   place();
   $("tourNext").focus({ preventScroll: true });
 }
@@ -181,8 +183,8 @@ addEventListener("scroll", () => requestAnimationFrame(place), true);
 
 /* ---------- Page « Tutoriel » : revoir une partie ---------- */
 function renderTutos() {
-  $("tutosList").innerHTML = LIST.map(id => { const t = TOURS[id];
-    return `<button class="menu-card" data-tour="${id}"><span class="mark${seen(id) ? " ok" : ""}">${seen(id) ? "✓" : "?"}</span><span class="mc"><b>${esc(t.name)}</b><span class="s">${esc(t.sub)}</span></span><span class="arrow" aria-hidden="true">›</span></button>`; }).join("");
+  $("tutosList").innerHTML = LIST.map(id => { const tour = TOURS[id];
+    return `<button class="menu-card" data-tour="${id}"><span class="mark${seen(id) ? " ok" : ""}">${seen(id) ? "✓" : "?"}</span><span class="mc"><b>${esc(tour.name)}</b><span class="s">${esc(tour.sub)}</span></span><span class="arrow" aria-hidden="true">›</span></button>`; }).join("");
 }
 $("tutosList").addEventListener("click", e => {
   const b = e.target.closest("[data-tour]"); if (!b) return;
@@ -196,7 +198,7 @@ function maybeResetTours() {
   if (!new URLSearchParams(location.search).has("reset-tutoriels") || !S.profile) return;
   saveProfile({ toursReset: Date.now() });
   history.replaceState(null, "", location.pathname);
-  toast("✓ Tutoriels remis à zéro");
+  toast(t("tutoriel.remisAZero"));
 }
 
 export { maybeResetTours, renderTutos, tourCheck };

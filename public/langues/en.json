@@ -1,0 +1,1502 @@
+{
+  "_langue": {
+    "nom": "English",
+    "locale": "en-US"
+  },
+  "app": {
+    "titre": "AS Sport · The Athlete’s Planner",
+    "description": "Log your workouts and nutrition, and track your progress.",
+    "devise": "The Athlete’s Planner"
+  },
+  "secours": {
+    "lent": "The app is taking a while to start.",
+    "reparer": "Repair and reload",
+    "donnees": "Your data won’t be deleted."
+  },
+  "config": {
+    "badge": "Setup",
+    "titre": "Firebase isn’t set up yet",
+    "texte": "Paste the <code>firebaseConfig</code> block from your Firebase console into <code>public/firebase-config.js</code>, then redeploy. README.md walks you through each step."
+  },
+  "commun": {
+    "chargement": "Loading",
+    "emailExemple": "name@example.com",
+    "masquerMessage": "Hide this message",
+    "moisPrecedent": "Previous month",
+    "moisSuivant": "Next month",
+    "joursCourts": {
+      "lun": "Mon",
+      "mar": "Tue",
+      "mer": "Wed",
+      "jeu": "Thu",
+      "ven": "Fri",
+      "sam": "Sat",
+      "dim": "Sun"
+    },
+    "jourPrecedent": "Previous day",
+    "jourSuivant": "Next day",
+    "ajouter": "Add",
+    "retour": "Back",
+    "envoyer": "Send",
+    "annuler": "Cancel",
+    "enregistrer": "Save",
+    "precedent": "Previous",
+    "suivant": "Next",
+    "horsConnexion": "Offline · everything will sync when you’re back online",
+    "fermer": "Close",
+    "passer": "Skip",
+    "plusTard": "Later",
+    "fermerMessage": "Close this message",
+    "jamais": "never",
+    "dureeHeures": "{h}h {m}",
+    "echecReessaie": "Failed, try again",
+    "ok": "OK",
+    "aujourdhui": "Today",
+    "erreur": "Something went wrong. Try again.",
+    "unInstant": "One moment…",
+    "aHeure": "at {heure}",
+    "confirmer": "Confirm",
+    "chargementPoints": "Loading…"
+  },
+  "connexion": {
+    "bienvenue": "Welcome",
+    "accroche": "Workouts, nutrition and progress, all in one place.",
+    "ongletConnexion": "Log in",
+    "ongletInscription": "Sign up",
+    "email": "Email",
+    "motDePasse": "Password",
+    "motDePasseMin": "At least 6 characters",
+    "seConnecter": "Log in",
+    "oublie": "Forgot your password?",
+    "erreurChargement": "Couldn’t load your account. Check your connection and try again.",
+    "creerCompte": "Create my account",
+    "erreurs": {
+      "invalid-email": "This email address isn’t valid.",
+      "email-already-in-use": "An account already exists with this email. Log in instead.",
+      "weak-password": "Choose a password of at least 6 characters.",
+      "invalid-credential": "Incorrect email or password.",
+      "wrong-password": "Incorrect password.",
+      "user-not-found": "No account with this email.",
+      "too-many-requests": "Too many attempts. Wait a few minutes and try again.",
+      "network-request-failed": "No internet connection. Check your network.",
+      "missing-password": "Enter your password."
+    },
+    "oublieSansEmail": "Enter your email above, then tap “Forgot your password?”.",
+    "oublieEnvoye": "If an account exists for {email}, an email is on its way (from: noreply@agenda-du-sportif.firebaseapp.com). Check your spam or junk folder too; it arrives within 1 to 5 minutes."
+  },
+  "legal": {
+    "conditions": "Terms of use",
+    "confidentialite": "Privacy"
+  },
+  "inscription": {
+    "badge": "Last step",
+    "titre": "Your <span>profile</span>",
+    "presenteToi": "Introduce yourself",
+    "intro": "Your account is yours alone: all your data is there every time you log in, on all your devices.",
+    "accepte": "I’m at least 15 years old and I accept the <a href=\"conditions.html\" target=\"_blank\" rel=\"noopener\">terms of use</a> and the <a href=\"confidentialite.html\" target=\"_blank\" rel=\"noopener\">privacy policy</a>.",
+    "terminer": "Finish signing up",
+    "choisisPseudo": "Choose a username to finish signing up.",
+    "accepteConditions": "Accept the terms of use to finish signing up.",
+    "erreur": "Couldn’t save your profile. Check your connection and try again."
+  },
+  "installation": {
+    "banniereTitre": "Install the app on your phone",
+    "banniereTexte": "One tap away, full screen",
+    "titre": "Install the app",
+    "gratuit": "AS Sport · free",
+    "texte": "Add the app to your home screen: it opens full screen in one tap, just like a real app.",
+    "pleinEcran": "Full screen",
+    "unToucher": "One-tap access",
+    "horsConnexion": "Works offline",
+    "ancienneIos": "<b>Delete the old icon</b>: long-press it › <b>Delete Bookmark</b> (or “Delete App”).",
+    "ancienneAndroid": "<b>Delete the old icon</b>: long-press it › <b>Remove</b> (or “Uninstall”).",
+    "titreBienvenue": "Put the app on your phone",
+    "nouvelleAdresse": "The app has a new address! 🏠 Add the new icon to your home screen, then <b>delete the old one</b>: it no longer works.",
+    "bienvenue": "Welcome! 🏠 Add the app to your home screen to open it in one tap, full screen.",
+    "autreApp1": "You opened the link from another app (Snapchat, Instagram…). You need to open it in <b>{nav}</b>.",
+    "autreApp2Ios": "Tap <b>•••</b> or the <b>compass</b> icon, then <b>Open in Safari</b>.",
+    "autreApp2Android": "Tap <b>•••</b> or the <b>browser</b> icon, then <b>Open in browser</b>.",
+    "autreApp3": "Can’t find it? Copy the link and paste it into {nav}.",
+    "copierLien": "Copy link",
+    "installer": "Install the app",
+    "ios1": "Tap <b>Share</b> at the bottom of Safari",
+    "ios2": "Choose <b>Add to Home Screen</b>",
+    "ios3": "Tap <b>Add</b>, and you’re done!",
+    "iosAide": "Don’t see “Share”? It’s sometimes in the <b>•••</b> menu. In a browser other than Safari, open this link in Safari first.",
+    "android1": "Tap the <b>⋮</b> menu at the top right",
+    "android2": "Choose <b>Install app</b> or <b>Add to Home screen</b>",
+    "lienCopie": "Link copied ✓",
+    "lienSelectionne": "Link selected: copy it"
+  },
+  "tutoriel": {
+    "titre": "Tutorial",
+    "intro": "Pick a part of the app: we’ll take you there and show you around step by step.",
+    "passer": "Skip the tutorial",
+    "pages": {
+      "home": {
+        "nom": "Home",
+        "sous": "Your dashboard and the bottom bar",
+        "e1": "Choose how many workouts you want to do per week: every successful week grows your streak 🔥.",
+        "e2": "Your live dashboard: muscle map, progress, nutrition, trophies, PRs, recap, calendar. Tap a card to open it.",
+        "e3": "The + button opens today’s workout directly.",
+        "e4": "At the bottom: Workouts (routines, programs, ideas, free workout), Social and your profile (“You”).",
+        "e5": "Replay these tips anytime with “Tutorial”. A question? “Contact”."
+      },
+      "go": {
+        "nom": "Workouts",
+        "sous": "Free workout, routines, programs, ideas",
+        "e1": "Free workout: build your own workout on any day. Tap the day in the calendar, then add your exercises.",
+        "e2": "Your saved workouts, ready to start again in one tap.",
+        "e3": "Multi-week plans: the app suggests the right workout every time.",
+        "e4": "Ready-made workouts if you’re short on ideas. It’s optional!"
+      },
+      "seances": {
+        "nom": "Calendar",
+        "sous": "Create a free workout on any day",
+        "e1": "Tap the day of your workout: today, a past day or an upcoming one.",
+        "e2": "Or this shortcut for today’s workout.",
+        "e3": "To delete a workout, swipe it to the right."
+      },
+      "seance-choix": {
+        "nom": "Create a workout",
+        "sous": "Choose your sport and add your exercises",
+        "e1": "Choose your sport. No need for a ready-made plan: you build your workout yourself."
+      },
+      "seance": {
+        "e1": "Add your exercises one by one, with your sets and weights: it’s your workout, your way.",
+        "e2": "Choose the type (Push, Pull, Legs…) to find your way around the calendar.",
+        "e3": "Wrong sport? Go back to choosing the activity here.",
+        "e4": "Everything saves automatically. To erase the workout: “Delete workout”, at the very bottom."
+      },
+      "routines": {
+        "nom": "My routines",
+        "sous": "Your saved workouts, ready to go",
+        "e1": "Save your favorite workouts to start them again in one tap.",
+        "e2": "Start a routine: your weights from last time are already filled in."
+      },
+      "programs": {
+        "nom": "Programs",
+        "sous": "Multi-week plans",
+        "e1": "A multi-week plan: the app suggests the right workout every time.",
+        "e2": "Pick one to get started."
+      },
+      "types": {
+        "nom": "Workout ideas",
+        "sous": "Ready-made workouts (optional)",
+        "e1": "Ready-made workouts, by activity. It’s optional: you can create your own with “Free workout”."
+      },
+      "hub": {
+        "e1": "“Try today” copies this workout into today’s calendar."
+      },
+      "records": {
+        "nom": "My PRs",
+        "sous": "Your best performances",
+        "e1": "Pick a category to view and add your PRs."
+      },
+      "progress": {
+        "nom": "My progress",
+        "sous": "Your charts, workout after workout",
+        "e1": "Pick a category to see your charts, workout after workout."
+      },
+      "muscles": {
+        "nom": "Muscle map",
+        "sous": "The muscles you’ve worked",
+        "e1": "View the last 7 or 30 days.",
+        "e2": "The redder it is, the more the muscle has worked. Tap a muscle to see its sets."
+      },
+      "recap": {
+        "nom": "Monthly recap",
+        "sous": "Your numbers to share",
+        "e1": "Your month in numbers.",
+        "e2": "Create an image to share in a story."
+      },
+      "social": {
+        "nom": "Social",
+        "sous": "Feed, friends, challenges, messages",
+        "e1": "Your friends, challenges and leaderboards.",
+        "e2": "Find friends 🔍 or open your messages 💬.",
+        "e3": "The feed: your friends’ latest workouts. React and comment!"
+      },
+      "friends": {
+        "nom": "Friends",
+        "sous": "Add friends with their code",
+        "e1": "Share your friend code so people can add you.",
+        "e2": "Or enter a friend’s code to add them."
+      },
+      "challenges": {
+        "nom": "Challenges",
+        "sous": "Challenge your friends",
+        "e1": "Challenge your friends: workouts, km, volume…"
+      },
+      "nutrition": {
+        "nom": "Nutrition",
+        "sous": "Supplements and creatine",
+        "e1": "Log your supplements and check off your creatine."
+      },
+      "creatine": {
+        "nom": "Creatine",
+        "sous": "Check off today’s dose",
+        "e1": "Tap this button once you’ve taken today’s creatine.",
+        "e2": "Forgot a day? Tap the date to check it off."
+      },
+      "complements": {
+        "nom": "Supplements",
+        "sous": "Log what you take",
+        "e1": "One tap to add a supplement.",
+        "e2": "Or add another one, with its dose."
+      },
+      "contact": {
+        "nom": "Contact",
+        "sous": "Send me an idea, a bug…",
+        "e1": "An idea, a bug, a question: write to me here."
+      },
+      "profile": {
+        "nom": "Profile",
+        "sous": "Your info, colors and settings",
+        "e1": "Your profile: your activities, your friends. “Share” shows your QR code so people can add you.",
+        "e2": "Choose your color and display mode.",
+        "e3": "Replay the tutorials whenever you like.",
+        "langue": "Choose the app’s language: it follows you on all your devices."
+      }
+    },
+    "terminer": "Finish",
+    "remisAZero": "✓ Tutorials reset"
+  },
+  "contact": {
+    "titre": "Contact",
+    "formTitre": "Contact me",
+    "formTexte": "Help, complaint, idea or problem: your message comes straight to me.",
+    "mesMessages": "My sent messages",
+    "objet": "Subject",
+    "objetMessage": "Message subject",
+    "explique": "Tell me in a few lines…",
+    "emailReponse": "Your email for the reply (optional)",
+    "envoye": "Sent",
+    "merci": "Message sent, thank you!",
+    "merciTexte": "I’ll read it as soon as I can. You’ll find your messages and their status on the Contact page.",
+    "retourAccueil": "Back to home",
+    "lu": "Read",
+    "choisisObjet": "Choose a subject for your message.",
+    "ecrisMessage": "Write your message before sending it.",
+    "envoi": "Sending…",
+    "echec": "Your message couldn’t be sent. Check your connection and try again."
+  },
+  "nav": {
+    "seances": "Workouts",
+    "accueil": "Home",
+    "nutrition": "Nutrition",
+    "idees": "Workout ideas",
+    "routines": "My routines",
+    "social": "Social",
+    "defis": "Challenges",
+    "amis": "Friends",
+    "records": "My PRs",
+    "progression": "My progress",
+    "contact": "Contact",
+    "profil": "Profile",
+    "admin": "Admin"
+  },
+  "nutrition": {
+    "titre": "Nutrition",
+    "rienAujourdhui": "Nothing logged today",
+    "priseA": "Taken today at {heure}",
+    "prise": "Taken today",
+    "pasPrise": "Not taken yet today"
+  },
+  "complements": {
+    "titre": "Supplements",
+    "ajoutRapide": "Quick add",
+    "autre": "Other supplement",
+    "nom": "Name",
+    "nomExemple": "e.g. Whey",
+    "dose": "Dose",
+    "doseExemple": "e.g. 30 g",
+    "prisCeJour": "Taken that day",
+    "aujourdhuiDate": "today, {date}",
+    "prisCeJourN": "Taken that day · {n}",
+    "doseNonPrecisee": "No dose given",
+    "retirer": "Remove",
+    "rien": "Nothing logged that day. Tap a supplement above to add it."
+  },
+  "creatine": {
+    "titre": "Creatine",
+    "calendrier": "Creatine calendar",
+    "oublie": "Forgot another day? Tap the date to check or uncheck it.",
+    "doseQuotidienne": "Daily dose",
+    "enGrammes": "in grams",
+    "prise": "Taken",
+    "aPrendre": "To take",
+    "toucherConfirmer": "Tap to confirm<br>{dose} g today",
+    "annuler": "Tap again to undo.",
+    "priseAria": ", taken",
+    "daffilee_one": "day in a row",
+    "daffilee_other": "days in a row",
+    "joursCeMois": "days this month",
+    "grammesCeMois": "g this month"
+  },
+  "idees": {
+    "titre": "Workout ideas",
+    "intro": "Pick an activity to see workout ideas to try."
+  },
+  "routines": {
+    "routine": "Routine"
+  },
+  "programmes": {
+    "titre": "Programs"
+  },
+  "muscles": {
+    "titre": "Muscle map",
+    "vueFace": "Front view",
+    "vueDos": "Back view",
+    "niveaux": {
+      "n0": "Not worked",
+      "n1": "A little",
+      "n2": "Well",
+      "n3": "A lot",
+      "n4": "Heavily"
+    },
+    "derniersJours": "Last {n} days",
+    "face": "Front",
+    "dos": "Back",
+    "toucher": "Tap a muscle to see how many sets it got.",
+    "vide": "No workouts in this period: your muscles will light up as you train.",
+    "aTravailler": "To work on",
+    "aucuneSerie": "No sets for these muscles in the last {n} days.",
+    "seriesParMuscle": "Sets per muscle",
+    "calcul": "A set counts as 1 for the exercise’s main muscles and 0.5 for the assisting muscles.",
+    "seriesSur_one": "{n} set in the last {jours} days",
+    "seriesSur_other": "{n} sets in the last {jours} days"
+  },
+  "bilan": {
+    "titre": "Monthly recap",
+    "vide": "No workouts in {mois}. Your recap will appear here after your first workout.",
+    "seances_one": "workout",
+    "seances_other": "workouts",
+    "joursActifs_one": "active day",
+    "joursActifs_other": "active days",
+    "recordsBattus_one": "PR set",
+    "recordsBattus_other": "PRs set",
+    "tonnesSoulevees": "lifted",
+    "kgSouleves": "kg lifted",
+    "kmCourus": "km run",
+    "semainesRecord": "🔥 weeks (best)",
+    "moisAvant": "Compared with last month",
+    "dePlus_one": "{n} more workout",
+    "dePlus_other": "{n} more workouts",
+    "deMoins_one": "{n} fewer workout",
+    "deMoins_other": "{n} fewer workouts",
+    "autant": "Same number of workouts",
+    "activiteFavorite": "Favorite activity",
+    "exercicePlusFait": "Most done exercise",
+    "fois_one": "{nom} ({n} time)",
+    "fois_other": "{nom} ({n} times)",
+    "musclePlusTravaille": "Most worked muscle",
+    "tempsCourse": "Running time",
+    "partager": "📲 Share as a story",
+    "partagerAide": "An image of your recap is created: share it on Insta, Snap or WhatsApp.",
+    "apercu": "Preview of the recap image",
+    "image": {
+      "titre": "MY MONTHLY RECAP",
+      "seances": "WORKOUTS",
+      "joursActifs": "ACTIVE DAYS",
+      "souleves": "LIFTED",
+      "courus": "RUN",
+      "records": "PRs SET",
+      "semaines": "🔥 WEEKS",
+      "favori": "Favorite exercise: {nom}",
+      "devise1": "THE ATHLETE’S ",
+      "devise2": "PLANNER"
+    },
+    "creation": "Creating the image…",
+    "fichier": "recap-{mois}",
+    "titrePartage": "My monthly recap",
+    "appuiLong": "You can also long-press the image to save it.",
+    "telechargee": "Image downloaded. On iPhone, long-press the image to save it.",
+    "impossible": "Couldn’t create the image. Try again."
+  },
+  "trophees": {
+    "titre": "My trophies",
+    "familles": {
+      "seances": "Workouts",
+      "regularite": "Consistency",
+      "records": "PRs",
+      "variete": "Variety",
+      "course": "Running",
+      "volume": "Volume"
+    },
+    "liste": {
+      "s1": {
+        "nom": "First step",
+        "desc": "Your first logged workout"
+      },
+      "s10": {
+        "nom": "Regular",
+        "desc": "{n} workouts"
+      },
+      "s25": {
+        "nom": "Dedicated",
+        "desc": "{n} workouts"
+      },
+      "s50": {
+        "nom": "Machine",
+        "desc": "{n} workouts"
+      },
+      "s100": {
+        "nom": "Legend",
+        "desc": "{n} workouts"
+      },
+      "w2": {
+        "nom": "Up and running",
+        "desc": "Weekly goal hit {n} weeks in a row"
+      },
+      "w4": {
+        "nom": "One month",
+        "desc": "{n} weeks in a row"
+      },
+      "w8": {
+        "nom": "Discipline",
+        "desc": "{n} weeks in a row"
+      },
+      "w12": {
+        "nom": "Unstoppable",
+        "desc": "{n} weeks in a row"
+      },
+      "r1": {
+        "nom": "First PR",
+        "desc": "A PR set during a workout"
+      },
+      "r10": {
+        "nom": "Hunter",
+        "desc": "{n} PRs set"
+      },
+      "r25": {
+        "nom": "Collector",
+        "desc": "{n} PRs set"
+      },
+      "d3": {
+        "nom": "All-rounder",
+        "desc": "{n} different activities done"
+      },
+      "d5": {
+        "nom": "Complete athlete",
+        "desc": "All {n} of the app’s activities done"
+      },
+      "k10": {
+        "nom": "First km",
+        "desc": "{n} km run in total"
+      },
+      "k25": {
+        "nom": "Enduring",
+        "desc": "{n} km run in total"
+      },
+      "k50": {
+        "nom": "Long haul",
+        "desc": "{n} km run in total"
+      },
+      "k100": {
+        "nom": "Centurion",
+        "desc": "{n} km run in total"
+      },
+      "k200": {
+        "nom": "Ultra",
+        "desc": "{n} km run in total"
+      },
+      "k500": {
+        "nom": "Globetrotter",
+        "desc": "{n} km run in total"
+      },
+      "t10": {
+        "nom": "10 tons",
+        "desc": "{n} tons lifted in total in the gym"
+      },
+      "t25": {
+        "nom": "Strong",
+        "desc": "{n} tons lifted in total"
+      },
+      "t50": {
+        "nom": "Brute force",
+        "desc": "{n} tons lifted in total"
+      },
+      "t100": {
+        "nom": "Titan",
+        "desc": "{n} tons lifted in total"
+      },
+      "t200": {
+        "nom": "Colossus",
+        "desc": "{n} tons lifted in total"
+      },
+      "t500": {
+        "nom": "Hercules",
+        "desc": "{n} tons lifted in total"
+      }
+    },
+    "atteint": "Done!",
+    "bravo_one": "{n} workout this week, well done.",
+    "bravo_other": "{n} workouts this week, well done.",
+    "debloque": "Trophy unlocked",
+    "semAbrege": "wks",
+    "bandeau": "My trophies · {n}/{total}",
+    "prochain": "Next: {nom} ({etat})",
+    "tous": "All unlocked, respect!",
+    "intro_one": "{n} of {total} unlocked, grouped by family. Tap a badge for details.",
+    "intro_other": "{n} of {total} unlocked, grouped by family. Tap a badge for details.",
+    "obtenuLe": "Earned on {date}",
+    "obtenu": "Earned",
+    "ariaObtenu": "{nom}: earned",
+    "ariaADebloquer": "{nom}: locked",
+    "ariaBarre": "{v} of {objectif}"
+  },
+  "social": {
+    "titre": "Social",
+    "rechercherAmis": "Find friends"
+  },
+  "messages": {
+    "titre": "Messages"
+  },
+  "defis": {
+    "titre": "Challenges",
+    "defi": "Challenge"
+  },
+  "classements": {
+    "titre": "Leaderboards"
+  },
+  "amis": {
+    "titre": "Friends"
+  },
+  "partage": {
+    "titre": "Share my profile"
+  },
+  "seances": {
+    "calendrier": "Calendar",
+    "noterDuJour": "Log today’s workout",
+    "types": "Types",
+    "seance": "Workout",
+    "court": {
+      "course": "Run",
+      "calis": "Calis",
+      "muscu": "Gym"
+    },
+    "nonEnregistre": "Not saved: check your connection"
+  },
+  "conversation": {
+    "plusOptions": "More options",
+    "voirSeances": "See their workouts",
+    "signaler": "Report conversation",
+    "bloquer": "Block",
+    "ecrire": "Write a message…",
+    "tonMessage": "Your message"
+  },
+  "records": {
+    "intro": "Pick a category to view and add your PRs."
+  },
+  "progression": {
+    "intro": "Pick a category to see your charts, workout after workout."
+  },
+  "crossfit": {
+    "noterWod": "Log today’s WOD",
+    "mesRecords": "My PRs (1RM)",
+    "wodReference": "Benchmark WODs",
+    "wodReferenceTexte": "The “Girls” and the “Hero WODs”: redo them regularly to measure your progress. Loads shown men / women.",
+    "score": {
+      "tours_one": "{n} round",
+      "tours_other": "{n} rounds",
+      "toursReps_one": "{n} round + {reps}",
+      "toursReps_other": "{n} rounds + {reps}",
+      "emom_one": "{n} min completed",
+      "emom_other": "{n} min completed",
+      "reps_one": "{n} rep",
+      "reps_other": "{n} reps"
+    },
+    "formats": {
+      "fortime": "For Time",
+      "amrap": "AMRAP",
+      "emom": "EMOM",
+      "tabata": "Tabata",
+      "chipper": "Chipper",
+      "force": "Strength"
+    },
+    "formatsAide": {
+      "fortime": "Finish the work as fast as possible. Your score = your time.",
+      "amrap": "“As Many Rounds As Possible” in the time given.",
+      "emom": "“Every Minute On the Minute”: one block at the start of each minute, rest for the remainder.",
+      "tabata": "8 rounds of 20 s work / 10 s rest per movement.",
+      "chipper": "A long list of movements to chip away at once through, for time.",
+      "force": "Heavy lifting (e.g. 5×5, 1RM). Your score = your max load."
+    },
+    "bench": {
+      "fran": "21-15-9: Thrusters (43/29 kg), Pull-ups",
+      "grace": "30 Clean & jerks (61/43 kg)",
+      "isabel": "30 Snatches (61/43 kg)",
+      "diane": "21-15-9: Deadlifts (102/70 kg), Handstand push-ups",
+      "elizabeth": "21-15-9: Squat cleans (61/43 kg), Ring dips",
+      "helen": "3 rounds: 400 m run, 21 KB swings (24/16 kg), 12 pull-ups",
+      "karen": "150 Wall balls (9/6 kg)",
+      "annie": "50-40-30-20-10: Double unders, Sit-ups",
+      "jackie": "1,000 m row, 50 Thrusters (20/15 kg), 30 Pull-ups",
+      "cindy": "AMRAP 20 min: 5 Pull-ups, 10 Push-ups, 15 Air squats",
+      "murph": "1.6 km run, 100 pull-ups, 200 push-ups, 300 squats, 1.6 km run (9/6 kg vest)",
+      "tours_one": "{n} round",
+      "tours_other": "{n} rounds"
+    },
+    "lifts": {
+      "bsquat": "Back squat",
+      "fsquat": "Front squat",
+      "dl": "Deadlift",
+      "clean": "Clean",
+      "cj": "Clean & jerk",
+      "snatch": "Snatch",
+      "spress": "Strict press",
+      "ppress": "Push press",
+      "bench": "Bench press"
+    }
+  },
+  "profil": {
+    "modifierInfos": "Edit my details",
+    "apparence": "Appearance",
+    "couleur": "Main color",
+    "mode": "Mode",
+    "modeAffichage": "Display mode",
+    "langue": "Language",
+    "langueAide": "Saved to your account: it follows you on all your devices.",
+    "son": "Timer sound",
+    "volume": "Volume",
+    "volumeMinuteur": "Timer volume",
+    "typeSon": "Sound type",
+    "bips": "3-2-1 beeps before the end",
+    "tester": "🔊 Test the sound",
+    "sonIphone": "On iPhone, there’s no sound when the silent switch (on the side of the phone) is on. Turn up the phone’s volume too.",
+    "monCompte": "My account",
+    "installer": "📲 Install the app on my phone",
+    "revoirTuto": "🎓 Replay the tutorial",
+    "contact": "✉️ Contact",
+    "exporter": "📦 Download my data",
+    "changerMdp": "🔑 Change my password",
+    "deconnexion": "Log out",
+    "zoneSensible": "Danger zone",
+    "supprimerCompte": "Delete my account and data",
+    "supprimerTexte": "This permanently deletes your account, workouts, nutrition, photos and messages. Enter your password to confirm.",
+    "supprimerDefinitivement": "Delete permanently",
+    "couleurs": {
+      "rouge": "Red",
+      "bleu": "Blue",
+      "vert": "Green",
+      "violet": "Purple",
+      "orange": "Orange",
+      "rose": "Pink",
+      "or": "Gold",
+      "argent": "Silver"
+    },
+    "modes": {
+      "noir": "Dark",
+      "anthracite": "Charcoal",
+      "clair": "Light"
+    },
+    "export": {
+      "preparation": "Preparing…",
+      "fichier": "my-data-as-sport",
+      "ok": "✓ Data downloaded"
+    },
+    "champs": {
+      "photo": "Profile photo",
+      "photoChanger": "Tap to change your photo",
+      "photoAjouter": "Tap to add your photo",
+      "pseudo": "Username *",
+      "pseudoExemple": "e.g. TheoFit",
+      "prenom": "First name",
+      "nom": "Last name",
+      "age": "Age",
+      "ans": "yrs",
+      "taille": "Height",
+      "poids": "Weight",
+      "objectif": "Goal"
+    },
+    "activites_one": "activity",
+    "activites_other": "activities",
+    "amis_one": "friend",
+    "amis_other": "friends",
+    "age_one": "{n} yr",
+    "age_other": "{n} yrs",
+    "membreDepuis": "Member since {date}",
+    "modifier": "Edit profile",
+    "partager": "📤 Share",
+    "connecteAvec": "Logged in as {email}",
+    "connecteAvecEmail": "Logged in with your email",
+    "pseudoVide": "Username can’t be empty.",
+    "enregistre": "Profile saved.",
+    "echec": "Saving failed. Check your connection and try again.",
+    "mdpEnvoye": "Email sent to {email}. Follow the link to choose a new password (check your spam folder too).",
+    "suppression": "Deleting…",
+    "suppressionEchec": "Deletion failed. Try again."
+  },
+  "admin": {
+    "badge": "Admin access",
+    "sauvegardeEnCours": "Backing up… {i} / {n}",
+    "sauvegardeFichier": "as-sport-backup-{date}",
+    "sauvegardeOk": "✓ Backup downloaded",
+    "reserve": "Admin access only.",
+    "sauvegarde": "Backup",
+    "sauvegardeAide": "Download a copy of the whole database (profiles, workouts, nutrition, without photos). Do it about once a month and keep it in Files or iCloud.",
+    "derniereSauvegarde": "Last backup: {date}.",
+    "aucuneSauvegarde": "No backup made from this device.",
+    "sauvegardeComplete": "💾 Full backup",
+    "inscrits": "registered users",
+    "actifs": "active in the last 7 days",
+    "seancesEnregistrees": "workouts logged",
+    "visites": "total visits",
+    "parType": "Workouts by type",
+    "aucuneSeance": "No workouts logged yet.",
+    "utilisateurs": "Users · {n}",
+    "toi": "you",
+    "ligneUtilisateur": "Seen {vu} · {seances} · {visites}",
+    "personne": "Nobody has signed up yet.",
+    "signalements": "Reports · {n}",
+    "aucunSignalement": "No reports.",
+    "utilisateur": "User",
+    "repondreA": "Reply to:",
+    "marquerNonLu": "Mark as unread",
+    "marquerLu": "Mark as read",
+    "aucunMessage": "No messages yet.",
+    "nSeances_one": "{n} workout",
+    "nSeances_other": "{n} workouts",
+    "nVisites_one": "{n} visit",
+    "nVisites_other": "{n} visits",
+    "messagesRecus_one": "Messages received · {n} unread",
+    "messagesRecus_other": "Messages received · {n} unread",
+    "signalement": {
+      "message": "Message",
+      "conversation": "Conversation",
+      "comment": "Comment",
+      "profile": "Profile",
+      "challenge": "Challenge",
+      "autre": "Report"
+    },
+    "banni": "Banned",
+    "signalePar": "reported by {pseudo} · {date}",
+    "supprimerContenu": "🗑 Delete content",
+    "retirerRecherche": "Remove from search",
+    "debannir": "Unban",
+    "bannir": "⛔ Ban",
+    "traite": "✓ Handled",
+    "actionImpossibleRegles": "Action failed. Check the Firebase rules.",
+    "contenuSupprime": "🗑 Content deleted",
+    "suppressionImpossible": "Deletion failed. Check the Firebase rules.",
+    "profilRetire": "Profile removed from search",
+    "actionImpossible": "Action failed.",
+    "fiche": {
+      "pseudo": "Username",
+      "email": "Email",
+      "prenom": "First name",
+      "nom": "Last name",
+      "age": "Age",
+      "taille": "Height",
+      "poids": "Weight",
+      "objectif": "Goal",
+      "inscritLe": "Signed up on",
+      "derniereVisite": "Last visit",
+      "visitesN": "Visits",
+      "volumeTotal": "Total volume",
+      "distance": "Distance run",
+      "photos": "Photos"
+    },
+    "joursCreatine": "creatine days",
+    "complementsNotes": "supplements logged",
+    "informations": "Details",
+    "dernieresSeances": "Latest workouts",
+    "aucuneSeanceUtilisateur": "No workouts logged.",
+    "debannirPseudo": "Unban {pseudo}",
+    "bannirPseudo": "⛔ Ban {pseudo}",
+    "joursNutrition_one": "{n} day of nutrition logged.",
+    "joursNutrition_other": "{n} days of nutrition logged."
+  },
+  "bibliotheque": {
+    "titreLong": "Exercise library",
+    "titre": "Exercises",
+    "chercher": "Search for an exercise, or type to create your own",
+    "chercherAria": "Search for an exercise or type to create your own",
+    "aide": "Can’t find your exercise? Type its full name: a “+ Create” button appears at the top of the list."
+  },
+  "types": {
+    "titre": "Workout types"
+  },
+  "photos": {
+    "photo": "Photo",
+    "supprimer": "Delete photo",
+    "photoSeance": "Workout photo"
+  },
+  "minuteur": {
+    "repos": "Rest",
+    "plus15": "+15 s",
+    "sons": {
+      "bip": "Beep",
+      "alarme": "Alarm",
+      "sifflet": "Whistle",
+      "gong": "Gong"
+    },
+    "reposNom": "Rest · {nom}",
+    "departReste": "Set {i}/{n} · {reste} left",
+    "departNom": "Set {i} / {n} · {nom}",
+    "termine_one": "Done · {n} set",
+    "termine_other": "Done · {n} sets",
+    "dernier": "Set {n} / {n} · last one!",
+    "reparti": "Back to work!",
+    "indiqueTemps": "Enter the time between two sets.",
+    "departSeul": "Go · {nom}"
+  },
+  "regles": {
+    "titre": "Our rules",
+    "sousTitre": "For a friendly, safe community",
+    "r1": "<b>Respect</b>: no insults, harassment or offensive content.",
+    "r2": "<b>Report</b> anything that’s wrong (⚑) and <b>block</b> anyone you want.",
+    "r3": "Your data belongs to you: you can <b>download</b> or <b>delete</b> it from your profile.",
+    "continuer": "By continuing, you confirm you’re at least 15 years old and accept the <a href=\"conditions.html\" target=\"_blank\" rel=\"noopener\">terms of use</a> and the <a href=\"confidentialite.html\" target=\"_blank\" rel=\"noopener\">privacy policy</a>.",
+    "accepte": "I accept"
+  },
+  "ancienneIcone": {
+    "titre": "Installed ✓",
+    "sousTitre": "The app’s new address",
+    "texte": "Remember to <b>delete the old app icon</b> from your home screen: it no longer works. Keep only this one.",
+    "fait": "Done"
+  },
+  "commentFaire": {
+    "titre": "How to do it"
+  },
+  "confirmation": {
+    "titre": "Delete this workout?",
+    "bouton": "Delete workout"
+  },
+  "nouveautes": {
+    "titre": "What’s new",
+    "diapositive": "slide",
+    "nom": {
+      "titre": "New name, new logo!",
+      "texte": "L’agenda du sportif is now <b>AS Sport</b>. Same app, same workouts, same friends: only the name and logo change. “The Athlete’s Planner” remains our motto."
+    },
+    "ios": {
+      "titre1": "On iPhone: add the new icon",
+      "garde": "Keep the old icon for now: you’ll delete it at the end.",
+      "copie": "Copy the app’s address",
+      "copier": "Copy",
+      "e2": "Open <b>Safari</b>, tap the address bar, <b>paste</b> and open the page.",
+      "e3": "Tap <b>Share</b> <svg class=\"ios-share\" viewBox=\"0 0 24 24\" aria-label=\"(square with arrow icon)\"><path d=\"M12 3v12M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1\"/></svg> then <b>Add to Home Screen</b> › <b>Add</b>.",
+      "deux": "You now have <b>two icons</b>. That’s normal: don’t delete anything yet.",
+      "titre2": "Then delete the old one",
+      "altNouvelle": "New icon: red AS on a black background",
+      "garder": "✓ New: keep it",
+      "altAncienne": "Old icon: white AS in a red square",
+      "supprimer": "✕ Old: delete it",
+      "e4": "Open the <b>new icon</b> “AS Sport” and log in with your <b>email and password</b>. All your workouts are there.",
+      "e5": "Everything there? <b>Long-press the old icon</b> “Agenda sportif” › <b>Delete Bookmark</b> (or “Delete App”).",
+      "oublie": "Forgot your password? Tap “Forgot your password?” on the login screen: you’ll get an email to change it."
+    },
+    "contact": {
+      "ici": "‹ here",
+      "legende": "At the bottom of the home page, under “Nutrition”",
+      "titre": "Got an idea? Found a bug? Let me know!",
+      "texte": "Feel free to write to me using the Contact button on the home page. An idea for an improvement, a missing exercise, a bug you’ve spotted: all your feedback helps me make the app better."
+    },
+    "position": "{i} of {n}",
+    "cestParti": "Let’s go!",
+    "copie": "Copied ✓",
+    "selectionnee": "Selected: copy it"
+  },
+  "onglets": {
+    "go": "Let’s go",
+    "navigation": "Main navigation",
+    "vous": "You"
+  },
+  "assistant": {
+    "ouvrir": "Open the assistant",
+    "bulle": "Need help? I’ll answer your questions 👋",
+    "titre": "Assistant",
+    "sousTitre": "Answers to frequently asked questions",
+    "pose": "Ask your question…",
+    "taQuestion": "Your question",
+    "faq": {
+      "commentFaire": {
+        "q": "How do I learn to do an exercise?",
+        "mots": "how to do exercise movement technique form animation figure help perform",
+        "r": "Tap the little red “?”: in your workout next to the exercise name, or right in the exercise search (without adding it).\nThe movement is animated from the side and the front (start then finish, on a loop), with a technique tip and, for push-ups, presses and pull-ups, a diagram of hand placement.\nThe working muscles are shown in red."
+      },
+      "boutonGo": {
+        "q": "What’s the + Let’s go button?",
+        "mots": "lets go let go start begin workout home plus button bar",
+        "r": "The big + button in the middle of the bottom bar opens today’s workout directly.\nThe “Workouts” tab brings together free workouts (calendar), your routines, programs and workout ideas. Home shows your muscle map, progress, trophies, PRs and recap."
+      },
+      "creerRoutine": {
+        "q": "How do I create a routine?",
+        "mots": "routine save template repeat workout favorite",
+        "r": "Two ways:\n• in a workout, tap “☆ Save as routine”;\n• or Workouts › My routines › “+ Create a routine”.\nThen one tap on “Start” and the workout is ready, with your weights from last time."
+      },
+      "suivreProgramme": {
+        "q": "How do I follow a program?",
+        "mots": "program plan weeks ppl full body 5x5 10k training follow",
+        "r": "Workouts › Programs, then “Follow this program”.\nThe app then suggests the right workout each time (“▶ Start”), week after week."
+      },
+      "derniereFois": {
+        "q": "What’s “last time”?",
+        "mots": "last time history previous weight prefilled before",
+        "r": "When you add an exercise you’ve done before, the app shows what you did last time (↺) and reuses your weights. Reps are suggested in gray: type yours or confirm the set."
+      },
+      "recordsDirect": {
+        "q": "How do live PRs work?",
+        "mots": "record new pr personal best beat trophy live",
+        "r": "When you complete a set heavier than your best (or more reps at the same weight), a “New PR!” message appears, with confetti. For running: your longest run and your best pace. Your friends see your PRs in the feed."
+      },
+      "serie": {
+        "q": "What’s the 🔥 streak?",
+        "mots": "streak flame goal week weekly ring",
+        "r": "On Home, choose your goal of workouts per week (tap the ring). Every week you hit it grows your 🔥 streak. “Rest” days don’t count."
+      },
+      "plusieursSeances": {
+        "q": "Several workouts on the same day?",
+        "mots": "several two workouts same day morning evening double",
+        "r": "Yes: in a workout, tap “+ Another workout” at the top, or “+ New” in Workouts. The day’s workouts show up as tabs."
+      },
+      "carteMusculaire": {
+        "q": "What’s the muscle map?",
+        "mots": "muscle map muscles body worked forgotten",
+        "r": "Home › Muscle map: the muscles worked over 7 or 30 days light up, from lightest to reddest. Tap a muscle to see how many sets it got."
+      },
+      "partagerBilan": {
+        "q": "How do I share my recap?",
+        "mots": "recap month story share instagram image summary",
+        "r": "Home › Monthly recap, then “📲 Share as a story”. An image is created with your numbers for the month: share it on Insta, Snap or WhatsApp."
+      },
+      "cordes": {
+        "q": "How do I log a rope workout?",
+        "mots": "rope ropes climb rope climb set start weight",
+        "r": "Tap a day, then choose “Ropes”. For each exercise: number of climbs, a new set every X seconds or minutes, with or without added weight.\n“⏱ Start the sets” makes the timer ring at each set."
+      },
+      "defi": {
+        "q": "How do I start a challenge?",
+        "mots": "challenge competition friends contest",
+        "r": "Social › Challenges › “+ New challenge”: choose what counts (workouts, active days, km or volume), the duration and the friends you invite. The leaderboard updates automatically."
+      },
+      "commenter": {
+        "q": "How do I comment on a workout?",
+        "mots": "comment comments feed news",
+        "r": "Social: in the feed, under each of your friends’ workouts, write your comment and tap “Send”. You see comments on your workouts in Social and on the workout itself."
+      },
+      "noterSeance": {
+        "q": "How do I log a workout?",
+        "mots": "log workout add training day calendar create",
+        "r": "Go to Workouts, then tap the day you want in the calendar (or “Log today’s workout”).\nChoose your activity: Strength training, CrossFit, Calisthenics or Running. Each activity has its own tailored log."
+      },
+      "ajouterSeries": {
+        "q": "How do I add sets?",
+        "mots": "set sets reps repetitions weight kg exercise add",
+        "r": "In your workout, tap “+ Add an exercise”, type its name, then fill in Reps and Weight for each set.\n“+ Add a set” copies the previous set to save time."
+      },
+      "repos": {
+        "q": "How does rest time work?",
+        "mots": "rest timer stopwatch time break recovery",
+        "r": "Under each exercise, set your rest time with − and + (in 15 s steps).\nAfter your set, tap “✓ Set 1 done · rest”: the set turns green and the timer starts. When the rest is over, the next set lights up on its own. “+15 s” adds time, “Skip” goes straight to the next set."
+      },
+      "enregistrement": {
+        "q": "Is my workout saved?",
+        "mots": "save saved backup lost lose button confirm",
+        "r": "Yes, everything saves automatically as you type, no button needed.\nA red message appears at the top only if there’s a connection problem."
+      },
+      "rpe": {
+        "q": "What’s RPE?",
+        "mots": "rpe difficulty hard effort rating",
+        "r": "RPE rates difficulty from 1 to 10.\n8 = you had 2 reps left in the tank, 9 = 1 rep, 10 = failure. It helps you know when to increase the weight."
+      },
+      "photo": {
+        "q": "How do I add a photo?",
+        "mots": "photo picture camera take physique",
+        "r": "Open your workout and scroll down to “Photos”, then tap “+ Take a photo”.\nTap a photo to enlarge or delete it."
+      },
+      "reprendre": {
+        "q": "How do I repeat my last workout?",
+        "mots": "repeat copy last previous same",
+        "r": "On an empty day, choose the workout type: a “Repeat last workout” button appears. It copies your exercises and weights."
+      },
+      "types": {
+        "q": "How do I change types and colors?",
+        "mots": "type color edit push pull legs cardio ropes rest",
+        "r": "In Workouts, tap the “Types” button. You can rename a type, change its color (tap the dot), add or remove types."
+      },
+      "creatine": {
+        "q": "How do I log my creatine?",
+        "mots": "creatine dose taken",
+        "r": "Nutrition › Creatine: tap the big circle, it turns red = taken.\nForgot a day? Tap the date in the calendar below. The dose is set at the bottom of the page."
+      },
+      "complement": {
+        "q": "How do I add a supplement?",
+        "mots": "supplement whey protein omega vitamin magnesium",
+        "r": "Nutrition › Supplements: tap a supplement in “Quick add”, or type a new one with its dose. The arrows at the top change the day."
+      },
+      "installer": {
+        "q": "How do I install the app on my phone?",
+        "mots": "install app application home screen download icon",
+        "r": "On iPhone: in Safari, tap Share then “Add to Home Screen”.\nOn Android: ⋮ menu then “Install app”.\nThere’s also a button in your Profile."
+      },
+      "modifierProfil": {
+        "q": "How do I edit my profile?",
+        "mots": "profile edit photo username weight height age goal info",
+        "r": "Tap “You” at the bottom right, then “Edit profile”. Change whatever you want and tap “Save”."
+      },
+      "motDePasse": {
+        "q": "I forgot my password",
+        "mots": "password forgot forgotten reset login log in",
+        "r": "On the login screen, type your email then tap “Forgot your password?”. You’ll get a link by email (check your spam folder too)."
+      },
+      "donneesPrivees": {
+        "q": "Is my data private?",
+        "mots": "private data security see privacy",
+        "r": "Other users can’t see your data.\nThe app’s administrator can view accounts to manage the app and help you."
+      },
+      "horsConnexion": {
+        "q": "Does it work without internet?",
+        "mots": "internet offline network wifi connection",
+        "r": "Yes, the app opens without a connection and keeps your changes. They’re sent as soon as you’re back online."
+      },
+      "supprimerCompte": {
+        "q": "How do I delete my account?",
+        "mots": "delete account erase unsubscribe remove",
+        "r": "You › “Delete my account and data”, then confirm with your password. Everything is permanently erased."
+      },
+      "course": {
+        "q": "How do I log a run?",
+        "mots": "run running jog jogging easy run tempo intervals vo2 pace distance km",
+        "r": "Tap a day › Running, then choose Easy run, Tempo or Intervals.\nEnter the distance and time: your pace (min/km) and speed are calculated automatically. For tempo and interval runs, add your blocks (e.g. 10 × 400 m, 1:00 recovery) and start the recovery timer."
+      },
+      "wod": {
+        "q": "How do I log a CrossFit WOD?",
+        "mots": "crossfit wod log save score",
+        "r": "Tap a day › CrossFit. Choose the format (For Time, AMRAP, EMOM…), write the movements, then your score and Rx or Scaled.\nType “Fran”, “Murph”… in the WOD name: the movements fill in automatically."
+      },
+      "recordsCrossfit": {
+        "q": "Where do I see my CrossFit PRs?",
+        "mots": "record 1rm pr max load benchmark girls fran murph cindy",
+        "r": "On Home, tap CrossFit: that’s where you log your PRs (1RM) in back squat, clean, snatch… and your times on benchmark WODs like Fran or Murph."
+      },
+      "calis": {
+        "q": "How do I log a calisthenics workout?",
+        "mots": "calisthenics street workout pull up dips muscle front lever planche handstand bodyweight",
+        "r": "Tap a day › Calisthenics. Add your exercises in one tap (Pull-ups, Dips, Front lever…). For held skills, tap “Reps ⇄” to log seconds. The Added weight column is for when you go weighted."
+      },
+      "idees": {
+        "q": "Where can I find workout ideas?",
+        "mots": "idea ideas workout type program example inspiration try",
+        "r": "On Home, tap “Workout ideas” then choose your activity: Strength training (Push, Pull, Legs…), CrossFit, Calisthenics or Running.\nEach idea has a “Try today” button that fills in today’s workout."
+      },
+      "recordsPR": {
+        "q": "Where do I log my PRs?",
+        "mots": "record pr 5k 10k half marathon bench press squat deadlift",
+        "r": "Home › PRs, then choose your category: Strength training, CrossFit, Calisthenics or Running. Tap + to add a PR: your best shows up in big numbers."
+      },
+      "progression": {
+        "q": "Where can I see my progress?",
+        "mots": "progress chart graph curve evolution stats statistics",
+        "r": "Home › Progress, then choose your category. In strength training, choose Push, Pull…: each exercise has its own chart with your max weight for every workout. Tap a chart to see a workout’s value."
+      },
+      "son": {
+        "q": "How do I set the timer sound?",
+        "mots": "sound volume timer stopwatch beep alarm hear loud",
+        "r": "You › “Timer sound”: set the volume, choose Beep, Alarm, Whistle or Gong, and tap “Test the sound”.\nOn iPhone, there’s no sound when the silent switch (on the side) is on."
+      },
+      "serieCouleur": {
+        "q": "What’s the colored set?",
+        "mots": "set color current highlighted green",
+        "r": "In a workout, the set you’re on is outlined in your main color (“Current set”). Fill in your reps and weight, then tap “✓ Set done”: it turns green, the rest starts, and the next one lights up when the timer ends."
+      },
+      "ajouterAmi": {
+        "q": "How do I add a friend?",
+        "mots": "friend friends add code username request accept",
+        "r": "Social › Friends (or the 🔍 magnifier). Show your QR code (You › Share) or give your friend code (e.g. THEO-4821) to your buddies, or search for their code or username, then tap “Add”. Your friend accepts the request and you’re done."
+      },
+      "messageAmi": {
+        "q": "How do I message a friend?",
+        "mots": "message messages write chat conversation talk",
+        "r": "Social › 💬 at the top right, or Friends then tap 💬 next to your friend. Messages are only visible to the two of you. A red dot shows new messages."
+      },
+      "essayerSeanceAmi": {
+        "q": "How do I try a friend’s workout?",
+        "mots": "workout friend try copy follow see",
+        "r": "Social › Friends, tap your friend then one of their workouts, and “Try this workout”: it’s copied into today’s workout, with their weights as a target. You can also react with 💪 🔥 👏."
+      },
+      "quiVoit": {
+        "q": "Who can see my workouts?",
+        "mots": "see workouts private share sharing privacy friends",
+        "r": "Only your accepted friends, and only if “Share my workouts with my friends” is on (Social › Friends). Your nutrition and personal info are never shared."
+      },
+      "bloquer": {
+        "q": "How do I block or report someone?",
+        "mots": "block report harassment problem insult",
+        "r": "In a conversation, tap ••• then “Block” or “Report”. You can also tap a message to report it. Reports go to the administrator."
+      },
+      "contacter": {
+        "q": "How do I contact the creator?",
+        "mots": "contact creator problem bug help complaint idea",
+        "r": "Tap “Contact” at the bottom of Home, choose a subject and write your message: it comes straight to me."
+      }
+    },
+    "lexique": {
+      "3030": {
+        "termes": "3030",
+        "q": "What’s a 30/30?",
+        "mots": "30 30 thirty intervals short",
+        "r": "30/30 = 30 seconds fast (around your vVO2max) then 30 seconds easy, repeated (e.g. 2 × 10 times). It’s a classic short interval session."
+      },
+      "21159": {
+        "termes": "21159",
+        "q": "What does 21-15-9 mean?",
+        "mots": "21 15 9 rep scheme",
+        "r": "It’s a rep scheme: 21 of each movement, then 15, then 9.\nE.g. Fran: 21 thrusters, 21 pull-ups, 15 thrusters, 15 pull-ups, 9 thrusters, 9 pull-ups."
+      },
+      "wod": {
+        "termes": "wod",
+        "q": "What’s a WOD?",
+        "mots": "wod workout day session today",
+        "r": "WOD = “Workout Of the Day”.\nIn CrossFit, it’s the main part of the class: often short (5 to 20 min) and intense, mixing cardio, gymnastics and weightlifting."
+      },
+      "rx": {
+        "termes": "rx scaled scale",
+        "q": "What do Rx and Scaled mean?",
+        "mots": "rx scaled prescribed adapted level",
+        "r": "Rx (“as prescribed”) = you do the WOD exactly as written: official loads, movements and reps.\nScaled = a version adapted to your level: lighter weight, banded pull-ups, knee push-ups…\nThere’s no shame in going Scaled: that’s how you progress without getting hurt."
+      },
+      "fortime": {
+        "termes": "fortime",
+        "q": "What’s a For Time?",
+        "mots": "for time clock fast possible time",
+        "r": "For Time = you do all the work as fast as possible. Your score is your time.\nThere’s often a “time cap” (maximum time)."
+      },
+      "timecap": {
+        "termes": "cap timecap",
+        "q": "What’s a time cap?",
+        "mots": "time cap limit maximum",
+        "r": "The time cap is the maximum time allowed for a WOD.\nIf you haven’t finished in time, your score = the number of reps completed (written e.g. “CAP + 12”)."
+      },
+      "amrap": {
+        "termes": "amrap",
+        "q": "What’s an AMRAP?",
+        "mots": "amrap many rounds possible max rounds",
+        "r": "AMRAP = “As Many Rounds As Possible” in a given time.\nE.g. AMRAP 12 min of 5 pull-ups, 10 push-ups, 15 squats. You keep going round after round until the beep.\nScore = full rounds + reps of the round in progress (e.g. 8 rounds + 7)."
+      },
+      "emom": {
+        "termes": "emom e2mom",
+        "q": "What’s an EMOM?",
+        "mots": "emom every minute each minute",
+        "r": "EMOM = “Every Minute On the Minute”: at the start of each minute, you do the work, then rest for the rest of the minute.\nE.g. EMOM 10 min: 3 power cleans. The faster you go, the more you rest.\nAn “E2MOM” = every 2 minutes."
+      },
+      "tabata": {
+        "termes": "tabata",
+        "q": "What’s a Tabata?",
+        "mots": "tabata 20 10 seconds interval",
+        "r": "Tabata = 8 rounds of 20 seconds all-out / 10 seconds rest, so 4 minutes.\nScore: total reps, or your weakest round, depending on the instructions."
+      },
+      "chipper": {
+        "termes": "chipper",
+        "q": "What’s a Chipper?",
+        "mots": "chipper long list",
+        "r": "A Chipper is a long list of high-rep movements, done just once, in order.\nYou “chip away” at them little by little. E.g. 50 box jumps, 50 wall balls, 50 burpees…"
+      },
+      "1rm": {
+        "termes": "1rm rm pr",
+        "q": "What are a 1RM and a PR?",
+        "mots": "1rm rm pr personal record max load rep",
+        "r": "1RM = “1 Repetition Max”: the heaviest weight you can lift once.\nPR = “Personal Record”, your personal best. Log them in the CrossFit tab to track your progress."
+      },
+      "girls": {
+        "termes": "girls girl hero heroes benchmark",
+        "q": "What are the Girls and Hero WODs?",
+        "mots": "girls hero benchmark reference fran murph grace cindy",
+        "r": "They’re benchmark WODs, always the same, to measure your progress.\nThe “Girls” have women’s names (Fran, Grace, Cindy…). The “Hero WODs” honor soldiers or firefighters who died in the line of duty (Murph…).\nYou’ll find them all in the CrossFit tab."
+      },
+      "charges": {
+        "termes": "kg",
+        "q": "What does 43/29 kg mean?",
+        "mots": "load men women slash two weights",
+        "r": "Two loads separated by “/” = men’s load / women’s load.\nE.g. Thrusters 43/29 kg: 43 kg for men, 29 kg for women (Rx version)."
+      },
+      "metcon": {
+        "termes": "metcon",
+        "q": "What’s a Metcon?",
+        "mots": "metcon metabolic conditioning cardio",
+        "r": "Metcon = “metabolic conditioning”: the intense, cardio part of the WOD that gets your heart rate up (often a For Time or an AMRAP)."
+      },
+      "box": {
+        "termes": "box",
+        "q": "What’s a box?",
+        "mots": "box gym crossfit",
+        "r": "A “box” is a CrossFit gym."
+      },
+      "kipping": {
+        "termes": "kipping strict butterfly",
+        "q": "Kipping or strict, what’s the difference?",
+        "mots": "kipping strict swing momentum pull up",
+        "r": "Strict = a movement with no momentum (e.g. a strict pull-up).\nKipping = you use a body swing to link reps faster (pull-ups, toes to bar, HSPU). “Butterfly” is an even faster kipping style."
+      },
+      "unbroken": {
+        "termes": "unbroken",
+        "q": "What does Unbroken mean?",
+        "mots": "unbroken no break drop",
+        "r": "Unbroken = all the reps of a set without stopping or dropping the bar."
+      },
+      "thruster": {
+        "termes": "thruster thrusters",
+        "q": "What’s a thruster?",
+        "mots": "thruster squat press",
+        "r": "A thruster = a front squat linked with an overhead press in one fluid movement: you use the drive out of the squat to push the bar up."
+      },
+      "wallball": {
+        "termes": "wall wallball wallballs",
+        "q": "What’s a wall ball?",
+        "mots": "wall ball medicine ball wall target",
+        "r": "Wall ball = a squat holding a medicine ball at your chest, then you throw the ball to a target on the wall (3 m for men, 2.70 m for women) and catch it."
+      },
+      "doubleunder": {
+        "termes": "double unders du",
+        "q": "What’s a double under?",
+        "mots": "double under rope jump",
+        "r": "Double under = with a jump rope, the rope passes under your feet twice in a single jump."
+      },
+      "t2b": {
+        "termes": "t2b toes",
+        "q": "What’s a toes to bar?",
+        "mots": "toes to bar feet bar hanging abs",
+        "r": "Toes to bar = hanging from the bar, you raise your feet until they touch the bar."
+      },
+      "muscleup": {
+        "termes": "muscleup muscle",
+        "q": "What’s a muscle-up?",
+        "mots": "muscle up rings bar pull up dips",
+        "r": "Muscle-up = a pull-up linked with a dip to get your chest above the bar or rings. It’s an advanced movement."
+      },
+      "hspu": {
+        "termes": "hspu",
+        "q": "What’s an HSPU?",
+        "mots": "hspu handstand push up balance",
+        "r": "HSPU = “Handstand Push-Up”: a push-up in a handstand, feet against the wall."
+      },
+      "halterophilie": {
+        "termes": "clean snatch jerk",
+        "q": "Clean, snatch, jerk: what are they?",
+        "mots": "clean snatch jerk olympic weightlifting",
+        "r": "They’re the Olympic weightlifting movements:\n• Clean: the bar goes from the floor to your shoulders.\n• Jerk: from your shoulders to overhead.\n• Clean & jerk: both linked.\n• Snatch: from the floor to overhead in one movement.\n“Power” = catching in a half squat instead of a full squat."
+      },
+      "kbswing": {
+        "termes": "kb kettlebell swing swings",
+        "q": "What’s a KB swing?",
+        "mots": "kb kettlebell swing",
+        "r": "KB swing = you swing a kettlebell between your legs then up to eye level (Russian swing) or overhead (American swing), driven by your hips."
+      },
+      "burpee": {
+        "termes": "burpee burpees",
+        "q": "What’s a burpee?",
+        "mots": "burpee",
+        "r": "Burpee = you drop your chest to the floor, get back up and jump, clapping your hands overhead."
+      },
+      "ef": {
+        "termes": "easy zone2 base",
+        "q": "What’s an easy run?",
+        "mots": "easy run base zone 2 slow jog aerobic",
+        "r": "An easy run is a slow, comfortable pace: you can talk while running. About 60 to 75% of your max heart rate.\nIt makes up most of a runner’s training: it builds your “engine” without wearing you out."
+      },
+      "seuil": {
+        "termes": "tempo threshold",
+        "q": "What’s tempo (threshold) running?",
+        "mots": "tempo threshold lactate pace",
+        "r": "Threshold is a comfortably hard pace that you could hold for about 45 min to 1 hour in a race. About 85 to 90% of your max HR.\nIn training, you work on it in blocks (e.g. 3 × 10 min at threshold, 2 min recovery)."
+      },
+      "fractionne": {
+        "termes": "intervals interval repeats",
+        "q": "What are intervals?",
+        "mots": "intervals interval speed repeats",
+        "r": "Intervals alternate fast efforts and recoveries.\nE.g. 10 × 400 m fast with 1 min recovery, or 30/30. That’s what improves your speed and VO2 max."
+      },
+      "vma": {
+        "termes": "vma vvo2 vo2",
+        "q": "What’s VO2 max speed (vVO2max)?",
+        "mots": "vo2 max speed maximal aerobic",
+        "r": "vVO2max (called VMA in French) = Maximal Aerobic Speed: the speed at which you use the most oxygen. You can hold it for about 4 to 7 minutes.\nIt’s used to set interval paces (e.g. 30/30 at 100% of vVO2max)."
+      },
+      "allure": {
+        "termes": "pace",
+        "q": "What’s pace?",
+        "mots": "pace min km speed",
+        "r": "Pace is the time it takes to cover 1 km (e.g. 5:00 /km).\n5:00 /km = 12 km/h, 6:00 /km = 10 km/h, 4:00 /km = 15 km/h. The app works it out for you from your distance and time."
+      },
+      "fc": {
+        "termes": "hr bpm heart rate",
+        "q": "What’s max HR?",
+        "mots": "hr max heart rate bpm",
+        "r": "Max HR is your maximum heart rate (in beats per minute). A simple estimate: 220 − your age, but it varies a lot from person to person.\nYour run’s average HR is on your watch."
+      }
+    },
+    "wodRef": {
+      "notes": {
+        "murph": "You can split the pull-ups, push-ups and squats however you like (e.g. 20 rounds of 5-10-15), but the run is done at the start and the end.",
+        "cindy": "Keep cycling rounds without stopping for 20 minutes: your score = rounds + reps.",
+        "fran": "It’s one of the best-known WODs: very short (often 3 to 10 min) but very intense.",
+        "helen": "Go through it 3 times: the run, the swings, then the pull-ups.",
+        "annie": "50 double unders and 50 sit-ups, then 40 and 40, and so on down to 10."
+      },
+      "question": "What’s the {nom} WOD?",
+      "description": "{nom}: {desc}.",
+      "amrap": "It’s a {n}-min AMRAP: your score is your rounds + reps.",
+      "fortime": "It’s a For Time: your score is your time.",
+      "noter": "Log your result in the CrossFit tab."
+    },
+    "motsVides": "i you he she it the a an of to in on at and or is are am be do does did how what which who why when where my your his her its our their can could would should will with for about this that these those me want know help app application mean means explain please not no more less all",
+    "ecrireCreateur": "✉️ Write to the creator",
+    "bonjourPseudo": "Hi {pseudo} 👋 I answer frequently asked questions about the app. Pick a question or type your own.",
+    "bonjour": "Hi 👋 I answer frequently asked questions about the app. Pick a question or type your own.",
+    "rubriques": {
+      "cf": "CrossFit glossary",
+      "wod": "WODs explained",
+      "run": "Running glossary"
+    },
+    "choisisMot": "Pick the word or WOD you want explained:",
+    "aussi": "This might help too:",
+    "pasTrouve": "I couldn’t find an answer to your question. You can write directly to the app’s creator, who’ll get back to you."
+  },
+  "valeurs": {
+    "types": {
+      "push": "Push",
+      "pull": "Pull",
+      "jambes": "Legs",
+      "haut": "Upper body",
+      "bas": "Lower body",
+      "cardio": "Cardio",
+      "cordes": "Ropes",
+      "repos": "Rest"
+    },
+    "humeurs": {
+      "forme": "Feeling great",
+      "normal": "Normal",
+      "fatigue": "Tired",
+      "douleur": "Sore"
+    },
+    "objectifs": {
+      "masse": "Bulking",
+      "seche": "Cutting",
+      "force": "Strength",
+      "maintien": "Maintain strength",
+      "forme": "Get back in shape",
+      "endurance": "Endurance"
+    },
+    "objets": {
+      "aide": "Help",
+      "reclamation": "Complaint",
+      "amelioration": "Suggest an improvement",
+      "probleme": "Problem with the app"
+    },
+    "complements": {
+      "whey": "Whey",
+      "omega3": "Omega-3",
+      "vitd": "Vitamin D",
+      "magnesium": "Magnesium",
+      "multi": "Multivitamins",
+      "cafeine": "Caffeine",
+      "creatine": "Creatine"
+    },
+    "doses": {
+      "gelules2": "2 capsules",
+      "comprime1": "1 tablet",
+      "ui1000": "1,000 IU"
+    },
+    "seances": {
+      "muscu": "Strength training",
+      "crossfit": "CrossFit",
+      "calis": "Calisthenics",
+      "course": "Running",
+      "cordes": "Ropes",
+      "hyrox": "Hyrox",
+      "ef": "Easy run",
+      "seuil": "Tempo",
+      "frac": "Intervals"
+    }
+  },
+  "disciplines": {
+    "muscu": "Push, pull, legs… sets, reps and weights",
+    "crossfit": "WODs, AMRAP, EMOM, For Time, PRs",
+    "calis": "Bodyweight: pull-ups, dips, skills…",
+    "course": "Easy runs, tempo, intervals",
+    "cordes": "Rope climbs: count, sets, added weight",
+    "hyrox": "Running + SkiErg, RowErg, sleds, lunges, wall balls…"
+  },
+  "course": {
+    "court": {
+      "ef": "Easy",
+      "seuil": "Tempo",
+      "frac": "Int."
+    },
+    "aide": {
+      "ef": "Easy pace: you should be able to talk while running (60–75% of your max HR).",
+      "seuil": "Comfortably hard pace you could hold for 30–60 min in a race (85–90% of your max HR).",
+      "frac": "Short, fast efforts with recoveries in between (VO2 max, hills, 30/30…)."
+    },
+    "calculAide": "Enter the distance and time: your pace and speed are calculated automatically.",
+    "auTotal": "{duree} total"
+  },
+  "fete": {
+    "continuer": "Continue"
+  },
+  "accueil": {
+    "serie": {
+      "depasse": "Goal smashed, huge 💪",
+      "atteint": "Weekly goal reached ✓",
+      "garder_one": "{n} more workout to keep your streak",
+      "garder_other": "{n} more workouts to keep your streak",
+      "lancer_one": "{n} more workout to start your streak",
+      "lancer_other": "{n} more workouts to start your streak",
+      "aria": "Weekly goal: {fait} of {objectif}. Tap to change it.",
+      "objectif": "Weekly goal",
+      "record_one": "Best: {n} week",
+      "record_other": "Best: {n} weeks",
+      "continue": "You’re beating your streak, keep going!",
+      "joursRestants_one": "{n} day left",
+      "joursRestants_other": "{n} days left",
+      "semaines_one": "week",
+      "semaines_other": "weeks",
+      "combien": "How many workouts per week?",
+      "aide": "Your 🔥 streak counts the weeks in a row you hit this goal. “Rest” days don’t count."
+    },
+    "progEx": "{nom}: {de} → {a} kg",
+    "seancesParSemaine": "Workouts per week (8 wks)",
+    "courbesBientot": "Your charts will appear after your first workouts.",
+    "septJours": "7 days",
+    "plusTravailles": "Most worked: {muscles}",
+    "aucuneSeance7j": "No workouts in the last 7 days",
+    "progression": "Progress",
+    "complements_one": "{nb} supplement",
+    "complements_other": "{nb} supplements",
+    "records": "PRs",
+    "dernierRecord": "Latest: {record}",
+    "premierRecord": "Set your first PR!",
+    "seancesEnMois_one": "workout in {mois}",
+    "seancesEnMois_other": "workouts in {mois}",
+    "aujourdhuiSeance": "Today: {seance}",
+    "prochaineSeance": "Next workout: {seance}",
+    "toutesSeances": "All your workouts, day by day"
+  },
+  "go": {
+    "tuiles": {
+      "seances": {
+        "nom": "Free workout",
+        "texte": "Create your workout in the calendar"
+      },
+      "routines": {
+        "nom": "My routines",
+        "texte": "Your saved workouts, ready to go"
+      },
+      "programs": {
+        "nom": "Programs",
+        "texte": "Multi-week plans"
+      },
+      "types": {
+        "nom": "Workout ideas",
+        "texte": "Gym, CrossFit, calisthenics, running"
+      }
+    },
+    "routinesEnregistrees_one": "{n} saved routine",
+    "routinesEnregistrees_other": "{n} saved routines",
+    "enCours": "In progress: {seance}",
+    "nouvelle": "+ New",
+    "lancerRoutine": "Start a routine"
+  }
+}

@@ -1,0 +1,1502 @@
+{
+  "_langue": {
+    "nom": "Français",
+    "locale": "fr-FR"
+  },
+  "app": {
+    "titre": "AS Sport · L’agenda du sportif",
+    "description": "Note tes séances de musculation, ta nutrition et suis tes progrès.",
+    "devise": "L’agenda du sportif"
+  },
+  "secours": {
+    "lent": "L’application met du temps à démarrer.",
+    "reparer": "Réparer et recharger",
+    "donnees": "Tes données ne seront pas effacées."
+  },
+  "config": {
+    "badge": "Configuration",
+    "titre": "Firebase n’est pas encore configuré",
+    "texte": "Colle le bloc <code>firebaseConfig</code> de ta console Firebase dans <code>public/firebase-config.js</code>, puis redéploie. Le fichier README.md explique chaque étape."
+  },
+  "commun": {
+    "chargement": "Chargement",
+    "emailExemple": "prenom@exemple.fr",
+    "masquerMessage": "Masquer ce message",
+    "moisPrecedent": "Mois précédent",
+    "moisSuivant": "Mois suivant",
+    "joursCourts": {
+      "lun": "Lun",
+      "mar": "Mar",
+      "mer": "Mer",
+      "jeu": "Jeu",
+      "ven": "Ven",
+      "sam": "Sam",
+      "dim": "Dim"
+    },
+    "jourPrecedent": "Jour précédent",
+    "jourSuivant": "Jour suivant",
+    "ajouter": "Ajouter",
+    "retour": "Retour",
+    "envoyer": "Envoyer",
+    "annuler": "Annuler",
+    "enregistrer": "Enregistrer",
+    "precedent": "Précédent",
+    "suivant": "Suivant",
+    "horsConnexion": "Hors connexion · tout sera envoyé au retour du réseau",
+    "fermer": "Fermer",
+    "passer": "Passer",
+    "plusTard": "Plus tard",
+    "fermerMessage": "Fermer ce message",
+    "jamais": "jamais",
+    "dureeHeures": "{h} h {m}",
+    "echecReessaie": "Échec, réessaie",
+    "ok": "OK",
+    "aujourdhui": "Aujourd’hui",
+    "erreur": "Une erreur est survenue. Réessaie.",
+    "unInstant": "Un instant…",
+    "aHeure": "à {heure}",
+    "confirmer": "Confirmer",
+    "chargementPoints": "Chargement…"
+  },
+  "connexion": {
+    "bienvenue": "Bienvenue",
+    "accroche": "Séances, nutrition et progrès, au même endroit.",
+    "ongletConnexion": "Connexion",
+    "ongletInscription": "Créer un compte",
+    "email": "E-mail",
+    "motDePasse": "Mot de passe",
+    "motDePasseMin": "6 caractères minimum",
+    "seConnecter": "Se connecter",
+    "oublie": "Mot de passe oublié ?",
+    "erreurChargement": "Impossible de charger ton compte. Vérifie ta connexion puis réessaie.",
+    "creerCompte": "Créer mon compte",
+    "erreurs": {
+      "invalid-email": "Cette adresse e-mail n’est pas valide.",
+      "email-already-in-use": "Un compte existe déjà avec cet e-mail. Connecte-toi plutôt.",
+      "weak-password": "Choisis un mot de passe d’au moins 6 caractères.",
+      "invalid-credential": "E-mail ou mot de passe incorrect.",
+      "wrong-password": "Mot de passe incorrect.",
+      "user-not-found": "Aucun compte avec cet e-mail.",
+      "too-many-requests": "Trop d’essais. Patiente quelques minutes puis réessaie.",
+      "network-request-failed": "Pas de connexion internet. Vérifie ton réseau.",
+      "missing-password": "Entre ton mot de passe."
+    },
+    "oublieSansEmail": "Entre ton e-mail ci-dessus, puis touche « Mot de passe oublié ? ».",
+    "oublieEnvoye": "Si un compte existe avec {email}, un e-mail vient de partir (expéditeur : noreply@agenda-du-sportif.firebaseapp.com). Regarde aussi dans tes spams ou courriers indésirables, il arrive en 1 à 5 minutes."
+  },
+  "legal": {
+    "conditions": "Conditions d’utilisation",
+    "confidentialite": "Confidentialité"
+  },
+  "inscription": {
+    "badge": "Dernière étape",
+    "titre": "Ton <span>profil</span>",
+    "presenteToi": "Présente-toi",
+    "intro": "Ton compte t’est attribué personnellement : tu retrouves toutes tes données à chaque connexion, sur tous tes appareils.",
+    "accepte": "J’ai au moins 15 ans et j’accepte les <a href=\"conditions.html\" target=\"_blank\" rel=\"noopener\">conditions d’utilisation</a> et la <a href=\"confidentialite.html\" target=\"_blank\" rel=\"noopener\">politique de confidentialité</a>.",
+    "terminer": "Terminer mon inscription",
+    "choisisPseudo": "Choisis un pseudo pour terminer ton inscription.",
+    "accepteConditions": "Accepte les conditions d’utilisation pour terminer ton inscription.",
+    "erreur": "Impossible d’enregistrer ton profil. Vérifie ta connexion et réessaie."
+  },
+  "installation": {
+    "banniereTitre": "Installe l’app sur ton téléphone",
+    "banniereTexte": "Accès en 1 toucher, en plein écran",
+    "titre": "Installe l’app",
+    "gratuit": "AS Sport · gratuit",
+    "texte": "Ajoute l’app à ton écran d’accueil : elle s’ouvre en plein écran, en un toucher, comme une vraie application.",
+    "pleinEcran": "Plein écran",
+    "unToucher": "Accès en 1 toucher",
+    "horsConnexion": "Marche hors connexion",
+    "ancienneIos": "<b>Supprime l’ancienne icône</b> : appui long dessus › <b>Supprimer le signet</b> (ou « Supprimer l’app »).",
+    "ancienneAndroid": "<b>Supprime l’ancienne icône</b> : appui long dessus › <b>Supprimer</b> (ou « Désinstaller »).",
+    "titreBienvenue": "Mets l’app sur ton téléphone",
+    "nouvelleAdresse": "L’app a une nouvelle adresse ! 🏠 Ajoute la nouvelle icône à ton écran d’accueil, puis <b>supprime l’ancienne</b> : elle ne marche plus.",
+    "bienvenue": "Bienvenue ! 🏠 Ajoute l’app à ton écran d’accueil pour l’ouvrir en un toucher, en plein écran.",
+    "autreApp1": "Tu as ouvert le lien depuis une autre app (Snapchat, Instagram…). Il faut l’ouvrir dans <b>{nav}</b>.",
+    "autreApp2Ios": "Touche <b>•••</b> ou l’icône <b>boussole</b>, puis <b>Ouvrir dans Safari</b>.",
+    "autreApp2Android": "Touche <b>•••</b> ou l’icône <b>navigateur</b>, puis <b>Ouvrir dans le navigateur</b>.",
+    "autreApp3": "Tu ne trouves pas ? Copie le lien et colle-le dans {nav}.",
+    "copierLien": "Copier le lien",
+    "installer": "Installer l’application",
+    "ios1": "Touche <b>Partager</b> en bas de Safari",
+    "ios2": "Choisis <b>Sur l’écran d’accueil</b>",
+    "ios3": "Touche <b>Ajouter</b>, c’est fait&nbsp;!",
+    "iosAide": "Tu ne vois pas « Partager » ? Il est parfois dans le menu <b>•••</b>. Sur un autre navigateur que Safari, ouvre d’abord ce lien dans Safari.",
+    "android1": "Touche le menu <b>⋮</b> en haut à droite",
+    "android2": "Choisis <b>Installer l’application</b> ou <b>Ajouter à l’écran d’accueil</b>",
+    "lienCopie": "Lien copié ✓",
+    "lienSelectionne": "Lien sélectionné : copie-le"
+  },
+  "tutoriel": {
+    "titre": "Tutoriel",
+    "intro": "Choisis une partie de l’app : on t’y emmène et on te la montre pas à pas.",
+    "passer": "Passer le tutoriel",
+    "pages": {
+      "home": {
+        "nom": "Accueil",
+        "sous": "Ton tableau de bord et la barre du bas",
+        "e1": "Choisis combien de séances tu veux faire par semaine : chaque semaine réussie fait grandir ta série 🔥.",
+        "e2": "Ton tableau de bord en direct : carte musculaire, progression, nutrition, trophées, records, bilan, calendrier. Touche une carte pour l’ouvrir.",
+        "e3": "Le bouton + ouvre directement ta séance du jour.",
+        "e4": "En bas : Séances (routines, programmes, idées, séance libre), Social et ton profil (« Vous »).",
+        "e5": "Revois ces explications quand tu veux avec « Tutoriel ». Une question ? « Contact »."
+      },
+      "go": {
+        "nom": "Séances",
+        "sous": "Séance libre, routines, programmes, idées",
+        "e1": "Séance libre : crée ta propre séance n’importe quel jour. Touche le jour dans le calendrier, puis ajoute tes exercices.",
+        "e2": "Tes séances enregistrées, à relancer en un toucher.",
+        "e3": "Des plans sur plusieurs semaines : l’app te propose la bonne séance à chaque fois.",
+        "e4": "Des séances toutes prêtes si tu manques d’idées. C’est facultatif !"
+      },
+      "seances": {
+        "nom": "Calendrier",
+        "sous": "Créer une séance libre, n’importe quel jour",
+        "e1": "Touche le jour de ta séance : aujourd’hui, un jour passé ou à venir.",
+        "e2": "Ou ce raccourci pour la séance d’aujourd’hui.",
+        "e3": "Pour supprimer une séance, glisse-la vers la droite."
+      },
+      "seance-choix": {
+        "nom": "Créer une séance",
+        "sous": "Choisir son sport et ajouter ses exercices",
+        "e1": "Choisis ton sport. Pas besoin d’idée toute faite : tu construis ta séance toi-même."
+      },
+      "seance": {
+        "e1": "Ajoute tes exercices un par un, avec tes séries et tes poids : c’est ta séance, à ta façon.",
+        "e2": "Choisis le type (Push, Pull, Jambes…) pour t’y retrouver dans le calendrier.",
+        "e3": "Pas le bon sport ? Reviens au choix de l’activité ici.",
+        "e4": "Tout s’enregistre tout seul. Pour effacer la séance : « Supprimer la séance », tout en bas."
+      },
+      "routines": {
+        "nom": "Mes routines",
+        "sous": "Tes séances enregistrées, prêtes à lancer",
+        "e1": "Enregistre tes séances préférées pour les relancer en un toucher.",
+        "e2": "Lance une routine : tes poids de la dernière fois sont déjà remplis."
+      },
+      "programs": {
+        "nom": "Programmes",
+        "sous": "Des plans sur plusieurs semaines",
+        "e1": "Un plan sur plusieurs semaines : l’app te propose la bonne séance à chaque fois.",
+        "e2": "Choisis-en un pour commencer."
+      },
+      "types": {
+        "nom": "Idées de séances",
+        "sous": "Des séances toutes prêtes (facultatif)",
+        "e1": "Des séances toutes prêtes, par activité. C’est facultatif : tu peux créer les tiennes avec « Séance libre »."
+      },
+      "hub": {
+        "e1": "« Essayer aujourd’hui » copie cette séance dans ton calendrier du jour."
+      },
+      "records": {
+        "nom": "Mes records",
+        "sous": "Tes meilleures perfs",
+        "e1": "Choisis une catégorie pour voir et ajouter tes records."
+      },
+      "progress": {
+        "nom": "Ma progression",
+        "sous": "Tes courbes séance après séance",
+        "e1": "Choisis une catégorie pour voir tes courbes, séance après séance."
+      },
+      "muscles": {
+        "nom": "Carte musculaire",
+        "sous": "Les muscles travaillés",
+        "e1": "Regarde les 7 ou les 30 derniers jours.",
+        "e2": "Plus c’est rouge, plus le muscle a travaillé. Touche un muscle pour voir ses séries."
+      },
+      "recap": {
+        "nom": "Bilan du mois",
+        "sous": "Tes chiffres à partager",
+        "e1": "Ton mois en chiffres.",
+        "e2": "Crée une image à partager en story."
+      },
+      "social": {
+        "nom": "Social",
+        "sous": "Fil d’actu, amis, défis, messages",
+        "e1": "Tes amis, les défis et les classements.",
+        "e2": "Cherche des amis 🔍 ou ouvre tes messages 💬.",
+        "e3": "Le fil d’actu : les dernières séances de tes amis. Réagis et commente !"
+      },
+      "friends": {
+        "nom": "Amis",
+        "sous": "Ajouter des amis avec leur code",
+        "e1": "Donne ton code ami pour qu’on t’ajoute.",
+        "e2": "Ou entre le code d’un ami pour l’ajouter."
+      },
+      "challenges": {
+        "nom": "Défis",
+        "sous": "Se lancer des défis entre amis",
+        "e1": "Lance un défi à tes amis : séances, km, volume…"
+      },
+      "nutrition": {
+        "nom": "Nutrition",
+        "sous": "Compléments et créatine",
+        "e1": "Note tes compléments et coche ta créatine."
+      },
+      "creatine": {
+        "nom": "Créatine",
+        "sous": "Cocher sa prise du jour",
+        "e1": "Touche ce bouton quand tu as pris ta créatine du jour.",
+        "e2": "Oublié un jour ? Touche la date pour la cocher."
+      },
+      "complements": {
+        "nom": "Compléments",
+        "sous": "Noter ce que tu prends",
+        "e1": "Un toucher pour ajouter un complément.",
+        "e2": "Ou ajoute-en un autre, avec sa dose."
+      },
+      "contact": {
+        "nom": "Contact",
+        "sous": "M’écrire une idée, un bug…",
+        "e1": "Une idée, un bug, une question : écris-moi ici."
+      },
+      "profile": {
+        "nom": "Profil",
+        "sous": "Tes infos, couleurs et réglages",
+        "e1": "Ton profil : tes activités, tes amis. « Partager » affiche ton QR code pour qu’on t’ajoute.",
+        "e2": "Choisis ta couleur et le mode d’affichage.",
+        "e3": "Revois les tutoriels quand tu veux.",
+        "langue": "Choisis la langue de l’app : elle te suit sur tous tes appareils."
+      }
+    },
+    "terminer": "Terminer",
+    "remisAZero": "✓ Tutoriels remis à zéro"
+  },
+  "contact": {
+    "titre": "Contact",
+    "formTitre": "Contactez-moi",
+    "formTexte": "Aide, réclamation, idée ou problème : ton message arrive directement chez moi.",
+    "mesMessages": "Mes messages envoyés",
+    "objet": "Objet",
+    "objetMessage": "Objet du message",
+    "explique": "Explique-moi en quelques lignes…",
+    "emailReponse": "Ton e-mail pour la réponse (facultatif)",
+    "envoye": "Envoyé",
+    "merci": "Message envoyé, merci !",
+    "merciTexte": "Je le lis au plus vite. Tu retrouves tes messages et leur statut dans la page Contact.",
+    "retourAccueil": "Retour à l’accueil",
+    "lu": "Lu",
+    "choisisObjet": "Choisis un objet pour ton message.",
+    "ecrisMessage": "Écris ton message avant de l’envoyer.",
+    "envoi": "Envoi…",
+    "echec": "Le message n’a pas pu être envoyé. Vérifie ta connexion et réessaie."
+  },
+  "nav": {
+    "seances": "Séances",
+    "accueil": "Accueil",
+    "nutrition": "Nutrition",
+    "idees": "Idées de séances",
+    "routines": "Mes routines",
+    "social": "Social",
+    "defis": "Défis",
+    "amis": "Amis",
+    "records": "Mes records",
+    "progression": "Ma progression",
+    "contact": "Contact",
+    "profil": "Profil",
+    "admin": "Administration"
+  },
+  "nutrition": {
+    "titre": "Nutrition",
+    "rienAujourdhui": "Rien de noté aujourd’hui",
+    "priseA": "Prise aujourd’hui à {heure}",
+    "prise": "Prise aujourd’hui",
+    "pasPrise": "Pas encore prise aujourd’hui"
+  },
+  "complements": {
+    "titre": "Compléments",
+    "ajoutRapide": "Ajout rapide",
+    "autre": "Autre complément",
+    "nom": "Nom",
+    "nomExemple": "ex. Whey",
+    "dose": "Dose",
+    "doseExemple": "ex. 30 g",
+    "prisCeJour": "Pris ce jour",
+    "aujourdhuiDate": "aujourd’hui, {date}",
+    "prisCeJourN": "Pris ce jour · {n}",
+    "doseNonPrecisee": "Dose non précisée",
+    "retirer": "Retirer",
+    "rien": "Rien de noté ce jour. Touche un complément ci-dessus pour l’ajouter."
+  },
+  "creatine": {
+    "titre": "Créatine",
+    "calendrier": "Calendrier créatine",
+    "oublie": "Oublié un autre jour ? Touche la date pour la cocher ou la décocher.",
+    "doseQuotidienne": "Dose quotidienne",
+    "enGrammes": "en grammes",
+    "prise": "Prise",
+    "aPrendre": "À prendre",
+    "toucherConfirmer": "Touche pour confirmer<br>{dose} g aujourd’hui",
+    "annuler": "Touche à nouveau pour annuler.",
+    "priseAria": ", prise",
+    "daffilee_one": "jour d’affilée",
+    "daffilee_other": "jours d’affilée",
+    "joursCeMois": "jours ce mois",
+    "grammesCeMois": "g ce mois"
+  },
+  "idees": {
+    "titre": "Idées de séances",
+    "intro": "Choisis une activité pour voir des idées de séances à essayer."
+  },
+  "routines": {
+    "routine": "Routine"
+  },
+  "programmes": {
+    "titre": "Programmes"
+  },
+  "muscles": {
+    "titre": "Carte musculaire",
+    "vueFace": "Vue de face",
+    "vueDos": "Vue de dos",
+    "niveaux": {
+      "n0": "Pas travaillé",
+      "n1": "Un peu",
+      "n2": "Bien",
+      "n3": "Beaucoup",
+      "n4": "Énormément"
+    },
+    "derniersJours": "{n} derniers jours",
+    "face": "Face",
+    "dos": "Dos",
+    "toucher": "Touche un muscle pour voir son nombre de séries.",
+    "vide": "Aucune séance sur cette période : tes muscles s’allumeront au fil de tes séances.",
+    "aTravailler": "À travailler",
+    "aucuneSerie": "Aucune série pour ces muscles sur les {n} derniers jours.",
+    "seriesParMuscle": "Séries par muscle",
+    "calcul": "Une série compte pour 1 sur les muscles principaux de l’exercice et 0,5 sur les muscles qui aident.",
+    "seriesSur_one": "{n} série sur les {jours} derniers jours",
+    "seriesSur_other": "{n} séries sur les {jours} derniers jours"
+  },
+  "bilan": {
+    "titre": "Bilan du mois",
+    "vide": "Aucune séance en {mois}. Ton bilan apparaîtra ici dès ta première séance.",
+    "seances_one": "séance",
+    "seances_other": "séances",
+    "joursActifs_one": "jour actif",
+    "joursActifs_other": "jours actifs",
+    "recordsBattus_one": "record battu",
+    "recordsBattus_other": "records battus",
+    "tonnesSoulevees": "soulevées",
+    "kgSouleves": "kg soulevés",
+    "kmCourus": "km courus",
+    "semainesRecord": "semaines 🔥 (record)",
+    "moisAvant": "Par rapport au mois d’avant",
+    "dePlus_one": "{n} séance de plus",
+    "dePlus_other": "{n} séances de plus",
+    "deMoins_one": "{n} séance de moins",
+    "deMoins_other": "{n} séances de moins",
+    "autant": "Autant de séances",
+    "activiteFavorite": "Activité favorite",
+    "exercicePlusFait": "Exercice le plus fait",
+    "fois_one": "{nom} ({n} fois)",
+    "fois_other": "{nom} ({n} fois)",
+    "musclePlusTravaille": "Muscle le plus travaillé",
+    "tempsCourse": "Temps de course",
+    "partager": "📲 Partager en story",
+    "partagerAide": "Une image de ton bilan est créée : partage-la sur Insta, Snap ou WhatsApp.",
+    "apercu": "Aperçu de l’image du bilan",
+    "image": {
+      "titre": "MON BILAN DU MOIS",
+      "seances": "SÉANCES",
+      "joursActifs": "JOURS ACTIFS",
+      "souleves": "SOULEVÉS",
+      "courus": "COURUS",
+      "records": "RECORDS BATTUS",
+      "semaines": "SEMAINES 🔥",
+      "favori": "Exercice favori : {nom}",
+      "devise1": "L’AGENDA ",
+      "devise2": "DU SPORTIF"
+    },
+    "creation": "Création de l’image…",
+    "fichier": "bilan-{mois}",
+    "titrePartage": "Mon bilan du mois",
+    "appuiLong": "Tu peux aussi appuyer longuement sur l’image pour l’enregistrer.",
+    "telechargee": "Image téléchargée. Sur iPhone, appuie longuement sur l’image pour l’enregistrer.",
+    "impossible": "Impossible de créer l’image. Réessaie."
+  },
+  "trophees": {
+    "titre": "Mes trophées",
+    "familles": {
+      "seances": "Séances",
+      "regularite": "Régularité",
+      "records": "Records",
+      "variete": "Variété",
+      "course": "Course",
+      "volume": "Volume"
+    },
+    "liste": {
+      "s1": {
+        "nom": "Premier pas",
+        "desc": "Ta première séance notée"
+      },
+      "s10": {
+        "nom": "Habitué",
+        "desc": "{n} séances"
+      },
+      "s25": {
+        "nom": "Assidu",
+        "desc": "{n} séances"
+      },
+      "s50": {
+        "nom": "Machine",
+        "desc": "{n} séances"
+      },
+      "s100": {
+        "nom": "Légende",
+        "desc": "{n} séances"
+      },
+      "w2": {
+        "nom": "C'est lancé",
+        "desc": "Objectif de la semaine atteint {n} semaines d'affilée"
+      },
+      "w4": {
+        "nom": "Un mois",
+        "desc": "{n} semaines d'affilée"
+      },
+      "w8": {
+        "nom": "Discipline",
+        "desc": "{n} semaines d'affilée"
+      },
+      "w12": {
+        "nom": "Inarrêtable",
+        "desc": "{n} semaines d'affilée"
+      },
+      "r1": {
+        "nom": "Premier record",
+        "desc": "Un record battu pendant une séance"
+      },
+      "r10": {
+        "nom": "Chasseur",
+        "desc": "{n} records battus"
+      },
+      "r25": {
+        "nom": "Collectionneur",
+        "desc": "{n} records battus"
+      },
+      "d3": {
+        "nom": "Touche-à-tout",
+        "desc": "{n} activités différentes pratiquées"
+      },
+      "d5": {
+        "nom": "Complet",
+        "desc": "Les {n} activités de l'app pratiquées"
+      },
+      "k10": {
+        "nom": "Premiers km",
+        "desc": "{n} km courus au total"
+      },
+      "k25": {
+        "nom": "Endurant",
+        "desc": "{n} km courus au total"
+      },
+      "k50": {
+        "nom": "Grand fond",
+        "desc": "{n} km courus au total"
+      },
+      "k100": {
+        "nom": "Centurion",
+        "desc": "{n} km courus au total"
+      },
+      "k200": {
+        "nom": "Ultra",
+        "desc": "{n} km courus au total"
+      },
+      "k500": {
+        "nom": "Globe-trotteur",
+        "desc": "{n} km courus au total"
+      },
+      "t10": {
+        "nom": "10 tonnes",
+        "desc": "{n} tonnes soulevées au total en musculation"
+      },
+      "t25": {
+        "nom": "Costaud",
+        "desc": "{n} tonnes soulevées au total"
+      },
+      "t50": {
+        "nom": "Force brute",
+        "desc": "{n} tonnes soulevées au total"
+      },
+      "t100": {
+        "nom": "Titan",
+        "desc": "{n} tonnes soulevées au total"
+      },
+      "t200": {
+        "nom": "Colosse",
+        "desc": "{n} tonnes soulevées au total"
+      },
+      "t500": {
+        "nom": "Hercule",
+        "desc": "{n} tonnes soulevées au total"
+      }
+    },
+    "atteint": "Atteint !",
+    "bravo_one": "{n} séance cette semaine, bravo.",
+    "bravo_other": "{n} séances cette semaine, bravo.",
+    "debloque": "Trophée débloqué",
+    "semAbrege": "sem.",
+    "bandeau": "Mes trophées · {n}/{total}",
+    "prochain": "Prochain : {nom} ({etat})",
+    "tous": "Tous débloqués, respect !",
+    "intro_one": "{n} débloqué sur {total}, rangés par famille. Touche un badge pour le détail.",
+    "intro_other": "{n} débloqués sur {total}, rangés par famille. Touche un badge pour le détail.",
+    "obtenuLe": "Obtenu le {date}",
+    "obtenu": "Obtenu",
+    "ariaObtenu": "{nom} : obtenu",
+    "ariaADebloquer": "{nom} : à débloquer",
+    "ariaBarre": "{v} sur {objectif}"
+  },
+  "social": {
+    "titre": "Social",
+    "rechercherAmis": "Rechercher des amis"
+  },
+  "messages": {
+    "titre": "Messages"
+  },
+  "defis": {
+    "titre": "Défis",
+    "defi": "Défi"
+  },
+  "classements": {
+    "titre": "Classements"
+  },
+  "amis": {
+    "titre": "Amis"
+  },
+  "partage": {
+    "titre": "Partager mon profil"
+  },
+  "seances": {
+    "calendrier": "Calendrier",
+    "noterDuJour": "Noter la séance du jour",
+    "types": "Types",
+    "seance": "Séance",
+    "court": {
+      "course": "Course",
+      "calis": "Calis",
+      "muscu": "Muscu"
+    },
+    "nonEnregistre": "Non enregistré : vérifie ta connexion"
+  },
+  "conversation": {
+    "plusOptions": "Plus d’options",
+    "voirSeances": "Voir ses séances",
+    "signaler": "Signaler la conversation",
+    "bloquer": "Bloquer",
+    "ecrire": "Écris un message…",
+    "tonMessage": "Ton message"
+  },
+  "records": {
+    "intro": "Choisis une catégorie pour voir et ajouter tes records."
+  },
+  "progression": {
+    "intro": "Choisis une catégorie pour voir tes courbes, séance après séance."
+  },
+  "crossfit": {
+    "noterWod": "Noter mon WOD du jour",
+    "mesRecords": "Mes records (1RM)",
+    "wodReference": "WOD de référence",
+    "wodReferenceTexte": "Les « Girls » et les « Hero WODs » : refais-les régulièrement pour mesurer tes progrès. Charges homme / femme.",
+    "score": {
+      "tours_one": "{n} tour",
+      "tours_other": "{n} tours",
+      "toursReps_one": "{n} tour + {reps}",
+      "toursReps_other": "{n} tours + {reps}",
+      "emom_one": "{n} min réussie",
+      "emom_other": "{n} min réussies",
+      "reps_one": "{n} rep",
+      "reps_other": "{n} reps"
+    },
+    "formats": {
+      "fortime": "For Time",
+      "amrap": "AMRAP",
+      "emom": "EMOM",
+      "tabata": "Tabata",
+      "chipper": "Chipper",
+      "force": "Force"
+    },
+    "formatsAide": {
+      "fortime": "Termine le travail le plus vite possible. Ton score = ton temps.",
+      "amrap": "« As Many Rounds As Possible » : un maximum de tours dans le temps donné.",
+      "emom": "« Every Minute On the Minute » : un bloc au début de chaque minute, repos le reste de la minute.",
+      "tabata": "8 tours de 20 s d’effort / 10 s de repos par mouvement.",
+      "chipper": "Une longue liste de mouvements à « grignoter » une seule fois, pour le temps.",
+      "force": "Travail de charge lourde (ex. 5×5, 1RM). Ton score = ta charge max."
+    },
+    "bench": {
+      "fran": "21-15-9 : Thrusters (43/29 kg), Tractions",
+      "grace": "30 Clean & jerks (61/43 kg)",
+      "isabel": "30 Snatchs (61/43 kg)",
+      "diane": "21-15-9 : Soulevé de terre (102/70 kg), Handstand push-ups",
+      "elizabeth": "21-15-9 : Squat cleans (61/43 kg), Dips aux anneaux",
+      "helen": "3 tours : 400 m course, 21 KB swings (24/16 kg), 12 tractions",
+      "karen": "150 Wall balls (9/6 kg)",
+      "annie": "50-40-30-20-10 : Double unders, Sit-ups",
+      "jackie": "1000 m rameur, 50 Thrusters (20/15 kg), 30 Tractions",
+      "cindy": "AMRAP 20 min : 5 Tractions, 10 Pompes, 15 Air squats",
+      "murph": "1,6 km course, 100 tractions, 200 pompes, 300 squats, 1,6 km course (gilet 9/6 kg)",
+      "tours_one": "{n} tour",
+      "tours_other": "{n} tours"
+    },
+    "lifts": {
+      "bsquat": "Back squat",
+      "fsquat": "Front squat",
+      "dl": "Soulevé de terre",
+      "clean": "Clean",
+      "cj": "Clean & jerk",
+      "snatch": "Snatch",
+      "spress": "Strict press",
+      "ppress": "Push press",
+      "bench": "Développé couché"
+    }
+  },
+  "profil": {
+    "modifierInfos": "Modifier mes informations",
+    "apparence": "Apparence",
+    "couleur": "Couleur principale",
+    "mode": "Mode",
+    "modeAffichage": "Mode d’affichage",
+    "langue": "Langue",
+    "langueAide": "Enregistrée sur ton compte : tu la retrouves sur tous tes appareils.",
+    "son": "Son du minuteur",
+    "volume": "Volume",
+    "volumeMinuteur": "Volume du minuteur",
+    "typeSon": "Type de son",
+    "bips": "Bips 3-2-1 avant la fin",
+    "tester": "🔊 Tester le son",
+    "sonIphone": "Sur iPhone, le son est coupé si le bouton silencieux (sur le côté du téléphone) est activé. Monte aussi le volume du téléphone.",
+    "monCompte": "Mon compte",
+    "installer": "📲 Installer l’app sur mon téléphone",
+    "revoirTuto": "🎓 Revoir le tutoriel",
+    "contact": "✉️ Contact",
+    "exporter": "📦 Télécharger mes données",
+    "changerMdp": "🔑 Changer mon mot de passe",
+    "deconnexion": "Se déconnecter",
+    "zoneSensible": "Zone sensible",
+    "supprimerCompte": "Supprimer mon compte et mes données",
+    "supprimerTexte": "Cette action efface définitivement ton compte, tes séances, ta nutrition, tes photos et tes messages. Entre ton mot de passe pour confirmer.",
+    "supprimerDefinitivement": "Supprimer définitivement",
+    "couleurs": {
+      "rouge": "Rouge",
+      "bleu": "Bleu",
+      "vert": "Vert",
+      "violet": "Violet",
+      "orange": "Orange",
+      "rose": "Rose",
+      "or": "Or",
+      "argent": "Argent"
+    },
+    "modes": {
+      "noir": "Sombre",
+      "anthracite": "Anthracite",
+      "clair": "Clair"
+    },
+    "export": {
+      "preparation": "Préparation…",
+      "fichier": "mes-donnees-agenda-du-sportif",
+      "ok": "✓ Données téléchargées"
+    },
+    "champs": {
+      "photo": "Photo de profil",
+      "photoChanger": "Touche pour changer ta photo",
+      "photoAjouter": "Touche pour ajouter ta photo",
+      "pseudo": "Pseudo *",
+      "pseudoExemple": "ex. TheoFit",
+      "prenom": "Prénom",
+      "nom": "Nom",
+      "age": "Âge",
+      "ans": "ans",
+      "taille": "Taille",
+      "poids": "Poids",
+      "objectif": "Objectif"
+    },
+    "activites_one": "activité",
+    "activites_other": "activités",
+    "amis_one": "ami",
+    "amis_other": "amis",
+    "age_one": "{n} an",
+    "age_other": "{n} ans",
+    "membreDepuis": "Membre depuis {date}",
+    "modifier": "Modifier le profil",
+    "partager": "📤 Partager",
+    "connecteAvec": "Connecté avec {email}",
+    "connecteAvecEmail": "Connecté avec ton e-mail",
+    "pseudoVide": "Le pseudo ne peut pas être vide.",
+    "enregistre": "Profil enregistré.",
+    "echec": "Échec de l’enregistrement. Vérifie ta connexion et réessaie.",
+    "mdpEnvoye": "E-mail envoyé à {email}. Suis le lien pour choisir un nouveau mot de passe (regarde aussi dans tes spams).",
+    "suppression": "Suppression…",
+    "suppressionEchec": "La suppression a échoué. Réessaie."
+  },
+  "admin": {
+    "badge": "Accès administrateur",
+    "sauvegardeEnCours": "Sauvegarde… {i} / {n}",
+    "sauvegardeFichier": "sauvegarde-agenda-du-sportif-{date}",
+    "sauvegardeOk": "✓ Sauvegarde téléchargée",
+    "reserve": "Accès réservé à l’administrateur.",
+    "sauvegarde": "Sauvegarde",
+    "sauvegardeAide": "Télécharge une copie de toute la base (profils, séances, nutrition, sans les photos). À faire environ une fois par mois et à garder dans Fichiers ou iCloud.",
+    "derniereSauvegarde": "Dernière sauvegarde : {date}.",
+    "aucuneSauvegarde": "Aucune sauvegarde faite depuis cet appareil.",
+    "sauvegardeComplete": "💾 Sauvegarde complète",
+    "inscrits": "utilisateurs inscrits",
+    "actifs": "actifs ces 7 derniers jours",
+    "seancesEnregistrees": "séances enregistrées",
+    "visites": "visites au total",
+    "parType": "Séances par type",
+    "aucuneSeance": "Aucune séance enregistrée pour l’instant.",
+    "utilisateurs": "Utilisateurs · {n}",
+    "toi": "toi",
+    "ligneUtilisateur": "Vu {vu} · {seances} · {visites}",
+    "personne": "Personne ne s’est encore inscrit.",
+    "signalements": "Signalements · {n}",
+    "aucunSignalement": "Aucun signalement.",
+    "utilisateur": "Utilisateur",
+    "repondreA": "Répondre à :",
+    "marquerNonLu": "Marquer non lu",
+    "marquerLu": "Marquer comme lu",
+    "aucunMessage": "Aucun message pour l’instant.",
+    "nSeances_one": "{n} séance",
+    "nSeances_other": "{n} séances",
+    "nVisites_one": "{n} visite",
+    "nVisites_other": "{n} visites",
+    "messagesRecus_one": "Messages reçus · {n} non lu",
+    "messagesRecus_other": "Messages reçus · {n} non lus",
+    "signalement": {
+      "message": "Message",
+      "conversation": "Conversation",
+      "comment": "Commentaire",
+      "profile": "Profil",
+      "challenge": "Défi",
+      "autre": "Signalement"
+    },
+    "banni": "Banni",
+    "signalePar": "signalé par {pseudo} · {date}",
+    "supprimerContenu": "🗑 Supprimer le contenu",
+    "retirerRecherche": "Retirer de la recherche",
+    "debannir": "Débannir",
+    "bannir": "⛔ Bannir",
+    "traite": "✓ Traité",
+    "actionImpossibleRegles": "Action impossible. Vérifie les règles Firebase.",
+    "contenuSupprime": "🗑 Contenu supprimé",
+    "suppressionImpossible": "Suppression impossible. Vérifie les règles Firebase.",
+    "profilRetire": "Profil retiré de la recherche",
+    "actionImpossible": "Action impossible.",
+    "fiche": {
+      "pseudo": "Pseudo",
+      "email": "E-mail",
+      "prenom": "Prénom",
+      "nom": "Nom",
+      "age": "Âge",
+      "taille": "Taille",
+      "poids": "Poids",
+      "objectif": "Objectif",
+      "inscritLe": "Inscrit le",
+      "derniereVisite": "Dernière visite",
+      "visitesN": "Visites",
+      "volumeTotal": "Volume total",
+      "distance": "Distance courue",
+      "photos": "Photos"
+    },
+    "joursCreatine": "jours créatine",
+    "complementsNotes": "compléments notés",
+    "informations": "Informations",
+    "dernieresSeances": "Dernières séances",
+    "aucuneSeanceUtilisateur": "Aucune séance enregistrée.",
+    "debannirPseudo": "Débannir {pseudo}",
+    "bannirPseudo": "⛔ Bannir {pseudo}",
+    "joursNutrition_one": "{n} jour de nutrition renseigné.",
+    "joursNutrition_other": "{n} jours de nutrition renseignés."
+  },
+  "bibliotheque": {
+    "titreLong": "Bibliothèque d’exercices",
+    "titre": "Exercices",
+    "chercher": "Chercher un exercice ou crée le tien en l’écrivant",
+    "chercherAria": "Chercher un exercice ou créer le tien en l’écrivant",
+    "aide": "Tu ne trouves pas ton exercice ? Écris son nom en entier : un bouton « + Créer » apparaît en haut de la liste."
+  },
+  "types": {
+    "titre": "Types de séance"
+  },
+  "photos": {
+    "photo": "Photo",
+    "supprimer": "Supprimer la photo",
+    "photoSeance": "Photo de la séance"
+  },
+  "minuteur": {
+    "repos": "Repos",
+    "plus15": "+15 s",
+    "sons": {
+      "bip": "Bip",
+      "alarme": "Alarme",
+      "sifflet": "Sifflet",
+      "gong": "Gong"
+    },
+    "reposNom": "Repos · {nom}",
+    "departReste": "Départ {i}/{n} · reste {reste}",
+    "departNom": "Départ {i} / {n} · {nom}",
+    "termine_one": "Terminé · {n} départ",
+    "termine_other": "Terminé · {n} départs",
+    "dernier": "Départ {n} / {n} · le dernier !",
+    "reparti": "C’est reparti !",
+    "indiqueTemps": "Indique le temps entre deux départs.",
+    "departSeul": "Départ · {nom}"
+  },
+  "regles": {
+    "titre": "Nos règles",
+    "sousTitre": "Pour une communauté sympa et sûre",
+    "r1": "<b>Respect</b> : zéro insulte, harcèlement ou contenu choquant.",
+    "r2": "<b>Signale</b> ce qui ne va pas (⚑) et <b>bloque</b> qui tu veux.",
+    "r3": "Tes données t’appartiennent : tu peux les <b>télécharger</b> ou les <b>supprimer</b> depuis ton profil.",
+    "continuer": "En continuant, tu confirmes avoir au moins 15 ans et tu acceptes les <a href=\"conditions.html\" target=\"_blank\" rel=\"noopener\">conditions d’utilisation</a> et la <a href=\"confidentialite.html\" target=\"_blank\" rel=\"noopener\">politique de confidentialité</a>.",
+    "accepte": "J’accepte"
+  },
+  "ancienneIcone": {
+    "titre": "Bien installée ✓",
+    "sousTitre": "Nouvelle adresse de l’app",
+    "texte": "Pense à <b>supprimer l’ancienne icône</b> de l’app sur ton écran d’accueil : elle ne marche plus. Garde uniquement celle-ci.",
+    "fait": "C’est fait"
+  },
+  "commentFaire": {
+    "titre": "Comment faire"
+  },
+  "confirmation": {
+    "titre": "Supprimer la séance ?",
+    "bouton": "Supprimer la séance"
+  },
+  "nouveautes": {
+    "titre": "Nouveautés",
+    "diapositive": "diapositive",
+    "nom": {
+      "titre": "Nouveau nom, nouveau logo !",
+      "texte": "L’agenda du sportif devient <b>AS Sport</b>. Même app, mêmes séances, mêmes amis : seuls le nom et le logo changent. « L’agenda du sportif » reste notre devise."
+    },
+    "ios": {
+      "titre1": "Sur iPhone : ajoute la nouvelle icône",
+      "garde": "Garde l’ancienne icône pour l’instant : tu la supprimeras à la fin.",
+      "copie": "Copie l’adresse de l’app",
+      "copier": "Copier",
+      "e2": "Ouvre <b>Safari</b>, touche la barre d’adresse, <b>colle</b> et ouvre la page.",
+      "e3": "Touche <b>Partager</b> <svg class=\"ios-share\" viewBox=\"0 0 24 24\" aria-label=\"(icône carré avec flèche)\"><path d=\"M12 3v12M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1\"/></svg> puis <b>Sur l’écran d’accueil</b> › <b>Ajouter</b>.",
+      "deux": "Tu as maintenant <b>deux icônes</b>. C’est normal : ne supprime rien pour l’instant.",
+      "titre2": "Puis supprime l’ancienne",
+      "altNouvelle": "Nouvelle icône : AS rouge sur fond noir",
+      "garder": "✓ Nouvelle : garde-la",
+      "altAncienne": "Ancienne icône : AS blanc dans un carré rouge",
+      "supprimer": "✕ Ancienne : supprime-la",
+      "e4": "Ouvre la <b>nouvelle icône</b> « AS Sport » et connecte-toi avec ton <b>e-mail et ton mot de passe</b>. Tu retrouves toutes tes séances.",
+      "e5": "Tout est là ? <b>Appui long sur l’ancienne icône</b> « Agenda sportif » › <b>Supprimer le signet</b> (ou « Supprimer l’app »).",
+      "oublie": "Mot de passe oublié ? Touche « Mot de passe oublié ? » sur l’écran de connexion : un e-mail arrive pour le changer."
+    },
+    "contact": {
+      "ici": "‹ ici",
+      "legende": "En bas de la page d’accueil, sous « Nutrition »",
+      "titre": "Une idée ? Un bug ? Dites-le-moi !",
+      "texte": "N’hésitez pas à m’écrire via le bouton Contact sur la page d’accueil. Une idée d’amélioration, un exercice qui manque, un bug repéré : tous vos retours m’aident à faire évoluer l’application."
+    },
+    "position": "{i} sur {n}",
+    "cestParti": "C’est parti !",
+    "copie": "Copié ✓",
+    "selectionnee": "Sélectionnée : copie-la"
+  },
+  "onglets": {
+    "go": "Let’s go",
+    "navigation": "Navigation principale",
+    "vous": "Vous"
+  },
+  "assistant": {
+    "ouvrir": "Ouvrir l’assistant",
+    "bulle": "Besoin d’aide ? Je réponds à tes questions 👋",
+    "titre": "Assistant",
+    "sousTitre": "Réponses aux questions fréquentes",
+    "pose": "Pose ta question…",
+    "taQuestion": "Ta question",
+    "faq": {
+      "commentFaire": {
+        "q": "Comment savoir faire un exercice ?",
+        "mots": "comment faire exercice mouvement technique animation silhouette aide executer",
+        "r": "Touche le petit « ? » rouge : dans ta séance à côté du nom de l’exercice, ou directement dans la recherche d’exercices (sans l’ajouter).\nLe mouvement est animé de profil et de face (départ puis arrivée, en boucle), avec un conseil de technique et, pour les pompes, développés et tractions, un schéma du placement des mains.\nLes muscles qui travaillent sont en rouge."
+      },
+      "boutonGo": {
+        "q": "C’est quoi le bouton + Let’s go ?",
+        "mots": "lets go let go lancer demarrer seance commencer accueil plus bouton barre",
+        "r": "Le gros bouton + au milieu de la barre du bas ouvre directement ta séance du jour.\nL’onglet « Séances » regroupe la séance libre (calendrier), tes routines, les programmes et les idées de séances. L’accueil montre ta carte musculaire, ta progression, tes trophées, tes records et ton bilan."
+      },
+      "creerRoutine": {
+        "q": "Comment créer une routine ?",
+        "mots": "routine enregistrer sauvegarder modele refaire seance favorite",
+        "r": "Deux façons :\n• dans une séance, touche « ☆ Enregistrer comme routine » ;\n• ou Séances › Mes routines › « + Créer une routine ».\nEnsuite, un toucher sur « Lancer » et la séance est prête, avec tes poids de la dernière fois."
+      },
+      "suivreProgramme": {
+        "q": "Comment suivre un programme ?",
+        "mots": "programme plan semaines ppl full body 5x5 prepa 10 km suivre",
+        "r": "Séances › Programmes, puis « Suivre ce programme ».\nL’app te propose ensuite la bonne séance à chaque fois (« ▶ Lancer »), semaine après semaine."
+      },
+      "derniereFois": {
+        "q": "C’est quoi « la dernière fois » ?",
+        "mots": "derniere fois historique precedent poids pre rempli avant",
+        "r": "Quand tu ajoutes un exercice déjà fait, l’app affiche ce que tu as fait la dernière fois (↺) et reprend tes poids. Les répétitions sont proposées en gris : tape les tiennes ou valide la série."
+      },
+      "recordsDirect": {
+        "q": "Comment marchent les records en direct ?",
+        "mots": "record nouveau pr battre trophee direct",
+        "r": "Quand tu valides une série plus lourde que ton meilleur résultat (ou plus de reps au même poids), le message « Nouveau record ! » s’affiche, avec des confettis. Pour la course : ta plus longue sortie et ta meilleure allure. Tes amis voient tes records dans le fil d’actu."
+      },
+      "serie": {
+        "q": "C’est quoi la série 🔥 ?",
+        "mots": "serie flamme streak objectif semaine hebdo anneau",
+        "r": "Sur l’accueil, choisis ton objectif de séances par semaine (touche l’anneau). Chaque semaine où tu l’atteins fait grandir ta série 🔥. Les jours « Repos » ne comptent pas."
+      },
+      "plusieursSeances": {
+        "q": "Plusieurs séances le même jour ?",
+        "mots": "plusieurs deux seances meme jour matin soir double",
+        "r": "Oui : dans une séance, touche « + Autre séance » en haut, ou « + Nouvelle » dans Séances. Les séances du jour s’affichent en onglets."
+      },
+      "carteMusculaire": {
+        "q": "C’est quoi la carte musculaire ?",
+        "mots": "carte musculaire muscles corps travailles oublies",
+        "r": "Accueil › Carte musculaire : les muscles travaillés sur 7 ou 30 jours s’allument, du plus clair au plus rouge. Touche un muscle pour voir son nombre de séries."
+      },
+      "partagerBilan": {
+        "q": "Comment partager mon bilan ?",
+        "mots": "bilan mois story partager instagram image recap",
+        "r": "Accueil › Bilan du mois, puis « 📲 Partager en story ». Une image est créée avec tes chiffres du mois : partage-la sur Insta, Snap ou WhatsApp."
+      },
+      "cordes": {
+        "q": "Comment noter une séance de cordes ?",
+        "mots": "corde cordes montee rope climb depart lest",
+        "r": "Touche un jour, puis choisis « Cordes ». Pour chaque exercice : nombre de cordes, départ toutes les X secondes ou minutes, avec ou sans lest.\n« ⏱ Lancer les départs » fait sonner le minuteur à chaque départ."
+      },
+      "defi": {
+        "q": "Comment lancer un défi ?",
+        "mots": "defi challenge competition amis concours",
+        "r": "Social › Défis › « + Nouveau défi » : choisis ce qu’on compte (séances, jours actifs, km ou volume), la durée et les amis invités. Le classement se met à jour tout seul."
+      },
+      "commenter": {
+        "q": "Comment commenter une séance ?",
+        "mots": "commenter commentaire fil actu actualite feed",
+        "r": "Social : dans le fil d’actu, sous chaque séance de tes amis, écris ton commentaire et touche « Envoyer ». Tu vois les commentaires sur tes séances dans Social et dans la fiche de la séance."
+      },
+      "noterSeance": {
+        "q": "Comment noter une séance ?",
+        "mots": "noter seance ajouter entrainement jour calendrier creer",
+        "r": "Va dans Séances, puis touche le jour voulu dans le calendrier (ou « Noter la séance du jour »).\nChoisis ton activité : Musculation, CrossFit, Callisthénie ou Course à pied. Chaque activité a sa fiche adaptée."
+      },
+      "ajouterSeries": {
+        "q": "Comment ajouter des séries ?",
+        "mots": "serie series repetition reps poids kg exercice ajouter",
+        "r": "Dans ta séance, touche « + Ajouter un exercice », écris son nom, puis remplis Reps et Poids pour chaque série.\n« + Ajouter une série » recopie la série précédente pour aller plus vite."
+      },
+      "repos": {
+        "q": "Comment marche le temps de repos ?",
+        "mots": "repos minuteur timer chrono temps pause recuperation",
+        "r": "Sous chaque exercice, règle ton temps de repos avec − et + (par pas de 15 s).\nAprès ta série, touche « ✓ Série 1 finie · repos » : la série passe en vert et le minuteur démarre. À la fin du repos, la série suivante s’allume toute seule. « +15 s » ajoute du temps, « Passer » passe directement à la série suivante."
+      },
+      "enregistrement": {
+        "q": "Est-ce que ma séance s’enregistre ?",
+        "mots": "enregistrer sauvegarder sauvegarde perdu perdre bouton valider",
+        "r": "Oui, tout s’enregistre tout seul pendant que tu écris, pas besoin de bouton.\nUn message rouge s’affiche en haut seulement s’il y a un problème de connexion."
+      },
+      "rpe": {
+        "q": "C’est quoi le RPE ?",
+        "mots": "rpe difficulte dur effort note",
+        "r": "Le RPE note la difficulté de 1 à 10.\n8 = il te restait 2 répétitions en réserve, 9 = 1 répétition, 10 = échec. Ça t’aide à savoir quand augmenter les charges."
+      },
+      "photo": {
+        "q": "Comment ajouter une photo ?",
+        "mots": "photo image camera prendre physique",
+        "r": "Ouvre ta séance et descends jusqu’à « Photos », puis touche « + Prendre une photo ».\nTouche une photo pour l’agrandir ou la supprimer."
+      },
+      "reprendre": {
+        "q": "Comment reprendre ma dernière séance ?",
+        "mots": "reprendre copier derniere precedente meme",
+        "r": "Sur un jour vide, choisis le type de séance : un bouton « Reprendre la dernière séance » apparaît. Il recopie tes exercices et tes poids."
+      },
+      "types": {
+        "q": "Comment changer les types et les couleurs ?",
+        "mots": "type couleur modifier push pull jambes cardio cordes repos",
+        "r": "Dans Séances, touche le bouton « Types ». Tu peux renommer un type, changer sa couleur (touche la pastille), en ajouter ou en retirer."
+      },
+      "creatine": {
+        "q": "Comment noter ma créatine ?",
+        "mots": "creatine prise dose",
+        "r": "Nutrition › Créatine : touche le grand rond, il devient rouge = prise.\nTu as oublié un jour ? Touche la date dans le calendrier en dessous. La dose se règle en bas de la page."
+      },
+      "complement": {
+        "q": "Comment ajouter un complément ?",
+        "mots": "complement whey proteine omega vitamine magnesium supplement",
+        "r": "Nutrition › Compléments : touche un complément dans « Ajout rapide », ou écris-en un nouveau avec sa dose. Les flèches en haut changent de jour."
+      },
+      "installer": {
+        "q": "Comment installer l’app sur mon téléphone ?",
+        "mots": "installer app application ecran accueil telecharger icone",
+        "r": "Sur iPhone : dans Safari, touche Partager puis « Sur l’écran d’accueil ».\nSur Android : menu ⋮ puis « Installer l’application ».\nTu retrouves aussi un bouton dans Profil."
+      },
+      "modifierProfil": {
+        "q": "Comment modifier mon profil ?",
+        "mots": "profil modifier photo pseudo poids taille age objectif infos",
+        "r": "Touche « Vous » en bas à droite, puis « Modifier le profil ». Change ce que tu veux et touche « Enregistrer »."
+      },
+      "motDePasse": {
+        "q": "J’ai oublié mon mot de passe",
+        "mots": "mot de passe oublie oubli reinitialiser connexion connecter",
+        "r": "Sur l’écran de connexion, écris ton e-mail puis touche « Mot de passe oublié ? ». Tu reçois un lien par e-mail (regarde aussi dans les spams)."
+      },
+      "donneesPrivees": {
+        "q": "Mes données sont-elles privées ?",
+        "mots": "prive privee donnees securite voir confidentialite",
+        "r": "Les autres utilisateurs ne peuvent pas voir tes données.\nL’administrateur de l’application peut consulter les comptes pour gérer l’app et t’aider."
+      },
+      "horsConnexion": {
+        "q": "Ça marche sans internet ?",
+        "mots": "internet hors connexion reseau wifi offline",
+        "r": "Oui, l’app s’ouvre sans réseau et garde tes modifications. Elles sont envoyées dès que la connexion revient."
+      },
+      "supprimerCompte": {
+        "q": "Comment supprimer mon compte ?",
+        "mots": "supprimer compte effacer desinscrire",
+        "r": "Vous › « Supprimer mon compte et mes données », puis confirme avec ton mot de passe. Tout est effacé définitivement."
+      },
+      "course": {
+        "q": "Comment noter une course à pied ?",
+        "mots": "course courir running footing endurance fondamentale seuil fractionne vma allure distance km",
+        "r": "Touche un jour › Course à pied, puis choisis Endurance fondamentale, Seuil ou Fractionné.\nEntre la distance et la durée : ton allure (min/km) et ta vitesse se calculent seules. Pour le seuil et le fractionné, ajoute tes blocs (ex. 10 × 400 m, récup 1:00) et lance le minuteur de récup."
+      },
+      "wod": {
+        "q": "Comment noter un WOD de CrossFit ?",
+        "mots": "crossfit wod noter enregistrer score",
+        "r": "Touche un jour › CrossFit. Choisis le format (For Time, AMRAP, EMOM…), écris les mouvements, puis ton score et Rx ou Scaled.\nÉcris « Fran », « Murph »… dans le nom du WOD : les mouvements se remplissent tout seuls."
+      },
+      "recordsCrossfit": {
+        "q": "Où voir mes records de CrossFit ?",
+        "mots": "record 1rm pr charge max benchmark girls fran murph cindy",
+        "r": "Sur l’accueil, touche CrossFit : tu y notes tes records (1RM) en back squat, clean, snatch… et tes temps sur les WOD de référence comme Fran ou Murph."
+      },
+      "calis": {
+        "q": "Comment noter une séance de callisthénie ?",
+        "mots": "callisthenie calisthenics street workout traction dips muscle front lever planche handstand poids corps",
+        "r": "Touche un jour › Callisthénie. Ajoute tes exercices en un toucher (Tractions, Dips, Front lever…). Pour les figures tenues, touche « Reps ⇄ » pour noter des secondes. La colonne Lest sert si tu t’alourdis."
+      },
+      "idees": {
+        "q": "Où trouver des idées de séances ?",
+        "mots": "idee idees seance type programme exemple inspiration essayer",
+        "r": "Sur l’accueil, touche « Séances types » puis choisis ton activité : Musculation (Push, Pull, Jambes…), CrossFit, Callisthénie ou Course à pied.\nChaque idée a un bouton « Essayer aujourd’hui » qui remplit ta séance du jour."
+      },
+      "recordsPR": {
+        "q": "Où noter mes records (PR) ?",
+        "mots": "record pr 5km 10km semi marathon developpe couche squat souleve",
+        "r": "Accueil › Records, puis choisis ta catégorie : Musculation, CrossFit, Callisthénie ou Course à pied. Touche + pour ajouter un record : ton meilleur s’affiche en gros."
+      },
+      "progression": {
+        "q": "Où voir ma progression ?",
+        "mots": "progression graphique courbe evolution progres stats statistiques",
+        "r": "Accueil › Progression, puis choisis ta catégorie. En musculation, choisis Push, Pull… : chaque exercice a sa courbe avec ta charge max à chaque séance. Touche une courbe pour voir la valeur d’une séance."
+      },
+      "son": {
+        "q": "Comment régler le son du minuteur ?",
+        "mots": "son volume minuteur chrono bip alarme entendre fort",
+        "r": "Vous › « Son du minuteur » : règle le volume, choisis Bip, Alarme, Sifflet ou Gong, et touche « Tester le son ».\nSur iPhone, le son est coupé si le bouton silencieux (sur le côté) est activé."
+      },
+      "serieCouleur": {
+        "q": "C’est quoi la série en couleur ?",
+        "mots": "serie couleur cours surligne verte",
+        "r": "Dans une séance, la série sur laquelle tu es est entourée de ta couleur principale (« Série en cours »). Remplis tes reps et ton poids, puis touche « ✓ Série finie » : elle passe en vert, le repos démarre, et la suivante s’allume à la fin du chrono."
+      },
+      "ajouterAmi": {
+        "q": "Comment ajouter un ami ?",
+        "mots": "ami amis ajouter code pseudo demande accepter",
+        "r": "Social › Amis (ou la loupe 🔍). Montre ton QR code (Vous › Partager) ou donne ton code ami (ex. THEO-4821) à tes potes, ou cherche leur code ou leur pseudo, puis touche « Ajouter ». Ton ami accepte la demande et c’est fait."
+      },
+      "messageAmi": {
+        "q": "Comment envoyer un message à un ami ?",
+        "mots": "message messages ecrire discuter conversation chat",
+        "r": "Social › 💬 en haut à droite, ou Amis puis touche 💬 à côté de ton ami. Les messages ne sont visibles que par vous deux. Un point rouge t’indique les nouveaux messages."
+      },
+      "essayerSeanceAmi": {
+        "q": "Comment essayer la séance d’un ami ?",
+        "mots": "seance ami essayer copier suivre voir",
+        "r": "Social › Amis, touche ton ami puis une de ses séances, et « Essayer cette séance » : elle est copiée dans ta séance du jour, avec ses poids comme objectif. Tu peux aussi réagir avec 💪 🔥 👏."
+      },
+      "quiVoit": {
+        "q": "Qui voit mes séances ?",
+        "mots": "voir seances prive partager partage confidentialite amis",
+        "r": "Seulement tes amis acceptés, et seulement si « Partager mes séances avec mes amis » est activé (Social › Amis). Ta nutrition et tes infos personnelles ne sont jamais partagées."
+      },
+      "bloquer": {
+        "q": "Comment bloquer ou signaler quelqu’un ?",
+        "mots": "bloquer signaler harcelement probleme insulte",
+        "r": "Dans une conversation, touche ••• puis « Bloquer » ou « Signaler ». Tu peux aussi toucher un message pour le signaler. Les signalements arrivent chez l’administrateur."
+      },
+      "contacter": {
+        "q": "Comment contacter le créateur ?",
+        "mots": "contact contacter createur probleme bug aide reclamation idee",
+        "r": "Touche « Contact » en bas de l’accueil, choisis un objet et écris ton message : il arrive directement chez moi."
+      }
+    },
+    "lexique": {
+      "3030": {
+        "termes": "3030",
+        "q": "C’est quoi un 30/30 ?",
+        "mots": "30 30 trente fractionne court",
+        "r": "30/30 = 30 secondes vite (autour de ta VMA) puis 30 secondes lentement, à répéter (ex. 2 × 10 fois). C’est un fractionné court classique."
+      },
+      "21159": {
+        "termes": "21159",
+        "q": "Que veut dire 21-15-9 ?",
+        "mots": "21 15 9 schema repetitions",
+        "r": "C’est un schéma de répétitions : 21 de chaque mouvement, puis 15, puis 9.\nEx. Fran : 21 thrusters, 21 tractions, 15 thrusters, 15 tractions, 9 thrusters, 9 tractions."
+      },
+      "wod": {
+        "termes": "wod",
+        "q": "C’est quoi un WOD ?",
+        "mots": "wod workout day seance jour",
+        "r": "WOD = « Workout Of the Day », l’entraînement du jour.\nEn CrossFit, c’est la partie principale de la séance : souvent courte (5 à 20 min) et intense, elle mélange cardio, gymnastique et haltérophilie."
+      },
+      "rx": {
+        "termes": "rx scaled scale",
+        "q": "C’est quoi Rx et Scaled ?",
+        "mots": "rx scaled prescribed adapte niveau",
+        "r": "Rx (« as prescribed ») = tu fais le WOD exactement comme il est écrit : charges, mouvements et répétitions officiels.\nScaled = version adaptée à ton niveau : charge plus légère, tractions avec élastique, pompes sur les genoux…\nFaire en Scaled n’a rien de honteux : c’est comme ça qu’on progresse sans se blesser."
+      },
+      "fortime": {
+        "termes": "fortime",
+        "q": "C’est quoi un For Time ?",
+        "mots": "for time chrono vite possible temps",
+        "r": "For Time = tu fais tout le travail demandé le plus vite possible. Ton score, c’est ton temps.\nIl y a souvent un « time cap » (temps maximum)."
+      },
+      "timecap": {
+        "termes": "cap timecap",
+        "q": "C’est quoi un time cap ?",
+        "mots": "time cap limite maximum",
+        "r": "Le time cap est le temps maximum autorisé pour un WOD.\nSi tu n’as pas fini à temps, ton score = le nombre de répétitions faites (on note par exemple « CAP + 12 »)."
+      },
+      "amrap": {
+        "termes": "amrap",
+        "q": "C’est quoi un AMRAP ?",
+        "mots": "amrap many rounds possible tours maximum",
+        "r": "AMRAP = « As Many Rounds As Possible » : un maximum de tours dans un temps donné.\nEx. : AMRAP 12 min de 5 tractions, 10 pompes, 15 squats. Tu enchaînes les tours jusqu’au bip.\nScore = tours complets + répétitions du tour en cours (ex. 8 tours + 7)."
+      },
+      "emom": {
+        "termes": "emom e2mom",
+        "q": "C’est quoi un EMOM ?",
+        "mots": "emom every minute chaque minute",
+        "r": "EMOM = « Every Minute On the Minute » : au début de chaque minute, tu fais le travail demandé, puis tu te reposes le reste de la minute.\nEx. : EMOM 10 min : 3 power cleans. Plus tu vas vite, plus tu te reposes.\nUn « E2MOM » = toutes les 2 minutes."
+      },
+      "tabata": {
+        "termes": "tabata",
+        "q": "C’est quoi un Tabata ?",
+        "mots": "tabata 20 10 secondes intervalle",
+        "r": "Tabata = 8 tours de 20 secondes d’effort maximal / 10 secondes de repos, soit 4 minutes.\nScore : le total de répétitions, ou le tour le plus faible selon la consigne."
+      },
+      "chipper": {
+        "termes": "chipper",
+        "q": "C’est quoi un Chipper ?",
+        "mots": "chipper liste longue",
+        "r": "Un Chipper est une longue liste de mouvements avec beaucoup de répétitions, à faire une seule fois dans l’ordre.\nOn les « grignote » (to chip) petit à petit. Ex. : 50 box jumps, 50 wall balls, 50 burpees…"
+      },
+      "1rm": {
+        "termes": "1rm rm pr",
+        "q": "C’est quoi un 1RM et un PR ?",
+        "mots": "1rm rm pr record personnel charge max repetition",
+        "r": "1RM = « 1 Repetition Max » : la charge la plus lourde que tu peux soulever une seule fois.\nPR = « Personal Record », ton record personnel. Note-les dans l’onglet CrossFit pour suivre tes progrès."
+      },
+      "girls": {
+        "termes": "girls girl hero heroes benchmark",
+        "q": "C’est quoi les Girls et les Hero WODs ?",
+        "mots": "girls hero benchmark reference fran murph grace cindy",
+        "r": "Ce sont des WOD de référence (« benchmarks »), toujours identiques, pour mesurer tes progrès.\nLes « Girls » portent des prénoms féminins (Fran, Grace, Cindy…). Les « Hero WODs » rendent hommage à des militaires ou pompiers morts en service (Murph…).\nTu les retrouves tous dans l’onglet CrossFit."
+      },
+      "charges": {
+        "termes": "kg",
+        "q": "Que veut dire 43/29 kg ?",
+        "mots": "charge homme femme slash deux poids",
+        "r": "Deux charges séparées par « / » = charge homme / charge femme.\nEx. Thrusters 43/29 kg : 43 kg pour les hommes, 29 kg pour les femmes (version Rx)."
+      },
+      "metcon": {
+        "termes": "metcon",
+        "q": "C’est quoi un Metcon ?",
+        "mots": "metcon metabolic conditioning cardio",
+        "r": "Metcon = « metabolic conditioning » : la partie intense et cardio du WOD, qui fait monter le cœur (souvent un For Time ou un AMRAP)."
+      },
+      "box": {
+        "termes": "box",
+        "q": "C’est quoi une box ?",
+        "mots": "box salle crossfit",
+        "r": "Une « box » est une salle de CrossFit."
+      },
+      "kipping": {
+        "termes": "kipping strict butterfly",
+        "q": "Kipping ou strict, c’est quoi ?",
+        "mots": "kipping strict balancement elan traction",
+        "r": "Strict = mouvement sans élan (ex. traction stricte).\nKipping = on utilise un balancement du corps pour enchaîner plus vite (tractions, toes to bar, HSPU). Le « butterfly » est un kipping encore plus rapide."
+      },
+      "unbroken": {
+        "termes": "unbroken",
+        "q": "Que veut dire Unbroken ?",
+        "mots": "unbroken sans pause lacher",
+        "r": "Unbroken = toutes les répétitions d’une série sans t’arrêter ni lâcher la barre."
+      },
+      "thruster": {
+        "termes": "thruster thrusters",
+        "q": "C’est quoi un thruster ?",
+        "mots": "thruster squat developpe",
+        "r": "Un thruster = un front squat enchaîné avec un développé au-dessus de la tête, en un seul mouvement fluide : tu utilises l’élan de la remontée du squat pour pousser la barre."
+      },
+      "wallball": {
+        "termes": "wall wallball wallballs",
+        "q": "C’est quoi un wall ball ?",
+        "mots": "wall ball medecine ballon mur cible",
+        "r": "Wall ball = un squat avec un médecine-ball contre la poitrine, puis tu lances le ballon vers une cible au mur (3 m pour les hommes, 2,70 m pour les femmes) et tu le rattrapes."
+      },
+      "doubleunder": {
+        "termes": "double unders du",
+        "q": "C’est quoi un double under ?",
+        "mots": "double under corde sauter",
+        "r": "Double under = à la corde à sauter, la corde passe 2 fois sous tes pieds pendant un seul saut."
+      },
+      "t2b": {
+        "termes": "t2b toes",
+        "q": "C’est quoi un toes to bar ?",
+        "mots": "toes to bar pieds barre suspendu abdos",
+        "r": "Toes to bar = suspendu à la barre, tu montes les pieds jusqu’à toucher la barre."
+      },
+      "muscleup": {
+        "termes": "muscleup muscle",
+        "q": "C’est quoi un muscle-up ?",
+        "mots": "muscle up anneaux barre traction dips",
+        "r": "Muscle-up = une traction enchaînée avec un dips pour passer le buste au-dessus de la barre ou des anneaux. C’est un mouvement avancé."
+      },
+      "hspu": {
+        "termes": "hspu",
+        "q": "C’est quoi un HSPU ?",
+        "mots": "hspu handstand push up pompe equilibre",
+        "r": "HSPU = « Handstand Push-Up » : une pompe en équilibre sur les mains, les pieds contre le mur."
+      },
+      "halterophilie": {
+        "termes": "clean snatch jerk epaule arrache",
+        "q": "Clean, snatch, jerk : c’est quoi ?",
+        "mots": "clean snatch jerk epaule arrache jete halterophilie",
+        "r": "Ce sont les mouvements d’haltérophilie :\n• Clean (épaulé) : la barre passe du sol aux épaules.\n• Jerk (jeté) : des épaules au-dessus de la tête.\n• Clean & jerk : les deux enchaînés.\n• Snatch (arraché) : du sol au-dessus de la tête en un seul mouvement.\n« Power » = réception en demi-squat au lieu du squat complet."
+      },
+      "kbswing": {
+        "termes": "kb kettlebell swing swings",
+        "q": "C’est quoi un KB swing ?",
+        "mots": "kb kettlebell swing balancier",
+        "r": "KB swing = tu balances une kettlebell entre les jambes puis jusqu’à hauteur des yeux (swing russe) ou au-dessus de la tête (swing américain), grâce à la poussée des hanches."
+      },
+      "burpee": {
+        "termes": "burpee burpees",
+        "q": "C’est quoi un burpee ?",
+        "mots": "burpee",
+        "r": "Burpee = tu poses la poitrine au sol, tu te relèves et tu sautes en tapant des mains au-dessus de la tête."
+      },
+      "ef": {
+        "termes": "ef endurance fondamentale",
+        "q": "C’est quoi l’endurance fondamentale ?",
+        "mots": "endurance fondamentale ef lent footing zone 2",
+        "r": "L’endurance fondamentale (EF) est une allure lente et confortable : tu peux parler en courant. Environ 60 à 75 % de ta fréquence cardiaque max.\nElle représente la majorité de l’entraînement d’un coureur : elle développe le « moteur » sans fatiguer."
+      },
+      "seuil": {
+        "termes": "seuil",
+        "q": "C’est quoi le seuil ?",
+        "mots": "seuil lactique allure tempo",
+        "r": "Le seuil est une allure soutenue mais contrôlée, que tu pourrais tenir environ 45 min à 1 h en course. Environ 85 à 90 % de ta FC max.\nEn séance, on le travaille par blocs (ex. 3 × 10 min au seuil, 2 min de récup)."
+      },
+      "fractionne": {
+        "termes": "fractionne fractionnee intervalle interval",
+        "q": "C’est quoi le fractionné ?",
+        "mots": "fractionne intervalle vitesse repetition",
+        "r": "Le fractionné alterne des efforts rapides et des récupérations.\nEx. : 10 × 400 m vite avec 1 min de récup, ou 30/30. C’est ce qui fait progresser ta vitesse et ta VMA."
+      },
+      "vma": {
+        "termes": "vma",
+        "q": "C’est quoi la VMA ?",
+        "mots": "vma vitesse maximale aerobie",
+        "r": "VMA = Vitesse Maximale Aérobie : la vitesse à laquelle tu consommes le maximum d’oxygène. Tu peux la tenir environ 4 à 7 minutes.\nOn s’en sert pour régler les allures du fractionné (ex. 30/30 à 100 % de VMA)."
+      },
+      "allure": {
+        "termes": "allure pace",
+        "q": "C’est quoi l’allure ?",
+        "mots": "allure pace min km vitesse",
+        "r": "L’allure est le temps pour parcourir 1 km (ex. 5:00 /km).\n5:00 /km = 12 km/h, 6:00 /km = 10 km/h, 4:00 /km = 15 km/h. L’app la calcule toute seule à partir de ta distance et de ta durée."
+      },
+      "fc": {
+        "termes": "fc bpm cardiaque frequence",
+        "q": "C’est quoi la FC max ?",
+        "mots": "fc frequence cardiaque max bpm coeur",
+        "r": "La FC max est ta fréquence cardiaque maximale (en battements par minute). Une estimation simple : 220 − ton âge, mais elle varie beaucoup d’une personne à l’autre.\nLa FC moyenne de ta sortie se lit sur ta montre."
+      }
+    },
+    "wodRef": {
+      "notes": {
+        "murph": "Tu peux découper les tractions, pompes et squats comme tu veux (ex. 20 tours de 5-10-15), mais la course se fait au début et à la fin.",
+        "cindy": "Enchaîne les tours sans t’arrêter pendant 20 minutes : ton score = tours + reps.",
+        "fran": "C’est l’un des WOD les plus connus : très court (souvent 3 à 10 min) mais très intense.",
+        "helen": "Enchaîne 3 fois : la course, les swings puis les tractions.",
+        "annie": "50 double unders et 50 sit-ups, puis 40 et 40, etc. jusqu’à 10."
+      },
+      "question": "C’est quoi le WOD {nom} ?",
+      "description": "{nom} : {desc}.",
+      "amrap": "C’est un AMRAP de {n} min : ton score est ton nombre de tours + reps.",
+      "fortime": "C’est un For Time : ton score est ton temps.",
+      "noter": "Note ton résultat dans l’onglet CrossFit."
+    },
+    "motsVides": "je tu il le la les de du un en et ou ce ca sa ma ta se ne on au comment pour avec dans une des est que qui quoi quel quelle quels mon mes ton tes son ses faire fait fais peux peut puis sur pas par plus moins tout tous toute cette ces aux the and elle ils nous vous etre avoir suis sont veux voudrais savoir aide aider app application veut dire signifie explique expliquer",
+    "ecrireCreateur": "✉️ Écrire au créateur",
+    "bonjourPseudo": "Salut {pseudo} 👋 Je réponds aux questions fréquentes sur l’app. Choisis une question ou écris la tienne.",
+    "bonjour": "Salut 👋 Je réponds aux questions fréquentes sur l’app. Choisis une question ou écris la tienne.",
+    "rubriques": {
+      "cf": "Lexique CrossFit",
+      "wod": "Explication des WOD",
+      "run": "Lexique course à pied"
+    },
+    "choisisMot": "Choisis le mot ou le WOD que tu veux comprendre :",
+    "aussi": "Ça peut aussi t’aider :",
+    "pasTrouve": "Je n’ai pas trouvé de réponse à ta question. Tu peux écrire directement au créateur de l’app, il te répondra."
+  },
+  "valeurs": {
+    "types": {
+      "push": "Push",
+      "pull": "Pull",
+      "jambes": "Jambes",
+      "haut": "Haut du corps",
+      "bas": "Bas du corps",
+      "cardio": "Cardio",
+      "cordes": "Cordes",
+      "repos": "Repos"
+    },
+    "humeurs": {
+      "forme": "En forme",
+      "normal": "Normal",
+      "fatigue": "Fatigué",
+      "douleur": "Douleur"
+    },
+    "objectifs": {
+      "masse": "Prise de masse",
+      "seche": "Sèche",
+      "force": "Force",
+      "maintien": "Maintien de force",
+      "forme": "Remise en forme",
+      "endurance": "Endurance"
+    },
+    "objets": {
+      "aide": "Aide",
+      "reclamation": "Réclamation",
+      "amelioration": "Amélioration à suggérer",
+      "probleme": "Problème sur l’application"
+    },
+    "complements": {
+      "whey": "Whey",
+      "omega3": "Oméga-3",
+      "vitd": "Vitamine D",
+      "magnesium": "Magnésium",
+      "multi": "Multivitamines",
+      "cafeine": "Caféine",
+      "creatine": "Créatine"
+    },
+    "doses": {
+      "gelules2": "2 gélules",
+      "comprime1": "1 comprimé",
+      "ui1000": "1000 UI"
+    },
+    "seances": {
+      "muscu": "Musculation",
+      "crossfit": "CrossFit",
+      "calis": "Callisthénie",
+      "course": "Course à pied",
+      "cordes": "Cordes",
+      "hyrox": "Hyrox",
+      "ef": "Endurance fondamentale",
+      "seuil": "Seuil",
+      "frac": "Fractionné"
+    }
+  },
+  "disciplines": {
+    "muscu": "Push, pull, jambes… séries, reps et charges",
+    "crossfit": "WOD, AMRAP, EMOM, For Time, records",
+    "calis": "Poids du corps : tractions, dips, figures…",
+    "course": "Endurance fondamentale, seuil, fractionné",
+    "cordes": "Montées de corde : nombre, départs, lest",
+    "hyrox": "Course + SkiErg, RowErg, sled, fentes, wall balls…"
+  },
+  "course": {
+    "court": {
+      "ef": "EF",
+      "seuil": "Seuil",
+      "frac": "Fract."
+    },
+    "aide": {
+      "ef": "Allure facile : tu dois pouvoir parler en courant (60 à 75 % de ta FC max).",
+      "seuil": "Allure soutenue mais contrôlée, tenable 30 à 60 min en course (85 à 90 % de ta FC max).",
+      "frac": "Efforts courts et rapides entrecoupés de récupérations (VMA, côtes, 30/30…)."
+    },
+    "calculAide": "Entre la distance et la durée : ton allure et ta vitesse se calculent toutes seules.",
+    "auTotal": "{duree} au total"
+  },
+  "fete": {
+    "continuer": "Continuer"
+  },
+  "accueil": {
+    "serie": {
+      "depasse": "Objectif dépassé, énorme 💪",
+      "atteint": "Objectif de la semaine atteint ✓",
+      "garder_one": "Encore {n} séance pour garder ta série",
+      "garder_other": "Encore {n} séances pour garder ta série",
+      "lancer_one": "Encore {n} séance pour lancer ta série",
+      "lancer_other": "Encore {n} séances pour lancer ta série",
+      "aria": "Objectif de la semaine : {fait} sur {objectif}. Toucher pour le changer.",
+      "objectif": "Objectif de la semaine",
+      "record_one": "Record : {n} semaine",
+      "record_other": "Record : {n} semaines",
+      "continue": "Tu bats ta série, continue !",
+      "joursRestants_one": "{n} jour restant",
+      "joursRestants_other": "{n} jours restants",
+      "semaines_one": "semaine",
+      "semaines_other": "semaines",
+      "combien": "Combien de séances par semaine ?",
+      "aide": "Ta série 🔥 compte les semaines d’affilée où tu atteins cet objectif. Les jours « Repos » ne comptent pas."
+    },
+    "progEx": "{nom} : {de} → {a} kg",
+    "seancesParSemaine": "Séances par semaine (8 sem.)",
+    "courbesBientot": "Tes courbes apparaîtront après tes premières séances.",
+    "septJours": "7 jours",
+    "plusTravailles": "Plus travaillés : {muscles}",
+    "aucuneSeance7j": "Aucune séance ces 7 derniers jours",
+    "progression": "Progression",
+    "complements_one": "{nb} complément",
+    "complements_other": "{nb} compléments",
+    "records": "Records",
+    "dernierRecord": "Dernier : {record}",
+    "premierRecord": "Bats ton premier record !",
+    "seancesEnMois_one": "séance en {mois}",
+    "seancesEnMois_other": "séances en {mois}",
+    "aujourdhuiSeance": "Aujourd’hui : {seance}",
+    "prochaineSeance": "Prochaine séance : {seance}",
+    "toutesSeances": "Toutes tes séances, jour par jour"
+  },
+  "go": {
+    "tuiles": {
+      "seances": {
+        "nom": "Séance libre",
+        "texte": "Crée ta séance dans le calendrier"
+      },
+      "routines": {
+        "nom": "Mes routines",
+        "texte": "Tes séances enregistrées, prêtes à lancer"
+      },
+      "programs": {
+        "nom": "Programmes",
+        "texte": "Des plans sur plusieurs semaines"
+      },
+      "types": {
+        "nom": "Idées de séances",
+        "texte": "Muscu, CrossFit, callisthénie, course"
+      }
+    },
+    "routinesEnregistrees_one": "{n} routine enregistrée",
+    "routinesEnregistrees_other": "{n} routines enregistrées",
+    "enCours": "En cours : {seance}",
+    "nouvelle": "+ Nouvelle",
+    "lancerRoutine": "Lancer une routine"
+  }
+}

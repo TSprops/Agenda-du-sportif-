@@ -1,6 +1,7 @@
 // Accueil (tableau de bord), page Séances, série de semaines, objectif et bilan du mois.
-import { $, DAYS, DISC, MONTHS, MUSCLES, S, cap, dayMeta, dayOf, dayVolume, discOf, esc, fmtDur, isEmpty, key, nf,
-  pad, parse, plural, runKm, runSecs, sessionsOn, titleOf, todayK } from "../commun/core.js";
+import { $, DISC, MUSCLES, S, dayMeta, dayOf, dayVolume, discOf, esc, fmtDur, fmtJourMois, fmtMois, fmtMoisAn, isEmpty, key, nf, nomEx,
+  pad, parse, runKm, runSecs, sessionsOn, titleOf, todayK } from "../commun/core.js";
+import { dateFormat, majuscule, t } from "../commun/i18n.js";
 import { go, refresh, saveProfile } from "../commun/store.js";
 import { openDay } from "../seances/index.js";
 import { nutOf } from "./nutrition.js";
@@ -39,16 +40,16 @@ function ringSVG(v, max, size) {
 }
 function streakCardHTML() {
   const st = streakInfo(), done = st.thisWeek >= st.G;
-  const msg = done ? (st.thisWeek > st.G ? "Objectif dépassé, énorme 💪" : "Objectif de la semaine atteint ✓")
-    : st.n ? `Encore ${st.left} séance${st.left > 1 ? "s" : ""} pour garder ta série` : `Encore ${st.left} séance${st.left > 1 ? "s" : ""} pour lancer ta série`;
-  return `<button type="button" class="streak-card${done ? " done" : ""}" id="goalBtn" aria-label="Objectif de la semaine : ${st.thisWeek} sur ${st.G}. Toucher pour le changer.">
+  const msg = done ? t(st.thisWeek > st.G ? "accueil.serie.depasse" : "accueil.serie.atteint")
+    : t(st.n ? "accueil.serie.garder" : "accueil.serie.lancer", { n: st.left });
+  return `<button type="button" class="streak-card${done ? " done" : ""}" id="goalBtn" aria-label="${esc(t("accueil.serie.aria", { fait: st.thisWeek, objectif: st.G }))}">
     <span class="ring-wrap">${ringSVG(st.thisWeek, st.G)}<span class="ring-txt"><b>${st.thisWeek}</b>/${st.G}</span></span>
-    <span class="sc-main"><span class="sc-lbl">Objectif de la semaine</span><b>${esc(msg)}</b><span class="sc-sub">${st.best > st.n ? "Record : " + st.best + " semaine" + (st.best > 1 ? "s" : "") : done ? "Tu bats ta série, continue !" : st.daysLeft + " jour" + (st.daysLeft > 1 ? "s" : "") + " restant" + (st.daysLeft > 1 ? "s" : "")}</span></span>
-    <span class="flame${st.n ? " on" : ""}"><span aria-hidden="true">🔥</span><b>${st.n}</b><small>semaine${st.n > 1 ? "s" : ""}</small></span>
+    <span class="sc-main"><span class="sc-lbl">${t("accueil.serie.objectif")}</span><b>${esc(msg)}</b><span class="sc-sub">${st.best > st.n ? t("accueil.serie.record", { n: st.best }) : done ? t("accueil.serie.continue") : t("accueil.serie.joursRestants", { n: st.daysLeft })}</span></span>
+    <span class="flame${st.n ? " on" : ""}"><span aria-hidden="true">🔥</span><b>${st.n}</b><small>${t("accueil.serie.semaines", { n: st.n })}</small></span>
   </button>
-  <div class="goal-pick card" id="goalPick" hidden><div class="lbl">Combien de séances par semaine ?</div>
+  <div class="goal-pick card" id="goalPick" hidden><div class="lbl">${t("accueil.serie.combien")}</div>
     <div class="chips">${[1, 2, 3, 4, 5, 6, 7].map(n => `<button type="button" class="chip" data-goal="${n}" style="--tc:var(--red)" aria-pressed="${n === st.G}">${n}</button>`).join("")}</div>
-    <p class="hint">Ta série 🔥 compte les semaines d’affilée où tu atteins cet objectif. Les jours « Repos » ne comptent pas.</p></div>`;
+    <p class="hint">${t("accueil.serie.aide")}</p></div>`;
 }
 document.addEventListener("click", e => {
   if (e.target.closest("#goalBtn")) { const p = $("goalPick"); if (p) p.hidden = !p.hidden; return; }
@@ -81,68 +82,68 @@ function progPreview() {
     map.set(id, it);
   }));
   const best = [...map.values()].filter(x => x.pts.length > 1).sort((a, b) => b.pts.length - a.pts.length)[0];
-  if (best) { const v = best.pts.slice(-10).map(p => p.v); return { svg: sparkSVG(v), txt: `${best.n} : ${nf.format(v[0])} → ${nf.format(v[v.length - 1])} kg` }; }
+  if (best) { const v = best.pts.slice(-10).map(p => p.v); return { svg: sparkSVG(v), txt: t("accueil.progEx", { nom: nomEx(best.n), de: nf.format(v[0]), a: nf.format(v[v.length - 1]) }) }; }
   const m = weekCounts(), mon = mondayOf(new Date()), v = [];
   for (let i = 7; i >= 0; i--) v.push(m.get(key(addDays(mon, -7 * i))) || 0);
-  return { svg: v.some(Boolean) ? sparkSVG(v) : "", txt: v.some(Boolean) ? "Séances par semaine (8 sem.)" : "Tes courbes apparaîtront après tes premières séances." };
+  return { svg: v.some(Boolean) ? sparkSVG(v) : "", txt: t(v.some(Boolean) ? "accueil.seancesParSemaine" : "accueil.courbesBientot") };
 }
 function lastRecord() {
   const ks = Object.keys(S.days).filter(k => (S.days[k].prs || []).length).sort();
   const n = ks.reduce((a, k) => a + S.days[k].prs.length, 0), k = ks[ks.length - 1];
   return k ? { n, txt: S.days[k].prs[S.days[k].prs.length - 1], k } : { n: 0 };
 }
-const dashTop = (t, extra) => `<span class="dc-top"><b>${t}</b>${extra || ""}<span class="arrow" aria-hidden="true">›</span></span>`;
+const dashTop = (titre, extra) => `<span class="dc-top"><b>${titre}</b>${extra || ""}<span class="arrow" aria-hidden="true">›</span></span>`;
 function renderHome() {
   refreshInstallBtn(); refreshSocial();
-  const t = new Date(), tk = key(t);
-  $("homeDate").innerHTML = `<span>${cap(DAYS[t.getDay()])}</span>${t.getDate()} ${MONTHS[t.getMonth()]} ${t.getFullYear()}`;
+  const now = new Date(), tk = key(now);
+  $("homeDate").innerHTML = `<span>${esc(majuscule(dateFormat(now, { weekday: "long" })))}</span>${esc(dateFormat(now, { day: "numeric", month: "long", year: "numeric" }))}`;
   $("homeStreak").innerHTML = streakCardHTML();
   // Carte musculaire : 7 derniers jours.
-  const from = key(addDays(t, -6)), load = muscleLoad(Object.keys(S.days).filter(k => dayOf(k) >= from)), lv = {};
+  const from = key(addDays(now, -6)), load = muscleLoad(Object.keys(S.days).filter(k => dayOf(k) >= from)), lv = {};
   Object.keys(MUSCLES).forEach(m => { lv[m] = levelOf(load[m] || 0, 7); });
   const topMu = Object.entries(load).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([m]) => MUSCLES[m]);
   // Semaine en cours (calendrier).
-  const mon = mondayOf(t);
+  const mon = mondayOf(now);
   let wk = "";
   for (let i = 0; i < 7; i++) {
     const k = key(addDays(mon, i)), ks = sessionsOn(k).filter(x => counts(S.days[x])), ty = ks.length && dayMeta(S.days[ks[0]]);
-    wk += `<span class="${ks.length ? "on" : ""}${k === tk ? " now" : ""}" style="--tc:${ty ? ty.color : "#8A847E"}">${"LMMJVSD"[i]}${ks.length > 1 ? "<sup>" + ks.length + "</sup>" : ""}</span>`;
+    wk += `<span class="${ks.length ? "on" : ""}${k === tk ? " now" : ""}" style="--tc:${ty ? ty.color : "#8A847E"}">${esc(dateFormat(addDays(mon, i), { weekday: "narrow" }))}${ks.length > 1 ? "<sup>" + ks.length + "</sup>" : ""}</span>`;
   }
   const today = todaySummary(), ps = programState(), pg = progPreview(), rec = lastRecord();
   const n = nutOf(tk), c = (n.complements || []).length, ms = monthStats(tk.slice(0, 7));
   $("homeDash").innerHTML = `
-    <button class="dash-card dash-mus" data-go="muscles">${dashTop("Carte musculaire", `<em>7 jours</em>`)}
+    <button class="dash-card dash-mus" data-go="muscles">${dashTop(t("muscles.titre"), `<em>${t("accueil.septJours")}</em>`)}
       <span class="dc-bodies">${bodySVG("front", lv, { cls: "dash-body" })}${bodySVG("back", lv, { cls: "dash-body" })}</span>
-      <span class="dc-sub">${topMu.length ? "Plus travaillés : " + esc(topMu.join(", ")) : "Aucune séance ces 7 derniers jours"}</span></button>
+      <span class="dc-sub">${topMu.length ? esc(t("accueil.plusTravailles", { muscles: topMu.join(", ") })) : t("accueil.aucuneSeance7j")}</span></button>
     <div class="dash-row">
-      <button class="dash-card dash-prog" data-go="progress">${dashTop("Progression")}${pg.svg || `<span class="dc-empty">📈</span>`}<span class="dc-sub">${esc(pg.txt)}</span></button>
-      <button class="dash-card" data-go="nutrition">${dashTop("Nutrition")}
-        <span class="dc-nut"><span class="${n.creatine ? "ok" : ""}">${n.creatine ? "✓" : "○"} Créatine</span><span class="${c ? "ok" : ""}"><b>${c}</b> complément${c > 1 ? "s" : ""}</span></span>
-        <span class="dc-sub">Aujourd’hui</span></button>
+      <button class="dash-card dash-prog" data-go="progress">${dashTop(t("accueil.progression"))}${pg.svg || `<span class="dc-empty">📈</span>`}<span class="dc-sub">${esc(pg.txt)}</span></button>
+      <button class="dash-card" data-go="nutrition">${dashTop(t("nutrition.titre"))}
+        <span class="dc-nut"><span class="${n.creatine ? "ok" : ""}">${n.creatine ? "✓" : "○"} ${t("creatine.titre")}</span><span class="${c ? "ok" : ""}">${t("accueil.complements", { n: c, nb: `<b>${c}</b>` })}</span></span>
+        <span class="dc-sub">${t("commun.aujourdhui")}</span></button>
     </div>
     ${trophyStripHTML()}
     <div class="dash-row">
-      <button class="dash-card" data-go="records">${dashTop("Records")}<span class="dc-big">${rec.n}</span><span class="dc-sub">${rec.n ? "Dernier : " + esc(rec.txt) : "Bats ton premier record !"}</span></button>
-      <button class="dash-card" data-go="recap">${dashTop("Bilan du mois")}<span class="dc-big">${ms.n}</span><span class="dc-sub">séance${ms.n > 1 ? "s" : ""} en ${MONTHS[t.getMonth()]}${ms.km ? " · " + nf.format(Math.round(ms.km * 10) / 10) + " km" : ms.vol ? " · " + (ms.vol >= 10000 ? nf.format(Math.round(ms.vol / 100) / 10) + " t" : nf.format(Math.round(ms.vol)) + " kg") : ""}</span></button>
+      <button class="dash-card" data-go="records">${dashTop(t("accueil.records"))}<span class="dc-big">${rec.n}</span><span class="dc-sub">${rec.n ? esc(t("accueil.dernierRecord", { record: rec.txt })) : t("accueil.premierRecord")}</span></button>
+      <button class="dash-card" data-go="recap">${dashTop(t("bilan.titre"))}<span class="dc-big">${ms.n}</span><span class="dc-sub">${t("accueil.seancesEnMois", { n: ms.n, mois: fmtMois(now) })}${ms.km ? " · " + nf.format(Math.round(ms.km * 10) / 10) + " km" : ms.vol ? " · " + (ms.vol >= 10000 ? nf.format(Math.round(ms.vol / 100) / 10) + " t" : nf.format(Math.round(ms.vol)) + " kg") : ""}</span></button>
     </div>
-    <button class="dash-card" data-go="seances">${dashTop("Calendrier")}<span class="week">${wk}</span>
-      <span class="dc-sub">${today ? "Aujourd’hui : " + esc(today) : ps && !ps.finished ? "Prochaine séance : " + esc(ps.next.name) : "Toutes tes séances, jour par jour"}</span></button>`;
+    <button class="dash-card" data-go="seances">${dashTop(t("seances.calendrier"))}<span class="week">${wk}</span>
+      <span class="dc-sub">${today ? esc(t("accueil.aujourdhuiSeance", { seance: today })) : ps && !ps.finished ? esc(t("accueil.prochaineSeance", { seance: ps.next.name })) : t("accueil.toutesSeances")}</span></button>`;
 }
 const SEANCE_TILES = [
-  ["seances", "Séance libre", "Crée ta séance dans le calendrier", '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>'],
-  ["routines", "Mes routines", "Tes séances enregistrées, prêtes à lancer", '<path d="M5 4h14v17l-7-4-7 4z"/>'],
-  ["programs", "Programmes", "Des plans sur plusieurs semaines", '<path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/>'],
-  ["types", "Idées de séances", "Muscu, CrossFit, callisthénie, course", '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.5h6c0-1.1.4-1.9 1-2.5A6 6 0 0 0 12 3z"/>']
+  ["seances", '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>'],
+  ["routines", '<path d="M5 4h14v17l-7-4-7 4z"/>'],
+  ["programs", '<path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/>'],
+  ["types", '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.5h6c0-1.1.4-1.9 1-2.5A6 6 0 0 0 12 3z"/>']
 ];
 function renderGo() {
   const ks = sessionsOn(todayK()).filter(k => !isEmpty(S.days[k])), ps = programState(), rs = routines();
-  const sub = { routines: rs.length ? plural(rs.length, "routine") + " enregistrée" + (rs.length > 1 ? "s" : "") : "", programs: ps && !ps.finished ? "En cours : " + ps.next.name : "" };
+  const sub = { routines: rs.length ? t("go.routinesEnregistrees", { n: rs.length }) : "", programs: ps && !ps.finished ? t("go.enCours", { seance: ps.next.name }) : "" };
   $("goBody").innerHTML = `
-    ${ks.length ? `<section class="go-hero"><span class="sc-lbl">Aujourd’hui</span><b class="go-today">${esc(todaySummary())}</b>
-        <div class="grid2"><button class="btn" data-goopen="${ks[ks.length - 1]}">Continuer</button><button class="btn primary" data-gonew="1">+ Nouvelle</button></div></section>` : ""}
-    <div class="seance-list">${SEANCE_TILES.map(([v, n, d, ic], i) => `<button class="seance-tile${i ? "" : " hl"}" data-go="${v}"><span class="disc-ico" aria-hidden="true" style="--tc:var(--red-hi)"><svg viewBox="0 0 24 24">${ic}</svg></span><span class="mc"><b>${n}</b><span>${esc(sub[v] || d)}</span></span><span class="arrow" aria-hidden="true">›</span></button>`).join("")}</div>
+    ${ks.length ? `<section class="go-hero"><span class="sc-lbl">${t("commun.aujourdhui")}</span><b class="go-today">${esc(todaySummary())}</b>
+        <div class="grid2"><button class="btn" data-goopen="${ks[ks.length - 1]}">${t("fete.continuer")}</button><button class="btn primary" data-gonew="1">${t("go.nouvelle")}</button></div></section>` : ""}
+    <div class="seance-list">${SEANCE_TILES.map(([v, ic], i) => `<button class="seance-tile${i ? "" : " hl"}" data-go="${v}"><span class="disc-ico" aria-hidden="true" style="--tc:var(--red-hi)"><svg viewBox="0 0 24 24">${ic}</svg></span><span class="mc"><b>${t(`go.tuiles.${v}.nom`)}</b><span>${esc(sub[v] || t(`go.tuiles.${v}.texte`))}</span></span><span class="arrow" aria-hidden="true">›</span></button>`).join("")}</div>
     ${programCardHTML(ps, true)}
-    ${rs.length ? `<section><h2 class="h2">Lancer une routine</h2><div class="chips">${rs.slice(0, 6).map(r => `<button class="chip" data-rgo2="${r.id}" style="--tc:var(--red)">▶ ${esc(r.name)}</button>`).join("")}</div></section>` : ""}`;
+    ${rs.length ? `<section><h2 class="h2">${t("go.lancerRoutine")}</h2><div class="chips">${rs.slice(0, 6).map(r => `<button class="chip" data-rgo2="${r.id}" style="--tc:var(--red)">▶ ${esc(r.name)}</button>`).join("")}</div></section>` : ""}`;
 }
 $("goBody").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
@@ -172,22 +173,22 @@ function renderRecap() {
   const mk = d.getFullYear() + "-" + pad(d.getMonth() + 1), st = monthStats(mk);
   const pm = new Date(d.getFullYear(), d.getMonth() - 1, 1), prev = monthStats(pm.getFullYear() + "-" + pad(pm.getMonth() + 1));
   const diff = st.n - prev.n, streak = streakInfo();
-  $("recapMonth").textContent = cap(MONTHS[d.getMonth()]) + " " + d.getFullYear();
+  $("recapMonth").textContent = fmtMoisAn(d);
   $("recapNext").disabled = d >= new Date(new Date().getFullYear(), new Date().getMonth(), 1);
   const big = (v, l) => `<div class="stat"><b>${v}</b><span>${l}</span></div>`;
-  $("recapBody").innerHTML = !st.n ? `<div class="empty">Aucune séance en ${MONTHS[d.getMonth()]}. Ton bilan apparaîtra ici dès ta première séance.</div>` : `
-    <div class="stats">${big(st.n, "séance" + (st.n > 1 ? "s" : ""))}${big(st.days, "jour" + (st.days > 1 ? "s" : "") + " actif" + (st.days > 1 ? "s" : ""))}${big(st.prs, "record" + (st.prs > 1 ? "s" : "") + " battu" + (st.prs > 1 ? "s" : ""))}</div>
-    <div class="stats">${big(st.vol >= 10000 ? nf.format(st.vol / 1000) + " t" : nf.format(st.vol), st.vol >= 10000 ? "soulevées" : "kg soulevés")}${big(nf.format(st.km), "km courus")}${big(streak.best, "semaines 🔥 (record)")}</div>
+  $("recapBody").innerHTML = !st.n ? `<div class="empty">${esc(t("bilan.vide", { mois: fmtMois(d) }))}</div>` : `
+    <div class="stats">${big(st.n, t("bilan.seances", { n: st.n }))}${big(st.days, t("bilan.joursActifs", { n: st.days }))}${big(st.prs, t("bilan.recordsBattus", { n: st.prs }))}</div>
+    <div class="stats">${big(st.vol >= 10000 ? nf.format(st.vol / 1000) + " t" : nf.format(st.vol), t(st.vol >= 10000 ? "bilan.tonnesSoulevees" : "bilan.kgSouleves"))}${big(nf.format(st.km), t("bilan.kmCourus"))}${big(streak.best, t("bilan.semainesRecord"))}</div>
     <section class="card"><dl class="kv">
-      <dt>Par rapport au mois d’avant</dt><dd>${diff > 0 ? "▲ " + diff + " séance" + (diff > 1 ? "s" : "") + " de plus" : diff < 0 ? "▼ " + (-diff) + " séance" + (diff < -1 ? "s" : "") + " de moins" : "Autant de séances"}</dd>
-      ${st.disc ? `<dt>Activité favorite</dt><dd>${esc(st.disc[0])} (${st.disc[1]})</dd>` : ""}
-      ${st.ex ? `<dt>Exercice le plus fait</dt><dd>${esc(st.ex[0])} (${st.ex[1]} fois)</dd>` : ""}
-      ${st.mus ? `<dt>Muscle le plus travaillé</dt><dd>${esc(MUSCLES[st.mus[0]])}</dd>` : ""}
-      ${st.runT ? `<dt>Temps de course</dt><dd>${esc(fmtDur(st.runT))}</dd>` : ""}
+      <dt>${t("bilan.moisAvant")}</dt><dd>${diff > 0 ? "▲ " + t("bilan.dePlus", { n: diff }) : diff < 0 ? "▼ " + t("bilan.deMoins", { n: -diff }) : t("bilan.autant")}</dd>
+      ${st.disc ? `<dt>${t("bilan.activiteFavorite")}</dt><dd>${esc(st.disc[0])} (${st.disc[1]})</dd>` : ""}
+      ${st.ex ? `<dt>${t("bilan.exercicePlusFait")}</dt><dd>${esc(t("bilan.fois", { nom: nomEx(st.ex[0]), n: st.ex[1] }))}</dd>` : ""}
+      ${st.mus ? `<dt>${t("bilan.musclePlusTravaille")}</dt><dd>${esc(MUSCLES[st.mus[0]])}</dd>` : ""}
+      ${st.runT ? `<dt>${t("bilan.tempsCourse")}</dt><dd>${esc(fmtDur(st.runT))}</dd>` : ""}
     </dl></section>
-    <button class="btn primary" id="recapShare">📲 Partager en story</button>
-    <p class="hint" id="recapMsg" style="text-align:center">Une image de ton bilan est créée : partage-la sur Insta, Snap ou WhatsApp.</p>
-    <img id="recapImg" class="recap-img" alt="Aperçu de l’image du bilan" hidden>`;
+    <button class="btn primary" id="recapShare">${t("bilan.partager")}</button>
+    <p class="hint" id="recapMsg" style="text-align:center">${t("bilan.partagerAide")}</p>
+    <img id="recapImg" class="recap-img" alt="${esc(t("bilan.apercu"))}" hidden>`;
 }
 $("recapPrev").onclick = () => { const d = S.recapMonth; S.recapMonth = new Date(d.getFullYear(), d.getMonth() - 1, 1); renderRecap(); };
 $("recapNext").onclick = () => { const d = S.recapMonth; S.recapMonth = new Date(d.getFullYear(), d.getMonth() + 1, 1); renderRecap(); };
@@ -200,11 +201,12 @@ async function recapImage() {
   const grd = g.createRadialGradient(W / 2, 260, 40, W / 2, 260, 900); grd.addColorStop(0, red + "55"); grd.addColorStop(1, "transparent");
   g.fillStyle = grd; g.fillRect(0, 0, W, H);
   g.textAlign = "center"; g.fillStyle = "#9C9690"; g.font = '600 44px "Figtree", sans-serif';
-  g.fillText("MON BILAN DU MOIS", W / 2, 200);
+  g.fillText(t("bilan.image.titre"), W / 2, 200);
   g.fillStyle = "#F4F1EE"; g.font = 'italic 800 150px "Barlow Condensed", sans-serif';
-  g.fillText(MONTHS[d.getMonth()].toUpperCase(), W / 2, 350, W - 120);
+  g.fillText(fmtMois(d).toLocaleUpperCase(), W / 2, 350, W - 120);
   g.fillStyle = red; g.fillText(String(d.getFullYear()), W / 2, 490);
-  const tiles = [[st.n, "SÉANCES"], [st.days, "JOURS ACTIFS"], [st.vol >= 10000 ? nf.format(st.vol / 1000) + " t" : nf.format(st.vol) + " kg", "SOULEVÉS"], [nf.format(st.km) + " km", "COURUS"], [st.prs, "RECORDS BATTUS"], [streakInfo().n, "SEMAINES 🔥"]];
+  const tiles = [[st.n, t("bilan.image.seances")], [st.days, t("bilan.image.joursActifs")], [st.vol >= 10000 ? nf.format(st.vol / 1000) + " t" : nf.format(st.vol) + " kg", t("bilan.image.souleves")],
+    [nf.format(st.km) + " km", t("bilan.image.courus")], [st.prs, t("bilan.image.records")], [streakInfo().n, t("bilan.image.semaines")]];
   tiles.forEach(([v, l], i) => {
     const x = 90 + (i % 2) * 470, y = 600 + Math.floor(i / 2) * 330;
     g.fillStyle = "#141416"; g.strokeStyle = "#2B2B2F"; g.lineWidth = 3;
@@ -213,22 +215,22 @@ async function recapImage() {
     g.fillStyle = "#9C9690"; g.font = '600 34px "Figtree", sans-serif'; g.fillText(l, x + 40, y + 230, 350);
   });
   g.textAlign = "center";
-  if (st.ex) { g.fillStyle = "#9C9690"; g.font = '600 36px "Figtree", sans-serif'; g.fillText("Exercice favori : " + st.ex[0], W / 2, 1640, W - 120); }
+  if (st.ex) { g.fillStyle = "#9C9690"; g.font = '600 36px "Figtree", sans-serif'; g.fillText(t("bilan.image.favori", { nom: nomEx(st.ex[0]) }), W / 2, 1640, W - 120); }
   g.font = 'italic 800 76px "Barlow Condensed", sans-serif'; g.textAlign = "left";
-  const w1 = g.measureText("L’AGENDA ").width, w2 = g.measureText("DU SPORTIF").width, x0 = (W - w1 - w2) / 2;
-  g.fillStyle = "#F4F1EE"; g.fillText("L’AGENDA ", x0, 1800); g.fillStyle = red; g.fillText("DU SPORTIF", x0 + w1, 1800);
+  const m1 = t("bilan.image.devise1"), m2 = t("bilan.image.devise2"), w1 = g.measureText(m1).width, w2 = g.measureText(m2).width, x0 = (W - w1 - w2) / 2;
+  g.fillStyle = "#F4F1EE"; g.fillText(m1, x0, 1800); g.fillStyle = red; g.fillText(m2, x0 + w1, 1800);
   return new Promise(r => cv.toBlob(r, "image/png"));
 }
 $("recapBody").addEventListener("click", async e => {
   if (!e.target.closest("#recapShare")) return;
-  const btn = $("recapShare"); btn.disabled = true; btn.textContent = "Création de l’image…";
+  const btn = $("recapShare"); btn.disabled = true; btn.textContent = t("bilan.creation");
   try {
-    const blob = await recapImage(), name = "bilan-" + MONTHS[S.recapMonth.getMonth()] + ".png", file = new File([blob], name, { type: "image/png" });
+    const blob = await recapImage(), name = t("bilan.fichier", { mois: fmtMois(S.recapMonth) }) + ".png", file = new File([blob], name, { type: "image/png" });
     const img = $("recapImg"); img.src = URL.createObjectURL(blob); img.hidden = false;
-    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: "Mon bilan du mois" }).catch(() => {}); $("recapMsg").textContent = "Tu peux aussi appuyer longuement sur l’image pour l’enregistrer."; }
-    else { const a = document.createElement("a"); a.href = img.src; a.download = name; document.body.appendChild(a); a.click(); a.remove(); $("recapMsg").textContent = "Image téléchargée. Sur iPhone, appuie longuement sur l’image pour l’enregistrer."; }
-  } catch (x) { $("recapMsg").textContent = "Impossible de créer l’image. Réessaie."; }
-  btn.disabled = false; btn.textContent = "📲 Partager en story";
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: t("bilan.titrePartage") }).catch(() => {}); $("recapMsg").textContent = t("bilan.appuiLong"); }
+    else { const a = document.createElement("a"); a.href = img.src; a.download = name; document.body.appendChild(a); a.click(); a.remove(); $("recapMsg").textContent = t("bilan.telechargee"); }
+  } catch (x) { $("recapMsg").textContent = t("bilan.impossible"); }
+  btn.disabled = false; btn.textContent = t("bilan.partager");
 });
 
 export { addDays, counts, renderGo, renderHome, renderRecap, streakInfo };
