@@ -10,6 +10,7 @@
 .onair i{width:7px;height:7px;border-radius:50%;background:var(--red-hi);box-shadow:0 0 8px var(--red-hi)}
 .brand-title{font-family:var(--display);font-weight:800;font-style:italic;font-size:54px;line-height:.9;text-transform:uppercase;margin:4px 0 0;text-wrap:balance}
 .brand-title span{color:var(--red-hi);text-shadow:0 0 22px color-mix(in srgb,var(--red-hi) 55%,transparent)}
+.brand-sub{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin:0}
 .toc{display:flex;flex-direction:column;border-top:2px solid var(--red)}
 .toc-item{display:flex;flex-direction:column;gap:10px;padding-block:22px;border-bottom:1px solid var(--line);text-align:left;width:100%}
 .toc-item:active{opacity:.6}

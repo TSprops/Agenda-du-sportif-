@@ -1,16 +1,17 @@
 // Fenêtre « Nouveautés » (une seule fois par utilisateur) et acceptation des conditions.
 import { $, S, TERMS_V } from "./core.js";
-import { HOW } from "../exercices/index.js";
-import { closeInstall, lsGet, lsSet, maybeWelcomeInstall } from "./install.js";
-import { figure, frameBox } from "../silhouette/index.js";
+import { closeInstall, iosApp, lsGet, lsSet, maybeWelcomeInstall } from "./install.js";
 import { saveProfile } from "./store.js";
 
 /* ---------- Nouveautés (une seule fois par utilisateur) ---------- */
-// Deux diapositives : « Comment faire », puis où trouver le bouton Contact. Vue une fois = plus jamais
+// Diapositives : nouveau nom et logo (AS Sport), mise à jour de l'icône (seulement dans l'app installée sur iPhone),
+// puis où trouver le bouton Contact. Vue une fois = plus jamais
 // (mémorisé sur l'appareil ET dans le profil, donc aussi après rechargement ou sur un autre appareil).
-// Pour la revoir (test) : ouvrir l'app avec « ?nouveautes » à la fin de l'adresse.
-const NEWS_ID = "v3";
-const NEWS_FORCE = new URLSearchParams(location.search).has("nouveautes");
+// Pour la revoir (test) : ouvrir l'app avec « ?nouveautes » à la fin de l'adresse (« ?nouveautes=ios » : avec la diapo iPhone).
+const NEWS_ID = "v4";
+const NEWS_PARAM = new URLSearchParams(location.search).get("nouveautes");
+const NEWS_FORCE = NEWS_PARAM !== null;
+
 let newsClosed = false, newsI = 0;
 export function termsPending() { return !!(S.profile && (S.profile.termsV || 0) < TERMS_V); }
 export function maybeTerms() { if (termsPending()) { $("termsBackdrop").hidden = false; $("termsSheet").hidden = false; return true; } return false; }
@@ -30,11 +31,11 @@ export function maybeNews() {
 }
 function openNews() {
   closeInstall();
-  // Illustration de la diapo 1 : le vrai bouton « ? » et le mannequin de « Comment faire » (départ / arrivée).
-  const v = HOW["Squats (poids du corps)"].views[0], box = frameBox(v.frames);
-  $("newsHow").innerHTML = `<div class="nh-row"><span class="nh-name">Squat</span><span class="how-btn nh-q"><span>?</span></span></div>
-    <div class="nh-figs">${v.frames.map((f, i) => `<figure>${figure(f, ["quadriceps", "fessiers"], box)}<figcaption>${["Départ", "Arrivée"][i]}</figcaption></figure>`).join("")}</div>
-    <span class="nh-play">▶ Voir le mouvement</span>`;
+  // L'iPhone garde l'ancienne icône d'une app déjà ajoutée : la diapo explique comment la remettre.
+  if (!(iosApp() || NEWS_PARAM === "ios") && $("newsIos")) $("newsIos").remove();
+  const n = $("newsTrack").children.length;
+  [...$("newsTrack").children].forEach((el, k) => el.setAttribute("aria-label", (k + 1) + " sur " + n));
+  $("newsDots").innerHTML = "<i></i>".repeat(n);
   newsGoTo(0);
   $("newsBackdrop").hidden = false; $("newsSheet").hidden = false;
   document.addEventListener("keydown", newsKey);
@@ -46,7 +47,7 @@ function newsGoTo(i) {
   $("newsTrack").style.transform = `translateX(${-100 * newsI}%)`;
   slides.forEach((el, k) => { el.inert = k !== newsI; el.setAttribute("aria-hidden", k !== newsI); });
   [...$("newsDots").children].forEach((d, k) => d.classList.toggle("on", k === newsI));
-  $("newsSheet").setAttribute("aria-labelledby", "newsTitle" + (newsI + 1));
+  $("newsSheet").setAttribute("aria-labelledby", slides[newsI].querySelector("h2").id);
   const last = newsI === slides.length - 1;
   $("newsPrev").style.visibility = newsI ? "visible" : "hidden";
   $("newsNext").textContent = last ? "C’est parti\u00a0!" : "Suivant";
@@ -54,7 +55,7 @@ function newsGoTo(i) {
 function closeNews() {
   newsClosed = true;
   document.removeEventListener("keydown", newsKey);
-  $("newsBackdrop").hidden = true; $("newsSheet").hidden = true; $("newsHow").innerHTML = "";
+  $("newsBackdrop").hidden = true; $("newsSheet").hidden = true;
   lsSet("seen-" + NEWS_ID, 1); saveProfile({ seen: { ...((S.profile && S.profile.seen) || {}), [NEWS_ID]: true } });
 }
 function newsKey(e) {

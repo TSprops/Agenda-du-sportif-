@@ -62,8 +62,8 @@ $("shareBody").addEventListener("click", e => {
   const code = (S.profile || {}).friendCode; if (b.id !== "scanBtn" && !code) return;
   if (b.id === "shareCopy") copy(code, b);
   else if (b.id === "shareLink") {
-    const url = inviteLink(code), text = "Ajoute-moi sur L’agenda du sportif ! Mon code ami : " + code;
-    if (navigator.share) navigator.share({ title: "L’agenda du sportif", text, url }).catch(() => {});
+    const url = inviteLink(code), text = "Ajoute-moi sur AS Sport ! Mon code ami : " + code;
+    if (navigator.share) navigator.share({ title: "AS Sport", text, url }).catch(() => {});
     else copy(url, b);
   } else if (b.id === "scanBtn") openScanner();
 });
@@ -107,7 +107,7 @@ export async function openScanner() {
       try {
         const r = await det.detect(v), c = r.map(x => codeFrom(x.rawValue)).find(Boolean);
         if (c) { closeScanner(); if (c === (S.profile || {}).friendCode) toast("C’est ton propre code 😉"); else searchCode(c); return; }
-        if (r.length) msg("Ce QR code ne vient pas de L’agenda du sportif.");
+        if (r.length) msg("Ce QR code ne vient pas d’AS Sport.");
       } catch (x) { /* image pas prête */ }
       me.timer = setTimeout(tick, 250);
     };

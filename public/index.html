@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>L’agenda du sportif</title>
+<title>AS Sport · L’agenda du sportif</title>
 <meta name="description" content="Note tes séances de musculation, ta nutrition et suis tes progrès.">
 <meta name="theme-color" content="#0A0A0B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Agenda sportif">
+<meta name="apple-mobile-web-app-title" content="AS Sport">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -17,19 +17,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
 <!-- Styles : dossier css/, chargés dans cet ordre (l'ordre compte). -->
-<link rel="stylesheet" href="css/01-theme.css?v=63">
-<link rel="stylesheet" href="css/02-accueil-seances.css?v=63">
-<link rel="stylesheet" href="css/03-nutrition-contact.css?v=63">
-<link rel="stylesheet" href="css/04-general.css?v=63">
-<link rel="stylesheet" href="css/05-course-crossfit.css?v=63">
-<link rel="stylesheet" href="css/06-apparence-progression.css?v=63">
-<link rel="stylesheet" href="css/07-amis.css?v=63">
-<link rel="stylesheet" href="css/08-bibliotheque-corps.css?v=63">
-<link rel="stylesheet" href="css/09-accueil-social.css?v=63">
-<link rel="stylesheet" href="css/10-comment-faire.css?v=63">
-<link rel="stylesheet" href="css/11-nouveautes-tutoriel.css?v=63">
-<link rel="stylesheet" href="css/12-barre-onglets.css?v=63">
-<link rel="stylesheet" href="css/13-accueil-profil-social.css?v=63">
+<link rel="stylesheet" href="css/01-theme.css?v=64">
+<link rel="stylesheet" href="css/02-accueil-seances.css?v=64">
+<link rel="stylesheet" href="css/03-nutrition-contact.css?v=64">
+<link rel="stylesheet" href="css/04-general.css?v=64">
+<link rel="stylesheet" href="css/05-course-crossfit.css?v=64">
+<link rel="stylesheet" href="css/06-apparence-progression.css?v=64">
+<link rel="stylesheet" href="css/07-amis.css?v=64">
+<link rel="stylesheet" href="css/08-bibliotheque-corps.css?v=64">
+<link rel="stylesheet" href="css/09-accueil-social.css?v=64">
+<link rel="stylesheet" href="css/10-comment-faire.css?v=64">
+<link rel="stylesheet" href="css/11-nouveautes-tutoriel.css?v=64">
+<link rel="stylesheet" href="css/12-barre-onglets.css?v=64">
+<link rel="stylesheet" href="css/13-accueil-profil-social.css?v=64">
 <script>
   // Déménagement : l'ancienne adresse (GitHub) renvoie vers la nouvelle (Firebase) quand MOVED vaut true.
   window.NEW_HOME = "https://agenda-du-sportif.web.app/";
@@ -44,7 +44,7 @@
     });
   }
   // Version de la page : doit correspondre à APP_VERSION dans js/commun/boot.js.
-  window.APP_PAGE_VERSION = "63";
+  window.APP_PAGE_VERSION = "64";
   // Comme une vraie application : pas de zoom avec deux doigts ni en tapant deux fois (Safari ignore parfois la balise viewport).
   ["gesturestart", "gesturechange", "gestureend"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
   document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -71,7 +71,7 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=63"></script>
+<script type="module" src="app.js?v=64"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->
@@ -82,14 +82,21 @@
 </div>
 <!-- ============ CHARGEMENT ============ -->
 <main class="app view splash" id="v-splash">
-  <div class="home-head"><span class="onair"><i></i>Chargement</span><h1 class="brand-title">L’agenda <span>du sportif</span></h1></div>
+  <div class="splash-lines" aria-hidden="true"><i></i><i class="thin"></i></div>
+  <div class="home-head splash-brand">
+    <img class="splash-logo" src="icons/logo.svg" alt="" width="112" height="112">
+    <h1 class="brand-title"><span>AS</span> Sport</h1>
+    <p class="brand-sub">L’agenda du sportif</p>
+  </div>
+  <span class="onair splash-onair"><i></i>Chargement</span>
 </main>
 
 <!-- ============ CONNEXION ============ -->
 <main class="app view login" id="v-login" hidden>
   <div class="home-head">
     <span class="onair"><i></i>Bienvenue</span>
-    <h1 class="brand-title">L’agenda <span>du sportif</span></h1>
+    <h1 class="brand-title"><span>AS</span> Sport</h1>
+    <p class="brand-sub">L’agenda du sportif</p>
     <p class="hint">Séances, nutrition et progrès, au même endroit.</p>
   </div>
   <section class="card">
@@ -129,7 +136,8 @@
   </div>
   <header class="home-head">
     <p class="home-date" id="homeDate"></p>
-    <h1 class="brand-title">L’agenda <span>du sportif</span></h1>
+    <h1 class="brand-title"><span>AS</span> Sport</h1>
+    <p class="brand-sub">L’agenda du sportif</p>
   </header>
   <section id="homeStreak" class="home-streak"></section>
   <div class="dash" id="homeDash"></div>
@@ -505,7 +513,7 @@
 <div class="install-backdrop" id="installBackdrop" hidden></div>
 <div class="install" id="installSheet" hidden role="dialog" aria-modal="true" aria-labelledby="installTitle">
   <i class="grab" aria-hidden="true"></i>
-  <div class="install-head"><img src="icons/icon-192.png" alt=""><div><b id="installTitle">Installe l’app</b><span>L’agenda du sportif · gratuit</span></div></div>
+  <div class="install-head"><img src="icons/icon-192.png" alt=""><div><b id="installTitle">Installe l’app</b><span>AS Sport · gratuit</span></div></div>
   <p class="lead" id="installLead">Ajoute l’app à ton écran d’accueil : elle s’ouvre en plein écran, en un toucher, comme une vraie application.</p>
   <div class="perks"><span>Plein écran</span><span>Accès en 1 toucher</span><span>Marche hors connexion</span></div>
   <div id="installBody"></div>
@@ -564,16 +572,31 @@
   <div class="news-top"><span class="onair"><i></i>Nouveautés</span><button type="button" class="news-skip" id="newsSkip">Passer</button></div>
   <div class="news-viewport" id="newsViewport">
     <div class="news-track" id="newsTrack">
-      <section class="news-slide" aria-roledescription="diapositive" aria-label="1 sur 2">
-        <div class="news-visual news-how" id="newsHow" aria-hidden="true"></div>
-        <h2 id="newsTitle1">Du nouveau dans l’app !</h2>
-        <p>Grâce à vos retours, l’application évolue. Nouveauté : la rubrique « Comment faire » sur chaque exercice. Retrouvez des schémas en position de départ et d’arrivée, et le bouton « Voir le mouvement » pour voir l’exercice animé. De quoi bien exécuter chaque mouvement en toute sécurité. Merci à tous ceux qui ont pris le temps de tester et de me faire leurs retours !</p>
+      <section class="news-slide" aria-roledescription="diapositive">
+        <div class="news-visual news-brand" aria-hidden="true">
+          <i class="nb-line"></i>
+          <img src="icons/logo.svg" alt="" width="84" height="84">
+          <span class="nb-title"><span>AS</span> Sport</span>
+          <span class="brand-sub">L’agenda du sportif</span>
+        </div>
+        <h2 id="newsTitle1">Nouveau nom, nouveau logo !</h2>
+        <p>L’agenda du sportif devient <b>AS Sport</b>. Même app, mêmes séances, mêmes amis : seuls le nom et le logo changent. « L’agenda du sportif » reste notre devise.</p>
       </section>
-      <section class="news-slide" aria-roledescription="diapositive" aria-label="2 sur 2">
+      <section class="news-slide" id="newsIos" aria-roledescription="diapositive">
+        <div class="news-visual" aria-hidden="true">
+          <ol class="steps">
+            <li><span class="n">1</span><span><b>Appui long</b> sur l’icône de l’app › <b>Supprimer de l’écran d’accueil</b>.</span></li>
+            <li><span class="n">2</span><span>Ouvre <b>agenda-du-sportif.web.app</b> dans Safari, puis <b>Partager</b> › <b>Sur l’écran d’accueil</b>.</span></li>
+          </ol>
+        </div>
+        <h2 id="newsTitleIos">Sur iPhone : mets à jour l’icône</h2>
+        <p>iPhone ne change pas tout seul l’icône d’une app déjà ajoutée. Pour avoir le nouveau logo, supprime-la puis rajoute-la. <b>Tes séances et ton compte ne bougent pas</b> : tout est enregistré en ligne.</p>
+      </section>
+      <section class="news-slide" aria-roledescription="diapositive">
         <div class="news-visual" aria-hidden="true">
           <div class="mini-home">
             <div class="mh-bar"><span class="mh-prof"><i></i>Profil</span></div>
-            <div class="mh-title">L’agenda <span>du sportif</span></div>
+            <div class="mh-title"><span>AS</span> Sport</div>
             <div class="mh-toc"><b>Let’s go <i>›</i></b><b>Social <i>›</i></b><b>Nutrition <i>›</i></b></div>
             <div class="mh-contact"><span class="mh-btn">Contact</span><span class="mh-arrow">‹ ici</span></div>
           </div>
@@ -584,7 +607,7 @@
       </section>
     </div>
   </div>
-  <div class="tuto-dots news-dots" id="newsDots" aria-hidden="true"><i class="on"></i><i></i></div>
+  <div class="tuto-dots news-dots" id="newsDots" aria-hidden="true"></div>
   <div class="news-nav">
     <button type="button" class="btn" id="newsPrev">Précédent</button>
     <button type="button" class="btn primary" id="newsNext">Suivant</button>

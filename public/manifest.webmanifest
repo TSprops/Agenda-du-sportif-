@@ -1,6 +1,6 @@
 {
-  "name": "L’agenda du sportif",
-  "short_name": "Agenda sportif",
+  "name": "AS Sport · L’agenda du sportif",
+  "short_name": "AS Sport",
   "description": "Note tes séances de musculation, ta nutrition et suis tes progrès.",
   "lang": "fr",
   "start_url": "./",

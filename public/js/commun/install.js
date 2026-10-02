@@ -12,6 +12,8 @@ const IS_ANDROID = /android/i.test(UA);
 // Navigateur intégré à une autre app (lien ouvert depuis Snapchat, Instagram, Messenger…) : l'installation y est impossible.
 const IN_APP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|Snapchat|musical_ly|TikTok|Twitter|LinkedInApp|Line\//i.test(UA);
 const standalone = () => window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+// App installée sur l'écran d'accueil d'un iPhone ou d'un iPad.
+const iosApp = () => IS_IOS && standalone();
 let deferredInstall = null;
 window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferredInstall = e; refreshInstallBtn(); });
 window.addEventListener("appinstalled", () => { lsSet("install-done", 1); closeInstall(); refreshInstallBtn(); });
@@ -111,4 +113,4 @@ function maybeInvite() {
   installTimer = setTimeout(() => { if (S.screen === "home" && !document.body.classList.contains("sheet-open")) openInstall(); }, 3000);
 }
 
-export { closeInstall, lsGet, lsSet, maybeInvite, maybeWelcomeInstall, refreshInstallBtn };
+export { closeInstall, iosApp, lsGet, lsSet, maybeInvite, maybeWelcomeInstall, refreshInstallBtn };

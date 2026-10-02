@@ -10,6 +10,13 @@
 .news-slide h2{font-family:var(--display);font-weight:800;font-style:italic;font-size:26px;line-height:1;text-transform:uppercase;margin:4px 0 0;text-wrap:balance}
 .news-slide p{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink)}
 .news-visual{background:var(--ground);border:1px solid var(--line);border-radius:18px;padding:10px;display:flex;flex-direction:column;gap:6px;flex:none}
+/* Diapo « Nouveau nom, nouveau logo » : logo, titre et le trait rouge de l'écran de chargement */
+.news-brand{position:relative;overflow:hidden;align-items:center;padding:16px 10px 14px;gap:6px}
+.news-brand img{position:relative;border-radius:20px;box-shadow:0 0 0 1px var(--line),0 8px 22px rgba(0,0,0,.4)}
+.nb-line{position:absolute;left:-10%;right:-10%;top:42%;height:2px;background:var(--red-hi);box-shadow:0 0 12px var(--red-hi);transform:rotate(-32.9deg)}
+.nb-title{position:relative;font-family:var(--display);font-weight:800;font-style:italic;font-size:34px;line-height:.9;text-transform:uppercase;margin-top:4px}
+.nb-title span{color:var(--red-hi)}
+.news-brand .brand-sub{position:relative;font-size:12px}
 .news-dots{align-self:center}
 .news-nav{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .news-nav .btn{min-height:48px;white-space:nowrap;padding-inline:10px}
