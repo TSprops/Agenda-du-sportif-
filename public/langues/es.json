@@ -56,7 +56,9 @@
     "unInstant": "Un momento…",
     "aHeure": "a las {heure}",
     "confirmer": "Confirmar",
-    "chargementPoints": "Cargando…"
+    "chargementPoints": "Cargando…",
+    "confirmerQ": "¿Confirmar?",
+    "heures": "Horas"
   },
   "connexion": {
     "bienvenue": "Bienvenido",
@@ -336,13 +338,214 @@
   },
   "idees": {
     "titre": "Ideas de sesiones",
-    "intro": "Elige una actividad para ver ideas de sesiones que probar."
+    "intro": "Elige una actividad para ver ideas de sesiones que probar.",
+    "muscu": {
+      "pushForce": {
+        "nom": "Empuje fuerza"
+      },
+      "pushVolume": {
+        "nom": "Empuje volumen"
+      },
+      "pullForce": {
+        "nom": "Tirón fuerza"
+      },
+      "pullDos": {
+        "nom": "Tirón espalda ancha"
+      },
+      "jambesCompletes": {
+        "nom": "Piernas completas"
+      },
+      "quadsFessiers": {
+        "nom": "Cuádriceps y glúteos"
+      },
+      "hautComplet": {
+        "nom": "Tren superior completo"
+      },
+      "hautExpress": {
+        "nom": "Tren superior exprés"
+      },
+      "basForce": {
+        "nom": "Tren inferior fuerza"
+      },
+      "fessiersIschios": {
+        "nom": "Glúteos e isquios"
+      }
+    },
+    "calis": {
+      "debutant": {
+        "nom": "Full body principiante"
+      },
+      "tiragePoussee": {
+        "nom": "Tirón y empuje"
+      },
+      "skills": {
+        "nom": "Skills: equilibrios y palancas"
+      },
+      "pyramide": {
+        "nom": "Pirámide de resistencia"
+      },
+      "muscleUp": {
+        "nom": "Muscle-up: progresión"
+      }
+    },
+    "course": {
+      "footing": {
+        "nom": "Rodaje suave",
+        "note": "Ritmo cómodo: debes poder hablar."
+      },
+      "sortieLongue": {
+        "nom": "Tirada larga",
+        "note": "Ritmo suave, regular de principio a fin. Hidrátate."
+      },
+      "lignesDroites": {
+        "nom": "Rodaje + rectas",
+        "note": "40 min de rodaje suave y luego 5 aceleraciones progresivas de 100 m, volviendo andando."
+      },
+      "seuil3x10": {
+        "nom": "Umbral 3 × 10 min",
+        "note": "Calentamiento 15 min suave, vuelta a la calma 10 min."
+      },
+      "seuil2x15": {
+        "nom": "Umbral 2 × 15 min",
+        "note": "Calentamiento 15 min suave, vuelta a la calma 10 min."
+      },
+      "tempo20": {
+        "nom": "Tempo 20 min",
+        "note": "Calentamiento 15 min, 20 min seguidos a ritmo exigente, 10 min suaves."
+      },
+      "vma400": {
+        "nom": "VAM 10 × 400 m",
+        "note": "Calentamiento 20 min suave + técnica. Recuperación trotando."
+      },
+      "trenteTrente": {
+        "nom": "30/30 × 2 series",
+        "note": "2 series de 10 × 30 s rápido / 30 s lento, 3 min de recuperación entre series."
+      },
+      "pyramide": {
+        "nom": "Pirámide de 200 a 800 m",
+        "note": "Recuperación = mismo tiempo que el esfuerzo, trotando."
+      },
+      "cotes": {
+        "nom": "Cuestas 8 × 30 s",
+        "note": "Pendiente media, subida dinámica, recuperación bajando al trote."
+      }
+    },
+    "allures": {
+      "semi": "ritmo de media",
+      "dixKm": "ritmo de 10 km +10 s",
+      "vma95": "VAM 95 %",
+      "vma": "VAM",
+      "vma90": "VAM 90 %",
+      "cote": "fuerte en cuesta"
+    },
+    "objectif": "Objetivo: {reps}",
+    "recupDe": "recuperación {duree}",
+    "reposDe": "descanso {duree}",
+    "essayer": "Probar hoy",
+    "ajouteeComme": "Añadida como {n}.ª sesión del día",
+    "titreActivite": "Ideas · {activite}"
   },
   "routines": {
-    "routine": "Rutina"
+    "routine": "Rutina",
+    "enregistree": "✓ Rutina guardada",
+    "enregistreeNom": "☆ Rutina «{nom}» guardada",
+    "creer": "+ Crear una rutina",
+    "astuce": "Truco: en una sesión, toca «☆ Guardar como rutina» para repetirla con un toque.",
+    "modifier": "Editar",
+    "lancer": "Empezar",
+    "vide": "Aún no tienes rutinas. Crea la primera: tus ejercicios, tus series y tus descansos, listos para empezar.",
+    "nouvelle": "Nueva rutina",
+    "nom": "Nombre de la rutina",
+    "nomExemple": "p. ej. Empuje del lunes",
+    "moinsSeries": "Menos series",
+    "plusSeries": "Más series",
+    "secondes": "Segundos",
+    "enregistrer": "Guardar la rutina",
+    "supprimer": "Eliminar la rutina",
+    "nomManquant": "Ponle un nombre a tu rutina.",
+    "exerciceManquant": "Añade al menos un ejercicio."
   },
   "programmes": {
-    "titre": "Programas"
+    "titre": "Programas",
+    "monProgramme": "Mi programa",
+    "termine": "¡Programa terminado, enhorabuena! 🎉",
+    "avancement": "Semana {semaine} / {semaines} · sesión {seance} / {seances}",
+    "autre": "Elegir otro programa",
+    "lancer": "▶ Empezar: {seance}",
+    "arreter": "Dejar este programa",
+    "intro": "Elige un programa: la app te propone la sesión adecuada cada vez, con tus pesos de la última vez.",
+    "duree_one": "{n} semana",
+    "duree_other": "{n} semanas",
+    "parSemaine_one": "{n} sesión por semana",
+    "parSemaine_other": "{n} sesiones por semana",
+    "enCours": "Programa en curso",
+    "suivre": "Seguir este programa",
+    "remplacer": "¿Sustituir tu programa actual?",
+    "choisi": "✓ Programa elegido: ¡vamos!",
+    "toucherArreter": "Toca otra vez para dejarlo",
+    "liste": {
+      "full3": {
+        "nom": "Full body principiante",
+        "desc": "Todo el cuerpo en cada sesión, 3 veces por semana. Ideal para empezar o retomar.",
+        "conseil": "Añade un poco de peso en cuanto completes todas tus series con buena técnica."
+      },
+      "ppl": {
+        "nom": "Empuje Tirón Piernas",
+        "desc": "El gran clásico: empuje, tirón, piernas. 3 sesiones por semana (o 6 haciéndolo 2 veces).",
+        "conseil": "Deja 1 o 2 repeticiones en reserva (RPE 8) en la mayoría de las series."
+      },
+      "upper4": {
+        "nom": "Torso / Pierna",
+        "desc": "4 sesiones: 2 de tren superior y 2 de tren inferior. Perfecto para ganar volumen.",
+        "conseil": "Sesión A pesada (pocas reps), sesión B más ligera (más reps)."
+      },
+      "force5": {
+        "nom": "Fuerza 5×5",
+        "desc": "Pocos ejercicios, mucha fuerza: 5 series de 5 en los movimientos básicos, alternando 2 sesiones.",
+        "conseil": "Añade 2,5 kg en cada sesión superada (5 kg en el peso muerto). Si fallas 3 veces, baja un 10 %."
+      },
+      "calis1": {
+        "nom": "Calistenia principiante",
+        "desc": "Con el peso corporal, sin gimnasio: las bases para tus primeras dominadas y tus primeros fondos.",
+        "conseil": "Cuando hagas todas las series sin esfuerzo, pasa a la variante más difícil (p. ej. flexiones → flexiones diamante)."
+      },
+      "run10": {
+        "nom": "Preparación 10 km",
+        "desc": "8 semanas para correr 10 km: una salida suave, una sesión de velocidad y una tirada larga por semana.",
+        "conseil": "La salida suave y la tirada larga deben ser cómodas: tienes que poder hablar."
+      }
+    },
+    "seances": {
+      "fullA": "Full body A",
+      "fullB": "Full body B",
+      "fullC": "Full body C",
+      "push": "Empuje",
+      "pull": "Tirón",
+      "jambes": "Piernas",
+      "hautA": "Torso A (fuerza)",
+      "basA": "Pierna A (fuerza)",
+      "hautB": "Torso B (volumen)",
+      "basB": "Pierna B (volumen)",
+      "seanceA": "Sesión A",
+      "seanceB": "Sesión B",
+      "tirageAbdos": "Tirón y abdominales",
+      "pousseeJambes": "Empuje y piernas",
+      "fullBody": "Full body",
+      "footing": "Rodaje suave",
+      "fracCourt": "Series cortas",
+      "seuil": "Umbral",
+      "sortieLongue": "Tirada larga"
+    },
+    "max": "máx.",
+    "allure5km": "ritmo de 5 km",
+    "allureSeuil": "umbral",
+    "course": {
+      "footing": "Semana {semaine}: {min} min a ritmo suave.",
+      "fracCourt": "Semana {semaine}: {n} × 400 m rápidos, recuperación 1:30 trotando.",
+      "seuil": "Semana {semaine}: {n} × {min} min a ritmo umbral, recuperación 2:00.",
+      "jourJ": "Semana 8: ¡es el gran día, corre tus 10 km!",
+      "sortieLongue": "Semana {semaine}: {km} km tranquilos."
+    }
   },
   "muscles": {
     "titre": "Mapa muscular",
@@ -365,7 +568,23 @@
     "seriesParMuscle": "Series por músculo",
     "calcul": "Una serie cuenta 1 para los músculos principales del ejercicio y 0,5 para los que ayudan.",
     "seriesSur_one": "{n} serie en los últimos {jours} días",
-    "seriesSur_other": "{n} series en los últimos {jours} días"
+    "seriesSur_other": "{n} series en los últimos {jours} días",
+    "noms": {
+      "pecs": "Pectorales",
+      "epaules": "Hombros",
+      "biceps": "Bíceps",
+      "triceps": "Tríceps",
+      "avantbras": "Antebrazos",
+      "abdos": "Abdominales",
+      "obliques": "Oblicuos",
+      "trapezes": "Trapecios",
+      "dorsaux": "Dorsales",
+      "lombaires": "Lumbares",
+      "fessiers": "Glúteos",
+      "quadriceps": "Cuádriceps",
+      "ischios": "Isquiotibiales",
+      "mollets": "Gemelos"
+    }
   },
   "bilan": {
     "titre": "Resumen del mes",
@@ -548,23 +767,188 @@
   },
   "social": {
     "titre": "Social",
-    "rechercherAmis": "Buscar amigos"
+    "rechercherAmis": "Buscar amigos",
+    "taSeance": "tu sesión",
+    "suspenduToast": "⛔ Cuenta suspendida de las funciones sociales",
+    "unAmi": "Un amigo",
+    "aReagi": "ha reaccionado {emoji} a {seance}",
+    "aCommente": "ha comentado: «{texte}»",
+    "suspendu": "⛔ Cuenta suspendida",
+    "suspenduTexte": "Tu cuenta está suspendida de las funciones sociales tras varias denuncias. Para hablarlo, escribe desde la página Contacto.",
+    "rubriques": "Secciones",
+    "classement": "Clasificación",
+    "nouveau": "Novedades en tus sesiones",
+    "activite": "Actividad en tus sesiones",
+    "fil": "Actividad",
+    "actualiser": "↻ Actualizar",
+    "ajouteAmisFil": "Añade amigos para ver aquí sus sesiones.",
+    "ajouterAmis": "Añadir amigos",
+    "filVide": "Tus amigos aún no tienen sesiones.",
+    "toi": "Tú",
+    "essayerSeance": "Probar esta sesión",
+    "reactionImpossible": "No se ha podido reaccionar (¿conexión?)",
+    "ami": "Amigo"
   },
   "messages": {
-    "titre": "Mensajes"
+    "titre": "Mensajes",
+    "toiTexte": "Tú: {texte}",
+    "demarrer": "Empezar la conversación",
+    "ajouteAmis": "Añade amigos para poder escribirles.",
+    "aucune": "Aún no hay conversaciones. Elige un amigo abajo para escribirle.",
+    "ecrireAmi": "Escribir a un amigo"
   },
   "defis": {
     "titre": "Retos",
-    "defi": "Reto"
+    "defi": "Reto",
+    "mesures": {
+      "seances": "Sesiones",
+      "jours": "Días activos",
+      "km": "Km corridos",
+      "volume": "Volumen levantado"
+    },
+    "joursRestants_one": "Queda {n} día",
+    "joursRestants_other": "Quedan {n} días",
+    "dernierJour": "¡último día!",
+    "termine": "terminado",
+    "participants_one": "{n} participante",
+    "participants_other": "{n} participantes",
+    "nouveau": "Nuevo reto",
+    "quoi": "Qué se cuenta",
+    "duree": "Duración (a partir de hoy)",
+    "nom": "Nombre del reto",
+    "invites": "Amigos invitados",
+    "ajouteAmis": "Añade primero amigos para retarlos.",
+    "lancer": "Lanzar el reto",
+    "nouveauBouton": "+ Nuevo reto",
+    "enCours": "En curso",
+    "aucun": "Ningún reto en curso. Lanza uno contra tus amigos: sesiones, km, volumen…",
+    "termines": "Terminados",
+    "durees": {
+      "j7": "1 semana",
+      "j14": "2 semanas",
+      "j30": "1 mes"
+    },
+    "noms": {
+      "seances": {
+        "j7": "Más sesiones de la semana",
+        "j30": "Más sesiones del mes",
+        "j14": "Más sesiones en 2 semanas"
+      },
+      "jours": {
+        "j7": "Más días activos de la semana",
+        "j30": "Más días activos del mes",
+        "j14": "Más días activos en 2 semanas"
+      },
+      "km": {
+        "j7": "Más km de la semana",
+        "j30": "Más km del mes",
+        "j14": "Más km en 2 semanas"
+      },
+      "volume": {
+        "j7": "Mayor volumen de la semana",
+        "j30": "Mayor volumen del mes",
+        "j14": "Mayor volumen en 2 semanas"
+      }
+    },
+    "inviteAmi": "Invita al menos a un amigo.",
+    "lance": "🏁 ¡Reto lanzado!",
+    "erreur": "No se ha podido crear el reto. Comprueba tu conexión.",
+    "duAu": "del {debut} al {fin}",
+    "scoresMaj": "Las puntuaciones se actualizan cuando cada uno abre la app.",
+    "supprimer": "Eliminar el reto",
+    "signaler": "⚑ Denunciar",
+    "quitter": "Abandonar el reto",
+    "signalementTexte": "Reto «{nom}»",
+    "signale": "Denunciado ✓",
+    "toucherQuitter": "Toca otra vez para abandonar"
   },
   "classements": {
-    "titre": "Clasificaciones"
+    "titre": "Clasificaciones",
+    "ceMois": "Este mes",
+    "parExercice": "Por ejercicio",
+    "ajouteAmis": "Añade amigos para compararte con ellos.",
+    "mesures": {
+      "seances": "Sesiones",
+      "jours": "Días activos",
+      "km": "Km",
+      "volume": "Volumen",
+      "streak": "Racha 🔥"
+    },
+    "unites": {
+      "seances_one": "sesión",
+      "seances_other": "sesiones",
+      "jours_one": "día",
+      "jours_other": "días",
+      "streak": "sem."
+    },
+    "aucunExercice": "Aún no hay ejercicios anotados con pesos.",
+    "meilleureSerie": "Mejor serie anotada en las sesiones (la carga más pesada y luego el mayor número de repeticiones).",
+    "chargement": "Cargando amigos…"
   },
   "amis": {
-    "titre": "Amigos"
+    "titre": "Amigos",
+    "monCode": "Mi código de amigo",
+    "donneCode": "Da este código a tus amigos para que te añadan.",
+    "monQr": "🔳 Mi código QR",
+    "partagees": "✓ Mis sesiones están compartidas",
+    "nonPartagees": "Mis sesiones no están compartidas",
+    "ajouter": "Añadir a un amigo",
+    "codeOuPseudo": "Código de amigo o nombre de usuario",
+    "chercher": "Buscar",
+    "scanner": "📷 Escanear un código QR",
+    "demandeEnvoyee": "Solicitud enviada",
+    "accepter": "Aceptar",
+    "bloque": "Bloqueado",
+    "demandesRecues": "Solicitudes recibidas · {n}",
+    "veutAjouter": "quiere añadirte como amigo",
+    "refuser": "Rechazar",
+    "mesAmis": "Mis amigos · {n}",
+    "ecrireA": "Escribir a {pseudo}",
+    "aucun": "Aún no tienes amigos. Busca un nombre de usuario o introduce arriba el código de amigo de alguien.",
+    "demandesEnvoyees": "Solicitudes enviadas",
+    "enAttente": "pendiente",
+    "bloquees": "Personas bloqueadas",
+    "debloquer": "Desbloquear",
+    "recherche": "Buscando…",
+    "deuxLettres": "Escribe al menos 2 letras.",
+    "aucunResultat": "Sin resultados. Comprueba el código o el nombre de usuario.",
+    "rechercheEchec": "La búsqueda ha fallado. Comprueba tu conexión.",
+    "demandeImpossible": "No se ha podido enviar la solicitud.",
+    "kmEn": "{km} en {duree}",
+    "score": "Marca: {score}",
+    "message": "💬 Mensaje",
+    "sesRecords": "Sus récords",
+    "sesSeances": "Sus sesiones",
+    "nePartagePas": "{pseudo} no comparte sus sesiones por ahora.",
+    "aucuneSeance": "Aún no hay sesiones registradas.",
+    "voirPlus": "Ver más sesiones",
+    "signalementProfil": "Perfil «{pseudo}»",
+    "signalementObjectif": "objetivo: {objectif}",
+    "signalementPhoto": "con foto",
+    "deTesAmis": "de tus amigos"
   },
   "partage": {
-    "titre": "Compartir mi perfil"
+    "titre": "Compartir mi perfil",
+    "compteurs": "{activites} · {amis}",
+    "activites_one": "{n} actividad",
+    "activites_other": "{n} actividades",
+    "amis_one": "{n} amigo",
+    "amis_other": "{n} amigos",
+    "qrAria": "Código QR de mi perfil",
+    "copier": "📋 Copiar",
+    "envoyerLien": "📤 Enviar el enlace",
+    "aide": "Tu amigo enfoca el código QR con la cámara de su móvil (o usa el botón «Escanear» de la app) y llega directamente a tu perfil.",
+    "scanner": "Escanear el código de un amigo",
+    "ouvrePhoto": "Abre la cámara",
+    "copieImpossible": "No se ha podido copiar: {texte}",
+    "message": "¡Añádeme en AS Sport! Mi código de amigo: {code}",
+    "scannerAria": "Escanear un código QR",
+    "vise": "Enfoca el código QR de tu amigo.",
+    "taperCode": "Escribir el código",
+    "navigateurIncompatible": "Tu navegador no sabe leer códigos QR. Abre la cámara de tu móvil y enfoca el código QR: el enlace se abre solo. O escribe el código de amigo.",
+    "tonCode": "Es tu propio código 😉",
+    "pasAsSport": "Este código QR no es de AS Sport.",
+    "accesRefuse": "Acceso a la cámara denegado. Permítelo en los ajustes o escribe el código de amigo."
   },
   "seances": {
     "calendrier": "Calendario",
@@ -576,7 +960,38 @@
       "calis": "Calis",
       "muscu": "Gym"
     },
-    "nonEnregistre": "No guardado: comprueba tu conexión"
+    "nonEnregistre": "No guardado: comprueba tu conexión",
+    "autresActivites": "Otras actividades",
+    "enChiffres": "{mois} en cifras",
+    "glisserSupprimer": "🗑 Eliminar",
+    "photos_one": "{n} foto",
+    "photos_other": "{n} fotos",
+    "astuceGlisser": "Truco: desliza una sesión hacia la derecha para eliminarla.",
+    "aucuneMois": "Ninguna sesión en {mois}. Toca un día del calendario para registrar tu entrenamiento.",
+    "ateliers_one": "{n} estación",
+    "ateliers_other": "{n} estaciones",
+    "exercices_one": "{n} ejercicio",
+    "exercices_other": "{n} ejercicios",
+    "supprimee": "🗑 Sesión eliminada",
+    "wodDuJour": "WOD del día",
+    "changerActivite": "Cambiar de actividad",
+    "titreSeance": "Título de la sesión",
+    "ressenti": "Sensación general",
+    "notePlaceholder": "Sueño, energía, qué cambiar la próxima vez…",
+    "photosTitre": "Fotos",
+    "toucherEfface": "Toca otra vez: se borrará el contenido",
+    "toucherSupprimer": "Toca otra vez para eliminar",
+    "quelleActivite": "¿Qué actividad?",
+    "choisisSport": "Elige tu deporte de hoy: cada actividad tiene su propia ficha.",
+    "reprendreType": "Repetir la última sesión de {type}",
+    "exercicesPreremplis_one": "{n} ejercicio, pesos rellenados",
+    "exercicesPreremplis_other": "{n} ejercicios, pesos rellenados",
+    "ajouterExercice": "+ Añadir un ejercicio",
+    "enregistrerRoutine": "☆ Guardar como rutina",
+    "reprendreDerniere": "Repetir tu última sesión",
+    "duJour": "Sesiones del día",
+    "numero": "Sesión {n}",
+    "autre": "+ Otra sesión"
   },
   "conversation": {
     "plusOptions": "Más opciones",
@@ -584,13 +999,90 @@
     "signaler": "Denunciar la conversación",
     "bloquer": "Bloquear",
     "ecrire": "Escribe un mensaje…",
-    "tonMessage": "Tu mensaje"
+    "tonMessage": "Tu mensaje",
+    "indisponible": "Conversación no disponible.",
+    "signalerMessage": "Denunciar este mensaje",
+    "vide": "Saluda 👋<br>Los mensajes solo los veis vosotros dos.",
+    "nonEnvoye": "Mensaje no enviado: puede que ya no seáis amigos.",
+    "signale": "Denunciado ✓ Gracias",
+    "citation": "«{texte}»",
+    "videSignalement": "(conversación vacía)",
+    "signalee": "Conversación denunciada ✓",
+    "toucherBloquer": "Toca otra vez para bloquear"
   },
   "records": {
-    "intro": "Elige una categoría para ver y añadir tus récords."
+    "intro": "Elige una categoría para ver y añadir tus récords.",
+    "nouveau": "¡Nuevo récord!",
+    "muscu": {
+      "bench": "Press de banca",
+      "squat": "Sentadilla",
+      "dl": "Peso muerto",
+      "ohp": "Press militar",
+      "pullw": "Dominada lastrada (lastre)",
+      "row": "Remo con barra"
+    },
+    "course": {
+      "5k": "5 km",
+      "10k": "10 km",
+      "semi": "Media maratón",
+      "marathon": "Maratón"
+    },
+    "calis": {
+      "pullups": "Dominadas",
+      "dips": "Fondos",
+      "pushups": "Flexiones",
+      "muscleup": "Muscle-up",
+      "frontlever": "Front lever",
+      "planche": "Plancha",
+      "handstand": "Pino",
+      "lsit": "L-sit"
+    },
+    "aucun": "Aún no hay récord",
+    "leDate": "el {date}",
+    "estime": "≈ 1RM estimado: {rm} ({kg} kg × {reps}, el {date})",
+    "nouvelleCharge": "Nueva carga (kg)",
+    "tonTemps": "Tu tiempo (h : min : s)",
+    "dureeTenue": "Tiempo de aguante (segundos)",
+    "repsAffilee": "Repeticiones seguidas",
+    "ex15": "p. ej. 15",
+    "titreActivite": "Récords · {activite}",
+    "aide": {
+      "muscu": "Tu carga máxima en una repetición (o tu mejor serie pesada). El 1RM estimado se calcula a partir de tus sesiones.",
+      "course": "Tu mejor tiempo en cada distancia. El ritmo se calcula solo.",
+      "calis": "Tu máximo de repeticiones seguidas, o tu aguante más largo."
+    },
+    "toucherPlus": "Toca + para añadir un récord."
   },
   "progression": {
-    "intro": "Elige una categoría para ver tus gráficas, sesión tras sesión."
+    "intro": "Elige una categoría para ver tus gráficas, sesión tras sesión.",
+    "ariaCourbe_one": "Gráfica de progreso, {n} sesión",
+    "ariaCourbe_other": "Gráfica de progreso, {n} sesiones",
+    "uneSeance": "1 sesión por ahora",
+    "stable": "estable",
+    "depuis": "{ecart} desde el {date}",
+    "record": "Récord",
+    "valeurs": "Ver los valores",
+    "titreActivite": "Progreso · {activite}",
+    "videMuscu": "Aún no hay sesiones de musculación. Registra tus sesiones con sus pesos: tu progreso aparecerá aquí, ejercicio a ejercicio.",
+    "valeurAffichee": "Valor mostrado",
+    "chargeMax": "Carga máx.",
+    "rmEstime": "1RM estimado",
+    "aide1rm": "1RM estimado (fórmula de Epley, series de 12 repeticiones como máximo) en cada sesión de {type}.",
+    "aideMax": "Carga máxima levantada en cada sesión de {type}.",
+    "toucherCourbe": "Toca una gráfica para ver el detalle.",
+    "aucunPoids": "Aún no hay pesos anotados en tus sesiones de {type}.",
+    "aideCalis": "Tu mejor resultado por sesión: repeticiones, o segundos para las figuras estáticas.",
+    "max": "Máx.",
+    "videCalis": "Aún no hay sesiones de calistenia registradas. Tu progreso aparecerá aquí, ejercicio a ejercicio.",
+    "toutes": "Todas",
+    "allureMoyenne": "Ritmo medio",
+    "meilleure": "Mejor",
+    "plusLongue": "Más larga",
+    "aideAllure": "En el ritmo, cuanto más baja la gráfica, más rápido corres.",
+    "videCourse": "Aún no hay salidas con distancia y tiempo. Introdúcelos en tus sesiones de running: tu ritmo y tus distancias aparecerán aquí.",
+    "records1rm": "Récords 1RM",
+    "videCrossfit": "Anota tus resultados en los WODs de referencia (Fran, Murph…) y tus 1RM en «Mis récords»: su evolución aparecerá aquí.",
+    "aideWod": "En un WOD por tiempo, cuanto más baja la gráfica, más rápido eres."
   },
   "crossfit": {
     "noterWod": "Registrar mi WOD de hoy",
@@ -648,7 +1140,174 @@
       "spress": "Strict press",
       "ppress": "Push press",
       "bench": "Press de banca"
-    }
+    },
+    "dureeMin": "Duración (min)",
+    "timeCap": "Time cap (min)",
+    "toursComplets": "Rondas completas",
+    "ex12": "p. ej. 12",
+    "plusReps": "+ Reps",
+    "minutesReussies": "Minutos completados",
+    "repsTotal": "Reps en total",
+    "chargeMax": "Carga máxima (kg)",
+    "ex100": "p. ej. 100",
+    "tempsFinal": "Tiempo final (min : s)",
+    "formatWod": "Formato del WOD",
+    "leWod": "El WOD",
+    "nomWod": "Nombre del WOD (opcional)",
+    "nomWodExemple": "p. ej. Fran, Murph, WOD del día",
+    "mouvements": "Movimientos",
+    "repetitions": "Repeticiones",
+    "changerMouvement": "Cambiar el movimiento: {nom}",
+    "choisirMouvement": "Elegir el movimiento",
+    "choisir": "Elegir…",
+    "chargeKg": "Carga en kg",
+    "supprimerMouvement": "Eliminar el movimiento",
+    "ajouterMouvement": "+ Añadir un movimiento",
+    "monScore": "Mi marca",
+    "rx": "Rx (cargas oficiales)",
+    "scaled": "Scaled (adaptado)",
+    "forceTechnique": "Fuerza / técnica (opcional)",
+    "forceExemple": "p. ej. Back squat 5×5 con 100 kg",
+    "intensite": "Intensidad percibida",
+    "how": {
+      "fran": {
+        "etapes": {
+          "e1": "21 thrusters y luego 21 dominadas",
+          "e2": "15 thrusters y luego 15 dominadas",
+          "e3": "9 thrusters y luego 9 dominadas"
+        },
+        "rx": "Barra de 43 kg para hombres, 29 kg para mujeres.",
+        "scaled": "Barra de 20 o 15 kg, dominadas con goma o dominadas australianas.",
+        "tip": "Divide las dominadas desde la primera ronda (p. ej. 11 + 10) para no reventarte los antebrazos."
+      },
+      "grace": {
+        "etapes": {
+          "e1": "30 clean & jerks, como quieras: seguidos, por bloques o de uno en uno"
+        },
+        "rx": "Barra de 61 kg para hombres, 43 kg para mujeres.",
+        "scaled": "Una carga que levantes 10 veces seguidas sin forzar (p. ej. 40 / 25 kg).",
+        "tip": "Haz singles regulares (una rep cada 5 a 10 s) en vez de grandes bloques que te revienten."
+      },
+      "isabel": {
+        "etapes": {
+          "e1": "30 snatches (arrancadas), barra del suelo a por encima de la cabeza en un solo movimiento"
+        },
+        "rx": "Barra de 61 kg para hombres, 43 kg para mujeres.",
+        "scaled": "Power snatch ligero (p. ej. 35 / 25 kg) o snatch alterno con mancuerna.",
+        "tip": "Como en Grace: singles rápidos, manteniendo la espalda bien firme en cada repetición."
+      },
+      "diane": {
+        "etapes": {
+          "e1": "21 pesos muertos y luego 21 handstand push-ups",
+          "e2": "15 pesos muertos y luego 15 handstand push-ups",
+          "e3": "9 pesos muertos y luego 9 handstand push-ups"
+        },
+        "rx": "Barra de 102 kg para hombres, 70 kg para mujeres. Flexiones en pino contra la pared.",
+        "scaled": "Barra de 60 / 40 kg, pike push-ups o press militar con mancuernas.",
+        "tip": "El peso muerto va rápido: guarda energía para los handstand push-ups, divididos en bloques pequeños."
+      },
+      "elizabeth": {
+        "etapes": {
+          "e1": "21 squat cleans y luego 21 fondos en anillas",
+          "e2": "15 squat cleans y luego 15 fondos",
+          "e3": "9 squat cleans y luego 9 fondos"
+        },
+        "rx": "Barra de 61 kg para hombres, 43 kg para mujeres.",
+        "scaled": "Barra más ligera (40 / 25 kg), fondos en paralelas o en banco.",
+        "tip": "Encadena los cleans en touch and go mientras la técnica aguante, y luego pasa a singles."
+      },
+      "helen": {
+        "etapes": {
+          "e1": "Carrera de 400 m",
+          "e2": "21 kettlebell swings",
+          "e3": "12 dominadas",
+          "e4": "Repite: 3 rondas en total"
+        },
+        "rx": "Kettlebell de 24 kg para hombres, 16 kg para mujeres. Swings por encima de la cabeza.",
+        "scaled": "Kettlebell de 16 / 12 kg, dominadas con goma.",
+        "tip": "Recupera en la carrera sin bajar el ritmo: ahí ganas tiempo encadenando rápido con los swings."
+      },
+      "karen": {
+        "etapes": {
+          "e1": "150 wall balls: sentadilla completa con el balón medicinal y lanzamiento a la diana"
+        },
+        "rx": "Balón de 9 kg a 3 m para hombres, 6 kg a 2,70 m para mujeres.",
+        "scaled": "Balón más ligero (6 / 4 kg) o diana más baja.",
+        "tip": "Márcate series desde el principio (p. ej. 15 reps y 3 respiraciones), antes de estar cansado."
+      },
+      "annie": {
+        "etapes": {
+          "e1": "50 double unders y luego 50 sit-ups",
+          "e2": "40 + 40",
+          "e3": "30 + 30",
+          "e4": "20 + 20",
+          "e5": "10 + 10"
+        },
+        "rx": "Double unders: la cuerda pasa dos veces bajo los pies en cada salto.",
+        "scaled": "Saltos simples (el doble de saltos) o menos repeticiones.",
+        "tip": "En los sit-ups, mantén un ritmo regular: son lo que más te frena al final del WOD."
+      },
+      "jackie": {
+        "etapes": {
+          "e1": "1000 m de remo",
+          "e2": "50 thrusters",
+          "e3": "30 dominadas"
+        },
+        "rx": "Barra de 20 kg para hombres, 15 kg para mujeres.",
+        "scaled": "Barra vacía más ligera, dominadas con goma o australianas.",
+        "tip": "No salgas demasiado rápido en el remo: tu respiración tiene que estar lista para los 50 thrusters."
+      },
+      "cindy": {
+        "etapes": {
+          "e1": "5 dominadas",
+          "e2": "10 flexiones",
+          "e3": "15 air squats",
+          "e4": "Repite tantas rondas como puedas en 20 minutos"
+        },
+        "rx": "Con el peso corporal. Flexiones con el pecho al suelo, sentadillas por debajo de la paralela.",
+        "scaled": "Dominadas con goma, flexiones de rodillas o con las manos elevadas.",
+        "tip": "Mantén un ritmo regular, más o menos una ronda por minuto, en vez de salir demasiado rápido.",
+        "score": "Tu marca: el número de rondas completas + las repeticiones de la ronda en curso.",
+        "lv1": "25+ rondas",
+        "lv2": "15–24 rondas",
+        "lv3": "8–14 rondas"
+      },
+      "murph": {
+        "etapes": {
+          "e1": "Carrera de 1,6 km",
+          "e2": "100 dominadas, 200 flexiones, 300 air squats (puedes repartirlas como quieras, p. ej. 20 rondas de 5-10-15)",
+          "e3": "Carrera de 1,6 km"
+        },
+        "rx": "Con chaleco lastrado de 9 kg para hombres, 6 kg para mujeres.",
+        "scaled": "Sin chaleco, la mitad de repeticiones («medio Murph») o dominadas con goma.",
+        "tip": "Divídelo en 20 rondas de 5 dominadas, 10 flexiones y 15 sentadillas: es la forma más sencilla de aguantar."
+      },
+      "deroule": "Cómo es",
+      "pendant": "Durante {n} minutos, encadena:",
+      "chrono": "El cronómetro arranca con el «3, 2, 1, ya» y se para en la última repetición. Tu marca es tu tiempo.",
+      "charges": "Cargas (Rx)",
+      "adaptee": "Versión adaptada (Scaled)",
+      "reperes": "Referencias",
+      "reperesTemps": "Referencias de tiempo",
+      "niveau1": "Muy bueno",
+      "niveau2": "Experimentado",
+      "niveau3": "Principiante",
+      "conseil": "Consejo"
+    },
+    "mesTemps": "Mis tiempos en los WODs de referencia",
+    "aEssayer": "WODs de referencia para probar",
+    "wodCeMois": "WODs este mes",
+    "wodTotal": "WODs en total",
+    "nRecords_one": "récord",
+    "nRecords_other": "récords",
+    "tonRecord": "tu récord",
+    "commentCaMarche": "Cómo funciona",
+    "record": "récord",
+    "aTenter": "Por intentar",
+    "tours": "Rondas",
+    "tonTemps": "Tu tiempo (min : s)",
+    "enregistrerResultat": "Guardar mi resultado",
+    "seance": "sesión"
   },
   "profil": {
     "modifierInfos": "Editar mis datos",
@@ -813,15 +1472,66 @@
     "titre": "Ejercicios",
     "chercher": "Busca un ejercicio o escribe para crear el tuyo",
     "chercherAria": "Buscar un ejercicio o escribir para crear el tuyo",
-    "aide": "¿No encuentras tu ejercicio? Escribe su nombre completo: aparecerá un botón «+ Crear» arriba de la lista."
+    "aide": "¿No encuentras tu ejercicio? Escribe su nombre completo: aparecerá un botón «+ Crear» arriba de la lista.",
+    "chercherMouvement": "Busca un movimiento o escribe para crear el tuyo",
+    "tous": "Todos",
+    "perso": "Ejercicio propio",
+    "creer": "Crear «{nom}»",
+    "ajouterMouvement": "Añadir tu propio movimiento",
+    "ajouterExercice": "Añadir tu propio ejercicio",
+    "mouvementsRecents": "Tus movimientos recientes",
+    "exercicesRecents": "Tus ejercicios recientes",
+    "ateliersHyrox": "Estaciones Hyrox",
+    "tousMouvements": "Todos los movimientos",
+    "tousExercices": "Todos los ejercicios",
+    "groupeVide": "Ningún ejercicio en este grupo.",
+    "nMouvements_one": "{n} movimiento",
+    "nMouvements_other": "{n} movimientos",
+    "nExercices_one": "{n} ejercicio",
+    "nExercices_other": "{n} ejercicios",
+    "groupes": {
+      "pecs": "Pecho",
+      "dos": "Espalda",
+      "epaules": "Hombros",
+      "bras": "Brazos",
+      "jambes": "Piernas",
+      "fessiers": "Glúteos",
+      "abdos": "Abdominales"
+    },
+    "materiel": {
+      "B": "Barra",
+      "H": "Mancuernas",
+      "M": "Máquina",
+      "P": "Polea",
+      "C": "Peso corporal",
+      "K": "Kettlebell",
+      "E": "Goma elástica"
+    },
+    "categoriesCf": {
+      "halt": "Halterofilia",
+      "force": "Fuerza",
+      "gym": "Gimnásticos",
+      "cardio": "Cardio"
+    }
   },
   "types": {
-    "titre": "Tipos de sesión"
+    "titre": "Tipos de sesión",
+    "aide": "Cada tipo tiene su color en el calendario. Toca el círculo para cambiar de color.",
+    "changerCouleur": "Cambiar el color de {nom}",
+    "nom": "Nombre del tipo",
+    "nouveau": "+ Nuevo tipo",
+    "reinitialiser": "Volver a los tipos por defecto",
+    "nomNouveau": "Nuevo tipo"
   },
   "photos": {
     "photo": "Foto",
     "supprimer": "Eliminar la foto",
-    "photoSeance": "Foto de la sesión"
+    "photoSeance": "Foto de la sesión",
+    "envoi": "Subiendo…",
+    "prendre": "Hacer una foto",
+    "voir": "Ver la foto {n}",
+    "erreur": "No se ha podido añadir la foto. Inténtalo de nuevo.",
+    "confirmer": "Confirmar la eliminación"
   },
   "minuteur": {
     "repos": "Descanso",
@@ -840,7 +1550,10 @@
     "dernier": "Salida {n} / {n} · ¡la última!",
     "reparti": "¡A por la siguiente!",
     "indiqueTemps": "Indica el tiempo entre dos salidas.",
-    "departSeul": "Salida · {nom}"
+    "departSeul": "Salida · {nom}",
+    "indiqueTempsDuree": "Indica el tiempo entre dos salidas y la duración.",
+    "corde": "Cuerda",
+    "depart": "Salida"
   },
   "regles": {
     "titre": "Nuestras normas",
@@ -858,11 +1571,37 @@
     "fait": "Hecho"
   },
   "commentFaire": {
-    "titre": "Cómo se hace"
+    "titre": "Cómo se hace",
+    "aria": "Cómo se hace: {nom}",
+    "position": "Posición a mantener",
+    "depart": "Inicio",
+    "arrivee": "Final",
+    "animation": "Animación en bucle ({vue})",
+    "voir": "Ver el movimiento",
+    "reperes": "Claves para empezar",
+    "mains": "Colocación de las manos",
+    "face": "Delante",
+    "dos": "Detrás",
+    "principaux": "Músculos principales",
+    "aident": "Músculos que ayudan",
+    "revoir": "Ver inicio y final",
+    "prises": {
+      "floor": "Manos en el suelo algo más separadas que los hombros, dedos hacia delante, codos a unos 45° del cuerpo.",
+      "wide": "Manos en el suelo mucho más separadas que los hombros (aproximadamente una vez y media).",
+      "diamond": "Manos juntas bajo el pecho: pulgares e índices se tocan formando un rombo (el «diamante»). Codos pegados al cuerpo.",
+      "bench": "Manos en la barra algo más separadas que los hombros: abajo, los antebrazos quedan bien verticales.",
+      "close": "Manos a la anchura de los hombros, no más juntas, para proteger las muñecas.",
+      "pro": "Agarre prono (palmas hacia la barra), manos algo más separadas que los hombros, dedos cerrados alrededor de la barra.",
+      "sup": "Agarre supino (palmas hacia ti), manos a la anchura de los hombros.",
+      "row": "Agarre prono (dorso de las manos hacia delante, pulgares hacia dentro), manos a la anchura de los hombros.",
+      "dips": "Una mano en cada barra paralela, brazos extendidos, hombros bajos y lejos de las orejas."
+    },
+    "largeurEpaules": "anchura de hombros"
   },
   "confirmation": {
     "titre": "¿Eliminar la sesión?",
-    "bouton": "Eliminar la sesión"
+    "bouton": "Eliminar la sesión",
+    "texte": "«{titre}» del {date} se eliminará, con sus fotos. Esta acción es definitiva."
   },
   "nouveautes": {
     "titre": "Novedades",
@@ -1409,6 +2148,15 @@
       "ef": "Rodaje suave",
       "seuil": "Umbral",
       "frac": "Series"
+    },
+    "records": {
+      "plusLongue": "Salida más larga",
+      "meilleureAllure": "Mejor ritmo"
+    },
+    "vues": {
+      "profil": "De perfil",
+      "face": "De frente",
+      "dessus": "Vista desde arriba"
     }
   },
   "disciplines": {
@@ -1431,7 +2179,49 @@
       "frac": "Esfuerzos cortos y rápidos con recuperaciones (VAM, cuestas, 30/30…)."
     },
     "calculAide": "Introduce la distancia y el tiempo: tu ritmo y tu velocidad se calculan solos.",
-    "auTotal": "{duree} en total"
+    "auTotal": "{duree} en total",
+    "recup": "Recuperación",
+    "unites": {
+      "m": "Metros",
+      "km": "Kilómetros",
+      "min": "Minutos",
+      "s": "Segundos"
+    },
+    "distanceParcourue": "Distancia recorrida {km}",
+    "ajouteAllure": "Añade un ritmo objetivo (p. ej. 4:30) para calcular la distancia recorrida.",
+    "totalParcouru": "Total recorrido {km}",
+    "blocValide": "ejercicio<br>validado ✓",
+    "seriesRestantes_one": "serie<br>restante",
+    "seriesRestantes_other": "series<br>restantes",
+    "lancerRecup": "⏱ Iniciar la recuperación",
+    "terminer": "✓ Terminar",
+    "apercu": "Vista previa: {bloc}",
+    "uniteBloc": "Unidad del bloque {n}",
+    "ancienneUnite": "unidad antigua",
+    "series": "series",
+    "duree": "duración",
+    "dureeDistance": "duración / distancia",
+    "unite": "unidad",
+    "allureCible": "Ritmo objetivo",
+    "valider": "✓ Validar el ejercicio",
+    "rouvrir": "Reabrir",
+    "supprimerBloc": "Eliminar el bloque {n}",
+    "supprimer": "Eliminar",
+    "typeSortie": "Tipo de salida",
+    "maSortie": "Mi salida",
+    "distanceKm": "Distancia (km)",
+    "exDistance": "p. ej. 8,5",
+    "dureeHms": "Duración (h : min : s)",
+    "fcMoyenne": "FC media (ppm)",
+    "exFc": "p. ej. 145",
+    "denivele": "Desnivel + (m)",
+    "exDenivele": "p. ej. 120",
+    "blocsSeuil": "Bloques a umbral",
+    "fractions": "Series",
+    "exSeuil": "P. ej.: 3 × 10 min a ritmo umbral, recuperación 2:00",
+    "exFractions": "P. ej.: 10 × 200 m a 3:45 /km, recuperación 1:00",
+    "ajouterBloc": "+ Añadir un bloque",
+    "effortRessenti": "Esfuerzo percibido"
   },
   "fete": {
     "continuer": "Continuar"
@@ -1498,5 +2288,1333 @@
     "enCours": "En curso: {seance}",
     "nouvelle": "+ Nueva",
     "lancerRoutine": "Empezar una rutina"
+  },
+  "series": {
+    "tenueS": "Aguante (s)",
+    "reps": "Reps",
+    "lestKg": "Lastre (kg)",
+    "poidsKg": "Peso (kg)",
+    "exempleCalis": "p. ej. Dominadas",
+    "nomExercice": "Nombre del ejercicio",
+    "changerTenue": "Cambiar entre repeticiones y aguante",
+    "tenue": "Aguante",
+    "supprimerExercice": "Eliminar el ejercicio",
+    "facon": "Forma de hacer el ejercicio",
+    "series": "Series",
+    "departs": "Salidas",
+    "serie": "Serie",
+    "passerA": "Ir a la serie {n} o marcarla",
+    "champSerie": "{champ} serie {n}",
+    "supprimerSerie": "Eliminar la serie {n}",
+    "exerciceFini": "✓ Ejercicio terminado",
+    "ajouterSerie": "+ Añadir una serie",
+    "reposEntre": "Descanso entre series",
+    "moinsRepos": "Menos descanso",
+    "plusRepos": "Más descanso",
+    "difficulte": "Dificultad (RPE)",
+    "difficulteAria": "Dificultad del 1 al 10",
+    "notePlaceholder": "Sensaciones: técnica, sensaciones, dolores…",
+    "effortAria": "Esfuerzo del 1 al 10",
+    "repsCourt": "reps",
+    "aucunRepos": "Ninguno",
+    "aucuneRemplie": "Ninguna serie rellenada",
+    "nSeries_one": "{n} serie",
+    "nSeries_other": "{n} series",
+    "totalTenue": "{n} s de aguante en total",
+    "totalReps": "{n} reps en total",
+    "lestMax": "lastre máx. {kg} kg",
+    "max": "máx. {kg} kg",
+    "volume": "volumen {kg} kg",
+    "toutesFaites": "✓ Todas las series hechas",
+    "derniereFaite": "✓ Última serie hecha · descanso",
+    "reposEnsuite": "⏸ Descanso · después la serie {n}",
+    "enCours": "Serie en curso: {i} / {n}",
+    "aFaire_one": "Por hacer · {fait} / {n} serie",
+    "aFaire_other": "Por hacer · {fait} / {n} series",
+    "reposEnCours": "⏸ Descansando…",
+    "lancerRepos": "⏱ Iniciar un descanso",
+    "serieFinie": "✓ Serie {n} hecha · descanso {repos}"
+  },
+  "departs": {
+    "aideCalis": "Una salida cada X segundos o minutos, durante el tiempo elegido. Haz tus reps y descansa hasta la siguiente salida.",
+    "repsParDepart": "Reps por salida",
+    "exemple5": "p. ej. 5",
+    "lest": "Lastre",
+    "sansLest": "Sin lastre",
+    "leste": "Con lastre",
+    "poidsLest": "Peso del lastre (kg)",
+    "reussis": "Salidas completadas (rellenar después)",
+    "surN": "de {n}",
+    "lancer": "⏱ Iniciar las salidas",
+    "repsParDepartN_one": "{n} rep por salida",
+    "repsParDepartN_other": "{n} reps por salida",
+    "toutesLes": "cada {duree}",
+    "pendant": "durante {duree}",
+    "reussisSur_one": "{ok} / {n} salida completadas",
+    "reussisSur_other": "{ok} / {n} salidas completadas",
+    "nDeparts_one": "{n} salida",
+    "nDeparts_other": "{n} salidas",
+    "lestKg": "lastre {kg} kg",
+    "totalCordes_one": "{n} cuerda en total",
+    "totalCordes_other": "{n} cuerdas en total",
+    "totalReps_one": "{n} rep en total",
+    "totalReps_other": "{n} reps en total",
+    "cordesParDepart_one": "{n} cuerda por salida",
+    "cordesParDepart_other": "{n} cuerdas por salida",
+    "nCordes_one": "{n} cuerda",
+    "nCordes_other": "{n} cuerdas",
+    "departToutesLes": "salida cada {duree}",
+    "lesteKg": "con lastre {kg} kg",
+    "lesteMin": "con lastre",
+    "sansLestMin": "sin lastre",
+    "toutesLesTitre": "Cada",
+    "pendantTitre": "Durante",
+    "changerUnite": "Cambiar entre segundos y minutos"
+  },
+  "cordes": {
+    "aide": "Para cada ejercicio: cuerdas por salida, una salida cada X segundos o minutos, durante cuánto tiempo, con o sin lastre.",
+    "reprendre": "Repetir tu última sesión de Cuerdas",
+    "exemple": "p. ej. Subida de cuerda",
+    "parDepart": "Por salida",
+    "ex1": "p. ej. 1",
+    "notePlaceholder": "Sensaciones: agarre, técnica, cansancio…"
+  },
+  "hyrox": {
+    "total": "Total: {duree}",
+    "exemple": "p. ej. SkiErg",
+    "distance": "Distancia",
+    "changerUnite": "Cambiar entre metros y repeticiones",
+    "calories": "Calorías",
+    "ex68": "p. ej. 68",
+    "chargeKg": "Carga (kg)",
+    "ex20": "p. ej. 20",
+    "temps": "Tiempo",
+    "notePlaceholder": "Sensaciones: ritmo, transiciones, cansancio…",
+    "aide": "Añade las estaciones que quieras, en el orden que quieras. Anota la distancia o las reps, la carga (o las calorías en SkiErg y RowErg) y tu tiempo (p. ej. 4:12).",
+    "formats": {
+      "open": "Solo Open",
+      "pro": "Solo Pro",
+      "double": "Dobles"
+    },
+    "categories": {
+      "h": "Hombre",
+      "f": "Mujer",
+      "x": "Mixto"
+    },
+    "formatsAide": {
+      "open": "La categoría de referencia, abierta a todos. 8 × (1 km de carrera + 1 estación), sin pausa: el cronómetro corre de principio a fin.",
+      "pro": "Las mismas 8 estaciones que en Open, con cargas más pesadas. Para atletas experimentados.",
+      "double": "En pareja: corréis juntos los 8 km. En cada estación os repartís el trabajo como queráis, pero solo trabaja uno a la vez."
+    },
+    "duree": {
+      "open": "1 h a 1 h 45",
+      "pro": "1 h a 1 h 30",
+      "double": "55 min a 1 h 30"
+    },
+    "nom": "Hyrox {format} · {categorie}",
+    "wallBalls": "Wall balls × {n} (diana {cible})",
+    "huitKm": "8 km de carrera · 8 estaciones",
+    "unKm": "1 km de carrera",
+    "mixte": "Wall balls: 6 kg a 3 m para el hombre, 4 kg a 2,70 m para la mujer. Trineos, farmers y sandbag con las cargas Open Hombre.",
+    "precisions": "Trineos: peso del trineo incluido. Farmers carry: una carga en cada mano."
+  },
+  "rpe": {
+    "aucun": "Sin valorar",
+    "facile": "Fácil",
+    "moderee": "Moderada",
+    "reserve3": "3 reps en reserva",
+    "reserve2": "2 reps en reserva",
+    "reserve1": "1 rep en reserva",
+    "echec": "Fallo"
+  },
+  "effort": {
+    "aucun": "Sin valorar",
+    "tresFacile": "Muy fácil",
+    "facile": "Fácil",
+    "soutenu": "Exigente",
+    "tresDur": "Muy duro",
+    "maximal": "Máximo"
+  },
+  "derniereFois": {
+    "suggestion": "💡 La última vez completaste todo con {de} kg: prueba {kg}",
+    "appliquer": "Aplicar"
+  },
+  "niveaux": {
+    "debutant": "Principiante",
+    "intermediaire": "Intermedio",
+    "confirme": "Experimentado",
+    "avance": "Avanzado",
+    "tous": "Todos los niveles",
+    "debutantInter": "De principiante a intermedio"
+  },
+  "categories": {
+    "ideas": {
+      "muscu": "Empuje, Tirón, Piernas, Tren superior e inferior",
+      "crossfit": "WODs de referencia para probar",
+      "calis": "De principiante a figuras",
+      "course": "Rodaje, umbral y series",
+      "hyrox": "Solo Open, Solo Pro y Dobles: los formatos de carrera"
+    },
+    "rec": {
+      "muscu": "Press de banca, sentadilla, peso muerto…",
+      "crossfit": "1RM y tiempos en los WODs de referencia",
+      "calis": "Máximo de dominadas, fondos, aguantes…",
+      "course": "5 km, 10 km, media y maratón"
+    },
+    "prog": {
+      "muscu": "Tus cargas, ejercicio a ejercicio",
+      "crossfit": "Tus WODs de referencia y tus 1RM",
+      "calis": "Tus repeticiones y aguantes",
+      "course": "Tu ritmo y tus distancias"
+    }
+  },
+  "commentaires": {
+    "voirTous": "Ver los {n} comentarios",
+    "supprimer": "Eliminar el comentario",
+    "signaler": "Denunciar el comentario",
+    "repondre": "Responder…",
+    "ecrire": "Escribe un comentario…",
+    "commentaire": "Comentario",
+    "deTesAmis": "Comentarios de tus amigos",
+    "nonEnvoye": "Comentario no enviado. Comprueba tu conexión.",
+    "signalerQ": "¿Denunciar?",
+    "dejaSignale": "Ya denunciado, ¡gracias!",
+    "signale": "⚑ Gracias, el comentario ha sido denunciado",
+    "signalementImpossible": "No se ha podido denunciar. Inténtalo de nuevo.",
+    "supprimerQ": "¿Eliminar?",
+    "suppressionImpossible": "No se ha podido eliminar."
+  },
+  "exercices": {
+    "noms": {
+      "developpe-couche": "Press de banca",
+      "developpe-couche-halteres": "Press de banca con mancuernas",
+      "developpe-incline": "Press inclinado",
+      "developpe-incline-halteres": "Press inclinado con mancuernas",
+      "developpe-decline": "Press declinado",
+      "ecarte-halteres": "Aperturas con mancuernas",
+      "ecarte-poulie-haute": "Cruce de poleas alto",
+      "ecarte-poulie-moyenne": "Cruce de poleas medio",
+      "ecarte-poulie-basse": "Cruce de poleas bajo",
+      "pec-deck-butterfly": "Contractor de pecho (butterfly)",
+      "presse-pectoraux": "Press de pecho en máquina",
+      "pompes": "Flexiones",
+      "pompes-diamant": "Flexiones diamante",
+      "dips": "Fondos",
+      "pull-over": "Pullover",
+      "tractions": "Dominadas",
+      "tractions-lestees": "Dominadas lastradas",
+      "tractions-supination-chin-up": "Dominadas supinas (chin-up)",
+      "tractions-australiennes": "Dominadas australianas",
+      "tirage-vertical": "Jalón al pecho",
+      "tirage-vertical-prise-serree": "Jalón al pecho agarre estrecho",
+      "tirage-horizontal": "Remo en polea baja",
+      "rowing-barre": "Remo con barra",
+      "rowing-haltere": "Remo con mancuerna",
+      "rowing-t-bar": "Remo en T",
+      "rowing-machine": "Remo en máquina",
+      "souleve-de-terre": "Peso muerto",
+      "souleve-de-terre-roumain": "Peso muerto rumano",
+      "souleve-de-terre-sumo": "Peso muerto sumo",
+      "shrugs": "Encogimientos de hombros",
+      "face-pull": "Face pull",
+      "extension-lombaire": "Hiperextensión lumbar",
+      "good-morning": "Buenos días (good morning)",
+      "developpe-militaire": "Press militar",
+      "developpe-arnold": "Press Arnold",
+      "elevations-laterales": "Elevaciones laterales",
+      "elevations-laterales-a-la-poulie": "Elevaciones laterales en polea",
+      "elevations-frontales": "Elevaciones frontales",
+      "oiseau-arriere-d-epaule": "Pájaros (deltoides posterior)",
+      "rowing-menton": "Remo al mentón",
+      "push-press": "Push press",
+      "curl-barre": "Curl con barra",
+      "curl-halteres": "Curl con mancuernas",
+      "curl-marteau": "Curl martillo",
+      "curl-incline": "Curl inclinado",
+      "curl-pupitre": "Curl en banco Scott",
+      "curl-a-la-poulie": "Curl en polea",
+      "extension-triceps-a-la-poulie": "Extensión de tríceps en polea",
+      "extension-triceps-nuque": "Extensión de tríceps tras nuca",
+      "barre-au-front": "Press francés",
+      "developpe-couche-prise-serree": "Press de banca agarre estrecho",
+      "kickback-triceps": "Patada de tríceps",
+      "curl-poignets": "Curl de muñeca",
+      "farmer-walk": "Paseo del granjero",
+      "montee-de-corde": "Subida de cuerda",
+      "montee-de-corde-avec-jambes": "Subida de cuerda con piernas",
+      "montee-de-corde-depart-assis": "Subida de cuerda desde sentado",
+      "squat": "Sentadilla",
+      "front-squat": "Sentadilla frontal",
+      "squat-goblet": "Sentadilla goblet",
+      "hack-squat": "Sentadilla hack",
+      "presse-a-cuisses": "Prensa de piernas",
+      "fentes": "Zancadas",
+      "fentes-bulgares": "Sentadilla búlgara",
+      "leg-extension": "Extensión de cuádriceps",
+      "leg-curl": "Curl femoral",
+      "hip-thrust": "Hip thrust",
+      "pont-fessier": "Puente de glúteos",
+      "abducteurs-machine": "Máquina de abductores",
+      "step-up": "Subidas al cajón",
+      "mollets-debout": "Gemelos de pie",
+      "mollets-assis": "Gemelos sentado",
+      "squats-poids-du-corps": "Sentadillas (peso corporal)",
+      "pistol-squat": "Sentadilla pistol",
+      "box-jumps": "Saltos al cajón",
+      "crunch": "Crunch",
+      "crunch-a-la-poulie": "Crunch en polea",
+      "releves-de-jambes": "Elevaciones de piernas",
+      "toes-to-bar": "Toes to bar",
+      "gainage": "Plancha abdominal",
+      "gainage-lateral": "Plancha lateral",
+      "russian-twist": "Giro ruso",
+      "roue-abdominale": "Rueda abdominal",
+      "mountain-climbers": "Escaladores",
+      "sit-ups": "Sit-ups",
+      "l-sit": "L-sit",
+      "hollow-hold": "Hollow hold",
+      "muscle-up": "Muscle-up",
+      "handstand-push-up": "Flexión en pino (HSPU)",
+      "pompes-pike": "Flexiones pike",
+      "pompes-archer": "Flexiones arquero",
+      "front-lever": "Front lever",
+      "back-lever": "Back lever",
+      "planche": "Planche",
+      "handstand": "Pino",
+      "human-flag": "Bandera humana",
+      "dips-aux-anneaux": "Fondos en anillas",
+      "kettlebell-swings": "Kettlebell swings",
+      "thrusters": "Thrusters",
+      "clean": "Clean (cargada)",
+      "snatch": "Snatch (arrancada)",
+      "burpees": "Burpees",
+      "wall-balls": "Wall balls",
+      "power-clean": "Power clean",
+      "power-snatch": "Power snatch",
+      "clean-jerk": "Clean & jerk (dos tiempos)",
+      "back-squat": "Back squat",
+      "overhead-squat": "Sentadilla overhead",
+      "air-squats": "Air squats",
+      "double-unders": "Double unders",
+      "rameur": "Remo (ergómetro)",
+      "air-bike": "Air bike",
+      "course": "Carrera",
+      "skierg": "SkiErg",
+      "sled-push": "Empuje de trineo",
+      "sled-pull": "Arrastre de trineo",
+      "burpees-sautes": "Burpees con salto",
+      "rowerg": "RowErg",
+      "farmers-carry": "Farmers carry",
+      "fentes-sandbag": "Zancadas con sandbag",
+      "montee-de-corde-sans-jambes": "Subida de cuerda sin piernas",
+      "squats": "Sentadillas",
+      "handstand-push-ups": "Flexiones en pino (HSPU)",
+      "squat-clean": "Squat clean",
+      "course-m-400": "Carrera (m) 400",
+      "rameur-m": "Remo (m)",
+      "course-m": "Carrera (m)",
+      "dips-lestes": "Fondos lastrados",
+      "extensions-triceps-poulie": "Extensiones de tríceps en polea",
+      "developpe-couche-machine": "Press de pecho en máquina",
+      "ecartes-poulie": "Aperturas en polea",
+      "extensions-triceps-corde": "Extensiones de tríceps con cuerda",
+      "fentes-marchees": "Zancadas caminando",
+      "fentes-arriere": "Zancadas hacia atrás",
+      "abduction-machine": "Máquina de abducción",
+      "kickback-poulie": "Patada de glúteo en polea",
+      "pompes-pieds-sureleves": "Flexiones con pies elevados"
+    }
+  },
+  "fiches": {
+    "communs": {
+      "legende1": "Inicio",
+      "legende2": "Final"
+    },
+    "crunch-a-la-poulie": {
+      "legende1": "De rodillas, cuerda detrás de la cabeza",
+      "legende2": "Espalda enrollada hacia el suelo",
+      "consigne": "De rodillas frente a la polea alta, con la cuerda detrás de la cabeza: enrolla la espalda hacia el suelo contrayendo el abdomen y vuelve a subir despacio.",
+      "conseil1": "Las caderas se quedan encima de las rodillas y no se mueven.",
+      "conseil2": "Manos fijas contra la cabeza: es la espalda la que se enrolla.",
+      "conseil3": "Suelta el aire al bajar."
+    },
+    "crunch": {
+      "legende1": "Tumbado, rodillas flexionadas",
+      "legende2": "Parte alta de la espalda enrollada, zona lumbar en el suelo",
+      "consigne": "Tumbado boca arriba, rodillas flexionadas y pies apoyados: enrolla la parte alta de la espalda soltando el aire, sin tirar del cuello, y vuelve a bajar.",
+      "conseil1": "Pies apoyados en el suelo, talones cerca de los glúteos.",
+      "conseil2": "La zona lumbar se queda pegada al suelo: solo se despegan los hombros.",
+      "conseil3": "Manos en las sienes, sin tirar de la cabeza."
+    },
+    "gainage-lateral": {
+      "legende1": "Posición a mantener",
+      "consigne": "Apoyado en un antebrazo, con el codo bajo el hombro: cuerpo alineado de la cabeza a los pies, sin dejar que la cadera caiga ni suba.",
+      "conseil1": "Codo justo debajo del hombro.",
+      "conseil2": "Cuerpo alineado: la cadera no sube ni cae.",
+      "conseil3": "¿Demasiado difícil? Apoya en el suelo la rodilla de abajo."
+    },
+    "gainage": {
+      "legende1": "Posición a mantener",
+      "consigne": "Apoyado en los antebrazos, codos bajo los hombros y antebrazos hacia delante: cuerpo alineado de los hombros a los talones.",
+      "conseil1": "Codos bajo los hombros, antebrazos paralelos apuntando hacia delante.",
+      "conseil2": "Cuerpo recto: ni glúteos arriba ni tripa caída.",
+      "conseil3": "Aprieta abdomen y glúteos, y respira con normalidad."
+    },
+    "hollow-hold": {
+      "legende1": "Posición a mantener",
+      "consigne": "Tumbado boca arriba, zona lumbar pegada al suelo: brazos estirados detrás de la cabeza y piernas estiradas, despegados del suelo.",
+      "conseil1": "La zona lumbar se queda pegada al suelo.",
+      "conseil2": "Hombros y pies despegados unos centímetros.",
+      "conseil3": "¿Demasiado difícil? Flexiona las rodillas o deja los brazos a lo largo del cuerpo."
+    },
+    "mountain-climbers": {
+      "legende1": "Rodilla derecha al pecho",
+      "legende2": "Plancha",
+      "legende3": "Rodilla izquierda al pecho",
+      "consigne": "En plancha con los brazos estirados: lleva una rodilla al pecho y luego la otra, alternando rápido sin levantar los glúteos.",
+      "conseil1": "Una rodilla tras otra, nunca las dos a la vez.",
+      "conseil2": "Manos bajo los hombros, brazos estirados.",
+      "conseil3": "Glúteos bajos, espalda recta."
+    },
+    "releves-de-jambes": {
+      "legende1": "Colgado, piernas estiradas",
+      "legende2": "Piernas en horizontal",
+      "consigne": "Colgado de la barra sin balancearte: sube las piernas estiradas hasta la horizontal y bájalas despacio.",
+      "conseil1": "Brazos estirados, hombros activos.",
+      "conseil2": "Sin impulso: las piernas suben y bajan despacio.",
+      "conseil3": "¿Demasiado difícil? Sube las rodillas flexionadas."
+    },
+    "roue-abdominale": {
+      "legende1": "De rodillas, rueda bajo los hombros",
+      "legende2": "Rueda hacia delante, espalda recta",
+      "consigne": "De rodillas, manos en la rueda bajo los hombros: rueda hacia delante con la espalda recta y vuelve contrayendo el abdomen.",
+      "conseil1": "Espalda recta, glúteos apretados: la zona lumbar nunca se arquea.",
+      "conseil2": "No vayas más lejos de lo que puedes controlar.",
+      "conseil3": "Principiante: recorrido corto, o contra una pared."
+    },
+    "russian-twist": {
+      "legende1": "Sentado, tronco inclinado hacia atrás",
+      "legende2": "Peso a la derecha",
+      "legende3": "Peso a la izquierda",
+      "consigne": "Sentado, con el tronco inclinado hacia atrás como al final de un crunch y los pies despegados: pasa el peso de un lado a otro girando los hombros.",
+      "conseil1": "Espalda recta (no redondeada), tronco inclinado unos 45°.",
+      "conseil2": "Son los hombros los que giran, el peso los sigue.",
+      "conseil3": "¿Demasiado difícil? Deja los talones en el suelo."
+    },
+    "sit-ups": {
+      "legende1": "Tumbado, rodillas flexionadas",
+      "legende2": "Tronco elevado hasta las rodillas",
+      "consigne": "Tumbado, rodillas flexionadas y pies apoyados (sujetos si hace falta): eleva todo el tronco hasta las rodillas y vuelve a bajar con suavidad.",
+      "conseil1": "Pies apoyados, dedos hacia delante, sujetos bajo un apoyo si hace falta.",
+      "conseil2": "Sube desenrollando la espalda y baja despacio.",
+      "conseil3": "Manos en las sienes o brazos cruzados sobre el pecho."
+    },
+    "toes-to-bar": {
+      "legende1": "Colgado",
+      "legende2": "Piernas en horizontal",
+      "legende3": "Puntas de los pies a la barra",
+      "consigne": "Colgado de la barra: sube los pies hasta tocar la barra, con las piernas estiradas, y bájalos controlando.",
+      "conseil1": "Las puntas de los pies tocan la barra, entre las manos.",
+      "conseil2": "Brazos estirados, hombros tirando hacia abajo.",
+      "conseil3": "Controla la bajada para no balancearte."
+    },
+    "communs-bras": {
+      "consigne": "Codos pegados al cuerpo y pulgares hacia arriba: sube las mancuernas sin balancearte y bájalas despacio.",
+      "conseil1": "Agarre martillo: pulgares hacia arriba durante todo el movimiento.",
+      "conseil2": "Codos fijos a lo largo del cuerpo.",
+      "conseil3": "Sin impulso: si te balanceas, baja el peso."
+    },
+    "barre-au-front": {
+      "legende1": "Barra cerca de la frente",
+      "legende2": "Brazos estirados",
+      "consigne": "Tumbado en un banco, con la barra sujeta y los brazos estirados por encima de la cara: flexiona los codos para bajar la barra hacia la frente y luego estira los brazos.",
+      "conseil1": "Manos a la anchura de los hombros (barra recta o EZ).",
+      "conseil2": "Los codos se quedan fijos, apuntando al techo.",
+      "conseil3": "Baja despacio hacia la frente, sin tocarla."
+    },
+    "curl-a-la-poulie": {
+      "legende1": "Brazos estirados hacia la polea",
+      "legende2": "Barra a la altura de los hombros",
+      "consigne": "Frente a la polea baja, con la barra en las manos: sube la barra hacia los hombros con los codos fijos y bájala despacio.",
+      "conseil1": "Da un paso atrás para que el cable siga tenso abajo.",
+      "conseil2": "Codos pegados al cuerpo.",
+      "conseil3": "La tensión del cable es constante: baja despacio."
+    },
+    "curl-barre": {
+      "legende1": "Brazos estirados",
+      "legende2": "Barra a los hombros, codos fijos",
+      "legende3": "Barra EZ, manos a la anchura de los hombros",
+      "legende4": "Codos a lo largo del cuerpo",
+      "consigne": "Barra EZ en las manos, palmas hacia delante y codos pegados al cuerpo: sube la barra sin balancearte y bájala despacio.",
+      "conseil1": "Barra EZ (curvada): más cómoda para las muñecas.",
+      "conseil2": "Solo se mueven los antebrazos, los codos se quedan junto al cuerpo.",
+      "conseil3": "Sin impulso con la espalda."
+    },
+    "curl-halteres": {
+      "legende1": "Pulgares hacia delante",
+      "legende2": "Palmas hacia los hombros",
+      "legende3": "Palmas hacia el cuerpo",
+      "legende4": "Rotación: palmas hacia arriba",
+      "consigne": "Mancuernas a los lados, palmas hacia los muslos: sube girando la muñeca para terminar con las palmas hacia los hombros y baja girando en sentido contrario.",
+      "conseil1": "Supinación: la muñeca gira durante la subida (palmas hacia arriba al final).",
+      "conseil2": "Codos fijos a lo largo del cuerpo.",
+      "conseil3": "Sube y baja despacio, sin impulso."
+    },
+    "curl-incline": {
+      "legende1": "Brazos colgando por detrás del tronco",
+      "legende2": "Mancuernas hacia los hombros",
+      "consigne": "Sentado en un banco inclinado, con los brazos colgando por detrás del tronco: sube las mancuernas sin adelantar los codos y bájalas despacio.",
+      "conseil1": "Banco a 45–60°, espalda y cabeza apoyadas en el respaldo.",
+      "conseil2": "Brazos verticales al inicio, por detrás del tronco: los codos no se mueven.",
+      "conseil3": "Menos peso que en el curl de pie."
+    },
+    "curl-marteau": {
+      "legende1": "Brazos estirados",
+      "legende2": "Pulgares hacia arriba",
+      "legende3": "Palmas hacia el cuerpo"
+    },
+    "curl-poignets": {
+      "legende1": "Muñecas hacia abajo",
+      "legende2": "Muñecas enrolladas hacia arriba",
+      "consigne": "Sentado, con los antebrazos apoyados en los muslos, las muñecas en el aire y las palmas hacia arriba: enrolla las muñecas hacia arriba y vuelve a bajarlas.",
+      "conseil1": "Antebrazos apoyados en los muslos, muñecas más allá de las rodillas.",
+      "conseil2": "Solo se mueven las muñecas.",
+      "conseil3": "Poco peso, muchas repeticiones."
+    },
+    "curl-pupitre": {
+      "legende1": "Brazos casi estirados sobre el banco Scott",
+      "legende2": "Barra hacia los hombros",
+      "consigne": "Sentado, con la parte trasera de los brazos apoyada en el banco Scott: sube la barra hacia los hombros y bájala despacio sin estirar de golpe.",
+      "conseil1": "Axilas encajadas en lo alto del banco.",
+      "conseil2": "La parte trasera de los brazos se queda pegada al cojín.",
+      "conseil3": "Mantén los codos ligeramente flexionados abajo."
+    },
+    "extension-triceps-a-la-poulie": {
+      "legende1": "Antebrazos arriba",
+      "legende2": "Brazos estirados",
+      "legende3": "Codos pegados al cuerpo",
+      "consigne": "Frente a la polea alta, con los codos pegados al cuerpo: estira por completo los brazos hacia abajo y vuelve a subir controlando.",
+      "conseil1": "Codos fijos a lo largo del cuerpo.",
+      "conseil2": "Estira por completo los brazos abajo.",
+      "conseil3": "Sube despacio hasta que los antebrazos queden en horizontal."
+    },
+    "extension-triceps-nuque": {
+      "legende1": "Mancuerna detrás de la cabeza",
+      "legende2": "Brazos estirados hacia arriba",
+      "legende3": "Codos hacia arriba",
+      "legende4": "Brazos estirados",
+      "consigne": "Mancuerna sujeta con las dos manos por encima de la cabeza: bájala detrás de la nuca flexionando los codos y luego estira los brazos hacia arriba.",
+      "conseil1": "Codos apuntando hacia arriba, cerca de la cabeza.",
+      "conseil2": "Solo se mueven los antebrazos.",
+      "conseil3": "Abdomen apretado para no arquear la espalda (o sentado, con la espalda apoyada)."
+    },
+    "kickback-triceps": {
+      "legende1": "Codo a 90°",
+      "legende2": "Brazo estirado hacia atrás",
+      "consigne": "Una rodilla y una mano apoyadas en un banco, espalda recta y brazo pegado al cuerpo: estira el antebrazo hacia atrás y vuelve despacio.",
+      "conseil1": "Rodilla y mano del mismo lado sobre el banco, espalda paralela al suelo.",
+      "conseil2": "La parte superior del brazo se queda pegada al cuerpo e inmóvil.",
+      "conseil3": "Poco peso, movimiento lento."
+    },
+    "communs-calisthenie": {
+      "legende1": "Brazos estirados",
+      "legende2": "Pecho hacia la barra",
+      "legende3": "Barbilla por encima de la barra",
+      "conseil1": "Empieza con los brazos completamente estirados y los hombros bajos.",
+      "conseil2": "Cabeza recta, mirada al frente: es el pecho el que sube hacia la barra, la cabeza no pasa por debajo.",
+      "conseil3": "Lleva los codos hacia abajo y hacia atrás, sin balancear las piernas.",
+      "conseil4": "Baja despacio hasta tener los brazos estirados."
+    },
+    "back-lever": {
+      "legende1": "Posición a mantener",
+      "consigne": "Colgado, con los brazos estirados por detrás de la espalda: cuerpo firme en horizontal, mirando al suelo.",
+      "conseil1": "Mirando al suelo, cuerpo recto de los hombros a los pies.",
+      "conseil2": "Brazos estirados, hombros hacia delante.",
+      "conseil3": "Progresión: piernas recogidas y luego una pierna estirada."
+    },
+    "dips-aux-anneaux": {
+      "legende1": "Brazos estirados",
+      "legende2": "Codos a 90°",
+      "legende3": "Brazos estirados, anillas pegadas",
+      "consigne": "Anillas sujetas con los brazos estirados cerca del cuerpo: baja hasta tener los codos a 90° y vuelve a subir manteniendo las anillas pegadas.",
+      "conseil1": "Más inestable que las paralelas: domina primero los fondos clásicos.",
+      "conseil2": "Anillas pegadas al cuerpo, brazos estirados arriba.",
+      "conseil3": "Baja despacio sin dejar que las anillas se separen."
+    },
+    "dips": {
+      "legende1": "Brazos estirados",
+      "legende2": "Codos a 90°",
+      "consigne": "Manos agarrando las barras, brazos estirados: baja hasta tener los codos a 90° y vuelve a subir.",
+      "conseil1": "Las manos rodean las barras, muñecas rectas.",
+      "conseil2": "Hombros bajos, lejos de las orejas.",
+      "conseil3": "Tronco inclinado hacia delante = más pectoral; tronco recto = más tríceps."
+    },
+    "front-lever": {
+      "legende1": "Posición a mantener",
+      "consigne": "Colgado con los brazos estirados: cuerpo firme en horizontal, mirando al techo.",
+      "conseil1": "Brazos estirados, tira de la barra hacia la cadera.",
+      "conseil2": "Cuerpo recto: ni cadera caída ni espalda arqueada.",
+      "conseil3": "Progresión: rodillas recogidas y luego una pierna estirada."
+    },
+    "handstand-push-up": {
+      "legende1": "Brazos estirados contra la pared",
+      "legende2": "Cabeza cerca del suelo",
+      "consigne": "En pino, con los pies contra la pared: baja la cabeza cerca del suelo flexionando los brazos y empuja hasta estirarlos.",
+      "conseil1": "Manos a 20–30 cm de la pared, a la anchura de los hombros.",
+      "conseil2": "Baja despacio, la cabeza roza el suelo.",
+      "conseil3": "Progresión: flexiones pike sobre un banco."
+    },
+    "handstand": {
+      "legende1": "Posición a mantener",
+      "consigne": "Manos a la anchura de los hombros, cuerpo firme y alineado, mirada entre las manos.",
+      "conseil1": "Empieza contra una pared, con el abdomen hacia la pared.",
+      "conseil2": "Brazos estirados, hombros empujando hacia arriba.",
+      "conseil3": "Cuerpo alineado: manos, hombros, cadera, pies."
+    },
+    "human-flag": {
+      "legende1": "Posición a mantener",
+      "consigne": "Manos agarradas a una barra vertical, brazos estirados: el brazo de arriba tira, el de abajo empuja, cuerpo en horizontal de lado.",
+      "conseil1": "Manos separadas una vez y media la anchura de los hombros en el poste.",
+      "conseil2": "El brazo de arriba tira y el de abajo empuja, los dos estirados.",
+      "conseil3": "Progresión: empieza con las piernas recogidas y luego una pierna estirada."
+    },
+    "l-sit": {
+      "legende1": "Posición a mantener",
+      "consigne": "Brazos estirados, apoyado en barras, hombros bajos: piernas estiradas en horizontal.",
+      "conseil1": "Hombros bajos, lejos de las orejas.",
+      "conseil2": "Piernas juntas y estiradas, puntas de los pies estiradas.",
+      "conseil3": "Progresión: una rodilla flexionada y luego las dos piernas estiradas."
+    },
+    "montee-de-corde-avec-jambes": {
+      "legende1": "Manos arriba, pies sujetando la cuerda",
+      "legende2": "Las piernas empujan, una mano y luego la otra",
+      "consigne": "Manos agarradas arriba y pies bloqueando la cuerda: empuja con las piernas y sube una mano tras otra.",
+      "conseil1": "Los pies pinzan la cuerda (un tobillo sobre el otro).",
+      "conseil2": "Son las piernas las que te hacen subir; los brazos sujetan.",
+      "conseil3": "Baja mano a mano, nunca deslizándote."
+    },
+    "montee-de-corde-depart-assis": {
+      "legende1": "Sentado en el suelo, piernas estiradas, manos en la cuerda",
+      "legende2": "Despega del suelo solo con los brazos",
+      "consigne": "Sentado en el suelo, con las piernas estiradas delante y las manos en la cuerda: tira con los brazos para despegar y sube mano a mano sin ayudarte de las piernas.",
+      "conseil1": "Salida sentado: sin impulso de piernas para despegar.",
+      "conseil2": "Piernas estiradas delante y firmes durante toda la subida.",
+      "conseil3": "Baja mano a mano hasta quedar sentado."
+    },
+    "montee-de-corde": {
+      "legende1": "Mano derecha arriba",
+      "legende2": "Mano izquierda arriba",
+      "consigne": "Solo con los brazos y las piernas algo levantadas: sube una mano tras otra.",
+      "conseil1": "Piernas levantadas delante, sin balancearte.",
+      "conseil2": "Una mano tras otra, los brazos tiran.",
+      "conseil3": "Baja también mano a mano."
+    },
+    "muscle-up": {
+      "legende1": "Brazos estirados",
+      "legende2": "Tirón explosivo, pecho a la barra",
+      "legende3": "Cuerpo por encima de la barra, brazos estirados",
+      "consigne": "Tira de forma explosiva hasta el pecho, pasa las muñecas por encima de la barra y empuja hasta estirar los brazos, con el cuerpo por encima de la barra.",
+      "conseil1": "Domina primero 10 dominadas estrictas y los fondos.",
+      "conseil2": "Tira de la barra hacia la parte baja del pecho, no hacia la barbilla.",
+      "conseil3": "Al final, brazos estirados y cadera a la altura de la barra."
+    },
+    "planche": {
+      "legende1": "Posición a mantener: hombros por delante de las manos",
+      "consigne": "Versión con los pies en el suelo (planche lean): apoyado en las manos con los brazos estirados, adelanta los hombros por delante de las manos manteniendo el cuerpo firme.",
+      "conseil1": "Brazos bien estirados, hombros empujando el suelo.",
+      "conseil2": "Dedos hacia fuera o hacia atrás para proteger las muñecas.",
+      "conseil3": "Cuerpo firme de principio a fin, puntas de los pies en el suelo."
+    },
+    "pompes-archer": {
+      "legende1": "Manos muy separadas",
+      "legende2": "Bajada a la derecha, brazo izquierdo estirado",
+      "legende3": "Bajada a la izquierda, brazo derecho estirado",
+      "consigne": "Manos muy separadas: baja hacia un lado flexionando ese brazo mientras el otro se queda estirado, vuelve a subir y baja hacia el otro lado.",
+      "conseil1": "Un lado y luego el otro, nunca los dos a la vez.",
+      "conseil2": "El brazo estirado se desliza hacia el lado y ayuda un poco.",
+      "conseil3": "Cuerpo firme y recto durante todo el movimiento."
+    },
+    "pompes-diamant": {
+      "legende1": "Brazos estirados",
+      "legende2": "Pecho cerca de las manos",
+      "legende3": "Manos en forma de rombo",
+      "legende4": "Codos pegados al cuerpo",
+      "consigne": "Manos juntas bajo el pecho formando un rombo: baja con los codos pegados al cuerpo y empuja.",
+      "conseil1": "Pulgares e índices se tocan bajo el pecho.",
+      "conseil2": "Codos pegados al cuerpo, aún más que en las flexiones clásicas.",
+      "conseil3": "Más difícil: empieza de rodillas si hace falta."
+    },
+    "pompes-pike": {
+      "legende1": "Cuerpo en V, brazos estirados",
+      "legende2": "Cabeza hacia el suelo por delante de las manos",
+      "consigne": "Manos en el suelo, cadera alta (cuerpo en V invertida): flexiona los brazos para llevar la cabeza hacia el suelo por delante de las manos y empuja.",
+      "conseil1": "Cadera alta: el cuerpo forma una V invertida.",
+      "conseil2": "La cabeza baja por delante de las manos, no entre ellas.",
+      "conseil3": "Cuanto más cerca estén los pies de las manos, más difícil."
+    },
+    "pompes": {
+      "legende1": "Brazos estirados",
+      "legende2": "Pecho cerca del suelo",
+      "legende3": "Codos cerca del cuerpo",
+      "consigne": "Cuerpo firme en plancha, manos algo más separadas que los hombros: baja el pecho cerca del suelo con los codos cerca del cuerpo y empuja.",
+      "conseil1": "Codos a unos 45° del cuerpo, no abiertos.",
+      "conseil2": "Cuerpo recto como una tabla: ni glúteos arriba ni tripa caída.",
+      "conseil3": "¿Demasiado difícil? Hazlas de rodillas o con las manos en un banco."
+    },
+    "tractions-australiennes": {
+      "legende1": "Brazos estirados",
+      "legende2": "Pecho a la barra",
+      "consigne": "Bajo una barra baja, cuerpo firme y recto, talones en el suelo: tira del pecho hasta la barra con los codos cerca del cuerpo y vuelve a bajar.",
+      "conseil1": "Cuerpo recto de los hombros a los talones.",
+      "conseil2": "Codos cerca del cuerpo, pecho hacia la barra.",
+      "conseil3": "Cuanto más lejos estén los pies, más difícil."
+    },
+    "tractions-lestees": {
+      "consigne": "Cinturón de lastre en la cadera, con el peso colgando entre las piernas: el mismo movimiento que la dominada clásica.",
+      "conseil1": "Cinturón ajustado a la cadera, disco colgando entre las piernas sin balancearse."
+    },
+    "tractions-supination-chin-up": {
+      "consigne": "Manos a la anchura de los hombros, palmas hacia ti: tira del pecho hacia la barra, con la barbilla por encima, y vuelve a bajar."
+    },
+    "tractions": {
+      "consigne": "Colgado con los brazos estirados y las manos algo más separadas que los hombros: tira del pecho hacia la barra hasta pasar la barbilla por encima y vuelve a bajar."
+    },
+    "air-bike": {
+      "legende1": "Pierna delantera arriba, brazo empujando",
+      "legende2": "Pierna delantera abajo, brazo tirando",
+      "consigne": "Pedalea y empuja y tira de las manetas a la vez: cuanto más rápido vas, más resiste el aire. Se cuenta en calorías.",
+      "conseil1": "Ajusta el sillín: pierna casi estirada con el pedal abajo.",
+      "conseil2": "Brazos y piernas trabajan juntos: empuja la maneta del lado de la pierna que empuja.",
+      "conseil3": "Empieza a un ritmo que puedas mantener y acelera al final."
+    },
+    "box-jumps": {
+      "legende1": "Impulso: brazos atrás",
+      "legende2": "Despegue: piernas estiradas",
+      "legende3": "Salto: rodillas recogidas",
+      "legende4": "Aterrizaje en el cajón",
+      "consigne": "Lleva los brazos atrás, salta con los pies juntos lanzando los brazos hacia delante y aterriza suavemente en el cajón con las rodillas flexionadas.",
+      "conseil1": "Los brazos acompañan el salto: atrás al coger impulso, delante al despegar.",
+      "conseil2": "Aterriza con todo el pie en el cajón, rodillas alineadas.",
+      "conseil3": "Baja andando en vez de saltando."
+    },
+    "burpees": {
+      "legende1": "De pie",
+      "legende2": "Manos en el suelo",
+      "legende3": "Plancha",
+      "legende4": "Flexión: pecho cerca del suelo",
+      "legende5": "Sentadilla con salto, brazos arriba",
+      "consigne": "Manos en el suelo, pies atrás, pecho al suelo; luego recoge los pies, levántate y salta con los brazos arriba.",
+      "conseil1": "El cuerpo mira hacia el mismo lado durante todo el movimiento.",
+      "conseil2": "En plancha, cuerpo firme: sin glúteos arriba.",
+      "conseil3": "Salto ligero, aterrizaje suave sobre la parte delantera del pie."
+    },
+    "clean-and-jerk": {
+      "legende1": "Barra sobre los hombros",
+      "legende2": "Jerk en tijera, brazos estirados",
+      "legende3": "Barra en el suelo",
+      "legende4": "Barra delante de las rodillas",
+      "legende5": "Extensión",
+      "legende6": "Recepción del clean",
+      "legende7": "De pie, barra sobre los hombros",
+      "legende8": "Pequeña flexión (dip)",
+      "legende9": "Jerk: tijera, brazos estirados",
+      "legende10": "Pies juntos, barra por encima de la cabeza",
+      "consigne": "Dos tiempos: sube la barra a los hombros (clean), luego flexiona un poco las piernas y empújala por encima de la cabeza abriendo en tijera (jerk).",
+      "conseil1": "En el clean, barra cerca del cuerpo y codos al frente en la recepción.",
+      "conseil2": "En el jerk, el tronco se queda recto durante la flexión: son las piernas las que lanzan la barra.",
+      "conseil3": "En la tijera, brazos bloqueados; luego junta el pie delantero y el trasero."
+    },
+    "clean": {
+      "legende1": "Barra en el suelo",
+      "legende2": "Barra recibida sobre los hombros, codos al frente",
+      "legende3": "Barra delante de las rodillas",
+      "legende4": "Extensión, de puntillas",
+      "legende5": "Recepción, codos al frente bajo la barra",
+      "legende6": "De pie, barra sobre los hombros",
+      "consigne": "Barra cerca del cuerpo: tira desde el suelo con las piernas y pasa los codos al frente para recibirla en la parte delantera de los hombros.",
+      "conseil1": "Agarre a la anchura de los hombros, espalda recta al inicio.",
+      "conseil2": "La barra se queda pegada al cuerpo durante la subida.",
+      "conseil3": "Recepción con los codos altos, barra apoyada en las clavículas."
+    },
+    "course": {
+      "legende1": "Apoyo: pie bajo la cadera",
+      "legende2": "Fase aérea, brazos opuestos a las piernas",
+      "consigne": "Con el tronco ligeramente inclinado hacia delante, apoya el pie bajo la cadera y deja que los brazos se balanceen de delante atrás.",
+      "conseil1": "Pasos cortos y rápidos mejor que zancadas largas.",
+      "conseil2": "Hombros relajados, codos flexionados a 90°.",
+      "conseil3": "Mirada al frente, no a los pies."
+    },
+    "double-unders": {
+      "legende1": "De puntillas, cuerda por encima de la cabeza",
+      "legende2": "En el aire: la cuerda pasa dos veces bajo los pies",
+      "consigne": "Un salto, dos vueltas de cuerda: salta un poco más alto que en un salto simple y haz girar la cuerda rápido con las muñecas.",
+      "conseil1": "Codos cerca del cuerpo, manos a la altura de la cadera.",
+      "conseil2": "Son las muñecas las que giran, no los brazos.",
+      "conseil3": "Mantente firme, piernas casi estiradas, y aterriza de puntillas."
+    },
+    "farmer-walk": {
+      "legende1": "Un paso",
+      "legende2": "El paso siguiente",
+      "legende3": "Cabeza alta, pecho abierto",
+      "consigne": "Una carga pesada en cada mano, brazos estirados: camina a pasos cortos, con la cabeza alta y el pecho abierto.",
+      "conseil1": "Cabeza alta, mirada al frente.",
+      "conseil2": "Pecho abierto, hombros bajos y hacia atrás.",
+      "conseil3": "Abdomen apretado, pasos cortos y regulares."
+    },
+    "kettlebell-swings": {
+      "consigne": "Un movimiento de cadera, no de brazos: kettlebell entre las piernas, proyecta la cadera hacia delante para lanzarla a la altura de los hombros.",
+      "conseil1": "Espalda recta, cadera hacia atrás como si cerraras una puerta con los glúteos.",
+      "conseil2": "Los brazos se quedan estirados: son los glúteos los que lanzan.",
+      "conseil3": "Arriba, cuerpo recto y firme, sin echarte hacia atrás."
+    },
+    "power-clean": {
+      "legende1": "Barra en el suelo",
+      "legende2": "Recepción en cuarto de sentadilla, codos al frente",
+      "legende3": "Barra delante de las rodillas",
+      "legende4": "Extensión, de puntillas",
+      "legende5": "Recepción en cuarto de sentadilla",
+      "legende6": "De pie, barra sobre los hombros",
+      "consigne": "Como un clean, pero recibes la barra arriba: piernas apenas flexionadas, sin bajar a sentadilla completa.",
+      "conseil1": "Espalda recta al inicio, barra sobre la mitad del pie.",
+      "conseil2": "Empuja fuerte contra el suelo y sube de puntillas antes de tirar con los brazos.",
+      "conseil3": "Recepción con la cadera por encima de las rodillas, codos altos al frente."
+    },
+    "power-snatch": {
+      "legende1": "Barra en el suelo, agarre ancho",
+      "legende2": "Recepción en cuarto de sentadilla, brazos estirados",
+      "legende3": "Barra delante de las rodillas",
+      "legende4": "Extensión, de puntillas",
+      "legende5": "Tirón, codos altos",
+      "legende6": "Recepción en cuarto de sentadilla",
+      "legende7": "De pie, brazos estirados",
+      "consigne": "Como un snatch, pero recibes la barra con los brazos estirados en cuarto de sentadilla, sin bajar a sentadilla completa.",
+      "conseil1": "Agarre ancho: la barra llega al pliegue de la cadera cuando estás de pie.",
+      "conseil2": "Barra cerca del cuerpo, codos altos durante el tirón.",
+      "conseil3": "Brazos bloqueados en la recepción y luego ponte de pie."
+    },
+    "rameur": {
+      "legende1": "Ataque: rodillas flexionadas, brazos estirados",
+      "legende2": "Final del tirón: piernas estiradas, maneta en la parte baja de las costillas",
+      "consigne": "Empuja primero con las piernas, luego lleva el tronco hacia atrás y tira de la maneta hacia la parte baja de las costillas. Al volver, en orden inverso: brazos, tronco, piernas.",
+      "conseil1": "El orden importa: piernas, tronco, brazos a la ida; brazos, tronco, piernas a la vuelta.",
+      "conseil2": "Espalda recta durante todo el movimiento.",
+      "conseil3": "La vuelta es más lenta que el empuje."
+    },
+    "snatch": {
+      "legende1": "Barra en el suelo, agarre ancho",
+      "legende2": "Barra por encima de la cabeza, brazos estirados",
+      "legende3": "Barra delante de las rodillas",
+      "legende4": "Extensión, de puntillas",
+      "legende5": "Tirón, codos altos",
+      "legende6": "La barra pasa por delante de la cara",
+      "legende7": "Brazos estirados por encima de la cabeza",
+      "consigne": "Agarre muy ancho: arranca la barra del suelo en un solo movimiento y recíbela con los brazos estirados por encima de la cabeza.",
+      "conseil1": "Movimiento técnico: apréndelo con un palo o una barra vacía.",
+      "conseil2": "Barra siempre cerca del cuerpo durante la subida.",
+      "conseil3": "Al final, brazos bloqueados y barra por encima de la nuca."
+    },
+    "thrusters": {
+      "legende1": "Sentadilla, barra sobre los hombros",
+      "legende2": "Barra por encima de la cabeza",
+      "legende3": "Sentadilla, rodillas alineadas con los pies",
+      "legende4": "Brazos estirados",
+      "consigne": "Barra apoyada delante de los hombros: baja en sentadilla y luego sube y empuja la barra por encima de la cabeza en un solo movimiento.",
+      "conseil1": "Codos altos delante de ti durante la sentadilla.",
+      "conseil2": "Rodillas alineadas con los pies, talones en el suelo.",
+      "conseil3": "Aprovecha el impulso de las piernas para empujar la barra."
+    },
+    "wall-balls": {
+      "legende1": "Sentadilla, balón contra el pecho",
+      "legende2": "Lanzamiento hacia la diana",
+      "legende3": "Lanzamiento",
+      "legende4": "Balón en el aire",
+      "legende5": "Balón en la diana",
+      "consigne": "Balón medicinal contra el pecho: baja en sentadilla, sube de golpe y lanza el balón a la diana de la pared. Recógelo y encadena.",
+      "conseil1": "Sentadilla completa en cada repetición, espalda recta.",
+      "conseil2": "El empuje de las piernas lanza el balón; los brazos terminan el gesto.",
+      "conseil3": "Mira la diana y recoge el balón bajando directamente a la sentadilla."
+    },
+    "extension-lombaire": {
+      "legende1": "Tronco hacia el suelo",
+      "legende2": "Cuerpo alineado",
+      "consigne": "En el banco de lumbares, con la cadera en el cojín y los pies sujetos: baja el tronco con la espalda recta y sube hasta quedar alineado.",
+      "conseil1": "El cojín queda justo debajo de la parte alta de la cadera.",
+      "conseil2": "Brazos cruzados sobre el pecho, espalda recta.",
+      "conseil3": "Sube hasta quedar alineado, sin arquearte por encima."
+    },
+    "good-morning": {
+      "legende1": "Barra sobre los hombros",
+      "legende2": "Tronco inclinado, espalda recta",
+      "consigne": "Barra apoyada en la parte alta de la espalda y los hombros, rodillas apenas flexionadas: inclina el tronco hacia delante con la espalda recta y vuelve a erguirte.",
+      "conseil1": "Empieza ligero: barra sola o un palo.",
+      "conseil2": "Espalda recta, rodillas ligeramente flexionadas y fijas.",
+      "conseil3": "Baja hasta notar el estiramiento detrás de los muslos, no más."
+    },
+    "rowing-barre": {
+      "legende1": "Brazos estirados",
+      "legende2": "Barra al ombligo, codos cerca del cuerpo",
+      "legende3": "Codos cerca del cuerpo",
+      "consigne": "Tronco inclinado a 45°, espalda recta: tira de la barra hacia el ombligo con los codos cerca del cuerpo y bájala con los brazos estirados.",
+      "conseil1": "Rodillas ligeramente flexionadas, tronco inclinado unos 45°, espalda recta.",
+      "conseil2": "Codos cerca del cuerpo (unos 45°), no abiertos.",
+      "conseil3": "Junta las escápulas arriba y baja sin redondear la espalda."
+    },
+    "rowing-haltere": {
+      "legende1": "Brazo estirado",
+      "legende2": "Codo hacia atrás",
+      "consigne": "Una mano y una rodilla en el banco, espalda recta: tira de la mancuerna hacia la cadera con el codo cerca del cuerpo y bájala.",
+      "conseil1": "Espalda recta, paralela al suelo.",
+      "conseil2": "Lleva el codo hacia la cadera, no hacia el hombro.",
+      "conseil3": "El tronco no gira durante el movimiento."
+    },
+    "rowing-machine": {
+      "legende1": "Brazos estirados, pecho en el cojín",
+      "legende2": "Codos hacia atrás",
+      "consigne": "Sentado, con el pecho contra el cojín y las manetas en las manos: tira de los codos hacia atrás juntando las escápulas y vuelve con los brazos estirados.",
+      "conseil1": "Ajusta el asiento para tener las manetas a la altura del pecho.",
+      "conseil2": "El pecho se queda pegado al cojín.",
+      "conseil3": "Codos cerca del cuerpo, junta las escápulas al final."
+    },
+    "rowing-t-bar": {
+      "legende1": "Barra entre las piernas, brazos estirados",
+      "legende2": "Maneta al pecho",
+      "legende3": "Barra entre las piernas",
+      "legende4": "Codos pegados",
+      "consigne": "De pie sobre la barra, que pasa entre tus piernas: tira de la maneta hacia el pecho con los codos cerca del cuerpo y bájala.",
+      "conseil1": "La barra pasa entre las piernas, maneta en V en las manos.",
+      "conseil2": "Tronco inclinado, espalda recta, rodillas ligeramente flexionadas.",
+      "conseil3": "Codos pegados a lo largo del cuerpo."
+    },
+    "shrugs": {
+      "legende1": "Hombros abajo",
+      "legende2": "Hombros encogidos",
+      "legende3": "Brazos estirados",
+      "legende4": "Hombros hacia las orejas",
+      "consigne": "Brazos estirados y cargas en las manos: sube los hombros hacia las orejas, haz una pausa y bájalos despacio.",
+      "conseil1": "Brazos estirados: no son los brazos los que tiran.",
+      "conseil2": "Sube recto hacia las orejas, sin girar los hombros.",
+      "conseil3": "Pausa de un segundo arriba."
+    },
+    "souleve-de-terre-roumain": {
+      "legende1": "De pie, piernas estiradas",
+      "legende2": "Cadera hacia atrás, rodillas algo flexionadas",
+      "consigne": "Piernas casi estiradas: lleva la cadera hacia atrás con la espalda recta, baja la barra a lo largo de los muslos hasta debajo de las rodillas y vuelve a subir.",
+      "conseil1": "Rodillas ligeramente flexionadas y fijas.",
+      "conseil2": "Es la cadera la que retrocede: la barra se desliza a lo largo de los muslos.",
+      "conseil3": "Para cuando notes el estiramiento detrás de los muslos, con la espalda siempre recta."
+    },
+    "souleve-de-terre-sumo": {
+      "legende1": "Barra en el suelo, tronco más recto",
+      "legende2": "Barra delante de las rodillas",
+      "legende3": "De pie",
+      "legende4": "Pies muy separados, manos entre las rodillas",
+      "consigne": "Pies muy separados con las puntas hacia fuera y las manos entre las rodillas: empuja las rodillas hacia fuera y sube con la espalda recta.",
+      "conseil1": "Pies mucho más separados que los hombros, puntas hacia fuera.",
+      "conseil2": "Manos por dentro de las rodillas, brazos estirados.",
+      "conseil3": "Rodillas alineadas con los pies, tronco más recto que en el peso muerto clásico."
+    },
+    "souleve-de-terre": {
+      "legende1": "Barra en el suelo, espalda recta",
+      "legende2": "Barra delante de las rodillas",
+      "legende3": "De pie, barra contra los muslos",
+      "legende4": "Manos justo por fuera de las rodillas",
+      "legende5": "De pie",
+      "consigne": "Barra sobre la mitad del pie y espalda recta: empuja el suelo con las piernas manteniendo la barra pegada a ellas hasta quedar de pie.",
+      "conseil1": "Pies a la anchura de la cadera, barra sobre la mitad del pie.",
+      "conseil2": "Espalda recta de principio a fin, nunca redondeada.",
+      "conseil3": "Barra pegada a las piernas durante toda la subida.",
+      "conseil4": "Arriba, aprieta los glúteos sin echarte hacia atrás."
+    },
+    "tirage-horizontal": {
+      "legende1": "Brazos estirados",
+      "legende2": "Maneta al abdomen",
+      "consigne": "Sentado, con los pies en la plataforma y la espalda recta: tira de la maneta hacia el abdomen juntando las escápulas, sin echarte hacia atrás.",
+      "conseil1": "Rodillas ligeramente flexionadas, espalda recta.",
+      "conseil2": "Codos cerca del cuerpo, maneta hacia el ombligo.",
+      "conseil3": "El tronco se queda casi inmóvil: tiran los brazos y la espalda."
+    },
+    "tirage-vertical-prise-serree": {
+      "legende1": "Brazos estirados",
+      "legende2": "Maneta a la parte alta del pecho",
+      "legende3": "Agarre estrecho",
+      "legende4": "Codos a lo largo del cuerpo",
+      "consigne": "Sentado bajo la polea con la maneta estrecha en las manos: tira hasta la parte alta del pecho con los codos cerca del cuerpo y vuelve a subir.",
+      "conseil1": "Manos juntas en la maneta en V.",
+      "conseil2": "La polea está encima de ti, el cable baja recto.",
+      "conseil3": "Codos a lo largo del cuerpo, pecho fuera."
+    },
+    "tirage-vertical": {
+      "legende1": "Brazos estirados",
+      "legende2": "Barra a la parte alta del pecho",
+      "legende3": "Agarre ancho",
+      "legende4": "Codos hacia abajo",
+      "consigne": "Sentado, con los muslos sujetos bajo los rodillos: tira de la barra hasta la parte alta del pecho juntando las escápulas y vuelve a subir con los brazos estirados.",
+      "conseil1": "La polea está justo encima de ti: el cable baja recto.",
+      "conseil2": "Pecho fuera, tronco ligeramente hacia atrás.",
+      "conseil3": "Lleva los codos hacia abajo, no hacia atrás."
+    },
+    "developpe-arnold": {
+      "legende1": "Palmas hacia ti, codos delante",
+      "legende2": "Brazos abiertos a los lados",
+      "legende3": "Palmas hacia delante, brazos estirados",
+      "legende4": "Brazos abiertos girando las muñecas",
+      "legende5": "Empuje: palmas hacia delante, brazos estirados",
+      "consigne": "Sentado, con las mancuernas delante de la cara y las palmas hacia ti: empuja hacia arriba girando las muñecas para terminar con las palmas hacia delante y baja girando en sentido contrario.",
+      "conseil1": "Sentado en un banco con el respaldo recto.",
+      "conseil2": "Abajo: palmas hacia ti, codos por delante del cuerpo.",
+      "conseil3": "El giro se hace durante la subida: arriba, palmas hacia delante."
+    },
+    "developpe-militaire": {
+      "legende1": "Mancuernas a la altura de los hombros",
+      "legende2": "Brazos estirados por encima de la cabeza",
+      "legende3": "Codos bajo las muñecas",
+      "legende4": "Brazos estirados",
+      "consigne": "De pie, con una mancuerna en cada mano a la altura de los hombros y las palmas hacia delante: empuja por encima de la cabeza sin arquear la espalda y vuelve a bajar.",
+      "conseil1": "Inicio: mancuernas a la altura de las orejas, codos bajo las muñecas.",
+      "conseil2": "Sube hasta tener los brazos casi estirados, sin chocar las mancuernas.",
+      "conseil3": "Abdomen y glúteos apretados: la espalda no se arquea."
+    },
+    "elevations-frontales": {
+      "legende1": "Mancuernas delante de los muslos",
+      "legende2": "Brazos delante, a la altura de los hombros",
+      "legende3": "Mancuernas en horizontal",
+      "legende4": "Brazos delante",
+      "consigne": "Mancuernas sujetas en horizontal delante de los muslos: sube los brazos casi estirados por delante hasta la altura de los hombros y bájalos despacio.",
+      "conseil1": "Mancuernas en horizontal, palmas hacia el suelo.",
+      "conseil2": "Sube como máximo hasta la altura de los ojos.",
+      "conseil3": "Sin impulso: el tronco no se mueve."
+    },
+    "elevations-laterales-a-la-poulie": {
+      "legende1": "Maneta delante de la cadera contraria",
+      "legende2": "Brazo en horizontal",
+      "consigne": "Polea baja a tu lado, maneta sujeta con la mano contraria: sube el brazo hacia el lado hasta la horizontal y bájalo despacio.",
+      "conseil1": "El cable pasa por delante del cuerpo.",
+      "conseil2": "Brazo casi estirado, súbelo hasta la horizontal.",
+      "conseil3": "Haz todas las repeticiones de un lado y luego cambia."
+    },
+    "elevations-laterales": {
+      "legende1": "Brazos a lo largo del cuerpo",
+      "legende2": "Brazos en horizontal a los lados",
+      "legende3": "Brazos en horizontal",
+      "consigne": "Brazos casi estirados: sube las mancuernas hacia los lados hasta la horizontal, sin encoger los hombros, y bájalas despacio.",
+      "conseil1": "Cargas ligeras, codos ligeramente flexionados.",
+      "conseil2": "Sube hasta la horizontal, no más.",
+      "conseil3": "Hombros bajos: no son los trapecios los que trabajan."
+    },
+    "face-pull": {
+      "legende1": "Brazos estirados hacia la polea",
+      "legende2": "Cuerda hacia la cara, codos altos",
+      "legende3": "Codos altos y abiertos, manos a la cara",
+      "consigne": "Polea a la altura de la cara, cuerda en las manos: tira hacia los ojos separando las manos, con los codos altos, y vuelve con los brazos estirados.",
+      "conseil1": "Codos a la altura de los hombros o más arriba.",
+      "conseil2": "Separa las manos a cada lado de la cabeza al final del movimiento.",
+      "conseil3": "Poco peso, movimiento lento."
+    },
+    "oiseau-arriere-d-epaule": {
+      "legende1": "Sentado inclinado, brazos colgando",
+      "legende2": "Brazos abiertos a los lados",
+      "legende3": "Brazos colgando",
+      "legende4": "Brazos en horizontal",
+      "consigne": "Sentado al borde de un banco, con el tronco inclinado sobre los muslos y la espalda recta: abre los brazos hacia los lados hasta la horizontal y vuelve a bajar.",
+      "conseil1": "Tronco casi apoyado en los muslos (o apoyado en un banco inclinado).",
+      "conseil2": "Codos ligeramente flexionados y fijos.",
+      "conseil3": "Cargas ligeras: piensa en «abrir», no en «tirar»."
+    },
+    "push-press": {
+      "legende1": "Barra sobre los hombros",
+      "legende2": "Pequeña flexión de rodillas",
+      "legende3": "Empuje por encima de la cabeza",
+      "consigne": "Barra en la parte delantera de los hombros: flexiona un poco las rodillas, empuja con las piernas y termina con los brazos para llevar la barra por encima de la cabeza.",
+      "conseil1": "Pequeña flexión de rodillas, tronco recto.",
+      "conseil2": "El impulso de las piernas lanza la barra; los brazos terminan.",
+      "conseil3": "Brazos bloqueados arriba, barra por encima de la nuca."
+    },
+    "rowing-menton": {
+      "legende1": "Barra contra los muslos",
+      "legende2": "Barra bajo la barbilla, codos altos",
+      "legende3": "Manos a la anchura de los hombros",
+      "legende4": "Codos más altos que las manos",
+      "consigne": "Barra contra los muslos: súbela a lo largo del cuerpo levantando los codos hacia los lados hasta la parte baja del pecho y vuelve a bajar.",
+      "conseil1": "Manos a la anchura de los hombros (no juntas).",
+      "conseil2": "Los codos suben más que las manos.",
+      "conseil3": "Para a la altura de la parte baja del pecho."
+    },
+    "communs-jambes": {
+      "conseil1": "Pies a la anchura de los hombros, puntas ligeramente hacia fuera.",
+      "conseil2": "Rodillas alineadas con los pies: ni hacia dentro ni hacia fuera.",
+      "conseil3": "Baja al menos hasta tener los muslos paralelos al suelo, espalda recta, talones en el suelo.",
+      "conseil4": "Empuja con los talones para subir."
+    },
+    "abducteurs-machine": {
+      "legende1": "Rodillas juntas",
+      "legende2": "Rodillas separadas",
+      "consigne": "Sentado, con los cojines por fuera de las rodillas: separa las piernas y vuelve a juntarlas despacio.",
+      "conseil1": "Espalda pegada al respaldo, manos en las empuñaduras.",
+      "conseil2": "Separa sin tirones, mantén 1 segundo y vuelve despacio."
+    },
+    "fentes-bulgares": {
+      "legende1": "Pie trasero en el banco",
+      "legende2": "Rodilla trasera hacia el suelo",
+      "consigne": "Empeine del pie trasero apoyado en un banco: baja la rodilla trasera hacia el suelo, con la rodilla delantera sobre el tobillo, y vuelve a subir.",
+      "conseil1": "Banco a la altura de la rodilla, con el empeine del pie trasero apoyado.",
+      "conseil2": "Pie delantero lo bastante lejos del banco para mantener la rodilla sobre el tobillo.",
+      "conseil3": "Tronco recto, baja en vertical."
+    },
+    "fentes": {
+      "legende1": "De pie",
+      "legende2": "Pierna derecha delante",
+      "legende3": "Pierna izquierda delante",
+      "consigne": "Un paso largo hacia delante: baja la rodilla trasera cerca del suelo, con la rodilla delantera sobre el tobillo, vuelve a subir y cambia de pierna.",
+      "conseil1": "Una pierna y luego la otra.",
+      "conseil2": "Rodilla delantera sobre el tobillo, alineada con el pie.",
+      "conseil3": "Tronco recto, la rodilla trasera roza el suelo."
+    },
+    "front-squat": {
+      "legende1": "Barra en la parte delantera de los hombros",
+      "legende2": "Tronco recto, muslos paralelos",
+      "legende3": "Barra en la parte delantera de los hombros, codos altos",
+      "legende4": "Rodillas alineadas con los pies",
+      "consigne": "Barra apoyada delante, sobre la parte alta de los hombros y las clavículas, con los codos altos: baja con el tronco recto y vuelve a subir.",
+      "conseil1": "La barra descansa en la parte delantera de los hombros, contra el cuello, no en las manos.",
+      "conseil2": "Codos altos y apuntando al frente durante toda la bajada.",
+      "conseil3": "Rodillas alineadas con los pies, tronco más recto que en la sentadilla clásica."
+    },
+    "hack-squat": {
+      "legende1": "Piernas casi estiradas",
+      "legende2": "Muslos paralelos a la plataforma",
+      "consigne": "Espalda pegada al respaldo, hombros bajo los cojines y pies en la plataforma: baja el carro flexionando las rodillas y empuja.",
+      "conseil1": "Espalda y pelvis pegadas al respaldo.",
+      "conseil2": "Pies a la anchura de los hombros en el centro de la plataforma.",
+      "conseil3": "No bloquees las rodillas arriba."
+    },
+    "hip-thrust": {
+      "legende1": "Cadera abajo",
+      "legende2": "Cuerpo en horizontal",
+      "consigne": "Parte alta de la espalda apoyada en un banco, barra sobre la cadera y pies apoyados: sube la cadera apretando los glúteos y vuelve a bajar.",
+      "conseil1": "La parte baja de las escápulas apoyada en el borde de un banco.",
+      "conseil2": "Barra en el pliegue de la cadera, con una almohadilla.",
+      "conseil3": "Arriba, tibias verticales y cuerpo plano como una mesa.",
+      "conseil4": "Barbilla recogida, mirada hacia las rodillas."
+    },
+    "leg-curl": {
+      "legende1": "Piernas estiradas",
+      "legende2": "Talones hacia los glúteos",
+      "consigne": "Tumbado boca abajo, con el rodillo detrás de los tobillos: lleva los talones hacia los glúteos y baja despacio.",
+      "conseil1": "Cadera pegada al banco durante todo el movimiento.",
+      "conseil2": "Rodillo justo por encima de los talones.",
+      "conseil3": "Baja despacio, sin dejar caer la carga."
+    },
+    "leg-extension": {
+      "legende1": "Rodillas a 90°",
+      "legende2": "Piernas estiradas",
+      "consigne": "Espalda apoyada en el respaldo, rodillo sobre la parte baja de las tibias: estira las piernas por completo y baja controlando.",
+      "conseil1": "Ajusta el respaldo para que las rodillas queden en el borde del asiento.",
+      "conseil2": "Rodillo apoyado en la parte baja de las espinillas.",
+      "conseil3": "Agarra las asas, los glúteos se quedan en el asiento."
+    },
+    "mollets-assis": {
+      "legende1": "Talones abajo",
+      "legende2": "Talones arriba",
+      "consigne": "Sentado, con el rodillo sobre las rodillas y la parte delantera de los pies en el escalón: sube los talones lo más alto posible y luego bájalos despacio.",
+      "conseil1": "Solo la parte delantera del pie está en el escalón, talones en el aire.",
+      "conseil2": "Rodillo bien ajustado sobre la parte baja de los muslos.",
+      "conseil3": "Movimiento lento, pausa arriba."
+    },
+    "mollets-debout": {
+      "legende1": "Talones por debajo del escalón",
+      "legende2": "De puntillas",
+      "consigne": "Parte delantera de los pies en el borde de un escalón, talones en el aire: ponte de puntillas lo más alto posible y luego baja despacio.",
+      "conseil1": "Solo la parte delantera del pie está en el escalón.",
+      "conseil2": "Baja los talones por debajo del escalón antes de volver a subir.",
+      "conseil3": "Sujétate a un apoyo para mantener el equilibrio."
+    },
+    "overhead-squat": {
+      "legende1": "De pie, barra por encima de la cabeza",
+      "legende2": "Sentadilla, barra sobre los pies",
+      "consigne": "Barra con los brazos extendidos por encima de la cabeza, agarre ancho: baja en sentadilla manteniendo la barra en línea con el centro de los pies.",
+      "conseil1": "Agarre ancho, codos bloqueados y hombros activos (empuja la barra hacia el techo).",
+      "conseil2": "Torso lo más recto posible, mirada al frente.",
+      "conseil3": "Empieza con un palo o la barra vacía: es un ejercicio tanto de movilidad como de fuerza."
+    },
+    "pistol-squat": {
+      "legende1": "Sobre una pierna, la otra delante",
+      "legende2": "Bajada sobre una pierna, la otra extendida",
+      "consigne": "Sobre una pierna, con la otra extendida delante: baja lo más posible sin despegar el talón y vuelve a subir.",
+      "conseil1": "Brazos extendidos delante para mantener el equilibrio.",
+      "conseil2": "Talón de la pierna de apoyo en el suelo, rodilla alineada con el pie.",
+      "conseil3": "Para aprender: baja hasta un banco o sujétate a un apoyo."
+    },
+    "pont-fessier": {
+      "legende1": "Tumbado, hombros en el suelo",
+      "legende2": "Cadera arriba",
+      "consigne": "Tumbado boca arriba, hombros en el suelo y pies apoyados: sube la cadera apretando los glúteos y vuelve a bajar.",
+      "conseil1": "Hombros y cabeza se quedan en el suelo (sin banco, a diferencia del hip thrust).",
+      "conseil2": "Pies apoyados, talones cerca de los glúteos.",
+      "conseil3": "Arriba, rodillas, cadera y hombros alineados; aprieta los glúteos 1 segundo."
+    },
+    "presse-a-cuisses": {
+      "legende1": "Rodillas flexionadas",
+      "legende2": "Piernas casi extendidas",
+      "consigne": "Espalda y cadera pegadas al asiento, pies en la plataforma: empuja sin bloquear las rodillas y vuelve a bajar despacio.",
+      "conseil1": "Pies a la anchura de la cadera, en el centro de la plataforma.",
+      "conseil2": "Baja hasta tener las rodillas a 90°, sin despegar la cadera.",
+      "conseil3": "No bloquees las rodillas arriba."
+    },
+    "squat-goblet": {
+      "legende1": "Mancuerna contra el pecho",
+      "legende2": "Codos entre las rodillas",
+      "legende3": "De pie",
+      "legende4": "Rodillas alineadas con los pies",
+      "consigne": "Mancuerna sujeta con las dos manos contra el pecho: baja entre las rodillas con el torso recto y las rodillas alineadas con los pies, y vuelve a subir.",
+      "conseil1": "Mancuerna en vertical contra el pecho, codos hacia abajo.",
+      "conseil2": "Pies algo más separados que los hombros, rodillas alineadas con los pies.",
+      "conseil3": "Abajo, los codos pasan entre las rodillas."
+    },
+    "squat": {
+      "legende1": "De pie, barra en la parte alta de la espalda",
+      "legende2": "Muslos paralelos al suelo",
+      "legende3": "De pie, codos bajo la barra",
+      "legende4": "Rodillas alineadas con los pies",
+      "consigne": "Barra en la parte alta de la espalda, espalda recta: baja la cadera hasta tener los muslos paralelos al suelo, con las rodillas alineadas con los pies, y empuja con los talones."
+    },
+    "squats-poids-du-corps": {
+      "legende1": "De pie, brazos delante",
+      "legende2": "Muslos paralelos al suelo",
+      "legende3": "De pie",
+      "legende4": "Rodillas alineadas con los pies",
+      "consigne": "Brazos delante para mantener el equilibrio: baja la cadera hasta tener los muslos paralelos al suelo, rodillas alineadas con los pies y talones en el suelo, y vuelve a subir."
+    },
+    "step-up": {
+      "legende1": "Un pie sobre el cajón",
+      "legende2": "De pie sobre esa rodilla",
+      "consigne": "Apoya todo el pie sobre el cajón: sube empujando con ese pie hasta quedar de pie sobre esa rodilla y baja controlando.",
+      "conseil1": "Cajón más o menos a la altura de la rodilla, con todo el pie apoyado.",
+      "conseil2": "Empuja con el talón del pie que está sobre el cajón, sin ayudarte con la otra pierna.",
+      "conseil3": "Sube hasta quedar bien recto y luego baja despacio."
+    },
+    "communs-pectoraux": {
+      "conseil1": "Pies apoyados en el suelo, glúteos y escápulas pegados al banco.",
+      "conseil2": "Codos a unos 45° del torso, no abiertos a 90°.",
+      "conseil3": "Abajo, antebrazos verticales y codos en ángulo recto (90°).",
+      "conseil4": "Principiante: empieza solo con la barra y pide a alguien que te asista."
+    },
+    "developpe-couche-halteres": {
+      "legende1": "Mancuernas a la altura del pecho",
+      "legende2": "Brazos extendidos",
+      "legende3": "Codos a 90°",
+      "legende4": "Mancuernas sobre los hombros",
+      "consigne": "Tumbado en un banco plano, con una mancuerna en cada mano: bájalas a los lados del pecho y empuja hacia arriba.",
+      "conseil1": "Banco plano, pies bien apoyados en el suelo.",
+      "conseil2": "Empieza con los brazos extendidos, palmas hacia los pies.",
+      "conseil3": "Baja hasta tener los codos a 90°, a unos 45° del torso.",
+      "conseil4": "Sube acercando las mancuernas, sin chocarlas."
+    },
+    "developpe-couche-prise-serree": {
+      "legende1": "Barra en la parte baja del pecho, codos pegados al torso",
+      "legende2": "Brazos extendidos",
+      "legende3": "Manos a la anchura de los hombros, codos cerrados",
+      "consigne": "Manos a la anchura de los hombros en la barra: bájala a la parte baja del pecho con los codos pegados al cuerpo y empuja.",
+      "conseil1": "Manos a la anchura de los hombros, no más juntas.",
+      "conseil2": "Codos pegados al cuerpo durante la bajada.",
+      "conseil3": "Trabaja sobre todo los tríceps."
+    },
+    "developpe-couche": {
+      "legende1": "Barra en la parte baja del pecho",
+      "legende2": "Brazos extendidos",
+      "legende3": "Antebrazos verticales, codos a 90°",
+      "consigne": "Tumbado en un banco plano, escápulas juntas y pies en el suelo: baja la barra a la parte baja del pecho y empuja hacia arriba."
+    },
+    "developpe-decline": {
+      "legende1": "Barra en la parte baja del pecho",
+      "legende2": "Brazos extendidos",
+      "consigne": "En un banco declinado, con los pies sujetos bajo los rodillos: baja la barra a la parte baja del pecho y empuja hacia arriba.",
+      "conseil1": "Cabeza más baja que la cadera (15–30°), pies sujetos.",
+      "conseil2": "Barra bajada a la parte baja del pecho.",
+      "conseil3": "Pide ayuda para sacar y volver a colocar la barra."
+    },
+    "developpe-incline-halteres": {
+      "legende1": "Mancuernas en la parte alta del pecho",
+      "legende2": "Brazos extendidos",
+      "legende3": "Codos a 90°",
+      "consigne": "En un banco inclinado a 30–45°, con una mancuerna en cada mano: bájalas a la altura de la parte alta del pecho y empuja hacia arriba.",
+      "conseil1": "Respaldo inclinado a 30–45°.",
+      "conseil2": "Palmas hacia los pies, codos a unos 45° del torso.",
+      "conseil3": "Baja hasta tener los codos a 90° y sube acercando las mancuernas."
+    },
+    "developpe-incline": {
+      "legende1": "Barra en la parte alta del pecho",
+      "legende2": "Brazos extendidos",
+      "legende3": "Codos a 90°",
+      "consigne": "En un banco inclinado a 30–45°: baja la barra a la parte alta del pecho y empuja hacia arriba.",
+      "conseil1": "Respaldo inclinado a 30–45° (2 o 3 posiciones).",
+      "conseil2": "Barra bajada a la parte alta del pecho, bajo las clavículas.",
+      "conseil3": "Codos a unos 45° del torso; abajo, codos a 90°."
+    },
+    "ecarte-halteres": {
+      "legende1": "Brazos abiertos",
+      "legende2": "Mancuernas sobre el pecho",
+      "legende3": "Brazos abiertos, codos ligeramente flexionados",
+      "legende4": "Manos que se juntan",
+      "consigne": "Tumbado, con los codos ligeramente flexionados: abre los brazos hacia los lados sin bajar más que el banco y ciérralos sobre el pecho.",
+      "conseil1": "Codos ligeramente flexionados y fijos.",
+      "conseil2": "Abre hasta notar el estiramiento del pecho, sin bajar más que el banco.",
+      "conseil3": "Cierra como si abrazaras el tronco de un árbol."
+    },
+    "ecarte-poulie-basse": {
+      "legende1": "Brazos abiertos hacia las poleas bajas",
+      "legende2": "Manos que se juntan a la altura de la cara",
+      "legende3": "Brazos abajo",
+      "legende4": "Manos delante de la cara",
+      "consigne": "Poleas en posición baja: lleva las manos hacia arriba y hacia delante hasta que se junten a la altura de la barbilla. Trabaja la parte alta del pecho.",
+      "conseil1": "Torso recto, un pie delante del otro.",
+      "conseil2": "Codos ligeramente flexionados, sube describiendo un arco.",
+      "conseil3": "Polea baja = parte alta del pecho."
+    },
+    "ecarte-poulie-haute": {
+      "legende1": "Brazos abiertos hacia las poleas altas",
+      "legende2": "Manos que se juntan delante de la cadera",
+      "legende3": "Brazos arriba",
+      "legende4": "Manos delante de la cadera",
+      "consigne": "Poleas en posición alta: lleva las manos hacia abajo y hacia delante hasta que se junten delante de la cadera. Trabaja la parte baja del pecho.",
+      "conseil1": "Un pie delante del otro, torso ligeramente inclinado.",
+      "conseil2": "Codos ligeramente flexionados y fijos.",
+      "conseil3": "Polea alta = parte baja del pecho."
+    },
+    "ecarte-poulie-moyenne": {
+      "legende1": "Brazos abiertos a la altura de los hombros",
+      "legende2": "Manos que se juntan delante del pecho",
+      "legende3": "Brazos abiertos",
+      "legende4": "Manos delante del pecho",
+      "consigne": "Poleas a la altura de los hombros: lleva las manos delante del pecho manteniendo los brazos en horizontal. Trabaja la parte media del pecho.",
+      "conseil1": "Brazos a la altura de los hombros durante todo el movimiento.",
+      "conseil2": "Codos ligeramente flexionados y fijos.",
+      "conseil3": "Polea media = parte media del pecho."
+    },
+    "pec-deck-butterfly": {
+      "legende1": "Antebrazos contra los cojines",
+      "legende2": "Cojines que se tocan",
+      "consigne": "Sentado en la máquina, espalda pegada y antebrazos contra los cojines: junta los brazos delante de ti hasta que los cojines se toquen y vuelve a abrir despacio.",
+      "conseil1": "Ajusta el asiento para tener los codos a la altura de los hombros.",
+      "conseil2": "Brazos flexionados a 90° contra los cojines.",
+      "conseil3": "Abre despacio sin ir demasiado hacia atrás."
+    },
+    "presse-pectoraux": {
+      "legende1": "Asas a la altura del pecho",
+      "legende2": "Brazos extendidos delante",
+      "legende3": "Codos a la altura del pecho",
+      "legende4": "Brazos extendidos hacia delante",
+      "consigne": "Sentado en la máquina, espalda pegada y asas a la altura del pecho: empuja hacia delante sin bloquear los codos y vuelve despacio.",
+      "conseil1": "Ajusta el asiento: asas a la altura de la mitad del pecho.",
+      "conseil2": "Espalda y cabeza pegadas al respaldo.",
+      "conseil3": "Empuja hasta tener los brazos casi extendidos."
+    },
+    "pull-over": {
+      "legende1": "Mancuerna detrás de la cabeza",
+      "legende2": "Mancuerna sobre el pecho",
+      "consigne": "Tumbado, con una mancuerna sujeta con las dos manos y los brazos casi extendidos: bájala detrás de la cabeza y vuelve a llevarla sobre el pecho.",
+      "conseil1": "Codos ligeramente flexionados y fijos.",
+      "conseil2": "Baja hasta notar el estiramiento, sin dolor en el hombro.",
+      "conseil3": "Cadera y zona lumbar se quedan apoyadas en el banco."
+    }
   }
 }

@@ -1,7 +1,8 @@
 // Fiche « Comment faire » : Rowing menton.
+import { t } from "../../commun/i18n.js";
 import { front, side } from "../_communs.js";
 import { uprowF, uprowS } from "./_communs.js";
 
-export default { views: [side([uprowS(0), uprowS(1)], ["Barre contre les cuisses", "Barre sous le menton, coudes hauts"]), front([uprowF(0), uprowF(1)], ["Mains à largeur d’épaules", "Coudes plus hauts que les mains"])],
-    cue: "Barre contre les cuisses : monte-la le long du corps en levant les coudes sur les côtés, jusqu’en bas de la poitrine, puis redescends.",
-    tips: ["Mains à largeur d’épaules (pas collées).", "Les coudes montent plus haut que les mains.", "Arrête-toi au bas de la poitrine."], anim: "De face" };
+export default { views: [side([uprowS(0), uprowS(1)], [t("fiches.rowing-menton.legende1"), t("fiches.rowing-menton.legende2")]), front([uprowF(0), uprowF(1)], [t("fiches.rowing-menton.legende3"), t("fiches.rowing-menton.legende4")])],
+    cue: t("fiches.rowing-menton.consigne"),
+    tips: [t("fiches.rowing-menton.conseil1"), t("fiches.rowing-menton.conseil2"), t("fiches.rowing-menton.conseil3")], anim: "De face" };

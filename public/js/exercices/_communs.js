@@ -1,5 +1,6 @@
 // Fonctions communes à toutes les fiches : poses de base (debout, de face), vues, sol.
 // Ce fichier n'importe que la silhouette et d'autres fichiers communs : il peut être évalué à tout moment.
+import { t } from "../commun/i18n.js";
 import { GROUND } from "../silhouette/index.js";
 
 export const ANK = GROUND - 7.2;   // cheville quand le pied est à plat au sol
@@ -14,4 +15,4 @@ export const standF = (o = {}) => ({ view: "front", hip: [120, HIPY], torso: -90
 export const view = (label, frames, caps, seq) => ({ label, frames, caps, seq: seq || frames.map((_, i) => i) });
 export const side = (frames, caps, seq) => view("De profil", frames, caps, seq);
 export const front = (frames, caps, seq) => view("De face", frames, caps, seq);
-export const DA = ["Départ", "Arrivée"];
+export const DA = [t("fiches.communs.legende1"), t("fiches.communs.legende2")];

@@ -4,7 +4,8 @@ import { cordesOf, cordesText } from "./cordes.js";
 import { prefillKg } from "./derniere-fois.js";
 import { freshKey } from "./plusieurs-seances.js";
 import { toast } from "./records.js";
-import { $, DISC, S, armed, clone, dayMeta, esc, show, todayK, typeOf } from "../commun/core.js";
+import { $, DISC, S, armed, clone, dayMeta, esc, nomEx, nomType, show, todayK, typeOf } from "../commun/core.js";
+import { t } from "../commun/i18n.js";
 import { doneSet, ideaExercises, repsText } from "../idees/index.js";
 import { EMPTY_DAY, fmtRest, forceFlush, normCordes, openDay, renderMain, renderSheet, restOf, setDisc } from "../seances/index.js";
 import { go, saveProfile } from "../commun/store.js";
@@ -27,12 +28,12 @@ export function saveRoutineFromSession(c) {
   const name = String(c.title || "").trim() || (c.disc === "calis" || c.disc === "cordes" ? DISC[c.disc].name : dayMeta(c).name);
   const list = routines(); list.unshift({ id: "r" + Date.now().toString(36), name: name.slice(0, 40), disc: c.disc, typeId: c.typeId || null, ex });
   saveRoutines(list.slice(0, 40));
-  toast("☆ Routine « " + esc(name) + " » enregistrée");
+  toast(esc(t("routines.enregistreeNom", { nom: name })));
 }
 // Lance une séance (routine, programme) aujourd'hui : poids de la dernière fois déjà remplis.
 export function startWorkout(w, extra) {
   const d = todayK(), k = freshKey(d);
-  go("seances"); const t = new Date(); S.view = new Date(t.getFullYear(), t.getMonth(), 1); renderMain();
+  go("seances"); const now = new Date(); S.view = new Date(now.getFullYear(), now.getMonth(), 1); renderMain();
   openDay(k);
   S.cur = EMPTY_DAY(); setDisc(S.cur, w.disc || "muscu"); S.cur.title = w.name || "";
   if (w.disc === "course") {
@@ -49,15 +50,15 @@ export function startWorkout(w, extra) {
 }
 export function renderRoutines() {
   const list = routines();
-  $("routinesBody").innerHTML = `<button class="btn primary" data-rnew="1">+ Créer une routine</button>
-    <p class="hint">Astuce : dans une séance, touche « ☆ Enregistrer comme routine » pour la refaire en un toucher.</p>
+  $("routinesBody").innerHTML = `<button class="btn primary" data-rnew="1">${t("routines.creer")}</button>
+    <p class="hint">${t("routines.astuce")}</p>
     ${list.length ? `<div class="list">${list.map(r => {
       const col = r.disc === "calis" || r.disc === "cordes" ? DISC[r.disc].color : (typeOf(r.typeId) || {}).color || "var(--red-hi)";
       return `<article class="idea" style="--tc:${col}">
-        <div class="idea-top"><b>${esc(r.name)}</b><span class="tag">${r.disc === "calis" || r.disc === "cordes" ? DISC[r.disc].name : esc((typeOf(r.typeId) || {}).name || "Musculation")}</span></div>
-        <ul>${(r.ex || []).map(e => `<li>${esc(e.n)} — ${e.c ? esc(cordesText(e.c)) : esc(e.s) + " × " + esc(repsText(e.r, e.h))}</li>`).join("")}</ul>
-        <div class="grid2"><button class="btn" data-redit="${r.id}">Modifier</button><button class="btn primary" data-rgo="${r.id}">Lancer</button></div>
-      </article>`; }).join("")}</div>` : `<div class="empty">Pas encore de routine. Crée ta première : tes exercices, tes séries et tes temps de repos, prêts à lancer.</div>`}`;
+        <div class="idea-top"><b>${esc(r.name)}</b><span class="tag">${r.disc === "calis" || r.disc === "cordes" ? DISC[r.disc].name : esc(typeOf(r.typeId) ? nomType(typeOf(r.typeId).name) : DISC.muscu.name)}</span></div>
+        <ul>${(r.ex || []).map(e => `<li>${esc(nomEx(e.n))} — ${e.c ? esc(cordesText(e.c)) : esc(e.s) + " × " + esc(repsText(e.r, e.h))}</li>`).join("")}</ul>
+        <div class="grid2"><button class="btn" data-redit="${r.id}">${t("routines.modifier")}</button><button class="btn primary" data-rgo="${r.id}">${t("routines.lancer")}</button></div>
+      </article>`; }).join("")}</div>` : `<div class="empty">${t("routines.vide")}</div>`}`;
 }
 $("routinesBody").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
@@ -67,21 +68,21 @@ $("routinesBody").addEventListener("click", e => {
 });
 export function renderRoutine() {
   const r = S.rEdit; if (!r) { go("routines"); return; }
-  $("routineTitle").textContent = r.id ? "Modifier" : "Nouvelle routine";
-  $("routineBody").innerHTML = `<label class="field"><span>Nom de la routine</span><input id="rtn-name" value="${esc(r.name)}" placeholder="ex. Push du lundi" maxlength="40"></label>
+  $("routineTitle").textContent = t(r.id ? "routines.modifier" : "routines.nouvelle");
+  $("routineBody").innerHTML = `<label class="field"><span>${t("routines.nom")}</span><input id="rtn-name" value="${esc(r.name)}" placeholder="${esc(t("routines.nomExemple"))}" maxlength="40"></label>
     <div class="chips">${["muscu", "calis", "cordes"].map(d => `<button type="button" class="chip" data-rdisc="${d}" style="--tc:${DISC[d].color}" aria-pressed="${r.disc === d}">${DISC[d].name}</button>`).join("")}</div>
-    ${r.disc === "muscu" ? `<div class="chips">${S.types.filter(t => t.id !== "repos" && t.id !== "cordes").map(t => `<button type="button" class="chip" data-rtype="${t.id}" style="--tc:${t.color}" aria-pressed="${r.typeId === t.id}"><i class="dot"></i>${esc(t.name)}</button>`).join("")}</div>` : ""}
+    ${r.disc === "muscu" ? `<div class="chips">${S.types.filter(ty => ty.id !== "repos" && ty.id !== "cordes").map(ty => `<button type="button" class="chip" data-rtype="${ty.id}" style="--tc:${ty.color}" aria-pressed="${r.typeId === ty.id}"><i class="dot"></i>${esc(nomType(ty.name))}</button>`).join("")}</div>` : ""}
     <div class="list">${r.ex.map((e, i) => `<div class="rt-ex card">
-      <div class="rt-ex-top"><b>${esc(e.n)}</b><button type="button" class="icon-btn" data-rdel="${i}">Retirer</button></div>
+      <div class="rt-ex-top"><b>${esc(nomEx(e.n))}</b><button type="button" class="icon-btn" data-rdel="${i}">${t("complements.retirer")}</button></div>
       ${e.c ? `<p class="hint">${esc(cordesText(e.c))}</p>` : `<div class="grid3">
-        <div class="field"><span>Séries</span><div class="rest-ctl"><button type="button" class="step" data-rset="${i}:-1" aria-label="Moins de séries">−</button><span class="rest-val">${e.s}</span><button type="button" class="step" data-rset="${i}:1" aria-label="Plus de séries">+</button></div></div>
-        <label class="field"><span>${e.h ? "Secondes" : "Reps"}</span><input data-rreps="${i}" value="${esc(e.r)}" inputmode="text" placeholder="10"></label>
-        <div class="field"><span>Repos</span><div class="rest-ctl"><button type="button" class="step" data-rrest="${i}:-15" aria-label="Moins de repos">−</button><span class="rest-val sm">${fmtRest(e.rest)}</span><button type="button" class="step" data-rrest="${i}:15" aria-label="Plus de repos">+</button></div></div>
+        <div class="field"><span>${t("series.series")}</span><div class="rest-ctl"><button type="button" class="step" data-rset="${i}:-1" aria-label="${esc(t("routines.moinsSeries"))}">−</button><span class="rest-val">${e.s}</span><button type="button" class="step" data-rset="${i}:1" aria-label="${esc(t("routines.plusSeries"))}">+</button></div></div>
+        <label class="field"><span>${t(e.h ? "routines.secondes" : "series.reps")}</span><input data-rreps="${i}" value="${esc(e.r)}" inputmode="text" placeholder="10"></label>
+        <div class="field"><span>${t("minuteur.repos")}</span><div class="rest-ctl"><button type="button" class="step" data-rrest="${i}:-15" aria-label="${esc(t("series.moinsRepos"))}">−</button><span class="rest-val sm">${fmtRest(e.rest)}</span><button type="button" class="step" data-rrest="${i}:15" aria-label="${esc(t("series.plusRepos"))}">+</button></div></div>
       </div>`}</div>`).join("")}</div>
-    <button type="button" class="add-ex" data-radd="1">+ Ajouter un exercice</button>
+    <button type="button" class="add-ex" data-radd="1">${t("seances.ajouterExercice")}</button>
     <p class="err" id="rtnErr" hidden></p>
-    <button type="button" class="btn primary" data-rsave="1">Enregistrer la routine</button>
-    ${r.id ? `<button type="button" class="danger" data-rremove="1">Supprimer la routine</button>` : ""}`;
+    <button type="button" class="btn primary" data-rsave="1">${t("routines.enregistrer")}</button>
+    ${r.id ? `<button type="button" class="danger" data-rremove="1">${t("routines.supprimer")}</button>` : ""}`;
 }
 $("routineBody").addEventListener("input", e => {
   const r = S.rEdit; if (!r) return;
@@ -97,11 +98,11 @@ $("routineBody").addEventListener("click", e => {
   if (b.dataset.rrest) { const [i, d] = b.dataset.rrest.split(":").map(Number); r.ex[i].rest = Math.min(600, Math.max(0, r.ex[i].rest + d)); renderRoutine(); return; }
   if (b.dataset.radd) { openLib((name, hold) => { r.ex.push({ n: name, s: 3, r: hold ? 30 : 10, rest: 90, h: !!hold }); renderRoutine(); }, r.disc); return; }
   if (b.dataset.rsave) {
-    if (!r.name.trim()) { show($("rtnErr"), "Donne un nom à ta routine."); return; }
-    if (!r.ex.length) { show($("rtnErr"), "Ajoute au moins un exercice."); return; }
+    if (!r.name.trim()) { show($("rtnErr"), t("routines.nomManquant")); return; }
+    if (!r.ex.length) { show($("rtnErr"), t("routines.exerciceManquant")); return; }
     const list = routines(), data = { ...r, name: r.name.trim().slice(0, 40), id: r.id || "r" + Date.now().toString(36) };
     const i = list.findIndex(x => x.id === data.id); if (i >= 0) list[i] = data; else list.unshift(data);
-    saveRoutines(list.slice(0, 40)); S.rEdit = null; go("routines"); toast("✓ Routine enregistrée"); return;
+    saveRoutines(list.slice(0, 40)); S.rEdit = null; go("routines"); toast(t("routines.enregistree")); return;
   }
-  if (b.dataset.rremove) { if (!armed(b, "Toucher à nouveau pour supprimer")) return; saveRoutines(routines().filter(x => x.id !== r.id)); S.rEdit = null; go("routines"); }
+  if (b.dataset.rremove) { if (!armed(b, t("seances.toucherSupprimer"))) return; saveRoutines(routines().filter(x => x.id !== r.id)); S.rEdit = null; go("routines"); }
 });

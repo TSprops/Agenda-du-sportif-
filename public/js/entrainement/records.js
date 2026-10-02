@@ -4,6 +4,8 @@ import { $, S, discOf, esc, fmtKm, nf, runKm, runPace, runSecs, sortieKm } from 
 import { doneSet } from "../idees/index.js";
 import { isDone } from "../seances/index.js";
 import { celebrate } from "../commun/fete.js";
+import { t, tFr } from "../commun/i18n.js";
+import { prTexte } from "../commun/core.js";
 
 /* ============================================================
    Records battus en direct
@@ -33,18 +35,19 @@ export function sessionPRs(c, k) {
       const cur = bestSets(ex.sets, st => isDone(st) && doneSet(st)); if (!cur.reps) return;
       const h = exBestBefore(name, k); if (!h.n) return;
       if (cur.kg > 0 && (cur.kg > h.kg || (cur.kg === h.kg && cur.rk > h.rk))) { seen.add(nk); out.push({ ex: name, txt: nf.format(cur.kg) + " kg × " + cur.rk }); }
-      else if (!cur.kg && !h.kg && cur.reps > h.reps) { seen.add(nk); out.push({ ex: name, txt: cur.reps + (ex.hold ? " s" : " reps") }); }
+      else if (!cur.kg && !h.kg && cur.reps > h.reps) { seen.add(nk); out.push({ ex: name, txt: cur.reps + (ex.hold ? " s" : " reps") }); } // i18n-ignore (unités)
     });
   } else if (disc === "course") {
     // Distance : sortie ou blocs validés. Allure : seulement « Ma sortie » (distance et durée saisies).
-    const r = c.run || {}, km = runKm(c), dist = sortieKm(c), t = runSecs(r); if (!km) return out;
+    const r = c.run || {}, km = runKm(c), dist = sortieKm(c), sec = runSecs(r); if (!km) return out;
     const prev = Object.keys(S.days).filter(x => x < k && discOf(S.days[x]) === "course" && runKm(S.days[x]));
     if (!prev.length) return out;
     const maxD = Math.max(...prev.map(x => runKm(S.days[x])));
-    if (km > maxD) out.push({ ex: "Plus longue sortie", txt: fmtKm(km) });
-    if (t && dist >= 3) {
+    // Noms de référence en français (enregistrés dans la séance), traduits à l'affichage.
+    if (km > maxD) out.push({ ex: tFr("valeurs.records.plusLongue"), txt: fmtKm(km) });
+    if (sec && dist >= 3) {
       const paces = prev.map(x => S.days[x]).filter(p => sortieKm(p) >= 3 && runSecs(p.run)).map(p => runSecs(p.run) / sortieKm(p));
-      if (paces.length && t / dist < Math.min(...paces)) out.push({ ex: "Meilleure allure", txt: runPace(r) + " /km" });
+      if (paces.length && sec / dist < Math.min(...paces)) out.push({ ex: tFr("valeurs.records.meilleureAllure"), txt: runPace(r) + " /km" });
     }
   }
   return out;
@@ -56,12 +59,12 @@ export function announcePRs(prs, k) {
   if (!fresh.length) return;
   const p = fresh[0];
   celebrate(`<span class="hex on sm" aria-hidden="true"><svg class="hex-ic" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></span>`
-    + `<span class="pr-txt"><b>Nouveau record !</b><span>${esc(p.ex)} · ${esc(p.txt)}</span></span>`, "pr");
+    + `<span class="pr-txt"><b>${t("records.nouveau")}</b><span>${esc(prTexte(p.ex + " · " + p.txt))}</span></span>`, "pr");
   if (navigator.vibrate) navigator.vibrate([80, 60, 160]);
 }
 let toastTimer = null;
 export function toast(html, kind) {
-  const t = $("toast"); t.innerHTML = html; t.className = "toast" + (kind ? " " + kind : ""); t.hidden = false;
-  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, kind === "pr" ? 4200 : 2600);
+  const el = $("toast"); el.innerHTML = html; el.className = "toast" + (kind ? " " + kind : ""); el.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.hidden = true; }, kind === "pr" ? 4200 : 2600);
 }
 $("toast").onclick = () => { $("toast").hidden = true; };

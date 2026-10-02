@@ -1,7 +1,8 @@
 // Amis : état partagé (SOC), fiche publique, synchronisation, compteurs de non-lus.
 import { renderFriends } from "./liste.js";
 import { myReactsHTML } from "./page-ami.js";
-import { $, BENCH, LIFTS, S, avatarHTML, collection, dayVolume, db, doc, getDoc, onSnapshot, plural, query, runKm, setDoc, todayK, where } from "../commun/core.js";
+import { $, BENCH, LIFTS, S, avatarHTML, collection, dayVolume, db, doc, getDoc, onSnapshot, query, runKm, setDoc, where } from "../commun/core.js";
+import { t } from "../commun/i18n.js";
 import { norm } from "../pages/faq.js";
 import { streakInfo } from "../pages/accueil.js";
 import { CALIS_PRS, MUSCU_LIFTS, RUN_PRS, benchEntries, benchText, benchValue, cfData, prBest, prText, prsData } from "../idees/index.js";
@@ -21,8 +22,8 @@ function makeCode(pseudo) { const base = norm(pseudo).replace(/[^a-z]/g, "").toU
 export async function dirOf(uid, fresh) {
   const old = SOC.dir[uid];
   if (old && !fresh) return old;
-  try { const s = await getDoc(doc(db, "directory", uid)); SOC.dir[uid] = s.exists() ? s.data() : { uid, pseudo: "Utilisateur" }; }
-  catch (e) { if (!old) SOC.dir[uid] = { uid, pseudo: "Utilisateur" }; }
+  try { const s = await getDoc(doc(db, "directory", uid)); SOC.dir[uid] = s.exists() ? s.data() : { uid, pseudo: t("admin.utilisateur") }; }
+  catch (e) { if (!old) SOC.dir[uid] = { uid, pseudo: t("admin.utilisateur") }; }
   const d = SOC.dir[uid];
   if (old && (old.photo !== d.photo || old.pseudo !== d.pseudo)) refreshSocial();
   return d;
@@ -37,14 +38,16 @@ export async function ensureSocialProfile() {
   setDoc(doc(db, "directory", S.uid), entry).catch(() => {});
   syncShare();
 }
+// Records partagés avec les amis : cat = activité (identifiant), key = clé de traduction du nom (chacun le lit dans sa langue).
+// name reste rempli pour les amis qui ont une ancienne version de l'app.
 function recordsSummary() {
   const pd = prsData(), cf = cfData(), out = [];
-  const push = (cat, name, text) => out.push({ cat, name, text });
-  MUSCU_LIFTS.forEach(([id, n]) => { const b = prBest("kg", pd.muscu[id] || []); if (b) push("Musculation", n, prText("kg", b)); });
-  RUN_PRS.forEach(([id, n, , k]) => { const b = prBest(k, pd.course[id] || []); if (b) push("Course", n, prText(k, b)); });
-  CALIS_PRS.forEach(([id, n, , k]) => { const b = prBest(k, pd.calis[id] || []); if (b) push("Callisthénie", n, prText(k, b)); });
-  LIFTS.forEach(([id, n]) => { const b = prBest("kg", cf.prs[id] || []); if (b) push("CrossFit", n, prText("kg", b)); });
-  BENCH.forEach(bm => { const e = benchEntries(bm).sort((a, b) => benchValue(bm, b) - benchValue(bm, a))[0]; if (e) push("CrossFit", bm.name, benchText(bm, e)); });
+  const push = (cat, key, name, text) => out.push({ cat, key, name, text });
+  MUSCU_LIFTS.forEach(([id, n]) => { const b = prBest("kg", pd.muscu[id] || []); if (b) push("muscu", "records.muscu." + id, n, prText("kg", b)); });
+  RUN_PRS.forEach(([id, n, , k]) => { const b = prBest(k, pd.course[id] || []); if (b) push("course", "records.course." + id, n, prText(k, b)); });
+  CALIS_PRS.forEach(([id, n, , k]) => { const b = prBest(k, pd.calis[id] || []); if (b) push("calis", "records.calis." + id, n, prText(k, b)); });
+  LIFTS.forEach(([id, n]) => { const b = prBest("kg", cf.prs[id] || []); if (b) push("crossfit", "crossfit.lifts." + id, n, prText("kg", b)); });
+  BENCH.forEach(bm => { const e = benchEntries(bm).sort((a, b) => benchValue(bm, b) - benchValue(bm, a))[0]; if (e) push("crossfit", "", bm.name, benchText(bm, e)); });
   return out;
 }
 let shareTimer = null;

@@ -3,7 +3,8 @@ import { flush, openDay } from "./feuille.js";
 import { dropPhoto } from "./photos.js";
 import { renderTypes } from "./types.js";
 import { hyroxTotal } from "./fiche-hyrox.js";
-import { $, DAYS, DISC, MONTHS, RUN_TYPES, S, cap, dayMeta, dayVolume, esc, fmtDur, fmtKm, key, nf, pad, parse, runKm, runPace, runSecs, sessionsOn, sortieKm, titleOf, todayK, wodScore } from "../commun/core.js";
+import { $, DISC, RUN_TYPES, S, dayMeta, dayVolume, esc, fmtDur, fmtJour, fmtJourMois, fmtMois, fmtKm, jourCourt, key, nf, nomFormat, nomType, pad, parse, runKm, runPace, runSecs, sessionsOn, sortieKm, titleOf, todayK, wodScore } from "../commun/core.js";
+import { liste, majuscule, t } from "../commun/i18n.js";
 import { persistDay } from "../commun/store.js";
 import { toast } from "../entrainement/index.js";
 
@@ -12,28 +13,28 @@ import { toast } from "../entrainement/index.js";
    ============================================================ */
 export function renderMain() {
   const y = S.view.getFullYear(), m = S.view.getMonth();
-  $("monthTitle").innerHTML = cap(MONTHS[m]) + " <small>" + y + "</small>";
+  $("monthTitle").innerHTML = esc(majuscule(fmtMois(S.view))) + " <small>" + y + "</small>";
   const first = (new Date(y, m, 1).getDay() + 6) % 7, count = new Date(y, m + 1, 0).getDate(), tk = todayK();
   let h = "";
   for (let i = 0; i < first; i++) h += '<span class="day pad" aria-hidden="true"></span>';
   for (let d = 1; d <= count; d++) {
     const k = key(new Date(y, m, d)), ks = sessionsOn(k), s = ks.length && S.days[ks[0]], mt = s && dayMeta(s);
-    h += `<button class="day${s ? " has" : ""}${k === tk ? " today" : ""}" data-k="${k}" style="--tc:${mt ? mt.color : "#8A847E"}" aria-label="${d} ${MONTHS[m]}${s ? ", " + esc(ks.map(x => titleOf(S.days[x])).join(" et ")) : ""}"><span class="n">${d}</span>${s ? `<span class="t">${esc(mt.short)}</span>` : ""}${ks.length > 1 ? `<span class="more">+${ks.length - 1}</span>` : ""}</button>`;
+    h += `<button class="day${s ? " has" : ""}${k === tk ? " today" : ""}" data-k="${k}" style="--tc:${mt ? mt.color : "#8A847E"}" aria-label="${esc(fmtJourMois(new Date(y, m, d)) + (s ? ", " + liste(ks.map(x => titleOf(S.days[x]))) : ""))}"><span class="n">${d}</span>${s ? `<span class="t">${esc(mt.short)}</span>` : ""}${ks.length > 1 ? `<span class="more">+${ks.length - 1}</span>` : ""}</button>`;
   }
   $("grid").innerHTML = h;
-  $("legend").innerHTML = S.types.filter(t => t.id !== "cordes").map(t => `<span style="--tc:${t.color}"><i class="dot"></i>${esc(t.name)}</span>`).join("")
-    + `<span class="legend-sep">Autres activités</span>`
-    + [["CrossFit", DISC.crossfit.color], ["Callisthénie", DISC.calis.color], ["Cordes", DISC.cordes.color], ["Hyrox", DISC.hyrox.color], ...RUN_TYPES.map(r => [r.name, r.color])]
+  $("legend").innerHTML = S.types.filter(ty => ty.id !== "cordes").map(ty => `<span style="--tc:${ty.color}"><i class="dot"></i>${esc(nomType(ty.name))}</span>`).join("")
+    + `<span class="legend-sep">${t("seances.autresActivites")}</span>`
+    + [...["crossfit", "calis", "cordes", "hyrox"].map(id => [DISC[id].name, DISC[id].color]), ...RUN_TYPES.map(r => [r.name, r.color])]
       .map(([n, c]) => `<span style="--tc:${c}"><i class="dot"></i>${esc(n)}</span>`).join("");
   const ks = Object.keys(S.days).filter(k => k.startsWith(y + "-" + pad(m + 1))).sort().reverse();
   const vol = ks.reduce((a, k) => a + dayVolume(S.days[k]), 0);
   const km = ks.reduce((a, k) => a + runKm(S.days[k]), 0);
-  $("sumTitle").textContent = cap(MONTHS[m]) + " en chiffres";
-  $("stats").innerHTML = `<div class="stat"><b>${ks.length}</b><span>séance${ks.length > 1 ? "s" : ""}</span></div><div class="stat"><b>${vol >= 10000 ? nf.format(vol / 1000) + " t" : nf.format(vol)}</b><span>${vol >= 10000 ? "soulevées" : "kg soulevés"}</span></div><div class="stat"><b>${nf.format(km)}</b><span>km courus</span></div>`;
+  $("sumTitle").textContent = t("seances.enChiffres", { mois: majuscule(fmtMois(S.view)) });
+  $("stats").innerHTML = `<div class="stat"><b>${ks.length}</b><span>${t("bilan.seances", { n: ks.length })}</span></div><div class="stat"><b>${vol >= 10000 ? nf.format(vol / 1000) + " t" : nf.format(vol)}</b><span>${t(vol >= 10000 ? "bilan.tonnesSoulevees" : "bilan.kgSouleves")}</span></div><div class="stat"><b>${nf.format(km)}</b><span>${t("bilan.kmCourus")}</span></div>`;
   $("list").innerHTML = ks.length ? ks.map(k => {
     const s = S.days[k], mt = dayMeta(s), d = parse(k), ph = (s.photos || []).length;
-    return `<div class="swipe"><div class="swipe-bg" aria-hidden="true">🗑 Supprimer</div><button class="row" data-k="${k}" style="--tc:${mt.color}"><i class="bar"></i><span class="d">${DAYS[d.getDay()].slice(0, 3)}<b>${d.getDate()}</b></span><span class="main"><div class="ti">${esc(titleOf(s))}</div><div class="me">${esc(sessionSummary(s))}${ph ? " · " + ph + " photo" + (ph > 1 ? "s" : "") : ""}</div></span><span aria-hidden="true" style="color:var(--red-hi)">›</span></button></div>`;
-  }).join("") + `<p class="hint swipe-hint">Astuce : fais glisser une séance vers la droite pour la supprimer.</p>` : `<div class="empty">Aucune séance en ${MONTHS[m]}. Touche un jour du calendrier pour noter ton entraînement.</div>`;
+    return `<div class="swipe"><div class="swipe-bg" aria-hidden="true">${t("seances.glisserSupprimer")}</div><button class="row" data-k="${k}" style="--tc:${mt.color}"><i class="bar"></i><span class="d">${esc(jourCourt(d))}<b>${d.getDate()}</b></span><span class="main"><div class="ti">${esc(titleOf(s))}</div><div class="me">${esc(sessionSummary(s))}${ph ? " · " + esc(t("seances.photos", { n: ph })) : ""}</div></span><span aria-hidden="true" style="color:var(--red-hi)">›</span></button></div>`;
+  }).join("") + `<p class="hint swipe-hint">${t("seances.astuceGlisser")}</p>` : `<div class="empty">${esc(t("seances.aucuneMois", { mois: fmtMois(S.view) }))}</div>`;
 }
 // Résumé d'une séance sur une ligne (liste du mois, administration).
 export function sessionSummary(s, types) {
@@ -46,17 +47,17 @@ export function sessionSummary(s, types) {
     return parts.join(" · ");
   }
   if (disc === "crossfit") {
-    const w = s.wod || {}, parts = ["CrossFit"];
-    if (w.format) parts.push(w.format);
+    const w = s.wod || {}, parts = [DISC.crossfit.name];
+    if (w.format) parts.push(nomFormat(w.format));
     const sc = wodScore(w); if (sc) parts.push(sc + (w.rx === false ? " (Scaled)" : w.rx ? " (Rx)" : ""));
     return parts.join(" · ");
   }
   if (disc === "hyrox") {
-    const n = (s.exercises || []).filter(x => String(x.name || "").trim()).length, t = hyroxTotal(s);
-    return `Hyrox · ${n} atelier${n > 1 ? "s" : ""}${t ? " · " + fmtDur(t) : ""}`;
+    const n = (s.exercises || []).filter(x => String(x.name || "").trim()).length, tot = hyroxTotal(s);
+    return `${DISC.hyrox.name} · ${t("seances.ateliers", { n })}${tot ? " · " + fmtDur(tot) : ""}`;
   }
   const n = (s.exercises || []).length;
-  return `${disc === "calis" ? "Callisthénie" : mt.name} · ${n} exercice${n > 1 ? "s" : ""}${dayVolume(s) ? " · " + nf.format(dayVolume(s)) + " kg" : ""}`;
+  return `${disc === "calis" ? DISC.calis.name : mt.name} · ${t("seances.exercices", { n })}${dayVolume(s) ? " · " + nf.format(dayVolume(s)) + " kg" : ""}`;
 }
 $("grid").addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (b) openDay(sessionsOn(b.dataset.k)[0] || b.dataset.k); });
 $("list").addEventListener("click", e => { if (SW.moved) { SW.moved = false; return; } const b = e.target.closest("[data-k]"); b && openDay(b.dataset.k); });
@@ -85,7 +86,7 @@ $("list").addEventListener("pointercancel", () => { if (SW.row) { SW.row.style.t
 function askDelete(k) {
   const s = S.days[k]; if (!s) return;
   const d = parse(k);
-  $("confirmText").textContent = `« ${titleOf(s)} » du ${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} sera supprimée, avec ses photos. Cette action est définitive.`;
+  $("confirmText").textContent = t("confirmation.texte", { titre: titleOf(s), date: fmtJour(d) });
   $("confirmGo").onclick = () => { closeConfirm(); deleteSession(k); };
   $("confirmBackdrop").hidden = false; $("confirmSheet").hidden = false;
 }
@@ -96,11 +97,11 @@ function deleteSession(k) {
   const s = S.days[k]; if (!s) return;
   (s.photos || []).map(p => p.pid).filter(Boolean).forEach(dropPhoto);
   delete S.days[k]; persistDay(k, null); renderMain();
-  toast("🗑 Séance supprimée");
+  toast(t("seances.supprimee"));
 }
 $("prev").onclick = () => { S.view = new Date(S.view.getFullYear(), S.view.getMonth() - 1, 1); renderMain(); };
 $("next").onclick = () => { S.view = new Date(S.view.getFullYear(), S.view.getMonth() + 1, 1); renderMain(); };
-$("today").onclick = () => { const t = new Date(); S.view = new Date(t.getFullYear(), t.getMonth(), 1); renderMain(); openDay(sessionsOn(key(t))[0] || key(t)); };
+$("today").onclick = () => { const d = new Date(); S.view = new Date(d.getFullYear(), d.getMonth(), 1); renderMain(); openDay(sessionsOn(key(d))[0] || key(d)); };
 $("types").onclick = () => { renderTypes(); $("typesSheet").scrollTop = 0; $("typesSheet").classList.add("open"); document.body.style.overflow = "hidden"; document.body.classList.add("sheet-open"); };
 let sx = null;
 $("seancesCal").addEventListener("touchstart", e => { sx = e.touches[0].clientX; }, { passive: true });

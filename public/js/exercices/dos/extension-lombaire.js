@@ -1,7 +1,8 @@
 // Fiche « Comment faire » : Extension lombaire.
+import { t } from "../../commun/i18n.js";
 import { side } from "../_communs.js";
 import { hyper } from "./_communs.js";
 
-export default { views: [side([hyper(75), hyper(0)], ["Buste vers le sol", "Corps aligné"])],
-    cue: "Allongé sur le banc à lombaires, hanches sur le coussin, pieds bloqués : descends le buste dos droit, puis remonte jusqu’à être aligné.",
-    tips: ["Le coussin est juste sous le haut des hanches.", "Bras croisés sur la poitrine, dos droit.", "Remonte jusqu’à l’alignement, sans te cambrer au-dessus."] };
+export default { views: [side([hyper(75), hyper(0)], [t("fiches.extension-lombaire.legende1"), t("fiches.extension-lombaire.legende2")])],
+    cue: t("fiches.extension-lombaire.consigne"),
+    tips: [t("fiches.extension-lombaire.conseil1"), t("fiches.extension-lombaire.conseil2"), t("fiches.extension-lombaire.conseil3")] };

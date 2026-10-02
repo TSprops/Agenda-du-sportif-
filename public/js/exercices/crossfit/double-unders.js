@@ -1,4 +1,5 @@
 // Fiche « Comment faire » : Double unders.
+import { t } from "../../commun/i18n.js";
 import { ANK, HIPY, onToes, side, stand } from "../_communs.js";
 import { GROUND, raw } from "../../silhouette/index.js";
 
@@ -14,6 +15,6 @@ const box = [64, -14, 182, GROUND];
 export default { views: [side([
       stand({ box, hip: [120, HIPY - 5], torso: -88, neck: -90, near: { ...arms, ankleAt: onToes(118, 34), ft: 34 }, eq: [rope(false)] }),
       { box, hip: [120, HIPY - 17], torso: -88, neck: -90, near: { ...arms, ankleAt: [119, ANK - 15], ft: 30, kneeBend: 1 }, eq: [rope(true)] }],
-      ["Sur la pointe des pieds, corde au-dessus de la tête", "En l’air : la corde passe deux fois sous les pieds"])],
-    cue: "Un saut, deux tours de corde : saute un peu plus haut qu’un saut simple et fais tourner la corde vite avec les poignets.",
-    tips: ["Coudes près du corps, mains à hauteur des hanches.", "Ce sont les poignets qui tournent, pas les bras.", "Reste gainé, jambes presque tendues, et atterris sur la pointe des pieds."] };
+      [t("fiches.double-unders.legende1"), t("fiches.double-unders.legende2")])],
+    cue: t("fiches.double-unders.consigne"),
+    tips: [t("fiches.double-unders.conseil1"), t("fiches.double-unders.conseil2"), t("fiches.double-unders.conseil3")] };

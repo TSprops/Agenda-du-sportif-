@@ -3,17 +3,14 @@ import { hyroxExercises, hyroxIdeasHTML, hyroxName } from "./hyrox.js";
 import { CALIS_IDEAS, MUSCU_IDEAS, RUN_IDEAS, ideaCard, ideaExercises, tryIdea } from "./idees-seances.js";
 import { $, DEFAULT_TYPES, DISC, MAIN_DISC, RUN_TYPES, S, esc, typeOf } from "../commun/core.js";
 import { go } from "../commun/store.js";
+import { t } from "../commun/i18n.js";
 
 /* ---------- Pages « catégories » (idées, records, progression) ---------- */
-const HUB_DESC = {
-  ideas: { muscu: "Push, Pull, Jambes, Haut et Bas du corps", crossfit: "Les WOD de référence à essayer", calis: "Du débutant aux figures", course: "Endurance, seuil et fractionné", hyrox: "Solo Open, Solo Pro et Double : les formats de course" },
-  rec: { muscu: "Développé couché, squat, soulevé de terre…", crossfit: "1RM et temps sur les WOD de référence", calis: "Max de tractions, dips, tenues…", course: "5 km, 10 km, semi et marathon" },
-  prog: { muscu: "Tes charges exercice par exercice", crossfit: "Tes WOD de référence et tes 1RM", calis: "Tes répétitions et tes tenues", course: "Ton allure et tes distances" }
-};
+// Sous-titre de chaque activité : « categories.<page>.<activité> ».
 // Hyrox : seulement dans les idées (pas encore de records ni de progression).
 function discGrid(mode) {
   const list = mode === "ideas" ? [...MAIN_DISC, "hyrox"] : MAIN_DISC;
-  return Object.entries(DISC).filter(([id]) => list.includes(id)).map(([id, x]) => `<button class="disc-card" data-cat="${mode}:${id}" style="--tc:${x.color}"><span class="disc-ico" aria-hidden="true"><svg viewBox="0 0 24 24">${x.icon}</svg></span><b>${x.name}</b><span>${HUB_DESC[mode][id]}</span></button>`).join("");
+  return Object.entries(DISC).filter(([id]) => list.includes(id)).map(([id, x]) => `<button class="disc-card" data-cat="${mode}:${id}" style="--tc:${x.color}"><span class="disc-ico" aria-hidden="true"><svg viewBox="0 0 24 24">${x.icon}</svg></span><b>${x.name}</b><span>${t(`categories.${mode}.${id}`)}</span></button>`).join("");
 }
 export function renderTypesHub() { $("typesGrid").innerHTML = discGrid("ideas"); }
 export function renderRecordsHub() { $("recGrid").innerHTML = discGrid("rec"); }
@@ -26,13 +23,13 @@ document.addEventListener("click", e => {
   else if (mode === "rec") { S.rec = d; S.recOpen = null; go("rec"); }
   else { S.prog = d; S.progTab = null; go("prog"); }
 });
-function catColor(id) { return (typeOf(id) || DEFAULT_TYPES.find(t => t.id === id) || {}).color || "#8A847E"; }
+function catColor(id) { return (typeOf(id) || DEFAULT_TYPES.find(ty => ty.id === id) || {}).color || "#8A847E"; }
 export function renderHub() {
   const d = S.hub, x = DISC[d]; if (!x) return;
-  $("hubTitle").textContent = "Idées · " + x.name; $("v-hub").style.setProperty("--tc", x.color);
+  $("hubTitle").textContent = t("idees.titreActivite", { activite: x.name }); $("v-hub").style.setProperty("--tc", x.color);
   let h = "";
   if (d === "muscu") {
-    const types = [["push", "Push"], ["pull", "Pull"], ["jambes", "Jambes"], ["haut", "Haut du corps"], ["bas", "Bas du corps"]];
+    const types = ["push", "pull", "jambes", "haut", "bas"].map(id => [id, t("valeurs.types." + id)]);
     const tab = S.hubTab && MUSCU_IDEAS[S.hubTab] ? S.hubTab : "push";
     h += `<div class="chips">${types.map(([id, n]) => `<button class="chip" data-tab="${id}" style="--tc:${catColor(id)}" aria-pressed="${id === tab}"><i class="dot"></i>${n}</button>`).join("")}</div>
       <div class="list">${MUSCU_IDEAS[tab].map((idea, i) => ideaCard(idea, "muscu", tab, i, catColor(tab))).join("")}</div>`;
@@ -55,7 +52,7 @@ $("v-hub").addEventListener("click", e => {
   const [disc, key, idx] = go2.dataset.try.split(":");
   if (disc === "muscu") {
     const idea = MUSCU_IDEAS[key][+idx];
-    tryIdea(go2, "muscu", c => { c.typeId = S.types.some(t => t.id === key) ? key : null; c.title = idea.name; c.exercises = ideaExercises(idea.ex); });
+    tryIdea(go2, "muscu", c => { c.typeId = S.types.some(ty => ty.id === key) ? key : null; c.title = idea.name; c.exercises = ideaExercises(idea.ex); });
   } else if (disc === "hyrox") {
     const [fmt, cat] = key.split("-");
     tryIdea(go2, "hyrox", c => { c.title = hyroxName(fmt, cat); c.exercises = hyroxExercises(key); });

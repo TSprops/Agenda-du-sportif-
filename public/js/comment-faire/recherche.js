@@ -1,6 +1,7 @@
 // « Comment faire » : retrouver la fiche d'un exercice à partir de son nom.
 import { HOW } from "../exercices/index.js";
 import { norm } from "../pages/faq.js";
+import { canon } from "../commun/i18n.js";
 
 // Noms tapés à la main : on retrouve la fiche grâce à quelques mots-clés.
 const MOVE_WORDS = [
@@ -28,13 +29,16 @@ const MOVE_WORDS = [
   [/l ?sit/, "L-sit"], [/handstand push|hspu/, "Handstand push-up"], [/handstand|poirier/, "Handstand"], [/front lever/, "Front lever"], [/back lever/, "Back lever"], [/drapeau|human flag/, "Human flag"], [/planche/, "Planche"],
   [/corde.*avec jambe/, "Montée de corde avec jambes"], [/corde.*assis/, "Montée de corde départ assis"], [/corde|rope/, "Montée de corde"],
   [/swing/, "Kettlebell swings"], [/wall ?ball/, "Wall balls"], [/thruster/, "Thrusters"], [/snatch|arrache/, "Snatch"], [/clean/, "Clean"], [/box/, "Box jumps"], [/burpee/, "Burpees"],
-  [/farmer|marche/, "Farmer walk"]
+  [/farmer|marche/, "Farmer walk"],
+  // Noms tapés en espagnol
+  [/sentadilla/, "Squat"], [/dominada/, "Tractions"], [/flexion/, "Pompes"], [/peso muerto/, "Soulevé de terre"], [/zancada/, "Fentes"], [/press banca/, "Développé couché"], [/\bremo\b/, "Rowing barre"]
 ];
 const key = n => norm(n || "").replace(/\s+/g, " ").trim();
 // Construit au premier usage (et pas au chargement du fichier : norm vient d'un autre fichier).
 let HOW_KEYS = null;
 export function moveOf(name) {
-  const k = key(name); if (!k) return null;
+  // Le champ affiche le nom traduit : on revient au nom français de la fiche.
+  const k = key(canon("exercices.noms", name)); if (!k) return null;
   HOW_KEYS = HOW_KEYS || Object.fromEntries(Object.keys(HOW).map(n => [key(n), n]));
   const n = HOW_KEYS[k] || (MOVE_WORDS.find(([re]) => re.test(k)) || [])[1];
   return n && HOW[n] ? { name: n, ...HOW[n] } : null;

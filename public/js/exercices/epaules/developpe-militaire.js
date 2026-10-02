@@ -1,7 +1,8 @@
 // Fiche « Comment faire » : Développé militaire.
+import { t } from "../../commun/i18n.js";
 import { front, side } from "../_communs.js";
 import { ohpF, ohpS } from "./_communs.js";
 
-export default { views: [side([ohpS(0), ohpS(1)], ["Haltères à hauteur des épaules", "Bras tendus au-dessus de la tête"]), front([ohpF(0), ohpF(1)], ["Coudes sous les poignets", "Bras tendus"])],
-    cue: "Debout, un haltère dans chaque main à hauteur des épaules, paumes vers l’avant : pousse au-dessus de la tête sans cambrer le dos, puis redescends.",
-    tips: ["Départ : haltères à hauteur des oreilles, coudes sous les poignets.", "Monte jusqu’aux bras presque tendus, sans cogner les haltères.", "Abdos et fessiers serrés : le dos ne se creuse pas."], anim: "De face" };
+export default { views: [side([ohpS(0), ohpS(1)], [t("fiches.developpe-militaire.legende1"), t("fiches.developpe-militaire.legende2")]), front([ohpF(0), ohpF(1)], [t("fiches.developpe-militaire.legende3"), t("fiches.developpe-militaire.legende4")])],
+    cue: t("fiches.developpe-militaire.consigne"),
+    tips: [t("fiches.developpe-militaire.conseil1"), t("fiches.developpe-militaire.conseil2"), t("fiches.developpe-militaire.conseil3")], anim: "De face" };

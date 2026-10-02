@@ -6,7 +6,8 @@ import { crossfitHTML } from "./fiche-crossfit.js";
 import { hyroxHTML } from "./fiche-hyrox.js";
 import { calisHTML, choiceHTML, muscuHTML, photoTile } from "./fiche-muscu-calis.js";
 import { loadPhotos } from "./photos.js";
-import { $, DAYS, DISC, MONTHS, MOODS, S, cap, clone, dayMeta, esc, isEmpty, parse, typeOf } from "../commun/core.js";
+import { $, DISC, MOODS, S, clone, dayMeta, esc, fmtJourAn, isEmpty, parse, typeOf } from "../commun/core.js";
+import { majuscule, t, valeur } from "../commun/i18n.js";
 import { myReactsHTML } from "../amis/index.js";
 import { renderCrossfit } from "../idees/index.js";
 import { myCommentsHTML } from "../social/index.js";
@@ -19,29 +20,29 @@ export function renderSheet() {
   const c = S.cur, k = S.open, d = parse(k), disc = c.disc;
   const mt = disc ? dayMeta(c) : null;
   const el = $("sheet"), y = el.scrollTop;
-  const dateTxt = `${cap(DAYS[d.getDay()])} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+  const dateTxt = esc(majuscule(fmtJourAn(d)));
   let body;
   if (!disc) body = `${sessTabsHTML(c, k)}<p class="eyebrow">${dateTxt}</p>${choiceHTML()}`;
   else {
     const specific = disc === "muscu" ? muscuHTML(c, k) : disc === "calis" ? calisHTML(c, k) : disc === "cordes" ? cordesHTML(c, k) : disc === "course" ? courseHTML(c) : disc === "hyrox" ? hyroxHTML(c) : crossfitHTML(c);
-    const ph = disc === "muscu" && mt && typeOf(c.typeId) ? mt.name : disc === "course" && c.runType ? mt.name : disc === "crossfit" ? "WOD du jour" : DISC[disc].name;
-    body = `${sessTabsHTML(c, k)}<div class="disc-line"><p class="eyebrow">${dateTxt} · ${DISC[disc].name}</p><button class="linkish" data-a="change-disc">Changer d’activité</button></div>
+    const ph = disc === "muscu" && mt && typeOf(c.typeId) ? mt.name : disc === "course" && c.runType ? mt.name : disc === "crossfit" ? t("seances.wodDuJour") : DISC[disc].name;
+    body = `${sessTabsHTML(c, k)}<div class="disc-line"><p class="eyebrow">${dateTxt} · ${DISC[disc].name}</p><button class="linkish" data-a="change-disc">${t("seances.changerActivite")}</button></div>
     <div class="my-reacts" id="myReacts">${myReactsHTML(k)}</div>
-    <input id="f-title" class="title-in" data-f="title" placeholder="${esc(ph)}" value="${esc(c.title)}" autocomplete="off" aria-label="Titre de la séance">
+    <input id="f-title" class="title-in" data-f="title" placeholder="${esc(ph)}" value="${esc(c.title)}" autocomplete="off" aria-label="${esc(t("seances.titreSeance"))}">
     ${specific}
-    <section class="card"><div class="lbl">Ressenti général</div>
-      <div class="chips">${MOODS.map(m => `<button class="chip" data-a="mood" data-v="${m}" style="--tc:var(--red)" aria-pressed="${c.mood === m}">${m}</button>`).join("")}</div>
-      <textarea id="f-note" data-f="note" placeholder="Sommeil, énergie, ce qu’il faut changer la prochaine fois…" rows="3">${esc(c.note)}</textarea>
+    <section class="card"><div class="lbl">${t("seances.ressenti")}</div>
+      <div class="chips">${MOODS.map(m => `<button class="chip" data-a="mood" data-v="${m}" style="--tc:var(--red)" aria-pressed="${c.mood === m}">${esc(valeur("valeurs.humeurs", m))}</button>`).join("")}</div>
+      <textarea id="f-note" data-f="note" placeholder="${esc(t("seances.notePlaceholder"))}" rows="3">${esc(c.note)}</textarea>
     </section>
-    <section class="card"><div class="lbl">Photos <em>${(c.photos || []).length || ""}</em></div>
-      <div class="photos">${(c.photos || []).map(photoTile).join("")}${'<div class="ph loading">Envoi…</div>'.repeat(S.uploading || 0)}
-      <label class="ph-add" for="phIn"><span class="plus">+</span>Prendre une photo<input id="phIn" type="file" accept="image/*" multiple data-f="photo"></label></div>
+    <section class="card"><div class="lbl">${t("seances.photosTitre")} <em>${(c.photos || []).length || ""}</em></div>
+      <div class="photos">${(c.photos || []).map(photoTile).join("")}${`<div class="ph loading">${t("photos.envoi")}</div>`.repeat(S.uploading || 0)}
+      <label class="ph-add" for="phIn"><span class="plus">+</span>${t("photos.prendre")}<input id="phIn" type="file" accept="image/*" multiple data-f="photo"></label></div>
       ${S.photoErr ? `<p class="err">${esc(S.photoErr)}</p>` : ""}
     </section>
     <section class="card" id="myComments">${myCommentsHTML(k)}</section>
-    ${isEmpty(c) ? "" : `<button class="danger" data-a="del-session">Supprimer la séance</button>`}`;
+    ${isEmpty(c) ? "" : `<button class="danger" data-a="del-session">${t("confirmation.bouton")}</button>`}`;
   }
-  el.innerHTML = `<div class="bar-top"><button class="link" data-a="close">‹ Calendrier</button><span class="save" id="saveState">${esc(S.saveMsg || "")}</span></div>
+  el.innerHTML = `<div class="bar-top"><button class="link" data-a="close">‹ ${t("seances.calendrier")}</button><span class="save" id="saveState">${esc(S.saveMsg || "")}</span></div>
   <div class="sheet-body" style="--tc:${mt ? mt.color : "var(--red-hi)"}">${body}</div>`;
   el.scrollTop = y;
   if (disc) loadPhotos(c.photos || []);
@@ -78,7 +79,7 @@ export function flush() {
   const k = S.open, c = S.cur;
   if (isEmpty(c)) { if (S.days[k]) { delete S.days[k]; persistDay(k, null); } }
   else {
-    const prs = sessionPRs(c, k); c.prs = prs.map(p => p.ex + " · " + p.txt);
+    const prs = sessionPRs(c, k); c.prs = prs.map(p => p.ex + " · " + p.txt); // nom de l'exercice (identifiant) · record
     const data = { ...clone(c), updatedAt: Date.now() }; S.days[k] = data; persistDay(k, data);
     announcePRs(prs, k);
     checkTrophies(true);

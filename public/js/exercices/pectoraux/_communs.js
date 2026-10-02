@@ -1,5 +1,6 @@
 // Fonctions communes du groupe Pectoraux : positions et matériel partagés par ses fiches.
 // Ce fichier n'importe que la silhouette et d'autres fichiers communs : il peut être évalué à tout moment.
+import { t } from "../../commun/i18n.js";
 import { ANK, HIPY, merge, onToes, stand, standF } from "../_communs.js";
 import { rad, shOf } from "../jambes/_communs.js";
 import { GROUND, add, bar, bench, db, fbar, fbench, fcables, fdb, raw, roller, seat } from "../../silhouette/index.js";
@@ -26,7 +27,7 @@ export const benchF = (down, x = 150, tool = "bar", o = {}) => ({ view: "front",
   R: { wristAt: down ? [x, 122] : [x - 8, 90], hand: -90, elbowBend: -1, ls: { ua: down ? 0.85 : 1 } }, ...o,
   eq: [fbench(160, o.back), tool === "db" ? fdb("across", { top: true }) : fbar(P => P.R.grip[1], { top: true })] });
 export const incF = (down, tool) => benchF(down, 150, tool, { hip: [120, 158], tls: 0.62, back: 118 });
-export const BENCH_TIPS = ["Pieds à plat au sol, fesses et omoplates collées au banc.", "Coudes à environ 45° du buste, pas écartés à 90°.", "En bas, avant-bras verticaux et coudes à angle droit (90°).", "Débutant : commence avec la barre seule et fais-toi surveiller."];
+export const BENCH_TIPS = [t("fiches.communs-pectoraux.conseil1"), t("fiches.communs-pectoraux.conseil2"), t("fiches.communs-pectoraux.conseil3"), t("fiches.communs-pectoraux.conseil4")];
 // Écarté : en haut, bras quasi tendus au-dessus de la poitrine (légère flexion fixe des coudes).
 // De profil, les bras s'ouvrent sur les côtés (hors du plan) : ils paraissent seulement plus courts en bas.
 export const flyArms = open => () => open ? { ua: -86, fa: -94, hand: -92, ls: { ua: 0.12, fa: 0.12 } } : { ua: -86, fa: -94, hand: -92 };

@@ -118,6 +118,8 @@ const nomFormat = f => FORMAT_ID[f] ? t("crossfit.formats." + FORMAT_ID[f]) : f;
 const WOD_HINTS = Object.fromEntries(WOD_FORMATS.map(f => [f, t("crossfit.formatsAide." + FORMAT_ID[f])]));
 // Noms d'exercices : identifiants enregistrés en français, affichés avec nomEx() (traduction dans « exercices.noms »).
 const nomEx = n => valeur("exercices.noms", n);
+// Record enregistré dans une séance : « Nom · 100 kg × 5 » (nom de référence en français), traduit à l'affichage.
+function prTexte(s) { const i = String(s).indexOf(" · "); return i < 0 ? s : valeur("valeurs.records", nomEx(s.slice(0, i))) + s.slice(i); }
 const CALIS_MOVES = [["Tractions"], ["Dips"], ["Pompes"], ["Muscle-up"], ["Squats"], ["Pistol squat"], ["Tractions australiennes"], ["Handstand push-up"],
   ["Front lever", 1], ["Back lever", 1], ["Planche", 1], ["Handstand", 1], ["L-sit", 1], ["Human flag", 1], ["Gainage", 1]];
 const CF_MOVES = CF_LIB.map(x => x[0]);
@@ -220,7 +222,7 @@ function isEmpty(d) {
     && !(d.photos || []).length && !d.rpe
     && !r.dist && !runSecs(r) && !r.fc && !r.dplus && !(r.blocks || []).some(b => b.rep || b.eff || b.pace || b.rec)
     && !w.format && !String(w.name || "").trim() && !w.cap && !(w.moves || []).some(m => m.name || m.reps) && !String(w.strength || "").trim()
-    && !wodScore({ ...w, format: w.format || "For Time" }) && !w.rounds && !w.kg && w.rx == null;
+    && !wodScore({ ...w, format: w.format || "For Time" }) && !w.rounds && !w.kg && w.rx == null; // i18n-ignore (format)
 }
 function titleOf(d, types) { // titre tapé par l'utilisateur, nom du WOD, sinon nom de la séance (traduit)
   const t = String(d.title || "").trim(); if (t) return t;
@@ -245,6 +247,6 @@ export { $, BENCH, CALIS_MOVES, CF_MOVES, DEFAULT_SUPPS, DEFAULT_TYPES, DISC, EQ
   TYPES_V, WOD_FORMATS, WOD_HINTS, addDoc, ago, armed, arrayRemove, auth, avatarHTML, cap, clone, collection,
   createUserWithEmailAndPassword, dayMeta, dayOf, dayVolume, db, deleteDoc, deleteUser, discOf, doc, documentId, esc, exVolume,
   fmtCourt, fmtDate, fmtDur, fmtJour, fmtJourAn, fmtJourMois, fmtMois, fmtMoisAn, getDoc, getDocs, getDocsFromCache, hm, isEmpty, key, limit, limitToLast, nameColor, nf, numOr,
-  jourCourt, nomEx, nomFormat, nomRef, nomType, onAuthStateChanged, onSnapshot, orderBy, pad, parse, parseClock, query, reauthenticateWithCredential, runCalcHTML,
+  jourCourt, nomEx, nomFormat, prTexte, nomRef, nomType, onAuthStateChanged, onSnapshot, orderBy, pad, parse, parseClock, query, reauthenticateWithCredential, runCalcHTML,
   blocDone, blocKm, blocsLegacy, blocsRun, fmtKm, runKm, sortieKm, runPace, runSecs, sendPasswordResetEmail, sessionsOn, setDoc, show, signInWithEmailAndPassword, signOut, titleOf,
   todayK, typeOf, updateDoc, where, wodScore, writeBatch };

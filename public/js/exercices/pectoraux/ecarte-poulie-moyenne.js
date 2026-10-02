@@ -1,8 +1,9 @@
 // Fiche « Comment faire » : Écarté poulie moyenne.
+import { t } from "../../commun/i18n.js";
 import { front, side } from "../_communs.js";
 import { SH_Y } from "../epaules/_communs.js";
 import { cableFly, cableFlySide } from "./_communs.js";
 
-export default { views: [front(cableFly(SH_Y + 16, "moyenne"), ["Bras ouverts à hauteur d’épaules", "Mains qui se rejoignent devant la poitrine"]), side(cableFlySide("moyenne"), ["Bras ouverts", "Mains devant la poitrine"])],
-    cue: "Poulies à hauteur d’épaules : ramène les mains devant la poitrine en gardant les bras à l’horizontale. Cible le milieu des pectoraux.",
-    tips: ["Bras à hauteur d’épaules pendant tout le mouvement.", "Coudes légèrement fléchis et fixes.", "Poulie moyenne = milieu des pectoraux."] };
+export default { views: [front(cableFly(SH_Y + 16, "moyenne"), [t("fiches.ecarte-poulie-moyenne.legende1"), t("fiches.ecarte-poulie-moyenne.legende2")]), side(cableFlySide("moyenne"), [t("fiches.ecarte-poulie-moyenne.legende3"), t("fiches.ecarte-poulie-moyenne.legende4")])],
+    cue: t("fiches.ecarte-poulie-moyenne.consigne"),
+    tips: [t("fiches.ecarte-poulie-moyenne.conseil1"), t("fiches.ecarte-poulie-moyenne.conseil2"), t("fiches.ecarte-poulie-moyenne.conseil3")] };

@@ -1,7 +1,8 @@
 // Fiche « Comment faire » : Curl incliné.
+import { t } from "../../commun/i18n.js";
 import { side } from "../_communs.js";
 import { inclCurl } from "./_communs.js";
 
-export default { views: [side([inclCurl(0), inclCurl(1)], ["Bras qui pendent derrière le buste", "Haltères vers les épaules"])],
-    cue: "Assis sur un banc incliné, bras qui pendent derrière le buste : monte les haltères sans avancer les coudes, puis redescends lentement.",
-    tips: ["Banc incliné à 45–60°, dos et tête collés au dossier.", "Bras verticaux au départ, derrière le buste : les coudes ne bougent pas.", "Charge plus légère qu’au curl debout."] };
+export default { views: [side([inclCurl(0), inclCurl(1)], [t("fiches.curl-incline.legende1"), t("fiches.curl-incline.legende2")])],
+    cue: t("fiches.curl-incline.consigne"),
+    tips: [t("fiches.curl-incline.conseil1"), t("fiches.curl-incline.conseil2"), t("fiches.curl-incline.conseil3")] };

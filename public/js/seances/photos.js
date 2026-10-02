@@ -3,6 +3,7 @@ import { renderMain } from "./calendrier.js";
 import { changed, forceFlush, renderSheet } from "./feuille.js";
 import { $, S, armed, clone, deleteDoc, doc, getDoc, setDoc } from "../commun/core.js";
 import { persistDay, subCol, subDoc } from "../commun/store.js";
+import { t } from "../commun/i18n.js";
 
 /* ============================================================
    Photos (stockées en JPEG compressé dans Firestore : reste gratuit)
@@ -40,7 +41,7 @@ export async function addPhotos(files) {
       const ref = doc(subCol("photos")); setDoc(ref, { data, date: k, createdAt: Date.now() }).catch(() => {});
       S.photoCache[ref.id] = data;
       target.photos = target.photos || []; target.photos.push({ pid: ref.id });
-    } catch (e) { S.photoErr = "La photo n’a pas pu être ajoutée. Réessaie."; }
+    } catch (e) { S.photoErr = t("photos.erreur"); }
     S.uploading--;
     if (S.open === k && S.cur === target) { changed(); renderSheet(); }
     else { const data = { ...clone(target), updatedAt: Date.now() }; S.days[k] = data; persistDay(k, data); renderMain(); }
@@ -52,7 +53,7 @@ $("viewer").addEventListener("click", e => {
   const b = e.target.closest("[data-a]"); if (!b) return;
   if (b.dataset.a === "vclose") { $("viewer").hidden = true; return; }
   if (b.dataset.a === "vdel") {
-    if (!armed(b, "Confirmer la suppression")) return;
+    if (!armed(b, t("photos.confirmer"))) return;
     const [p] = S.cur.photos.splice(vIdx, 1); $("viewer").hidden = true;
     forceFlush(); if (p && p.pid) dropPhoto(p.pid); renderSheet();
   }

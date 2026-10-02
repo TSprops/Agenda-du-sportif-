@@ -12,11 +12,11 @@ function aplatir(o, pre = "", out = {}) {
   return out;
 }
 const vars = s => [...String(s).matchAll(/\{(\w+)\}/g)].map(m => m[1]).sort().join(",");
-const balises = s => [...String(s).matchAll(/<\/?([a-z0-9]+)/gi)].map(m => m[1].toLowerCase()).sort().join(",");
+const balises = s => [...String(s).matchAll(/<\/?([a-z0-9]+)/gi)].map(m => m[1].toLowerCase()).filter(b => b !== "sup").sort().join(","); // <sup> : ordinaux propres au français
 const sansPluriel = k => k.replace(/_(zero|one|two|few|many|other)$/, "");
 
 // Textes français laissés dans le code : mots courants ou lettres accentuées dans une chaîne.
-const FRANCAIS = /[a-zàâçéèêëîïôûùüÿœ’]{2,}[  ]+[a-zàâçéèêëîïôûùüÿœ]|[àâçéèêëîïôûùüœ]|\b(tes|ton|ta|mes|mon|une|des|les|pour|avec|dans|sur|jour|jours|séance)\b/i;
+const FRANCAIS = /[a-zàâçéèêëîïôûùüÿœ’]{2,}[  ]+[a-zàâçéèêëîïôûùüÿœ]|[àâçéèêëîïôûùüœ]|\b(tes|ton|ta|mes|mon|une|des|les|pour|avec|dans|sur)\b/i;
 function chainesJs(src) {
   const out = []; let i = 0, ligne = 1;
   const lignes = src.split("\n");
@@ -58,7 +58,9 @@ function chainesJs(src) {
 const UNITES = /(^|[\s\d(/])(km\/h|km|kg|cm|min|reps?|rpe|1rm|bpm|ui|mg|g|m|s|h)(?=$|[\s\d).,/])/gi;
 function visible(txt) {
   if (/color-mix\(|^[\w-]+:[^;]*;|url\(|\d+px\b|\$\d/.test(txt)) return false; // CSS, police, remplacement d'expression régulière
-  const sansHtml = txt.replace(/<[^>]*>/g, " ").replace(/&[a-z]+;/g, " ").replace(UNITES, "$1 ");
+  if (/^[a-z0-9_-]+(\.[\w-]+)+$/.test(txt) || /^\.{1,2}\/[\w./-]+$/.test(txt)) return false; // clé de traduction, chemin de module
+  const sansHtml = txt.replace(/<[^>]*>/g, " ").replace(/&[a-z]+;/g, " ").replace(/[\w-]+="[^"]*"|\b(readonly|disabled|hidden|checked|selected)\b/g, " ")
+    .replace(/\b(AS Sport|Rx|Scaled|CrossFit|Hyrox)\b/g, " ").replace(UNITES, "$1 ");
   return /[A-Za-zÀ-ÿ]/.test(sansHtml) && FRANCAIS.test(sansHtml) && !CANONIQUES.has(txt.trim());
 }
 

@@ -1,5 +1,5 @@
 // Accueil (tableau de bord), page Séances, série de semaines, objectif et bilan du mois.
-import { $, DISC, MUSCLES, S, dayMeta, dayOf, dayVolume, discOf, esc, fmtDur, fmtJourMois, fmtMois, fmtMoisAn, isEmpty, key, nf, nomEx,
+import { $, DISC, MUSCLES, S, prTexte, dayMeta, dayOf, dayVolume, discOf, esc, fmtDur, fmtMois, fmtMoisAn, isEmpty, key, nf, nomEx,
   pad, parse, runKm, runSecs, sessionsOn, titleOf, todayK } from "../commun/core.js";
 import { dateFormat, majuscule, t } from "../commun/i18n.js";
 import { go, refresh, saveProfile } from "../commun/store.js";
@@ -90,7 +90,7 @@ function progPreview() {
 function lastRecord() {
   const ks = Object.keys(S.days).filter(k => (S.days[k].prs || []).length).sort();
   const n = ks.reduce((a, k) => a + S.days[k].prs.length, 0), k = ks[ks.length - 1];
-  return k ? { n, txt: S.days[k].prs[S.days[k].prs.length - 1], k } : { n: 0 };
+  return k ? { n, txt: prTexte(S.days[k].prs[S.days[k].prs.length - 1]), k } : { n: 0 };
 }
 const dashTop = (titre, extra) => `<span class="dc-top"><b>${titre}</b>${extra || ""}<span class="arrow" aria-hidden="true">›</span></span>`;
 function renderHome() {

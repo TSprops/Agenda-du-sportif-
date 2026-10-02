@@ -1,5 +1,6 @@
 // Fonctions communes du groupe Jambes / fessiers : positions et matériel partagés par ses fiches.
 // Ce fichier n'importe que la silhouette et d'autres fichiers communs : il peut être évalué à tout moment.
+import { t } from "../../commun/i18n.js";
 import { ANK, HIPY, onToes, stand } from "../_communs.js";
 import { GROUND, add, bar, bench, box, db, line, raw, roller, seat } from "../../silhouette/index.js";
 
@@ -15,7 +16,7 @@ export const squatF = (down, o = {}) => ({ view: "front", torso: -90, neck: -90,
 // Front squat : barre posée sur l'avant des épaules (au contact des clavicules), coudes hauts devant.
 export const frontRack = (hip, torso, ank) => { const sh = shOf(hip, torso), r = rad(torso + 90), w = add(sh, [6.2 * Math.cos(r) - 3.75 * Math.sin(r), 6.2 * Math.sin(r) + 3.75 * Math.cos(r)]);
   return { hip, torso, neck: torso + (torso > -80 ? -14 : 0), near: { ankleAt: ank, ft: 0, wristAt: w, elbowBend: 1, hand: -30 + torso + 90 }, eq: [bar(P => P.near.grip, 13, { top: true })] }; };
-export const SQUAT_TIPS = ["Pieds largeur d’épaules, pointes légèrement vers l’extérieur.", "Genoux dans l’axe des pieds : ils ne rentrent pas et ne partent pas vers l’extérieur.", "Descends au moins jusqu’aux cuisses parallèles au sol, dos droit, talons au sol.", "Pousse dans les talons pour remonter."];
+export const SQUAT_TIPS = [t("fiches.communs-jambes.conseil1"), t("fiches.communs-jambes.conseil2"), t("fiches.communs-jambes.conseil3"), t("fiches.communs-jambes.conseil4")];
 // Pied posé par la plante (bord d'une marche) : cheville placée pour que la plante reste au point « ball ».
 export const ankleFromBall = (ball, ft) => add(ball, [-(18 * Math.cos(rad(ft)) - 7.2 * Math.sin(rad(ft))), -(18 * Math.sin(rad(ft)) + 7.2 * Math.cos(rad(ft)))]);
 export const calfStand = ft => { const a = ankleFromBall([132, 188], ft); return stand({ hip: [a[0], a[1] - 90], near: { ft, ua: 93, fa: 84 }, eq: [box(128, 188, 40, 22), db(P => [P.near.grip, 90], "side", { mid: true })] }); };
