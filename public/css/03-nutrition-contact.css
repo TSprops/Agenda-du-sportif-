@@ -64,7 +64,8 @@
 .barrow .fill{height:100%;background:var(--tc);border-radius:5px}
 .barrow b{text-align:right;font-variant-numeric:tabular-nums}
 /* Écran de chargement : logo, titre, et un trait rouge qui se dessine au même angle que la coupe du logo */
-.splash{position:relative;min-height:100dvh;padding-block:0;justify-content:center;align-items:center}
+/* Fixé sur tout l'écran : sur iPhone, les marges de l'encoche s'ajoutaient à la hauteur et la page défilait */
+.splash{position:fixed;inset:0;max-width:none;padding-block:0;justify-content:center;align-items:center;overflow:hidden}
 .splash-brand{position:relative;z-index:1;gap:10px}
 .splash-logo{width:112px;height:112px;border-radius:26px;box-shadow:0 0 0 1px var(--line),0 12px 32px rgba(0,0,0,.45)}
 .splash-onair{position:absolute;z-index:1;bottom:calc(32px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%)}
