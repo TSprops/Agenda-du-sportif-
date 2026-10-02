@@ -4,6 +4,8 @@ import { norm } from "../pages/faq.js";
 
 // Noms tapés à la main : on retrouve la fiche grâce à quelques mots-clés.
 const MOVE_WORDS = [
+  [/power clean/, "Power clean"], [/power snatch/, "Power snatch"], [/clean (and|&|et) jerk|epaule jete/, "Clean & jerk"], [/overhead squat|ohs\b/, "Overhead squat"],
+  [/double under|\bdu\b/, "Double unders"], [/rameur|rowerg|concept/, "Rameur"], [/air ?bike|assault|echo bike/, "Air bike"], [/^course|^run/, "Course"], [/air squat/, "Air squats"], [/back squat/, "Back squat"],
   [/diamant|diamond/, "Pompes diamant"], [/archer/, "Pompes archer"], [/pike/, "Pompes pike"], [/pompe|push ?up/, "Pompes"], [/anneau/, "Dips aux anneaux"], [/dips/, "Dips"],
   [/incline.*haltere|haltere.*incline/, "Développé incliné haltères"], [/incline/, "Développé incliné"], [/decline/, "Développé décliné"], [/couche.*serre|serre.*couche/, "Développé couché prise serrée"],
   [/couche.*haltere|haltere.*couche/, "Développé couché haltères"], [/presse pec|chest press/, "Presse pectoraux"], [/couche|bench/, "Développé couché"],
@@ -25,7 +27,7 @@ const MOVE_WORDS = [
   [/gainage lateral|side plank/, "Gainage latéral"], [/gainage|plank/, "Gainage"], [/roue|ab wheel/, "Roue abdominale"], [/hollow/, "Hollow hold"], [/climber/, "Mountain climbers"],
   [/l ?sit/, "L-sit"], [/handstand push|hspu/, "Handstand push-up"], [/handstand|poirier/, "Handstand"], [/front lever/, "Front lever"], [/back lever/, "Back lever"], [/drapeau|human flag/, "Human flag"], [/planche/, "Planche"],
   [/corde.*avec jambe/, "Montée de corde avec jambes"], [/corde.*assis/, "Montée de corde départ assis"], [/corde|rope/, "Montée de corde"],
-  [/swing/, "Kettlebell swings"], [/wall ?ball/, "Wall balls"], [/thruster/, "Thrusters"], [/snatch|arrache/, "Snatch"], [/clean|epaule jete/, "Clean"], [/box/, "Box jumps"], [/burpee/, "Burpees"],
+  [/swing/, "Kettlebell swings"], [/wall ?ball/, "Wall balls"], [/thruster/, "Thrusters"], [/snatch|arrache/, "Snatch"], [/clean/, "Clean"], [/box/, "Box jumps"], [/burpee/, "Burpees"],
   [/farmer|marche/, "Farmer walk"]
 ];
 const key = n => norm(n || "").replace(/\s+/g, " ").trim();

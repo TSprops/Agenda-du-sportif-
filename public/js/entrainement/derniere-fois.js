@@ -70,7 +70,7 @@ export function addExercise(name, hold) {
   const lib = libFind(name), ex = { name, hold: !!(hold || (lib && lib.hold)), sets: blankSets(3), rpe: 0, note: "", rest: 90 };
   if (c.disc === "hyrox") {
     const st = hyroxStation(name), h = Object.keys(S.days).filter(x => x < S.open).sort().reverse().map(x => (S.days[x].exercises || []).find(e => e.kind === "hyrox" && exKey(e.name || "") === exKey(name))).find(Boolean);
-    Object.assign(ex, hyroxEx(name, h ? h.amt : st ? st[2] : "", h ? h.kg : ""));
+    Object.assign(ex, hyroxEx(name, h ? h.amt : st ? st[2] : "", h ? h.kg : ""), h && h.cal ? { cal: h.cal } : {});
   } else if (c.disc === "cordes") {
     const h = lastCordes(name, S.open);
     Object.assign(ex, { kind: "cordes", sets: [], ropes: "", every: "", unit: "s", lest: false, kg: "" }, h ? cordesOf(h.ex) : {});

@@ -17,19 +17,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
 <!-- Styles : dossier css/, chargés dans cet ordre (l'ordre compte). -->
-<link rel="stylesheet" href="css/01-theme.css?v=62">
-<link rel="stylesheet" href="css/02-accueil-seances.css?v=62">
-<link rel="stylesheet" href="css/03-nutrition-contact.css?v=62">
-<link rel="stylesheet" href="css/04-general.css?v=62">
-<link rel="stylesheet" href="css/05-course-crossfit.css?v=62">
-<link rel="stylesheet" href="css/06-apparence-progression.css?v=62">
-<link rel="stylesheet" href="css/07-amis.css?v=62">
-<link rel="stylesheet" href="css/08-bibliotheque-corps.css?v=62">
-<link rel="stylesheet" href="css/09-accueil-social.css?v=62">
-<link rel="stylesheet" href="css/10-comment-faire.css?v=62">
-<link rel="stylesheet" href="css/11-nouveautes-tutoriel.css?v=62">
-<link rel="stylesheet" href="css/12-barre-onglets.css?v=62">
-<link rel="stylesheet" href="css/13-accueil-profil-social.css?v=62">
+<link rel="stylesheet" href="css/01-theme.css?v=63">
+<link rel="stylesheet" href="css/02-accueil-seances.css?v=63">
+<link rel="stylesheet" href="css/03-nutrition-contact.css?v=63">
+<link rel="stylesheet" href="css/04-general.css?v=63">
+<link rel="stylesheet" href="css/05-course-crossfit.css?v=63">
+<link rel="stylesheet" href="css/06-apparence-progression.css?v=63">
+<link rel="stylesheet" href="css/07-amis.css?v=63">
+<link rel="stylesheet" href="css/08-bibliotheque-corps.css?v=63">
+<link rel="stylesheet" href="css/09-accueil-social.css?v=63">
+<link rel="stylesheet" href="css/10-comment-faire.css?v=63">
+<link rel="stylesheet" href="css/11-nouveautes-tutoriel.css?v=63">
+<link rel="stylesheet" href="css/12-barre-onglets.css?v=63">
+<link rel="stylesheet" href="css/13-accueil-profil-social.css?v=63">
 <script>
   // Déménagement : l'ancienne adresse (GitHub) renvoie vers la nouvelle (Firebase) quand MOVED vaut true.
   window.NEW_HOME = "https://agenda-du-sportif.web.app/";
@@ -44,7 +44,7 @@
     });
   }
   // Version de la page : doit correspondre à APP_VERSION dans js/commun/boot.js.
-  window.APP_PAGE_VERSION = "62";
+  window.APP_PAGE_VERSION = "63";
   // Comme une vraie application : pas de zoom avec deux doigts ni en tapant deux fois (Safari ignore parfois la balise viewport).
   ["gesturestart", "gesturechange", "gestureend"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
   document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -71,7 +71,7 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=62"></script>
+<script type="module" src="app.js?v=63"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->
@@ -467,7 +467,7 @@
 
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Séance"></div>
 <div class="sheet lib-sheet" id="libSheet" role="dialog" aria-modal="true" aria-label="Bibliothèque d’exercices">
-  <div class="bar-top"><button class="link" id="libClose">‹ Retour</button><b>Exercices</b><span style="width:60px"></span></div>
+  <div class="bar-top"><button class="link" id="libClose">‹ Retour</button><b id="libTitle">Exercices</b><span style="width:60px"></span></div>
   <div class="sheet-body" style="gap:12px">
     <input id="libQ" class="lib-q" type="search" placeholder="Chercher un exercice ou crée le tien en l’écrivant" aria-label="Chercher un exercice ou créer le tien en l’écrivant" autocomplete="off">
     <p class="hint lib-help">Tu ne trouves pas ton exercice ? Écris son nom en entier : un bouton « + Créer » apparaît en haut de la liste.</p>

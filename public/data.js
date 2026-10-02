@@ -132,6 +132,38 @@ export const EXERCISES = [
 // Mots-clés : pour reconnaître les muscles d'un exercice tapé à la main.
 // Exercices proposés dans une séance « Corde » (bouton « Ajouter un exercice »).
 export const CORDES_EX = ["Montée de corde", "Montée de corde avec jambes", "Montée de corde départ assis"];
+// Mouvements proposés dans un WOD (bouton « + Ajouter un mouvement ») : [nom, catégorie, muscles principaux, secondaires, matériel].
+export const CF_CATS = [["halt", "Haltéro"], ["force", "Force"], ["gym", "Gym"], ["cardio", "Cardio"]];
+export const CF_LIB = [
+  ["Thrusters", "halt", ["quadriceps", "epaules"], ["fessiers", "triceps"], "B"],
+  ["Clean", "halt", ["fessiers", "trapezes"], ["quadriceps", "ischios", "epaules"], "B"],
+  ["Power clean", "halt", ["fessiers", "trapezes"], ["quadriceps", "ischios", "epaules"], "B"],
+  ["Snatch", "halt", ["epaules", "fessiers"], ["trapezes", "quadriceps"], "B"],
+  ["Power snatch", "halt", ["epaules", "fessiers"], ["trapezes", "quadriceps"], "B"],
+  ["Clean & jerk", "halt", ["fessiers", "epaules"], ["quadriceps", "trapezes", "triceps"], "B"],
+  ["Push press", "halt", ["epaules"], ["triceps", "quadriceps"], "B"],
+  ["Back squat", "force", ["quadriceps", "fessiers"], ["ischios", "lombaires", "abdos"], "B"],
+  ["Front squat", "force", ["quadriceps"], ["fessiers", "abdos"], "B"],
+  ["Overhead squat", "force", ["quadriceps", "epaules"], ["fessiers", "abdos", "trapezes"], "B"],
+  ["Soulevé de terre", "force", ["lombaires", "fessiers", "ischios"], ["dorsaux", "trapezes", "quadriceps", "avantbras"], "B"],
+  ["Tractions", "gym", ["dorsaux"], ["biceps", "avantbras"], "C"],
+  ["Muscle-up", "gym", ["dorsaux", "triceps"], ["pecs", "biceps", "abdos"], "C"],
+  ["Toes to bar", "gym", ["abdos"], ["dorsaux", "avantbras"], "C"],
+  ["Handstand push-up", "gym", ["epaules", "triceps"], ["trapezes"], "C"],
+  ["Pompes", "gym", ["pecs"], ["triceps", "epaules", "abdos"], "C"],
+  ["Montée de corde", "gym", ["dorsaux", "biceps"], ["avantbras", "abdos"], "C"],
+  ["Sit-ups", "gym", ["abdos"], [], "C"],
+  ["Air squats", "gym", ["quadriceps", "fessiers"], ["ischios"], "C"],
+  ["Fentes", "gym", ["quadriceps", "fessiers"], ["ischios"], "C"],
+  ["Burpees", "cardio", ["pecs", "quadriceps"], ["abdos", "epaules"], "C"],
+  ["Box jumps", "cardio", ["quadriceps", "fessiers"], ["mollets"], "C"],
+  ["Double unders", "cardio", ["mollets"], ["quadriceps", "epaules", "avantbras"], "C"],
+  ["Wall balls", "cardio", ["quadriceps", "epaules"], ["fessiers"], "C"],
+  ["Kettlebell swings", "cardio", ["fessiers", "ischios"], ["lombaires", "epaules"], "K"],
+  ["Rameur", "cardio", ["dorsaux", "quadriceps"], ["biceps", "lombaires", "fessiers"], "M"],
+  ["Air bike", "cardio", ["quadriceps"], ["fessiers", "epaules", "pecs"], "M"],
+  ["Course", "cardio", ["quadriceps", "mollets"], ["ischios", "fessiers"], "C"]
+];
 // Ateliers proposés dans une séance « Hyrox » : [nom, unité (m ou reps), quantité d'une course officielle, muscles principaux, secondaires, avec charge ?]
 export const HYROX_EX = [
   ["Course", "m", 1000, ["quadriceps", "mollets"], ["ischios", "fessiers"]],

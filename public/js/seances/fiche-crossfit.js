@@ -1,6 +1,7 @@
 // Séances, fiche du jour : CrossFit (WOD).
 import { effortCard } from "./fiche-muscu-calis.js";
-import { BENCH, CF_MOVES, DISC, WOD_FORMATS, WOD_HINTS, esc } from "../commun/core.js";
+import { howBtnHTML } from "../comment-faire/index.js";
+import { BENCH, DISC, WOD_FORMATS, WOD_HINTS, esc } from "../commun/core.js";
 
 export function crossfitHTML(c) {
   const w = c.wod || {}, f = w.format, val = v => v === undefined || v === null ? "" : esc(v);
@@ -17,8 +18,7 @@ export function crossfitHTML(c) {
       <datalist id="benchList">${BENCH.map(b => `<option value="${esc(b.name)}">`).join("")}</datalist>
       <label class="field"><span>${capLbl}</span><input id="wd-cap" data-f="wod-cap" inputmode="numeric" placeholder="ex. 12" value="${val(w.cap)}"></label>
       <div class="lbl">Mouvements</div>
-      ${(w.moves || []).map((m, j) => `<div class="move"><input class="num mv-reps" id="mv-reps-${j}" data-f="mv-reps" data-m="${j}" placeholder="21" value="${val(m.reps)}" aria-label="Répétitions"><input class="mv-name" id="mv-name-${j}" data-f="mv-name" data-m="${j}" list="moveList" placeholder="ex. Thrusters" value="${val(m.name)}" aria-label="Mouvement"><input class="num mv-kg" id="mv-kg-${j}" data-f="mv-kg" data-m="${j}" inputmode="decimal" placeholder="kg" value="${val(m.kg)}" aria-label="Charge en kg"><button class="icon-btn" data-a="mv-del" data-m="${j}" aria-label="Supprimer le mouvement">−</button></div>`).join("")}
-      <datalist id="moveList">${CF_MOVES.map(m => `<option value="${esc(m)}">`).join("")}</datalist>
+      ${(w.moves || []).map((m, j) => `<div class="move"><input class="num mv-reps" id="mv-reps-${j}" data-f="mv-reps" data-m="${j}" placeholder="21" value="${val(m.reps)}" aria-label="Répétitions"><div class="mv-name${m.name ? "" : " empty"}"><button type="button" class="mv-pick" id="mv-name-${j}" data-a="mv-pick" data-m="${j}" aria-label="${m.name ? "Changer le mouvement : " + esc(m.name) : "Choisir le mouvement"}"><b>${m.name ? esc(m.name) : "Choisir…"}</b>${m.name ? "" : '<span aria-hidden="true">›</span>'}</button>${howBtnHTML(m.name, "mv" + j)}</div><input class="num mv-kg" id="mv-kg-${j}" data-f="mv-kg" data-m="${j}" inputmode="decimal" placeholder="kg" value="${val(m.kg)}" aria-label="Charge en kg"><button class="icon-btn" data-a="mv-del" data-m="${j}" aria-label="Supprimer le mouvement">−</button></div>`).join("")}
       <button class="add-set" data-a="mv-add">+ Ajouter un mouvement</button>
     </section>
     <section class="card"><div class="lbl">Mon score</div>

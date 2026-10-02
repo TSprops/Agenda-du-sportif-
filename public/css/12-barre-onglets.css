@@ -17,6 +17,8 @@ body.tabbar-on{--tb:calc(env(safe-area-inset-bottom,0px) + 66px)}
 body.tabbar-on:has(.sheet.open){--tb:0px}
 body:has(.sheet.open) .tabbar{display:none}
 body.tabbar-on .app{padding-bottom:calc(var(--tb) + 90px)}
+/* Page toujours au moins aussi haute que l'écran : sur iPhone, une page plus courte (ex. Séances) faisait remonter la barre en laissant un vide dessous */
+body.tabbar-on .app{min-height:100vh;min-height:100dvh}
 body.tabbar-on .help-fab{bottom:calc(var(--tb) + 14px);width:52px;height:52px}
 body.tabbar-on .help-hint{bottom:calc(var(--tb) + 22px);right:78px}
 body.tabbar-on .help-panel{bottom:calc(var(--tb) + 10px)}
