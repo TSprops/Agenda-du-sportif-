@@ -17,19 +17,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
 <!-- Styles : dossier css/, chargés dans cet ordre (l'ordre compte). -->
-<link rel="stylesheet" href="css/01-theme.css?v=64">
-<link rel="stylesheet" href="css/02-accueil-seances.css?v=64">
-<link rel="stylesheet" href="css/03-nutrition-contact.css?v=64">
-<link rel="stylesheet" href="css/04-general.css?v=64">
-<link rel="stylesheet" href="css/05-course-crossfit.css?v=64">
-<link rel="stylesheet" href="css/06-apparence-progression.css?v=64">
-<link rel="stylesheet" href="css/07-amis.css?v=64">
-<link rel="stylesheet" href="css/08-bibliotheque-corps.css?v=64">
-<link rel="stylesheet" href="css/09-accueil-social.css?v=64">
-<link rel="stylesheet" href="css/10-comment-faire.css?v=64">
-<link rel="stylesheet" href="css/11-nouveautes-tutoriel.css?v=64">
-<link rel="stylesheet" href="css/12-barre-onglets.css?v=64">
-<link rel="stylesheet" href="css/13-accueil-profil-social.css?v=64">
+<link rel="stylesheet" href="css/01-theme.css?v=65">
+<link rel="stylesheet" href="css/02-accueil-seances.css?v=65">
+<link rel="stylesheet" href="css/03-nutrition-contact.css?v=65">
+<link rel="stylesheet" href="css/04-general.css?v=65">
+<link rel="stylesheet" href="css/05-course-crossfit.css?v=65">
+<link rel="stylesheet" href="css/06-apparence-progression.css?v=65">
+<link rel="stylesheet" href="css/07-amis.css?v=65">
+<link rel="stylesheet" href="css/08-bibliotheque-corps.css?v=65">
+<link rel="stylesheet" href="css/09-accueil-social.css?v=65">
+<link rel="stylesheet" href="css/10-comment-faire.css?v=65">
+<link rel="stylesheet" href="css/11-nouveautes-tutoriel.css?v=65">
+<link rel="stylesheet" href="css/12-barre-onglets.css?v=65">
+<link rel="stylesheet" href="css/13-accueil-profil-social.css?v=65">
 <script>
   // Déménagement : l'ancienne adresse (GitHub) renvoie vers la nouvelle (Firebase) quand MOVED vaut true.
   window.NEW_HOME = "https://agenda-du-sportif.web.app/";
@@ -44,7 +44,7 @@
     });
   }
   // Version de la page : doit correspondre à APP_VERSION dans js/commun/boot.js.
-  window.APP_PAGE_VERSION = "64";
+  window.APP_PAGE_VERSION = "65";
   // Comme une vraie application : pas de zoom avec deux doigts ni en tapant deux fois (Safari ignore parfois la balise viewport).
   ["gesturestart", "gesturechange", "gestureend"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
   document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -71,7 +71,7 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=64"></script>
+<script type="module" src="app.js?v=65"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->
@@ -582,15 +582,28 @@
         <h2 id="newsTitle1">Nouveau nom, nouveau logo !</h2>
         <p>L’agenda du sportif devient <b>AS Sport</b>. Même app, mêmes séances, mêmes amis : seuls le nom et le logo changent. « L’agenda du sportif » reste notre devise.</p>
       </section>
-      <section class="news-slide" id="newsIos" aria-roledescription="diapositive">
-        <div class="news-visual" aria-hidden="true">
-          <ol class="steps">
-            <li><span class="n">1</span><span><b>Appui long</b> sur l’icône de l’app › <b>Supprimer de l’écran d’accueil</b>.</span></li>
-            <li><span class="n">2</span><span>Ouvre <b>agenda-du-sportif.web.app</b> dans Safari, puis <b>Partager</b> › <b>Sur l’écran d’accueil</b>.</span></li>
-          </ol>
+      <!-- Diapos iPhone (seulement dans l'app installée sur iPhone) : on ajoute la nouvelle icône AVANT de supprimer l'ancienne -->
+      <section class="news-slide news-ios" aria-roledescription="diapositive">
+        <h2 id="newsTitleIos1">Sur iPhone : ajoute la nouvelle icône</h2>
+        <p>Garde l’ancienne icône pour l’instant : tu la supprimeras à la fin.</p>
+        <ol class="steps ios-steps">
+          <li><span class="n">1</span><span><b>Copie l’adresse de l’app</b> :<span class="ios-copy"><code id="newsAddr">agenda-du-sportif.web.app</code><button type="button" id="newsCopy">Copier</button></span></span></li>
+          <li><span class="n">2</span><span>Ouvre <b>Safari</b>, touche la barre d’adresse, <b>colle</b> et ouvre la page.</span></li>
+          <li><span class="n">3</span><span>Touche <b>Partager</b> <svg class="ios-share" viewBox="0 0 24 24" aria-label="(icône carré avec flèche)"><path d="M12 3v12M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg> puis <b>Sur l’écran d’accueil</b> › <b>Ajouter</b>.</span></li>
+        </ol>
+        <p class="ios-warn"><span aria-hidden="true">⚠️</span><span>Tu as maintenant <b>deux icônes</b>. C’est normal : ne supprime rien pour l’instant.</span></p>
+      </section>
+      <section class="news-slide news-ios" aria-roledescription="diapositive">
+        <h2 id="newsTitleIos2">Puis supprime l’ancienne</h2>
+        <div class="ios-pair">
+          <figure><img src="icons/logo.svg" alt="Nouvelle icône : AS rouge sur fond noir" width="56" height="56"><figcaption class="keep">✓ Nouvelle : garde-la</figcaption></figure>
+          <figure><img src="icons/ancien-logo.svg" alt="Ancienne icône : AS blanc dans un carré rouge" width="56" height="56"><figcaption class="drop">✕ Ancienne : supprime-la</figcaption></figure>
         </div>
-        <h2 id="newsTitleIos">Sur iPhone : mets à jour l’icône</h2>
-        <p>iPhone ne change pas tout seul l’icône d’une app déjà ajoutée. Pour avoir le nouveau logo, supprime-la puis rajoute-la. <b>Tes séances et ton compte ne bougent pas</b> : tout est enregistré en ligne.</p>
+        <ol class="steps ios-steps">
+          <li><span class="n">4</span><span>Ouvre la <b>nouvelle icône</b> « AS Sport » et connecte-toi avec ton <b>e-mail et ton mot de passe</b>. Tu retrouves toutes tes séances.</span></li>
+          <li><span class="n">5</span><span>Tout est là ? <b>Appui long sur l’ancienne icône</b> « Agenda sportif » › <b>Supprimer le signet</b> (ou « Supprimer l’app »).</span></li>
+        </ol>
+        <p class="hint">Mot de passe oublié ? Touche « Mot de passe oublié ? » sur l’écran de connexion : un e-mail arrive pour le changer.</p>
       </section>
       <section class="news-slide" aria-roledescription="diapositive">
         <div class="news-visual" aria-hidden="true">

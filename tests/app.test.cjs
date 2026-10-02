@@ -137,7 +137,7 @@ module.exports = async function appTests(t) {
     await put(`users/${A.uid}`, { pseudo: "Alice", termsV: 1, seen: { amis1: true, v2: true, tuto: true }, typesV: 2 });
     await home(A); await A.waitForSelector("#newsSheet:not([hidden])", { timeout: 5000 });
     const slide = () => A.evaluate(() => [document.getElementById("newsSheet").getAttribute("aria-labelledby"), document.querySelector("#newsDots .on") === document.querySelector("#newsDots i:nth-child(2)"), document.getElementById("newsNext").textContent].join());
-    t("nouveautés : diapo 1 (nouveau nom et logo), pas de diapo iPhone hors de l'app installée", (await slide()) + "," + (await A.$$eval(".news-brand img", x => x.length)) + "," + (await A.$$eval("#newsIos, #newsDots i", x => x.length)), "newsTitle1,false,Suivant,1,2");
+    t("nouveautés : diapo 1 (nouveau nom et logo), pas de diapo iPhone hors de l'app installée", (await slide()) + "," + (await A.$$eval(".news-brand img", x => x.length)) + "," + (await A.$$eval(".news-ios, #newsDots i", x => x.length)), "newsTitle1,false,Suivant,1,2");
     await A.click("#newsNext");
     t("nouveautés : diapo 2 (Contact)", await slide(), "newsTitle2,true,C’est parti\u00a0!");
     await A.click("#newsPrev");

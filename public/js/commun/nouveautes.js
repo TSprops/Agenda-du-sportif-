@@ -4,11 +4,11 @@ import { closeInstall, iosApp, lsGet, lsSet, maybeWelcomeInstall } from "./insta
 import { saveProfile } from "./store.js";
 
 /* ---------- Nouveautés (une seule fois par utilisateur) ---------- */
-// Diapositives : nouveau nom et logo (AS Sport), mise à jour de l'icône (seulement dans l'app installée sur iPhone),
+// Diapositives : nouveau nom et logo (AS Sport), changement d'icône en deux diapos (seulement dans l'app installée sur iPhone),
 // puis où trouver le bouton Contact. Vue une fois = plus jamais
 // (mémorisé sur l'appareil ET dans le profil, donc aussi après rechargement ou sur un autre appareil).
 // Pour la revoir (test) : ouvrir l'app avec « ?nouveautes » à la fin de l'adresse (« ?nouveautes=ios » : avec la diapo iPhone).
-const NEWS_ID = "v4";
+const NEWS_ID = "v5";
 const NEWS_PARAM = new URLSearchParams(location.search).get("nouveautes");
 const NEWS_FORCE = NEWS_PARAM !== null;
 
@@ -31,8 +31,8 @@ export function maybeNews() {
 }
 function openNews() {
   closeInstall();
-  // L'iPhone garde l'ancienne icône d'une app déjà ajoutée : la diapo explique comment la remettre.
-  if (!(iosApp() || NEWS_PARAM === "ios") && $("newsIos")) $("newsIos").remove();
+  // L'iPhone garde l'ancienne icône d'une app déjà ajoutée : deux diapos expliquent comment ajouter la nouvelle, puis supprimer l'ancienne.
+  if (!(iosApp() || NEWS_PARAM === "ios")) document.querySelectorAll("#newsTrack .news-ios").forEach(el => el.remove());
   const n = $("newsTrack").children.length;
   [...$("newsTrack").children].forEach((el, k) => el.setAttribute("aria-label", (k + 1) + " sur " + n));
   $("newsDots").innerHTML = "<i></i>".repeat(n);
@@ -64,6 +64,12 @@ function newsKey(e) {
   else if (e.key === "ArrowLeft") newsGoTo(newsI - 1);
 }
 $("newsSkip").onclick = closeNews;
+// Copier l'adresse de l'app (diapo iPhone) : rien à retenir pour la rouvrir dans Safari.
+$("newsCopy").onclick = async () => {
+  const url = window.NEW_HOME || location.origin + "/";
+  try { await navigator.clipboard.writeText(url); $("newsCopy").textContent = "Copié ✓"; }
+  catch (e) { const r = document.createRange(); r.selectNodeContents($("newsAddr")); getSelection().removeAllRanges(); getSelection().addRange(r); $("newsCopy").textContent = "Sélectionnée : copie-la"; }
+};
 $("newsPrev").onclick = () => newsGoTo(newsI - 1);
 $("newsNext").onclick = () => { if (newsI === $("newsTrack").children.length - 1) closeNews(); else newsGoTo(newsI + 1); };
 // Glisser le doigt vers la gauche / la droite pour changer de diapositive.

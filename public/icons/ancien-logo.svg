@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="L’agenda du sportif">
+  <title>Ancien logo de L’agenda du sportif</title>
+  <defs>
+    <filter id="halo" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="flou"/>
+      <feComponentTransfer in="flou" result="doux"><feFuncA type="linear" slope="0.6"/></feComponentTransfer>
+      <feMerge><feMergeNode in="doux"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" fill="#0A0A0B"/>
+  <g filter="url(#halo)">
+    <rect x="89" y="89" width="334" height="334" rx="54" fill="none" stroke="#FF3B42" stroke-width="14"/>
+    <circle cx="256" cy="383" r="11" fill="#FF2B34"/>
+  </g>
+  <path fill="#F4F1EE" d="M228.9 320.2 224.3 287.4H179.1L162.7 320.2H138L204.2 191.9H233.4L253.5 320.2ZM215.2 211.7Q213.4 217.5 207 231L189.1 267.2H222.3L216.7 226Q215.2 213.8 215.2 211.7ZM316.4 322Q293.9 322 282.1 313.4Q270.4 304.8 268 287L292.3 282.5Q294.1 292.6 300.2 297.2Q306.3 301.9 318 301.9Q347 301.9 347 283.8Q347 276.5 342 272.2Q337 268 322 263.9Q306.5 259.5 299.1 254.6Q291.6 249.8 287.7 242.8Q283.8 235.9 283.8 225.8Q283.8 209.7 297 199.8Q310.2 190 332 190Q352 190 364.1 197.9Q376.2 205.7 379 220.9L354.8 227Q352.9 218.8 346.8 213.9Q340.6 209 330.6 209Q320.2 209 314.3 213.3Q308.3 217.5 308.3 224.9Q308.3 229.1 310.5 232.1Q312.7 235.2 316.9 237.4Q321.1 239.6 333.5 243.3Q346.9 247.3 353.3 250.8Q359.7 254.3 363.5 258.6Q367.3 263 369.3 268.7Q371.3 274.3 371.3 281.7Q371.3 301.3 357.4 311.7Q343.4 322 316.4 322Z"/>
+</svg>

@@ -17,6 +17,21 @@
 .nb-title{position:relative;font-family:var(--display);font-weight:800;font-style:italic;font-size:34px;line-height:.9;text-transform:uppercase;margin-top:4px}
 .nb-title span{color:var(--red-hi)}
 .news-brand .brand-sub{position:relative;font-size:12px}
+/* Diapos iPhone : changer d'icône sans perdre l'app */
+.ios-steps{gap:8px}
+.ios-steps li{align-items:flex-start;padding:9px 11px;font-size:14px;line-height:1.38}
+.ios-copy{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:6px}
+.ios-copy code{font-size:13px;background:var(--ground);border:1px solid var(--line);border-radius:8px;padding:4px 8px;user-select:all;overflow-wrap:anywhere}
+.ios-copy button{min-height:34px;padding:0 14px;border-radius:10px;background:var(--red);color:var(--on-red);font-weight:700;font-size:13.5px}
+.ios-share{width:16px;height:16px;vertical-align:-3px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ios-warn{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--red);border-radius:14px;padding:10px 12px;background:color-mix(in srgb,var(--red) 12%,var(--surface));font-size:14px}
+.ios-warn b{color:var(--red-hi)}
+.ios-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ios-pair figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:10px 6px;text-align:center}
+.ios-pair img{border-radius:13px}
+.ios-pair figcaption{font-weight:700;font-size:13px}
+.ios-pair .keep{color:#2FB350}
+.ios-pair .drop{color:var(--red-hi)}
 .news-dots{align-self:center}
 .news-nav{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .news-nav .btn{min-height:48px;white-space:nowrap;padding-inline:10px}
