@@ -1,6 +1,6 @@
 // Parcours dans l'app (navigateur Chromium via Playwright).
 const { chromium } = require("playwright");
-const { BASE, put, signupPage, screen, home } = require("./helpers.cjs");
+const { BASE, get, put, signupPage, screen, home } = require("./helpers.cjs");
 
 module.exports = async function appTests(t) {
   const browser = await chromium.launch();
@@ -310,6 +310,48 @@ module.exports = async function appTests(t) {
     await A.click(`#adminBody [data-uid="${B.uid}"]`); await A.waitForTimeout(500); await A.click("#auserBody [data-ban]"); await A.click("#auserBody [data-ban]"); await A.waitForTimeout(800);
     await home(B); await B.click("[data-tab=social]");
     t("le banni voit la suspension", await B.$(".ban-card") !== null, true);
+
+    // Langues : celle de l'appareil au premier lancement, repli sur le français.
+    const ouvrir = async locale => {
+      const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, locale });
+      const p = await ctx.newPage(); p.errs = []; p.on("pageerror", e => p.errs.push(e.message));
+      await p.goto(BASE); await p.waitForSelector("#v-login:not([hidden])");
+      return p;
+    };
+    for (const [locale, lang] of [["en-US", "en"], ["es-MX", "es"], ["de-DE", "fr"], ["fr-CA", "fr"]]) {
+      const p = await ouvrir(locale);
+      t(`langue de l'appareil ${locale} → ${lang}`, await p.evaluate(() => document.documentElement.lang), lang);
+      await p.context().close();
+    }
+    const E = await ouvrir("en-US");
+    t("anglais : écran de connexion traduit", await E.textContent("#tabUp"), "Sign up");
+    t("anglais : dates au format américain", await E.evaluate(async () => (await import("./js/commun/i18n.js")).dateLongue("2026-03-05T12:00:00")), "March 5, 2026");
+    t("anglais : nombres au format américain", await E.evaluate(async () => (await import("./js/commun/i18n.js")).nombre(1234.5)), "1,234.5");
+    t("anglais : pluriels", await E.evaluate(async () => { const { t: tr } = await import("./js/commun/i18n.js"); return [1, 3].map(n => tr("programmes.parSemaine", { n })).join(" / "); }),
+      "1 workout per week / 3 workouts per week");
+    t("aucune erreur JavaScript (anglais)", E.errs.join(" | "), "");
+    await E.context().close();
+    const Es = await ouvrir("es-ES");
+    t("espagnol : dates", await Es.evaluate(async () => (await import("./js/commun/i18n.js")).dateLongue("2026-03-05T12:00:00")), "5 de marzo de 2026");
+    await Es.context().close();
+    // Inscription en anglais : la langue est enregistrée sur le compte.
+    const G = await signupPage(browser, "Gina", "en-US");
+    await G.waitForTimeout(800);
+    t("langue enregistrée sur le compte à l'inscription", (await get("users/" + G.uid)).body.fields.lang?.stringValue, "en");
+    t("barre du bas en anglais", await G.$eval("#tabbar [data-tab=profile] > span:not(.tab-av)", x => x.textContent), "You");
+    // Sélecteur dans les réglages : passe en espagnol, enregistré sur le compte, l'app se recharge.
+    await G.click("[data-tab=profile]"); await G.waitForSelector("#langList [data-lang=es]");
+    await Promise.all([G.waitForEvent("load"), G.click("#langList [data-lang=es]")]);
+    await G.waitForSelector("#v-home:not([hidden]), #v-profile:not([hidden])");
+    t("sélecteur : l'app passe en espagnol", await G.evaluate(() => document.documentElement.lang), "es");
+    t("sélecteur : choix enregistré sur le compte", (await get("users/" + G.uid)).body.fields.lang?.stringValue, "es");
+    // Autre appareil (en français) : la langue du compte est reprise à la connexion.
+    const G2 = await ouvrir("fr-FR");
+    await G2.fill("#auEmail", G.email); await G2.fill("#auPass", "secret123");
+    await Promise.all([G2.waitForEvent("load", { timeout: 15000 }), G2.click("#auSubmit")]);
+    await G2.waitForSelector("#v-home:not([hidden])");
+    t("autre appareil : langue du compte reprise", await G2.evaluate(() => document.documentElement.lang), "es");
+    t("aucune erreur JavaScript (espagnol)", [...G.errs, ...G2.errs].join(" | "), "");
 
     t("aucune erreur JavaScript (A)", A.errs.join(" | "), "");
     t("aucune erreur JavaScript (B)", B.errs.join(" | "), "");

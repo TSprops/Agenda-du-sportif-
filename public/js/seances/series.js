@@ -2,25 +2,26 @@
 import { changed } from "./feuille.js";
 import { $, S, dayMeta, dayOf, discOf, exVolume, nf, pad, todayK } from "../commun/core.js";
 import { RT } from "../commun/timer.js";
+import { t } from "../commun/i18n.js";
 
 /* ============================================================
    Séances : fiche du jour
    ============================================================ */
 export function rpeColor(v) { return v <= 6 ? "#2FBF71" : v <= 8 ? "#FF9F0A" : "#FF3B30"; }
-export function rpeLabel(v) { return !v ? "Non notée" : v <= 5 ? "Facile" : v === 6 ? "Modérée" : v === 7 ? "3 reps en réserve" : v === 8 ? "2 reps en réserve" : v === 9 ? "1 rep en réserve" : "Échec"; }
-export function effortLabel(v) { return !v ? "Non noté" : v <= 3 ? "Très facile" : v <= 5 ? "Facile" : v <= 7 ? "Soutenu" : v <= 9 ? "Très dur" : "Maximal"; }
+export function rpeLabel(v) { return t("rpe." + (!v ? "aucun" : v <= 5 ? "facile" : v === 6 ? "moderee" : v === 7 ? "reserve3" : v === 8 ? "reserve2" : v === 9 ? "reserve1" : "echec")); }
+export function effortLabel(v) { return t("effort." + (!v ? "aucun" : v <= 3 ? "tresFacile" : v <= 5 ? "facile" : v <= 7 ? "soutenu" : v <= 9 ? "tresDur" : "maximal")); }
 export function restOf(ex) { return typeof ex.rest === "number" ? ex.rest : 90; }
-export function fmtRest(v) { if (!v) return "Aucun"; const m = Math.floor(v / 60), sec = v % 60; return m ? m + " min" + (sec ? " " + pad(sec) : "") : sec + " s"; }
+export function fmtRest(v) { if (!v) return t("series.aucunRepos"); const m = Math.floor(v / 60), sec = v % 60; return m ? m + " min" + (sec ? " " + pad(sec) : "") : sec + " s"; }
 export function exStats(ex, disc) {
   const s = (ex.sets || []).filter(x => x.reps !== "" || x.kg !== "");
-  if (!s.length) return "Aucune série remplie";
+  if (!s.length) return t("series.aucuneRemplie");
   const best = Math.max(0, ...s.map(x => +x.kg || 0));
   if (disc === "calis") {
     const tot = s.reduce((a, x) => a + (+x.reps || 0), 0);
-    return `${s.length} série${s.length > 1 ? "s" : ""} · ${ex.hold ? "total " + tot + " s de tenue" : "total " + tot + " reps"}${best ? " · lest max " + nf.format(best) + " kg" : ""}`;
+    return [t("series.nSeries", { n: s.length }), t(ex.hold ? "series.totalTenue" : "series.totalReps", { n: tot }), best ? t("series.lestMax", { kg: nf.format(best) }) : ""].filter(Boolean).join(" · ");
   }
   const v = exVolume(ex);
-  return `${s.length} série${s.length > 1 ? "s" : ""}${best ? " · max " + nf.format(best) + " kg" : ""}${v ? " · volume " + nf.format(v) + " kg" : ""}`;
+  return [t("series.nSeries", { n: s.length }), best ? t("series.max", { kg: nf.format(best) }) : "", v ? t("series.volume", { kg: nf.format(v) }) : ""].filter(Boolean).join(" · ");
 }
 // Dernière séance comparable, pour la reprendre (musculation : même type ; callisthénie : n'importe laquelle).
 export function lastComparable(c, before) {
@@ -82,16 +83,16 @@ export function setState(ex, j, i) {
 }
 export function setNowText(ex, i) {
   const sets = ex.sets || [], n = sets.length; if (!n) return "";
-  if (ex.fini) return `<span class="ok">✓ Toutes les séries sont faites</span>`;
-  if (resting(i)) { const nx = sets.findIndex(st => !isDone(st)); return nx === -1 ? `<span class="ok">✓ Dernière série faite · repos</span>` : `⏸ Repos · série <b>${nx + 1}</b> ensuite`; }
+  if (ex.fini) return `<span class="ok">${t("series.toutesFaites")}</span>`;
+  if (resting(i)) { const nx = sets.findIndex(st => !isDone(st)); return nx === -1 ? `<span class="ok">${t("series.derniereFaite")}</span>` : t("series.reposEnsuite", { n: `<b>${nx + 1}</b>` }); }
   const a = activeSet(ex, i);
-  if (a === -1) return `<span class="ok">✓ Toutes les séries sont faites</span>`;
-  return i === focusEx() ? `<span class="dot-live"></span>Série en cours : <b>${a + 1}</b> / ${n}` : `À faire · ${sets.filter(isDone).length} / ${n} séries`;
+  if (a === -1) return `<span class="ok">${t("series.toutesFaites")}</span>`;
+  return i === focusEx() ? `<span class="dot-live"></span>${t("series.enCours", { i: `<b>${a + 1}</b>`, n })}` : t("series.aFaire", { fait: sets.filter(isDone).length, n });
 }
 export function goLabel(ex, i) {
   const a = activeSet(ex, i);
-  if (resting(i)) return "⏸ Repos en cours…";
-  return a === -1 ? "⏱ Lancer un repos" : `✓ Série ${a + 1} finie · repos ${fmtRest(restOf(ex))}`;
+  if (resting(i)) return t("series.reposEnCours");
+  return a === -1 ? t("series.lancerRepos") : t("series.serieFinie", { n: a + 1, repos: fmtRest(restOf(ex)) });
 }
 export function refreshAllSets() { ((S.cur && S.cur.exercises) || []).forEach((_, k) => refreshSets(k)); }
 export function refreshSets(i) {

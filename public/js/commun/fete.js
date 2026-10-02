@@ -4,6 +4,7 @@ import { $, esc } from "./core.js";
 import { lsGet } from "./install.js";
 import { playSound } from "./timer.js";
 import { toast } from "../entrainement/index.js";
+import { t } from "./i18n.js";
 
 const Q = [];
 let busy = false;
@@ -29,7 +30,7 @@ function openBadge(b) {
   }
   el.innerHTML = `<div class="fete-card"><div class="hex on big" aria-hidden="true"><svg class="hex-ic" viewBox="0 0 24 24">${b.ico}</svg></div>
     <span class="lbl fete-k">${esc(b.kicker)}</span><h2 id="feteTitle" class="fete-t">${esc(b.title)}</h2><p class="hint">${esc(b.sub)}</p>
-    <button type="button" class="btn primary fete-ok" data-fete-ok>Continuer</button></div>`;
+    <button type="button" class="btn primary fete-ok" data-fete-ok>${t("fete.continuer")}</button></div>`;
   opener = document.activeElement; el.hidden = false;
   const ok = el.querySelector("[data-fete-ok]"); if (ok) ok.focus({ preventScroll: true });
 }
@@ -53,14 +54,14 @@ function confetti() {
   }));
   const LIFE = 2400, t0 = performance.now();
   let last = t0;
-  const step = t => {
-    const k = Math.min(3, (t - last) / 16.7); last = t;
-    g.clearRect(0, 0, W, H); g.globalAlpha = Math.max(0, 1 - (t - t0) / LIFE);
+  const step = ts => {
+    const k = Math.min(3, (ts - last) / 16.7); last = ts;
+    g.clearRect(0, 0, W, H); g.globalAlpha = Math.max(0, 1 - (ts - t0) / LIFE);
     P.forEach(p => {
       p.vy += 0.33 * k; p.vx *= Math.pow(0.99, k); p.x += p.vx * k; p.y += p.vy * k; p.r += p.vr * k;
       g.save(); g.translate(p.x, p.y); g.rotate(p.r * Math.PI / 180); g.fillStyle = p.c; g.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); g.restore();
     });
-    if (t - t0 < LIFE) requestAnimationFrame(step); else c.remove();
+    if (ts - t0 < LIFE) requestAnimationFrame(step); else c.remove();
   };
   requestAnimationFrame(step);
 }

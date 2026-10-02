@@ -176,6 +176,12 @@
 .tbadge .tb-n{font-size:11px;line-height:1.2;color:var(--muted)}
 .tbadge.on .tb-n{color:var(--ink);font-weight:600}
 .tbadge.sel .tb-n{text-decoration:underline;text-decoration-color:var(--red-hi);text-decoration-thickness:2px;text-underline-offset:4px}
+/* Petits écrans et noms longs (traductions) : les badges rétrécissent au lieu de déborder. */
+.tfam-row{grid-template-columns:repeat(auto-fill,minmax(54px,1fr))}
+.tbadge{min-width:0}
+.tbadge .hex{width:min(58px,100%);height:auto;aspect-ratio:58/64}
+.tbadge .tb-n{overflow-wrap:break-word}
+@media (max-width:360px){.tbadge .tb-n{font-size:10px;margin:0 -3px;letter-spacing:-.01em}}
 .tfam-detail{font-size:13px;color:var(--muted);line-height:1.4}
 .tfam-detail b{color:var(--ink)}
 .tfam-detail span{display:block;margin-top:2px;font-weight:600;font-variant-numeric:tabular-nums}
@@ -191,7 +197,7 @@
 @media (prefers-reduced-motion: reduce){.fete-card{animation:none}}
 /* Célébration : confettis au-dessus de tout, sans gêner les touchers */
 .confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:200}
-.tfam-row.six{grid-template-columns:repeat(3,1fr);gap:10px 4px}
+.tfam-row.six{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 4px}
 /* Départs réguliers (cordes, callisthénie) : X par départ, toutes les Y, pendant Z */
 .dep-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .dep-grid .field>span{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

@@ -5,6 +5,7 @@ import { renderAdmin } from "../pages/admin.js";
 import { lsSet } from "./install.js";
 import { SOC, otherOf } from "../amis/index.js";
 import { acceptedFriends, loadFeed } from "../social/index.js";
+import { t } from "./i18n.js";
 
 /* ============================================================
    Mes données : export (droit d'accès et de portabilité)
@@ -16,7 +17,7 @@ function downloadJSON(obj, name) {
   setTimeout(() => URL.revokeObjectURL(a.href), 60000);
 }
 async function exportMyData(btn) {
-  btn.disabled = true; const label = btn.textContent; btn.textContent = "Préparation…";
+  btn.disabled = true; const label = btn.textContent; btn.textContent = t("profil.export.preparation");
   try {
     const all = async name => { const o = {}; (await getDocs(subCol(name))).forEach(d => { o[d.id] = d.data(); }); return o; };
     const [seances, nutrition, photos] = await Promise.all([all("seances"), all("nutrition"), all("photos")]);
@@ -25,13 +26,13 @@ async function exportMyData(btn) {
       try { convs[(SOC.dir[otherOf(f)] || {}).pseudo || otherOf(f)] = (await getDocs(query(collection(db, "chats", pid, "messages"), orderBy("at"), limitToLast(500)))).docs.map(d => d.data()); } catch (x) { /* conversation indisponible */ }
     }
     downloadJSON({
-      app: "L'agenda du sportif", exportedAt: new Date().toISOString(), email: S.email, profil: S.profile,
+      app: "L'agenda du sportif", exportedAt: new Date().toISOString(), email: S.email, profil: S.profile, // i18n-ignore (données)
       seances, nutrition, photos, amis: acceptedFriends().map(u => (SOC.dir[u] || {}).pseudo || u),
       reactionsRecues: SOC.myReacts, commentairesRecus: SOC.myComments, conversations: convs,
       defis: (SOC.challenges || []).map(({ id, ...c }) => c)
-    }, "mes-donnees-agenda-du-sportif.json");
-    btn.textContent = "✓ Données téléchargées";
-  } catch (x) { btn.textContent = "Échec, réessaie"; }
+    }, t("profil.export.fichier") + ".json");
+    btn.textContent = t("profil.export.ok");
+  } catch (x) { btn.textContent = t("commun.echecReessaie"); }
   setTimeout(() => { btn.disabled = false; btn.textContent = label; }, 4000);
 }
 $("exportBtn").onclick = e => exportMyData(e.currentTarget);
@@ -43,14 +44,14 @@ async function adminBackup(btn) {
   try {
     let i = 0;
     for (const m of users) {
-      btn.textContent = `Sauvegarde… ${++i} / ${users.length}`;
+      btn.textContent = t("admin.sauvegardeEnCours", { i: ++i, n: users.length });
       const get = async name => { const o = {}; (await getDocs(subCol(name, m.id))).forEach(d => { o[d.id] = d.data(); }); return o; };
       const { id, ...profil } = m;
       out.users[id] = { profil, seances: await get("seances"), nutrition: await get("nutrition") };
     }
-    downloadJSON(out, "sauvegarde-agenda-du-sportif-" + todayK() + ".json");
-    lsSet("last-backup", Date.now()); btn.textContent = "✓ Sauvegarde téléchargée";
-  } catch (x) { btn.textContent = "Échec, réessaie"; }
+    downloadJSON(out, t("admin.sauvegardeFichier", { date: todayK() }) + ".json");
+    lsSet("last-backup", Date.now()); btn.textContent = t("admin.sauvegardeOk");
+  } catch (x) { btn.textContent = t("commun.echecReessaie"); }
   setTimeout(() => { btn.disabled = false; btn.textContent = label; renderAdmin(); }, 4000);
 }
 // Hors connexion : petit bandeau discret sur tous les écrans (les données restent enregistrées sur le téléphone).

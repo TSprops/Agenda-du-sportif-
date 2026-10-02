@@ -3,6 +3,7 @@ import { libFind } from "./bibliotheque.js";
 import { cordesOf, lastCordes } from "./cordes.js";
 import { moveOf } from "../comment-faire/index.js";
 import { $, S, esc, nf } from "../commun/core.js";
+import { t } from "../commun/i18n.js";
 import { norm } from "../pages/faq.js";
 import { doneSet, shortDate } from "../idees/index.js";
 import { changed, hyroxEx, hyroxStation, renderSheet, restOf } from "../seances/index.js";
@@ -46,8 +47,8 @@ export function kgSuggestion(ex) {
 }
 export function kgSuggestHTML(ex, i) {
   const g = kgSuggestion(ex); if (!g) return "";
-  return `<span class="kg-tip-t">💡 Tout réussi à ${esc(nf.format(g.from))} kg la dernière fois : essaie <b>${esc(nf.format(g.kg))} kg</b></span>`
-    + `<button class="kg-tip-b" data-a="kg-up" data-ex="${i}" data-kg="${g.kg}" data-from="${g.from}">Appliquer</button>`;
+  return `<span class="kg-tip-t">${t("derniereFois.suggestion", { de: esc(nf.format(g.from)), kg: `<b>${esc(nf.format(g.kg))} kg</b>` })}</span>`
+    + `<button class="kg-tip-b" data-a="kg-up" data-ex="${i}" data-kg="${g.kg}" data-from="${g.from}">${t("derniereFois.appliquer")}</button>`;
 }
 // Pré-remplit les séries avec celles de la dernière fois (poids repris, répétitions en objectif).
 function prefillFromLast(ex, before) {

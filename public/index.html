@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>AS Sport · L’agenda du sportif</title>
-<meta name="description" content="Note tes séances de musculation, ta nutrition et suis tes progrès.">
+<title data-i18n="app.titre">AS Sport · L’agenda du sportif</title>
+<meta name="description" data-i18n-content="app.description" content="Note tes séances de musculation, ta nutrition et suis tes progrès.">
 <meta name="theme-color" content="#0A0A0B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -17,19 +17,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
 <!-- Styles : dossier css/, chargés dans cet ordre (l'ordre compte). -->
-<link rel="stylesheet" href="css/01-theme.css?v=67">
-<link rel="stylesheet" href="css/02-accueil-seances.css?v=67">
-<link rel="stylesheet" href="css/03-nutrition-contact.css?v=67">
-<link rel="stylesheet" href="css/04-general.css?v=67">
-<link rel="stylesheet" href="css/05-course-crossfit.css?v=67">
-<link rel="stylesheet" href="css/06-apparence-progression.css?v=67">
-<link rel="stylesheet" href="css/07-amis.css?v=67">
-<link rel="stylesheet" href="css/08-bibliotheque-corps.css?v=67">
-<link rel="stylesheet" href="css/09-accueil-social.css?v=67">
-<link rel="stylesheet" href="css/10-comment-faire.css?v=67">
-<link rel="stylesheet" href="css/11-nouveautes-tutoriel.css?v=67">
-<link rel="stylesheet" href="css/12-barre-onglets.css?v=67">
-<link rel="stylesheet" href="css/13-accueil-profil-social.css?v=67">
+<link rel="stylesheet" href="css/01-theme.css?v=68">
+<link rel="stylesheet" href="css/02-accueil-seances.css?v=68">
+<link rel="stylesheet" href="css/03-nutrition-contact.css?v=68">
+<link rel="stylesheet" href="css/04-general.css?v=68">
+<link rel="stylesheet" href="css/05-course-crossfit.css?v=68">
+<link rel="stylesheet" href="css/06-apparence-progression.css?v=68">
+<link rel="stylesheet" href="css/07-amis.css?v=68">
+<link rel="stylesheet" href="css/08-bibliotheque-corps.css?v=68">
+<link rel="stylesheet" href="css/09-accueil-social.css?v=68">
+<link rel="stylesheet" href="css/10-comment-faire.css?v=68">
+<link rel="stylesheet" href="css/11-nouveautes-tutoriel.css?v=68">
+<link rel="stylesheet" href="css/12-barre-onglets.css?v=68">
+<link rel="stylesheet" href="css/13-accueil-profil-social.css?v=68">
 <script>
   // Déménagement : l'ancienne adresse (GitHub) renvoie vers la nouvelle (Firebase) quand MOVED vaut true.
   window.NEW_HOME = "https://agenda-du-sportif.web.app/";
@@ -44,7 +44,7 @@
     });
   }
   // Version de la page : doit correspondre à APP_VERSION dans js/commun/boot.js.
-  window.APP_PAGE_VERSION = "67";
+  window.APP_PAGE_VERSION = "68";
   // Comme une vraie application : pas de zoom avec deux doigts ni en tapant deux fois (Safari ignore parfois la balise viewport).
   ["gesturestart", "gesturechange", "gestureend"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
   document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -63,7 +63,11 @@
     function showRescue() {
       if (window.__appBooted || document.getElementById("rescue")) return;
       var d = document.createElement("div"); d.id = "rescue";
-      d.innerHTML = '<p>L’application met du temps à démarrer.</p><button type="button">Réparer et recharger</button><small>Tes données ne seront pas effacées.</small>';
+      // Textes dans la langue choisie (gardés par js/commun/i18n.js), en français la toute première fois.
+      var tx = { lent: "L’application met du temps à démarrer.", reparer: "Réparer et recharger", donnees: "Tes données ne seront pas effacées." };
+      try { var g = JSON.parse(localStorage.getItem("secours") || "null"); if (g) tx = g; } catch (e) { /* stockage bloqué */ }
+      d.innerHTML = '<p></p><button type="button"></button><small></small>';
+      d.querySelector("p").textContent = tx.lent; d.querySelector("button").textContent = tx.reparer; d.querySelector("small").textContent = tx.donnees;
       d.querySelector("button").onclick = repair;
       document.body.appendChild(d);
     }
@@ -71,14 +75,14 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=67"></script>
+<script type="module" src="app.js?v=68"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->
 <div class="setup" id="v-setup" hidden>
-  <span class="onair" style="align-self:flex-start"><i></i>Configuration</span>
-  <h1 class="vtitle" style="margin:0">Firebase n’est pas encore configuré</h1>
-  <p>Colle le bloc <code>firebaseConfig</code> de ta console Firebase dans <code>public/firebase-config.js</code>, puis redéploie. Le fichier README.md explique chaque étape.</p>
+  <span class="onair" style="align-self:flex-start" data-i18n="config.badge"><i></i>Configuration</span>
+  <h1 class="vtitle" style="margin:0" data-i18n="config.titre">Firebase n’est pas encore configuré</h1>
+  <p data-i18n-html="config.texte">Colle le bloc <code>firebaseConfig</code> de ta console Firebase dans <code>public/firebase-config.js</code>, puis redéploie. Le fichier README.md explique chaque étape.</p>
 </div>
 <!-- ============ CHARGEMENT ============ -->
 <main class="app view splash" id="v-splash">
@@ -86,83 +90,83 @@
   <div class="home-head splash-brand">
     <img class="splash-logo" src="icons/logo.svg" alt="" width="112" height="112">
     <h1 class="brand-title"><span>AS</span> Sport</h1>
-    <p class="brand-sub">L’agenda du sportif</p>
+    <p class="brand-sub" data-i18n="app.devise">L’agenda du sportif</p>
   </div>
-  <span class="onair splash-onair"><i></i>Chargement</span>
+  <span class="onair splash-onair" data-i18n="commun.chargement"><i></i>Chargement</span>
 </main>
 
 <!-- ============ CONNEXION ============ -->
 <main class="app view login" id="v-login" hidden>
   <div class="home-head">
-    <span class="onair"><i></i>Bienvenue</span>
+    <span class="onair" data-i18n="connexion.bienvenue"><i></i>Bienvenue</span>
     <h1 class="brand-title"><span>AS</span> Sport</h1>
-    <p class="brand-sub">L’agenda du sportif</p>
-    <p class="hint">Séances, nutrition et progrès, au même endroit.</p>
+    <p class="brand-sub" data-i18n="app.devise">L’agenda du sportif</p>
+    <p class="hint" data-i18n="connexion.accroche">Séances, nutrition et progrès, au même endroit.</p>
   </div>
   <section class="card">
     <div class="tabs" role="tablist">
-      <button type="button" role="tab" id="tabIn" aria-selected="true">Connexion</button>
-      <button type="button" role="tab" id="tabUp" aria-selected="false">Créer un compte</button>
+      <button type="button" role="tab" id="tabIn" aria-selected="true" data-i18n="connexion.ongletConnexion">Connexion</button>
+      <button type="button" role="tab" id="tabUp" aria-selected="false" data-i18n="connexion.ongletInscription">Créer un compte</button>
     </div>
     <form id="authForm" autocomplete="on" style="display:flex;flex-direction:column;gap:12px">
-      <label class="field"><span>E-mail</span><input id="auEmail" type="email" inputmode="email" autocomplete="email" required placeholder="prenom@exemple.fr"></label>
-      <label class="field"><span>Mot de passe</span><input id="auPass" type="password" autocomplete="current-password" required minlength="6" placeholder="6 caractères minimum"></label>
+      <label class="field"><span data-i18n="connexion.email">E-mail</span><input id="auEmail" type="email" inputmode="email" autocomplete="email" required placeholder="prenom@exemple.fr" data-i18n-placeholder="commun.emailExemple"></label>
+      <label class="field"><span data-i18n="connexion.motDePasse">Mot de passe</span><input id="auPass" type="password" autocomplete="current-password" required minlength="6" placeholder="6 caractères minimum" data-i18n-placeholder="connexion.motDePasseMin"></label>
       <p class="err" id="auErr" hidden></p>
       <p class="ok-msg" id="auOk" hidden></p>
-      <button class="btn primary" type="submit" id="auSubmit">Se connecter</button>
-      <button class="linkish" type="button" id="auForgot">Mot de passe oublié ?</button>
+      <button class="btn primary" type="submit" id="auSubmit" data-i18n="connexion.seConnecter">Se connecter</button>
+      <button class="linkish" type="button" id="auForgot" data-i18n="connexion.oublie">Mot de passe oublié ?</button>
     </form>
   </section>
-  <p class="legal-links"><a href="conditions.html">Conditions d’utilisation</a> · <a href="confidentialite.html">Confidentialité</a></p>
+  <p class="legal-links"><a href="conditions.html" data-i18n="legal.conditions">Conditions d’utilisation</a> · <a href="confidentialite.html" data-i18n="legal.confidentialite">Confidentialité</a></p>
 </main>
 
 <!-- ============ PROFIL À COMPLÉTER (1re connexion) ============ -->
 <main class="app view login" id="v-onboard" hidden>
-  <div class="home-head"><span class="onair"><i></i>Dernière étape</span><h1 class="brand-title">Ton <span>profil</span></h1></div>
+  <div class="home-head"><span class="onair" data-i18n="inscription.badge"><i></i>Dernière étape</span><h1 class="brand-title" data-i18n-html="inscription.titre">Ton <span>profil</span></h1></div>
   <form class="card" id="signup" autocomplete="off">
-    <div style="display:flex;flex-direction:column;gap:8px"><h2 class="vtitle" style="font-size:30px;margin:0">Présente-toi</h2><p class="hint">Ton compte t’est attribué personnellement : tu retrouves toutes tes données à chaque connexion, sur tous tes appareils.</p></div>
+    <div style="display:flex;flex-direction:column;gap:8px"><h2 class="vtitle" style="font-size:30px;margin:0" data-i18n="inscription.presenteToi">Présente-toi</h2><p class="hint" data-i18n="inscription.intro">Ton compte t’est attribué personnellement : tu retrouves toutes tes données à chaque connexion, sur tous tes appareils.</p></div>
     <div id="suFields"></div>
-    <label class="terms"><input type="checkbox" id="suTerms"><span>J’ai au moins 15 ans et j’accepte les <a href="conditions.html" target="_blank" rel="noopener">conditions d’utilisation</a> et la <a href="confidentialite.html" target="_blank" rel="noopener">politique de confidentialité</a>.</span></label>
+    <label class="terms"><input type="checkbox" id="suTerms"><span data-i18n-html="inscription.accepte">J’ai au moins 15 ans et j’accepte les <a href="conditions.html" target="_blank" rel="noopener">conditions d’utilisation</a> et la <a href="confidentialite.html" target="_blank" rel="noopener">politique de confidentialité</a>.</span></label>
     <p class="err" id="suErr" hidden></p>
-    <button class="btn primary" type="submit">Terminer mon inscription</button>
+    <button class="btn primary" type="submit" data-i18n="inscription.terminer">Terminer mon inscription</button>
   </form>
 </main>
 
 <!-- ============ ACCUEIL ============ -->
 <main class="app home view" id="v-home" hidden>
   <div class="install-banner" id="installBanner" hidden>
-    <button type="button" class="ib-open" id="installBannerOpen"><span aria-hidden="true">📲</span><span><b>Installe l’app sur ton téléphone</b><small>Accès en 1 toucher, en plein écran</small></span></button>
-    <button type="button" class="ib-x" id="installBannerClose" aria-label="Masquer ce message">✕</button>
+    <button type="button" class="ib-open" id="installBannerOpen"><span aria-hidden="true">📲</span><span><b data-i18n="installation.banniereTitre">Installe l’app sur ton téléphone</b><small data-i18n="installation.banniereTexte">Accès en 1 toucher, en plein écran</small></span></button>
+    <button type="button" class="ib-x" id="installBannerClose" aria-label="Masquer ce message" data-i18n-aria-label="commun.masquerMessage">✕</button>
   </div>
   <header class="home-head">
     <p class="home-date" id="homeDate"></p>
     <h1 class="brand-title"><span>AS</span> Sport</h1>
-    <p class="brand-sub">L’agenda du sportif</p>
+    <p class="brand-sub" data-i18n="app.devise">L’agenda du sportif</p>
   </header>
   <section id="homeStreak" class="home-streak"></section>
   <div class="dash" id="homeDash"></div>
   <div class="home-links" id="homeLinks">
-    <button class="home-link" data-go="tutos"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.6M12 16.8h.01"/></svg>Tutoriel</button>
-    <button class="home-link" data-go="contact"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>Contact</button>
+    <button class="home-link" data-go="tutos" data-i18n="tutoriel.titre"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.6M12 16.8h.01"/></svg>Tutoriel</button>
+    <button class="home-link" data-go="contact" data-i18n="contact.titre"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>Contact</button>
   </div>
   <p class="note-mode" id="mode"></p>
 </main>
 
 <!-- ============ SÉANCES ============ -->
 <main class="app view" id="v-seances" hidden>
-  <button class="back" data-go="go">‹ Séances</button>
+  <button class="back" data-go="go">‹ <span data-i18n="nav.seances">Séances</span></button>
   <header class="top" style="margin-top:-14px">
-    <div><div class="eyebrow-s">Séances</div><h1 class="month" id="monthTitle"></h1></div>
-    <div class="nav"><button id="prev" aria-label="Mois précédent">‹</button><button id="next" aria-label="Mois suivant">›</button></div>
+    <div><div class="eyebrow-s" data-i18n="nav.seances">Séances</div><h1 class="month" id="monthTitle"></h1></div>
+    <div class="nav"><button id="prev" aria-label="Mois précédent" data-i18n-aria-label="commun.moisPrecedent">‹</button><button id="next" aria-label="Mois suivant" data-i18n-aria-label="commun.moisSuivant">›</button></div>
   </header>
-  <section class="cal" id="seancesCal" aria-label="Calendrier">
-    <div class="dow"><span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span></div>
+  <section class="cal" id="seancesCal" aria-label="Calendrier" data-i18n-aria-label="seances.calendrier">
+    <div class="dow"><span data-i18n="commun.joursCourts.lun">Lun</span><span data-i18n="commun.joursCourts.mar">Mar</span><span data-i18n="commun.joursCourts.mer">Mer</span><span data-i18n="commun.joursCourts.jeu">Jeu</span><span data-i18n="commun.joursCourts.ven">Ven</span><span data-i18n="commun.joursCourts.sam">Sam</span><span data-i18n="commun.joursCourts.dim">Dim</span></div>
     <div class="grid" id="grid"></div>
     <div class="legend" id="legend"></div>
   </section>
   <div class="cta">
-    <button class="btn primary" id="today">Noter la séance du jour</button>
-    <button class="btn" id="types">Types</button>
+    <button class="btn primary" id="today" data-i18n="seances.noterDuJour">Noter la séance du jour</button>
+    <button class="btn" id="types" data-i18n="seances.types">Types</button>
   </div>
   <section>
     <h2 class="h2" id="sumTitle"></h2>
@@ -173,312 +177,317 @@
 
 <!-- ============ NUTRITION ============ -->
 <main class="app view" id="v-nutrition" hidden>
-  <button class="back" data-go="home">‹ Accueil</button>
-  <h1 class="vtitle">Nutrition</h1>
+  <button class="back" data-go="home">‹ <span data-i18n="nav.accueil">Accueil</span></button>
+  <h1 class="vtitle" data-i18n="nutrition.titre">Nutrition</h1>
   <div class="menu">
-    <button class="menu-card" data-go="complements"><span class="mark" id="nutCpMark">0</span><span class="mc"><b>Compléments</b><span class="s" id="nutCpSub"></span></span><span class="arrow" aria-hidden="true">›</span></button>
-    <button class="menu-card" data-go="creatine"><span class="mark" id="nutCrMark">–</span><span class="mc"><b>Créatine</b><span class="s" id="nutCrSub"></span></span><span class="arrow" aria-hidden="true">›</span></button>
+    <button class="menu-card" data-go="complements"><span class="mark" id="nutCpMark">0</span><span class="mc"><b data-i18n="complements.titre">Compléments</b><span class="s" id="nutCpSub"></span></span><span class="arrow" aria-hidden="true">›</span></button>
+    <button class="menu-card" data-go="creatine"><span class="mark" id="nutCrMark">–</span><span class="mc"><b data-i18n="creatine.titre">Créatine</b><span class="s" id="nutCrSub"></span></span><span class="arrow" aria-hidden="true">›</span></button>
   </div>
 </main>
 
 <main class="app view" id="v-complements" hidden>
-  <button class="back" data-go="nutrition">‹ Nutrition</button>
-  <h1 class="vtitle">Compléments</h1>
-  <div class="daynav"><button id="cpPrev" aria-label="Jour précédent">‹</button><span id="cpDate"></span><button id="cpNext" aria-label="Jour suivant">›</button></div>
-  <section><h2 class="h2">Ajout rapide</h2><div class="chips" id="cpChips"></div></section>
+  <button class="back" data-go="nutrition">‹ <span data-i18n="nav.nutrition">Nutrition</span></button>
+  <h1 class="vtitle" data-i18n="complements.titre">Compléments</h1>
+  <div class="daynav"><button id="cpPrev" aria-label="Jour précédent" data-i18n-aria-label="commun.jourPrecedent">‹</button><span id="cpDate"></span><button id="cpNext" aria-label="Jour suivant" data-i18n-aria-label="commun.jourSuivant">›</button></div>
+  <section><h2 class="h2" data-i18n="complements.ajoutRapide">Ajout rapide</h2><div class="chips" id="cpChips"></div></section>
   <form class="card" id="cpForm" autocomplete="off">
-    <div class="lbl">Autre complément</div>
+    <div class="lbl" data-i18n="complements.autre">Autre complément</div>
     <div class="two">
-      <label class="field"><span>Nom</span><input id="cpName" list="cpList" placeholder="ex. Whey" required></label>
-      <label class="field"><span>Dose</span><input id="cpDose" placeholder="ex. 30 g"></label>
+      <label class="field"><span data-i18n="complements.nom">Nom</span><input id="cpName" list="cpList" placeholder="ex. Whey" data-i18n-placeholder="complements.nomExemple" required></label>
+      <label class="field"><span data-i18n="complements.dose">Dose</span><input id="cpDose" placeholder="ex. 30 g" data-i18n-placeholder="complements.doseExemple"></label>
     </div>
     <datalist id="cpList"></datalist>
-    <button class="btn primary" type="submit">Ajouter</button>
+    <button class="btn primary" type="submit" data-i18n="commun.ajouter">Ajouter</button>
   </form>
-  <section><h2 class="h2" id="cpListTitle">Pris ce jour</h2><div class="card" id="cpItems" style="gap:0"></div></section>
+  <section><h2 class="h2" id="cpListTitle" data-i18n="complements.prisCeJour">Pris ce jour</h2><div class="card" id="cpItems" style="gap:0"></div></section>
 </main>
 
 <main class="app view" id="v-creatine" hidden>
-  <button class="back" data-go="nutrition">‹ Nutrition</button>
-  <h1 class="vtitle">Créatine</h1>
+  <button class="back" data-go="nutrition">‹ <span data-i18n="nav.nutrition">Nutrition</span></button>
+  <h1 class="vtitle" data-i18n="creatine.titre">Créatine</h1>
   <div class="crea-wrap"><button class="crea-btn" id="creaBtn"></button><p class="hint" id="creaHint" style="text-align:center"></p></div>
   <div class="stats" id="creaStats"></div>
-  <section class="cal" aria-label="Calendrier créatine">
+  <section class="cal" aria-label="Calendrier créatine" data-i18n-aria-label="creatine.calendrier">
     <div class="top" style="padding:0 4px 10px;align-items:center">
-      <b id="creaMonth" style="font-family:var(--display);font-size:22px;text-transform:uppercase;white-space:nowrap"></b>
-      <div class="nav"><button id="crPrev" aria-label="Mois précédent">‹</button><button id="crNext" aria-label="Mois suivant">›</button></div>
+      <b id="creaMonth" style="font-family:var(--display);font-size:clamp(18px,6vw,22px);text-transform:uppercase;min-width:0;line-height:1.05;text-wrap:balance"></b>
+      <div class="nav"><button id="crPrev" aria-label="Mois précédent" data-i18n-aria-label="commun.moisPrecedent">‹</button><button id="crNext" aria-label="Mois suivant" data-i18n-aria-label="commun.moisSuivant">›</button></div>
     </div>
-    <div class="dow"><span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span></div>
+    <div class="dow"><span data-i18n="commun.joursCourts.lun">Lun</span><span data-i18n="commun.joursCourts.mar">Mar</span><span data-i18n="commun.joursCourts.mer">Mer</span><span data-i18n="commun.joursCourts.jeu">Jeu</span><span data-i18n="commun.joursCourts.ven">Ven</span><span data-i18n="commun.joursCourts.sam">Sam</span><span data-i18n="commun.joursCourts.dim">Dim</span></div>
     <div class="grid" id="creaGrid"></div>
-    <p class="hint" style="padding:10px 4px 0">Oublié un autre jour ? Touche la date pour la cocher ou la décocher.</p>
+    <p class="hint" style="padding:10px 4px 0" data-i18n="creatine.oublie">Oublié un autre jour ? Touche la date pour la cocher ou la décocher.</p>
   </section>
-  <label class="card dose" for="creaDose"><span><b>Dose quotidienne</b><br><span class="hint">en grammes</span></span><input id="creaDose" inputmode="decimal" value="5"></label>
+  <label class="card dose" for="creaDose"><span><b data-i18n="creatine.doseQuotidienne">Dose quotidienne</b><br><span class="hint" data-i18n="creatine.enGrammes">en grammes</span></span><input id="creaDose" inputmode="decimal" value="5"></label>
 </main>
 
 <!-- ============ CROSSFIT ============ -->
 <!-- ============ SÉANCES TYPES ============ -->
 <main class="app view" id="v-types" hidden>
-  <button class="back" data-go="go">‹ Séances</button>
-  <h1 class="vtitle">Idées de séances</h1>
-  <p class="hint" style="margin-top:-8px">Choisis une activité pour voir des idées de séances à essayer.</p>
+  <button class="back" data-go="go">‹ <span data-i18n="nav.seances">Séances</span></button>
+  <h1 class="vtitle" data-i18n="idees.titre">Idées de séances</h1>
+  <p class="hint" style="margin-top:-8px" data-i18n="idees.intro">Choisis une activité pour voir des idées de séances à essayer.</p>
   <div class="disc-grid" id="typesGrid"></div>
 </main>
 <main class="app view" id="v-hub" hidden>
-  <button class="back" data-go="types">‹ Idées de séances</button>
+  <button class="back" data-go="types">‹ <span data-i18n="nav.idees">Idées de séances</span></button>
   <h1 class="vtitle" id="hubTitle"></h1>
   <div id="hubBody" style="display:flex;flex-direction:column;gap:22px"></div>
 </main>
 
 <!-- ============ LET'S GO ============ -->
 <main class="app view" id="v-go" hidden>
-  <h1 class="vtitle">Séances</h1>
+  <h1 class="vtitle" data-i18n="nav.seances">Séances</h1>
   <div id="goBody" style="display:flex;flex-direction:column;gap:18px"></div>
 </main>
 <main class="app view" id="v-routines" hidden>
-  <button class="back" data-go="go">‹ Séances</button>
-  <h1 class="vtitle">Mes routines</h1>
+  <button class="back" data-go="go">‹ <span data-i18n="nav.seances">Séances</span></button>
+  <h1 class="vtitle" data-i18n="nav.routines">Mes routines</h1>
   <div id="routinesBody" style="display:flex;flex-direction:column;gap:14px"></div>
 </main>
 <main class="app view" id="v-routine" hidden>
-  <button class="back" data-go="routines">‹ Mes routines</button>
-  <h1 class="vtitle" id="routineTitle">Routine</h1>
+  <button class="back" data-go="routines">‹ <span data-i18n="nav.routines">Mes routines</span></button>
+  <h1 class="vtitle" id="routineTitle" data-i18n="routines.routine">Routine</h1>
   <div id="routineBody" style="display:flex;flex-direction:column;gap:14px"></div>
 </main>
 <main class="app view" id="v-programs" hidden>
-  <button class="back" data-go="go">‹ Séances</button>
-  <h1 class="vtitle">Programmes</h1>
+  <button class="back" data-go="go">‹ <span data-i18n="nav.seances">Séances</span></button>
+  <h1 class="vtitle" data-i18n="programmes.titre">Programmes</h1>
   <div id="programsBody" style="display:flex;flex-direction:column;gap:16px"></div>
 </main>
 <main class="app view" id="v-muscles" hidden>
-  <button class="back" data-go="home">‹ Accueil</button>
-  <h1 class="vtitle">Carte musculaire</h1>
+  <button class="back" data-go="home">‹ <span data-i18n="nav.accueil">Accueil</span></button>
+  <h1 class="vtitle" data-i18n="muscles.titre">Carte musculaire</h1>
   <div id="musBody" style="display:flex;flex-direction:column;gap:16px"></div>
 </main>
 <main class="app view" id="v-recap" hidden>
-  <button class="back" data-go="home">‹ Accueil</button>
-  <h1 class="vtitle">Bilan du mois</h1>
-  <div class="daynav"><button id="recapPrev" aria-label="Mois précédent">‹</button><span id="recapMonth"></span><button id="recapNext" aria-label="Mois suivant">›</button></div>
+  <button class="back" data-go="home">‹ <span data-i18n="nav.accueil">Accueil</span></button>
+  <h1 class="vtitle" data-i18n="bilan.titre">Bilan du mois</h1>
+  <div class="daynav"><button id="recapPrev" aria-label="Mois précédent" data-i18n-aria-label="commun.moisPrecedent">‹</button><span id="recapMonth"></span><button id="recapNext" aria-label="Mois suivant" data-i18n-aria-label="commun.moisSuivant">›</button></div>
   <div id="recapBody" style="display:flex;flex-direction:column;gap:12px"></div>
 </main>
 <main class="app view" id="v-trophees" hidden>
-  <button class="back" data-go="home">‹ Accueil</button>
-  <h1 class="vtitle">Mes trophées</h1>
+  <button class="back" data-go="home">‹ <span data-i18n="nav.accueil">Accueil</span></button>
+  <h1 class="vtitle" data-i18n="trophees.titre">Mes trophées</h1>
   <div id="trophyBody" style="display:flex;flex-direction:column;gap:16px"></div>
 </main>
 
 <!-- ============ SOCIAL ============ -->
 <main class="app view" id="v-social" hidden>
   <header class="soc-head">
-    <h1 class="vtitle">Social</h1>
-    <button type="button" class="round-btn" data-go="friends" aria-label="Rechercher des amis"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
-    <button type="button" class="round-btn" data-go="messages" aria-label="Messages"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><b class="tab-dot" id="socMsgDot" hidden></b></button>
+    <h1 class="vtitle" data-i18n="social.titre">Social</h1>
+    <button type="button" class="round-btn" data-go="friends" aria-label="Rechercher des amis" data-i18n-aria-label="social.rechercherAmis"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
+    <button type="button" class="round-btn" data-go="messages" aria-label="Messages" data-i18n-aria-label="messages.titre"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><b class="tab-dot" id="socMsgDot" hidden></b></button>
   </header>
   <div id="socialBody" style="display:flex;flex-direction:column;gap:18px"></div>
   <div id="feedBody" style="display:flex;flex-direction:column;gap:14px"></div>
 </main>
 <main class="app view" id="v-messages" hidden>
-  <button class="back" data-go="social">‹ Social</button>
-  <h1 class="vtitle">Messages</h1>
+  <button class="back" data-go="social">‹ <span data-i18n="nav.social">Social</span></button>
+  <h1 class="vtitle" data-i18n="messages.titre">Messages</h1>
   <div id="msgsBody" style="display:flex;flex-direction:column;gap:18px"></div>
 </main>
 <main class="app view" id="v-challenges" hidden>
-  <button class="back" data-go="social">‹ Social</button>
-  <h1 class="vtitle">Défis</h1>
+  <button class="back" data-go="social">‹ <span data-i18n="nav.social">Social</span></button>
+  <h1 class="vtitle" data-i18n="defis.titre">Défis</h1>
   <div id="chBody" style="display:flex;flex-direction:column;gap:18px"></div>
 </main>
 <main class="app view" id="v-challenge" hidden>
-  <button class="back" data-go="challenges">‹ Défis</button>
-  <h1 class="vtitle" id="chdTitle">Défi</h1>
+  <button class="back" data-go="challenges">‹ <span data-i18n="nav.defis">Défis</span></button>
+  <h1 class="vtitle" id="chdTitle" data-i18n="defis.defi">Défi</h1>
   <div id="chdBody" style="display:flex;flex-direction:column;gap:16px"></div>
 </main>
 <main class="app view" id="v-ranks" hidden>
-  <button class="back" data-go="social">‹ Social</button>
-  <h1 class="vtitle">Classements</h1>
+  <button class="back" data-go="social">‹ <span data-i18n="nav.social">Social</span></button>
+  <h1 class="vtitle" data-i18n="classements.titre">Classements</h1>
   <div id="ranksBody" style="display:flex;flex-direction:column;gap:14px"></div>
 </main>
 
 <!-- ============ AMIS ============ -->
 <main class="app view" id="v-friends" hidden>
-  <button class="back" data-go="social">‹ Social</button>
-  <h1 class="vtitle">Amis</h1>
+  <button class="back" data-go="social">‹ <span data-i18n="nav.social">Social</span></button>
+  <h1 class="vtitle" data-i18n="amis.titre">Amis</h1>
   <div id="friendsBody" style="display:flex;flex-direction:column;gap:18px"></div>
 </main>
 <main class="app view" id="v-friend" hidden>
-  <button class="back" data-go="friends">‹ Amis</button>
+  <button class="back" data-go="friends">‹ <span data-i18n="nav.amis">Amis</span></button>
   <h1 class="vtitle" id="friendName"></h1>
   <div id="friendBody" style="display:flex;flex-direction:column;gap:18px"></div>
 </main>
 <main class="view chat-view" id="v-chat" hidden>
   <header class="chat-head">
-    <button class="back" id="chatBack" aria-label="Retour">‹</button>
+    <button class="back" id="chatBack" aria-label="Retour" data-i18n-aria-label="commun.retour">‹</button>
     <button type="button" class="chat-who" id="chatWho"></button>
-    <button type="button" class="icon-btn" id="chatMore" aria-label="Plus d’options">•••</button>
+    <button type="button" class="icon-btn" id="chatMore" aria-label="Plus d’options" data-i18n-aria-label="conversation.plusOptions">•••</button>
   </header>
   <div class="chat-menu card" id="chatMenu" hidden>
-    <button type="button" class="btn" data-cm="profile">Voir ses séances</button>
-    <button type="button" class="btn" data-cm="report">Signaler la conversation</button>
-    <button type="button" class="btn ghost-danger" data-cm="block">Bloquer</button>
+    <button type="button" class="btn" data-cm="profile" data-i18n="conversation.voirSeances">Voir ses séances</button>
+    <button type="button" class="btn" data-cm="report" data-i18n="conversation.signaler">Signaler la conversation</button>
+    <button type="button" class="btn ghost-danger" data-cm="block" data-i18n="conversation.bloquer">Bloquer</button>
   </div>
   <div class="chat-msgs" id="chatMsgs"></div>
   <form class="chat-form" id="chatForm" autocomplete="off">
-    <input id="chatInput" placeholder="Écris un message…" maxlength="1000" aria-label="Ton message">
-    <button class="btn primary" type="submit" aria-label="Envoyer">➤</button>
+    <input id="chatInput" placeholder="Écris un message…" maxlength="1000" aria-label="Ton message" data-i18n-placeholder="conversation.ecrire" data-i18n-aria-label="conversation.tonMessage">
+    <button class="btn primary" type="submit" aria-label="Envoyer" data-i18n-aria-label="commun.envoyer">➤</button>
   </form>
 </main>
 
 <!-- ============ MES RECORDS ============ -->
 <main class="app view" id="v-records" hidden>
-  <button class="back" data-go="home">‹ Accueil</button>
-  <h1 class="vtitle">Mes records</h1>
-  <p class="hint" style="margin-top:-8px">Choisis une catégorie pour voir et ajouter tes records.</p>
+  <button class="back" data-go="home">‹ <span data-i18n="nav.accueil">Accueil</span></button>
+  <h1 class="vtitle" data-i18n="nav.records">Mes records</h1>
+  <p class="hint" style="margin-top:-8px" data-i18n="records.intro">Choisis une catégorie pour voir et ajouter tes records.</p>
   <div class="disc-grid" id="recGrid"></div>
 </main>
 <main class="app view" id="v-rec" hidden>
-  <button class="back" data-go="records">‹ Mes records</button>
+  <button class="back" data-go="records">‹ <span data-i18n="nav.records">Mes records</span></button>
   <h1 class="vtitle" id="recTitle"></h1>
   <div id="recBody" style="display:flex;flex-direction:column;gap:18px"></div>
 </main>
 
 <!-- ============ MA PROGRESSION ============ -->
 <main class="app view" id="v-progress" hidden>
-  <button class="back" data-go="home">‹ Accueil</button>
-  <h1 class="vtitle">Ma progression</h1>
-  <p class="hint" style="margin-top:-8px">Choisis une catégorie pour voir tes courbes, séance après séance.</p>
+  <button class="back" data-go="home">‹ <span data-i18n="nav.accueil">Accueil</span></button>
+  <h1 class="vtitle" data-i18n="nav.progression">Ma progression</h1>
+  <p class="hint" style="margin-top:-8px" data-i18n="progression.intro">Choisis une catégorie pour voir tes courbes, séance après séance.</p>
   <div class="disc-grid" id="progGrid"></div>
 </main>
 <main class="app view" id="v-prog" hidden>
-  <button class="back" data-go="progress">‹ Ma progression</button>
+  <button class="back" data-go="progress">‹ <span data-i18n="nav.progression">Ma progression</span></button>
   <h1 class="vtitle" id="progTitle"></h1>
   <div id="progBody" style="display:flex;flex-direction:column;gap:18px"></div>
 </main>
 
 <main class="app view" id="v-crossfit" hidden>
-  <button class="back" id="cfBack" data-go="types">‹ Idées de séances</button>
+  <button class="back" id="cfBack" data-go="types">‹ <span data-i18n="nav.idees">Idées de séances</span></button>
   <h1 class="vtitle" id="cfTitle">CrossFit</h1>
-  <button class="btn primary cf-btn" id="cfToday">Noter mon WOD du jour</button>
+  <button class="btn primary cf-btn" id="cfToday" data-i18n="crossfit.noterWod">Noter mon WOD du jour</button>
   <div class="stats" id="cfStats"></div>
   <section id="cfPrSec">
-    <h2 class="h2">Mes records (1RM)</h2>
+    <h2 class="h2" data-i18n="crossfit.mesRecords">Mes records (1RM)</h2>
     <div class="card" id="cfPrs" style="gap:0;padding-block:4px"></div>
   </section>
   <section>
-    <h2 class="h2" id="cfBenchTitle">WOD de référence</h2>
-    <p class="hint" style="margin:-4px 0 12px">Les « Girls » et les « Hero WODs » : refais-les régulièrement pour mesurer tes progrès. Charges homme / femme.</p>
+    <h2 class="h2" id="cfBenchTitle" data-i18n="crossfit.wodReference">WOD de référence</h2>
+    <p class="hint" style="margin:-4px 0 12px" data-i18n="crossfit.wodReferenceTexte">Les « Girls » et les « Hero WODs » : refais-les régulièrement pour mesurer tes progrès. Charges homme / femme.</p>
     <div class="list" id="cfBench"></div>
   </section>
 </main>
 
 <!-- ============ TUTORIEL : REVOIR UNE PAGE ============ -->
 <main class="app view" id="v-tutos" hidden>
-  <button class="back" data-go="home">‹ Accueil</button>
-  <h1 class="vtitle">Tutoriel</h1>
-  <p class="hint" style="margin-top:-8px">Choisis une partie de l’app : on t’y emmène et on te la montre pas à pas.</p>
+  <button class="back" data-go="home">‹ <span data-i18n="nav.accueil">Accueil</span></button>
+  <h1 class="vtitle" data-i18n="tutoriel.titre">Tutoriel</h1>
+  <p class="hint" style="margin-top:-8px" data-i18n="tutoriel.intro">Choisis une partie de l’app : on t’y emmène et on te la montre pas à pas.</p>
   <div class="menu" id="tutosList"></div>
 </main>
 
 <!-- ============ CONTACT ============ -->
 <main class="app view" id="v-contact" hidden>
-  <button class="back" data-go="home">‹ Accueil</button>
-  <h1 class="vtitle">Contact</h1>
+  <button class="back" data-go="home">‹ <span data-i18n="nav.accueil">Accueil</span></button>
+  <h1 class="vtitle" data-i18n="contact.titre">Contact</h1>
   <div class="menu">
-    <button class="menu-card" data-go="contactform"><span class="mark ok">@</span><span class="mc"><b>Contactez-moi</b><span class="s">Aide, réclamation, idée ou problème : ton message arrive directement chez moi.</span></span><span class="arrow" aria-hidden="true">›</span></button>
+    <button class="menu-card" data-go="contactform"><span class="mark ok">@</span><span class="mc"><b data-i18n="contact.formTitre">Contactez-moi</b><span class="s" data-i18n="contact.formTexte">Aide, réclamation, idée ou problème : ton message arrive directement chez moi.</span></span><span class="arrow" aria-hidden="true">›</span></button>
   </div>
-  <section id="myMsgsWrap" hidden><h2 class="h2">Mes messages envoyés</h2><div class="card" id="myMsgs" style="gap:0"></div></section>
+  <section id="myMsgsWrap" hidden><h2 class="h2" data-i18n="contact.mesMessages">Mes messages envoyés</h2><div class="card" id="myMsgs" style="gap:0"></div></section>
 </main>
 
 <main class="app view" id="v-contactform" hidden>
-  <button class="back" data-go="contact">‹ Contact</button>
-  <h1 class="vtitle">Contactez-moi</h1>
+  <button class="back" data-go="contact">‹ <span data-i18n="nav.contact">Contact</span></button>
+  <h1 class="vtitle" data-i18n="contact.formTitre">Contactez-moi</h1>
   <form class="card" id="ctForm" autocomplete="off">
-    <div class="lbl">Objet</div>
-    <div class="chips" id="ctObjets" role="group" aria-label="Objet du message"></div>
-    <label class="field"><span>Ton message</span><textarea id="ctText" rows="7" placeholder="Explique-moi en quelques lignes…" style="min-height:150px;height:auto;padding-block:10px"></textarea></label>
-    <label class="field"><span>Ton e-mail pour la réponse (facultatif)</span><input id="ctMail" type="email" inputmode="email" placeholder="prenom@exemple.fr"></label>
+    <div class="lbl" data-i18n="contact.objet">Objet</div>
+    <div class="chips" id="ctObjets" role="group" aria-label="Objet du message" data-i18n-aria-label="contact.objetMessage"></div>
+    <label class="field"><span data-i18n="conversation.tonMessage">Ton message</span><textarea id="ctText" rows="7" placeholder="Explique-moi en quelques lignes…" data-i18n-placeholder="contact.explique" style="min-height:150px;height:auto;padding-block:10px"></textarea></label>
+    <label class="field"><span data-i18n="contact.emailReponse">Ton e-mail pour la réponse (facultatif)</span><input id="ctMail" type="email" inputmode="email" placeholder="prenom@exemple.fr" data-i18n-placeholder="commun.emailExemple"></label>
     <p class="err" id="ctErr" hidden></p>
-    <button class="btn primary" type="submit" id="ctSend">Envoyer</button>
+    <button class="btn primary" type="submit" id="ctSend" data-i18n="commun.envoyer">Envoyer</button>
   </form>
   <section class="card" id="ctDone" hidden style="text-align:center;align-items:center">
-    <span class="onair"><i></i>Envoyé</span>
-    <b style="font-size:18px">Message envoyé, merci !</b>
-    <p class="hint">Je le lis au plus vite. Tu retrouves tes messages et leur statut dans la page Contact.</p>
-    <button class="btn" data-go="home" style="align-self:stretch">Retour à l’accueil</button>
+    <span class="onair" data-i18n="contact.envoye"><i></i>Envoyé</span>
+    <b style="font-size:18px" data-i18n="contact.merci">Message envoyé, merci !</b>
+    <p class="hint" data-i18n="contact.merciTexte">Je le lis au plus vite. Tu retrouves tes messages et leur statut dans la page Contact.</p>
+    <button class="btn" data-go="home" style="align-self:stretch" data-i18n="contact.retourAccueil">Retour à l’accueil</button>
   </section>
 </main>
 
 <!-- ============ PROFIL ============ -->
 <!-- ============ PARTAGER MON PROFIL (code ami et QR code) ============ -->
 <main class="app view" id="v-share" hidden>
-  <button class="back" data-go="profile">‹ Profil</button>
-  <h1 class="vtitle">Partager mon profil</h1>
+  <button class="back" data-go="profile">‹ <span data-i18n="nav.profil">Profil</span></button>
+  <h1 class="vtitle" data-i18n="partage.titre">Partager mon profil</h1>
   <div id="shareBody" style="display:flex;flex-direction:column;gap:16px"></div>
 </main>
 
 <main class="app view" id="v-profile" hidden>
   <section class="pf-head" id="pfView"></section>
   <form class="card" id="pfForm" autocomplete="off" hidden>
-    <div class="lbl">Modifier mes informations</div>
+    <div class="lbl" data-i18n="profil.modifierInfos">Modifier mes informations</div>
     <div id="pfFields"></div>
     <p class="err" id="pfMsg" hidden></p>
-    <div class="grid2"><button class="btn" type="button" id="pfCancel">Annuler</button><button class="btn primary" type="submit">Enregistrer</button></div>
+    <div class="grid2"><button class="btn" type="button" id="pfCancel" data-i18n="commun.annuler">Annuler</button><button class="btn primary" type="submit" data-i18n="commun.enregistrer">Enregistrer</button></div>
   </form>
   <section class="card" id="themeCard">
-    <div class="lbl">Apparence</div>
-    <div class="field"><span>Couleur principale</span><div class="swatches" id="accentList" role="group" aria-label="Couleur principale"></div></div>
-    <div class="field"><span>Mode</span><div class="modes" id="bgList" role="group" aria-label="Mode d’affichage"></div></div>
+    <div class="lbl" data-i18n="profil.apparence">Apparence</div>
+    <div class="field"><span data-i18n="profil.couleur">Couleur principale</span><div class="swatches" id="accentList" role="group" aria-label="Couleur principale" data-i18n-aria-label="profil.couleur"></div></div>
+    <div class="field"><span data-i18n="profil.mode">Mode</span><div class="modes" id="bgList" role="group" aria-label="Mode d’affichage" data-i18n-aria-label="profil.modeAffichage"></div></div>
+  </section>
+  <section class="card" id="langCard">
+    <div class="lbl" data-i18n="profil.langue">Langue</div>
+    <div class="chips" id="langList" role="group" aria-label="Langue" data-i18n-aria-label="profil.langue"></div>
+    <p class="hint" data-i18n="profil.langueAide">Enregistrée sur ton compte : tu la retrouves sur tous tes appareils.</p>
   </section>
   <section class="card" id="soundCard">
-    <div class="lbl">Son du minuteur</div>
-    <div class="field"><span>Volume <b id="sndVolTxt" style="color:var(--ink)"></b></span><input type="range" id="sndVol" min="0" max="100" step="5" aria-label="Volume du minuteur"></div>
-    <div class="field"><span>Type de son</span><div class="chips" id="sndTypes"></div></div>
-    <button type="button" class="chip" id="sndCount" style="--tc:var(--red);align-self:flex-start" aria-pressed="true">Bips 3-2-1 avant la fin</button>
-    <button type="button" class="btn" id="sndTest">🔊 Tester le son</button>
-    <p class="hint">Sur iPhone, le son est coupé si le bouton silencieux (sur le côté du téléphone) est activé. Monte aussi le volume du téléphone.</p>
+    <div class="lbl" data-i18n="profil.son">Son du minuteur</div>
+    <div class="field"><span data-i18n="profil.volume">Volume <b id="sndVolTxt" style="color:var(--ink)"></b></span><input type="range" id="sndVol" min="0" max="100" step="5" aria-label="Volume du minuteur" data-i18n-aria-label="profil.volumeMinuteur"></div>
+    <div class="field"><span data-i18n="profil.typeSon">Type de son</span><div class="chips" id="sndTypes"></div></div>
+    <button type="button" class="chip" id="sndCount" style="--tc:var(--red);align-self:flex-start" aria-pressed="true" data-i18n="profil.bips">Bips 3-2-1 avant la fin</button>
+    <button type="button" class="btn" id="sndTest" data-i18n="profil.tester">🔊 Tester le son</button>
+    <p class="hint" data-i18n="profil.sonIphone">Sur iPhone, le son est coupé si le bouton silencieux (sur le côté du téléphone) est activé. Monte aussi le volume du téléphone.</p>
   </section>
-  <button class="btn" id="adminBtn" data-go="admin" hidden>Administration</button>
+  <button class="btn" id="adminBtn" data-go="admin" hidden data-i18n="nav.admin">Administration</button>
   <section class="card">
-    <div class="lbl">Mon compte</div>
+    <div class="lbl" data-i18n="profil.monCompte">Mon compte</div>
     <p class="hint" id="pfEmail"></p>
     <div class="pf-list">
-      <button id="installBtn" hidden>📲 Installer l’app sur mon téléphone<span class="arrow" aria-hidden="true">›</span></button>
-      <button id="tutoAgain" data-go="tutos">🎓 Revoir le tutoriel<span class="arrow" aria-hidden="true">›</span></button>
-      <button data-go="contact">✉️ Contact<span class="arrow" aria-hidden="true">›</span></button>
-      <button id="exportBtn">📦 Télécharger mes données<span class="arrow" aria-hidden="true">›</span></button>
-      <button id="pwReset">🔑 Changer mon mot de passe<span class="arrow" aria-hidden="true">›</span></button>
-      <button id="logout" class="danger">Se déconnecter</button>
+      <button id="installBtn" hidden data-i18n="profil.installer">📲 Installer l’app sur mon téléphone<span class="arrow" aria-hidden="true">›</span></button>
+      <button id="tutoAgain" data-go="tutos" data-i18n="profil.revoirTuto">🎓 Revoir le tutoriel<span class="arrow" aria-hidden="true">›</span></button>
+      <button data-go="contact" data-i18n="profil.contact">✉️ Contact<span class="arrow" aria-hidden="true">›</span></button>
+      <button id="exportBtn" data-i18n="profil.exporter">📦 Télécharger mes données<span class="arrow" aria-hidden="true">›</span></button>
+      <button id="pwReset" data-i18n="profil.changerMdp">🔑 Changer mon mot de passe<span class="arrow" aria-hidden="true">›</span></button>
+      <button id="logout" class="danger" data-i18n="profil.deconnexion">Se déconnecter</button>
     </div>
     <p class="ok-msg" id="pwMsg" hidden></p>
-    <p class="legal-links" style="margin:0"><a href="conditions.html">Conditions d’utilisation</a> · <a href="confidentialite.html">Confidentialité</a></p>
+    <p class="legal-links" style="margin:0"><a href="conditions.html" data-i18n="legal.conditions">Conditions d’utilisation</a> · <a href="confidentialite.html" data-i18n="legal.confidentialite">Confidentialité</a></p>
   </section>
   <section class="card">
-    <div class="lbl">Zone sensible</div>
-    <button class="btn ghost-danger" id="delAccount">Supprimer mon compte et mes données</button>
+    <div class="lbl" data-i18n="profil.zoneSensible">Zone sensible</div>
+    <button class="btn ghost-danger" id="delAccount" data-i18n="profil.supprimerCompte">Supprimer mon compte et mes données</button>
     <form id="delForm" hidden style="display:flex;flex-direction:column;gap:10px">
-      <p class="hint">Cette action efface définitivement ton compte, tes séances, ta nutrition, tes photos et tes messages. Entre ton mot de passe pour confirmer.</p>
-      <label class="field"><span>Mot de passe</span><input id="delPass" type="password" autocomplete="current-password" required></label>
+      <p class="hint" data-i18n="profil.supprimerTexte">Cette action efface définitivement ton compte, tes séances, ta nutrition, tes photos et tes messages. Entre ton mot de passe pour confirmer.</p>
+      <label class="field"><span data-i18n="connexion.motDePasse">Mot de passe</span><input id="delPass" type="password" autocomplete="current-password" required></label>
       <p class="err" id="delErr" hidden></p>
-      <button class="btn ghost-danger armed" type="submit" id="delGo">Supprimer définitivement</button>
+      <button class="btn ghost-danger armed" type="submit" id="delGo" data-i18n="profil.supprimerDefinitivement">Supprimer définitivement</button>
     </form>
   </section>
 </main>
 
 <!-- ============ ADMIN ============ -->
 <main class="app view" id="v-admin" hidden>
-  <button class="back" data-go="profile">‹ Profil</button>
-  <div><span class="onair"><i></i>Accès administrateur</span></div>
-  <h1 class="vtitle" style="margin-top:-8px">Administration</h1>
+  <button class="back" data-go="profile">‹ <span data-i18n="nav.profil">Profil</span></button>
+  <div><span class="onair" data-i18n="admin.badge"><i></i>Accès administrateur</span></div>
+  <h1 class="vtitle" style="margin-top:-8px" data-i18n="nav.admin">Administration</h1>
   <div id="adminBody"></div>
 </main>
 <main class="app view" id="v-auser" hidden>
-  <button class="back" data-go="admin">‹ Administration</button>
+  <button class="back" data-go="admin">‹ <span data-i18n="nav.admin">Administration</span></button>
   <div id="auserBody"></div>
 </main>
 
-<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Séance"></div>
-<div class="sheet lib-sheet" id="libSheet" role="dialog" aria-modal="true" aria-label="Bibliothèque d’exercices">
-  <div class="bar-top"><button class="link" id="libClose">‹ Retour</button><b id="libTitle">Exercices</b><span style="width:60px"></span></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Séance" data-i18n-aria-label="seances.seance"></div>
+<div class="sheet lib-sheet" id="libSheet" role="dialog" aria-modal="true" aria-label="Bibliothèque d’exercices" data-i18n-aria-label="bibliotheque.titreLong">
+  <div class="bar-top"><button class="link" id="libClose">‹ <span data-i18n="commun.retour">Retour</span></button><b id="libTitle" data-i18n="bibliotheque.titre">Exercices</b><span style="width:60px"></span></div>
   <div class="sheet-body" style="gap:12px">
-    <input id="libQ" class="lib-q" type="search" placeholder="Chercher un exercice ou crée le tien en l’écrivant" aria-label="Chercher un exercice ou créer le tien en l’écrivant" autocomplete="off">
-    <p class="hint lib-help">Tu ne trouves pas ton exercice ? Écris son nom en entier : un bouton « + Créer » apparaît en haut de la liste.</p>
+    <input id="libQ" class="lib-q" type="search" placeholder="Chercher un exercice ou crée le tien en l’écrivant" aria-label="Chercher un exercice ou créer le tien en l’écrivant" data-i18n-placeholder="bibliotheque.chercher" data-i18n-aria-label="bibliotheque.chercherAria" autocomplete="off">
+    <p class="hint lib-help" data-i18n="bibliotheque.aide">Tu ne trouves pas ton exercice ? Écris son nom en entier : un bouton « + Créer » apparaît en haut de la liste.</p>
     <div class="chips lib-chips" id="libChips"></div>
     <div id="libList" style="display:flex;flex-direction:column;gap:8px"></div>
   </div>
@@ -487,25 +496,25 @@
 <div class="tour" id="tour" hidden>
   <div class="tour-hole" id="tourHole"></div>
   <div class="tour-bubble" id="tourBubble" role="dialog" aria-modal="true" aria-labelledby="tourText">
-    <div class="tour-top"><span class="tour-step" id="tourStep"></span><button type="button" class="tour-skip" id="tourSkip">Passer le tutoriel</button></div>
+    <div class="tour-top"><span class="tour-step" id="tourStep"></span><button type="button" class="tour-skip" id="tourSkip" data-i18n="tutoriel.passer">Passer le tutoriel</button></div>
     <p class="tour-text" id="tourText" aria-live="polite"></p>
-    <div class="tour-nav"><button type="button" class="btn" id="tourPrev">Précédent</button><button type="button" class="btn primary" id="tourNext">Suivant</button></div>
+    <div class="tour-nav"><button type="button" class="btn" id="tourPrev" data-i18n="commun.precedent">Précédent</button><button type="button" class="btn primary" id="tourNext" data-i18n="commun.suivant">Suivant</button></div>
   </div>
 </div>
 <div class="toast" id="toast" hidden role="status" aria-live="polite"></div>
-<div class="offline-pill" id="offlinePill" hidden>Hors connexion · tout sera envoyé au retour du réseau</div>
-<div class="sheet" id="typesSheet" role="dialog" aria-modal="true" aria-label="Types de séance"></div>
-<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="Photo">
-  <div class="vbar"><button data-a="vclose">Fermer</button><button data-a="vdel">Supprimer la photo</button></div>
-  <img id="viewerImg" alt="Photo de la séance">
+<div class="offline-pill" id="offlinePill" hidden data-i18n="commun.horsConnexion">Hors connexion · tout sera envoyé au retour du réseau</div>
+<div class="sheet" id="typesSheet" role="dialog" aria-modal="true" aria-label="Types de séance" data-i18n-aria-label="types.titre"></div>
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="Photo" data-i18n-aria-label="photos.photo">
+  <div class="vbar"><button data-a="vclose" data-i18n="commun.fermer">Fermer</button><button data-a="vdel" data-i18n="photos.supprimer">Supprimer la photo</button></div>
+  <img id="viewerImg" alt="Photo de la séance" data-i18n-alt="photos.photoSeance">
 </div>
 <!-- ============ MINUTEUR DE REPOS ============ -->
 <div class="rest-timer" id="restTimer" hidden role="timer" aria-live="polite">
   <div class="rt-bar"><i id="rtFill"></i></div>
   <div class="rt-row">
-    <div class="rt-txt"><span class="rt-lbl" id="rtLbl">Repos</span><b id="rtTime">1:30</b></div>
-    <button type="button" class="rt-btn" id="rtPlus">+15 s</button>
-    <button type="button" class="rt-btn primary" id="rtSkip">Passer</button>
+    <div class="rt-txt"><span class="rt-lbl" id="rtLbl" data-i18n="minuteur.repos">Repos</span><b id="rtTime">1:30</b></div>
+    <button type="button" class="rt-btn" id="rtPlus" data-i18n="minuteur.plus15">+15 s</button>
+    <button type="button" class="rt-btn primary" id="rtSkip" data-i18n="commun.passer">Passer</button>
   </div>
 </div>
 
@@ -513,41 +522,41 @@
 <div class="install-backdrop" id="installBackdrop" hidden></div>
 <div class="install" id="installSheet" hidden role="dialog" aria-modal="true" aria-labelledby="installTitle">
   <i class="grab" aria-hidden="true"></i>
-  <div class="install-head"><img src="icons/icon-192.png" alt=""><div><b id="installTitle">Installe l’app</b><span>AS Sport · gratuit</span></div></div>
-  <p class="lead" id="installLead">Ajoute l’app à ton écran d’accueil : elle s’ouvre en plein écran, en un toucher, comme une vraie application.</p>
-  <div class="perks"><span>Plein écran</span><span>Accès en 1 toucher</span><span>Marche hors connexion</span></div>
+  <div class="install-head"><img src="icons/icon-192.png" alt=""><div><b id="installTitle" data-i18n="installation.titre">Installe l’app</b><span data-i18n="installation.gratuit">AS Sport · gratuit</span></div></div>
+  <p class="lead" id="installLead" data-i18n="installation.texte">Ajoute l’app à ton écran d’accueil : elle s’ouvre en plein écran, en un toucher, comme une vraie application.</p>
+  <div class="perks"><span data-i18n="installation.pleinEcran">Plein écran</span><span data-i18n="installation.unToucher">Accès en 1 toucher</span><span data-i18n="installation.horsConnexion">Marche hors connexion</span></div>
   <div id="installBody"></div>
-  <button type="button" class="later" id="installLater">Plus tard</button>
+  <button type="button" class="later" id="installLater" data-i18n="commun.plusTard">Plus tard</button>
 </div>
 
 <!-- ============ CONDITIONS À ACCEPTER (comptes existants) ============ -->
 <div class="install-backdrop" id="termsBackdrop" hidden></div>
 <div class="install" id="termsSheet" hidden role="dialog" aria-modal="true" aria-labelledby="termsTitle">
   <i class="grab" aria-hidden="true"></i>
-  <div class="install-head"><span class="news-ico" aria-hidden="true">📜</span><div><b id="termsTitle">Nos règles</b><span>Pour une communauté sympa et sûre</span></div></div>
+  <div class="install-head"><span class="news-ico" aria-hidden="true">📜</span><div><b id="termsTitle" data-i18n="regles.titre">Nos règles</b><span data-i18n="regles.sousTitre">Pour une communauté sympa et sûre</span></div></div>
   <ol class="steps">
-    <li><span class="n">1</span><span><b>Respect</b> : zéro insulte, harcèlement ou contenu choquant.</span></li>
-    <li><span class="n">2</span><span><b>Signale</b> ce qui ne va pas (⚑) et <b>bloque</b> qui tu veux.</span></li>
-    <li><span class="n">3</span><span>Tes données t’appartiennent : tu peux les <b>télécharger</b> ou les <b>supprimer</b> depuis ton profil.</span></li>
+    <li><span class="n">1</span><span data-i18n-html="regles.r1"><b>Respect</b> : zéro insulte, harcèlement ou contenu choquant.</span></li>
+    <li><span class="n">2</span><span data-i18n-html="regles.r2"><b>Signale</b> ce qui ne va pas (⚑) et <b>bloque</b> qui tu veux.</span></li>
+    <li><span class="n">3</span><span data-i18n-html="regles.r3">Tes données t’appartiennent : tu peux les <b>télécharger</b> ou les <b>supprimer</b> depuis ton profil.</span></li>
   </ol>
-  <p class="hint">En continuant, tu confirmes avoir au moins 15 ans et tu acceptes les <a href="conditions.html" target="_blank" rel="noopener">conditions d’utilisation</a> et la <a href="confidentialite.html" target="_blank" rel="noopener">politique de confidentialité</a>.</p>
-  <button type="button" class="btn primary" id="termsOk">J’accepte</button>
+  <p class="hint" data-i18n-html="regles.continuer">En continuant, tu confirmes avoir au moins 15 ans et tu acceptes les <a href="conditions.html" target="_blank" rel="noopener">conditions d’utilisation</a> et la <a href="confidentialite.html" target="_blank" rel="noopener">politique de confidentialité</a>.</p>
+  <button type="button" class="btn primary" id="termsOk" data-i18n="regles.accepte">J’accepte</button>
 </div>
 
 <!-- ============ ANCIENNE ICÔNE À SUPPRIMER (une fois) ============ -->
 <div class="install-backdrop" id="oldIconBackdrop" hidden></div>
 <div class="install" id="oldIconSheet" hidden role="dialog" aria-modal="true" aria-labelledby="oldIconTitle">
   <i class="grab" aria-hidden="true"></i>
-  <div class="install-head"><img src="icons/icon-192.png" alt=""><div><b id="oldIconTitle">Bien installée ✓</b><span>Nouvelle adresse de l’app</span></div></div>
-  <p class="lead">Pense à <b>supprimer l’ancienne icône</b> de l’app sur ton écran d’accueil : elle ne marche plus. Garde uniquement celle-ci.</p>
+  <div class="install-head"><img src="icons/icon-192.png" alt=""><div><b id="oldIconTitle" data-i18n="ancienneIcone.titre">Bien installée ✓</b><span data-i18n="ancienneIcone.sousTitre">Nouvelle adresse de l’app</span></div></div>
+  <p class="lead" data-i18n-html="ancienneIcone.texte">Pense à <b>supprimer l’ancienne icône</b> de l’app sur ton écran d’accueil : elle ne marche plus. Garde uniquement celle-ci.</p>
   <ol class="steps" id="oldIconSteps"></ol>
-  <button type="button" class="btn primary" id="oldIconOk">C’est fait</button>
+  <button type="button" class="btn primary" id="oldIconOk" data-i18n="ancienneIcone.fait">C’est fait</button>
 </div>
 
 <!-- ============ COMMENT FAIRE (silhouette animée) ============ -->
 <div class="install-backdrop" id="howBackdrop" hidden></div>
 <div class="install" id="howSheet" hidden role="dialog" aria-modal="true" aria-labelledby="howTitle">
-  <div class="install-head"><div><span>Comment faire</span><b id="howTitle"></b></div><button type="button" class="how-x" id="howClose" aria-label="Fermer">✕</button></div>
+  <div class="install-head"><div><span data-i18n="commentFaire.titre">Comment faire</span><b id="howTitle"></b></div><button type="button" class="how-x" id="howClose" aria-label="Fermer" data-i18n-aria-label="commun.fermer">✕</button></div>
   <div class="how-stage" id="howStage"></div>
   <p class="how-cue" id="howCue"></p>
   <div class="how-tips" id="howTips" hidden></div>
@@ -559,101 +568,101 @@
 <div class="install-backdrop" id="confirmBackdrop" hidden></div>
 <div class="install" id="confirmSheet" hidden role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
   <i class="grab" aria-hidden="true"></i>
-  <div class="install-head"><span class="news-ico" aria-hidden="true">🗑</span><div><b id="confirmTitle">Supprimer la séance ?</b></div></div>
+  <div class="install-head"><span class="news-ico" aria-hidden="true">🗑</span><div><b id="confirmTitle" data-i18n="confirmation.titre">Supprimer la séance ?</b></div></div>
   <p class="lead" id="confirmText"></p>
-  <button type="button" class="btn ghost-danger armed" id="confirmGo">Supprimer la séance</button>
-  <button type="button" class="later" id="confirmCancel">Annuler</button>
+  <button type="button" class="btn ghost-danger armed" id="confirmGo" data-i18n="confirmation.bouton">Supprimer la séance</button>
+  <button type="button" class="later" id="confirmCancel" data-i18n="commun.annuler">Annuler</button>
 </div>
 
 <!-- ============ NOUVEAUTÉS (une seule fois par utilisateur) ============ -->
 <div class="install-backdrop" id="newsBackdrop" hidden></div>
 <div class="install news" id="newsSheet" hidden role="dialog" aria-modal="true" aria-labelledby="newsTitle1">
   <i class="grab" aria-hidden="true"></i>
-  <div class="news-top"><span class="onair"><i></i>Nouveautés</span><button type="button" class="news-skip" id="newsSkip">Passer</button></div>
+  <div class="news-top"><span class="onair" data-i18n="nouveautes.titre"><i></i>Nouveautés</span><button type="button" class="news-skip" id="newsSkip" data-i18n="commun.passer">Passer</button></div>
   <div class="news-viewport" id="newsViewport">
     <div class="news-track" id="newsTrack">
-      <section class="news-slide" aria-roledescription="diapositive">
+      <section class="news-slide" aria-roledescription="diapositive" data-i18n-aria-roledescription="nouveautes.diapositive">
         <div class="news-visual news-brand" aria-hidden="true">
           <i class="nb-line"></i>
           <img src="icons/logo.svg" alt="" width="84" height="84">
           <span class="nb-title"><span>AS</span> Sport</span>
-          <span class="brand-sub">L’agenda du sportif</span>
+          <span class="brand-sub" data-i18n="app.devise">L’agenda du sportif</span>
         </div>
-        <h2 id="newsTitle1">Nouveau nom, nouveau logo !</h2>
-        <p>L’agenda du sportif devient <b>AS Sport</b>. Même app, mêmes séances, mêmes amis : seuls le nom et le logo changent. « L’agenda du sportif » reste notre devise.</p>
+        <h2 id="newsTitle1" data-i18n="nouveautes.nom.titre">Nouveau nom, nouveau logo !</h2>
+        <p data-i18n-html="nouveautes.nom.texte">L’agenda du sportif devient <b>AS Sport</b>. Même app, mêmes séances, mêmes amis : seuls le nom et le logo changent. « L’agenda du sportif » reste notre devise.</p>
       </section>
       <!-- Diapos iPhone (seulement dans l'app installée sur iPhone) : on ajoute la nouvelle icône AVANT de supprimer l'ancienne -->
-      <section class="news-slide news-ios" aria-roledescription="diapositive">
-        <h2 id="newsTitleIos1">Sur iPhone : ajoute la nouvelle icône</h2>
-        <p>Garde l’ancienne icône pour l’instant : tu la supprimeras à la fin.</p>
+      <section class="news-slide news-ios" aria-roledescription="diapositive" data-i18n-aria-roledescription="nouveautes.diapositive">
+        <h2 id="newsTitleIos1" data-i18n="nouveautes.ios.titre1">Sur iPhone : ajoute la nouvelle icône</h2>
+        <p data-i18n="nouveautes.ios.garde">Garde l’ancienne icône pour l’instant : tu la supprimeras à la fin.</p>
         <ol class="steps ios-steps">
-          <li><span class="n">1</span><span><b>Copie l’adresse de l’app</b> :<span class="ios-copy"><code id="newsAddr">agenda-du-sportif.web.app</code><button type="button" id="newsCopy">Copier</button></span></span></li>
-          <li><span class="n">2</span><span>Ouvre <b>Safari</b>, touche la barre d’adresse, <b>colle</b> et ouvre la page.</span></li>
-          <li><span class="n">3</span><span>Touche <b>Partager</b> <svg class="ios-share" viewBox="0 0 24 24" aria-label="(icône carré avec flèche)"><path d="M12 3v12M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg> puis <b>Sur l’écran d’accueil</b> › <b>Ajouter</b>.</span></li>
+          <li><span class="n">1</span><span><b data-i18n="nouveautes.ios.copie">Copie l’adresse de l’app</b> :<span class="ios-copy"><code id="newsAddr">agenda-du-sportif.web.app</code><button type="button" id="newsCopy" data-i18n="nouveautes.ios.copier">Copier</button></span></span></li>
+          <li><span class="n">2</span><span data-i18n-html="nouveautes.ios.e2">Ouvre <b>Safari</b>, touche la barre d’adresse, <b>colle</b> et ouvre la page.</span></li>
+          <li><span class="n">3</span><span data-i18n-html="nouveautes.ios.e3">Touche <b>Partager</b> <svg class="ios-share" viewBox="0 0 24 24" aria-label="(icône carré avec flèche)"><path d="M12 3v12M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg> puis <b>Sur l’écran d’accueil</b> › <b>Ajouter</b>.</span></li>
         </ol>
-        <p class="ios-warn"><span aria-hidden="true">⚠️</span><span>Tu as maintenant <b>deux icônes</b>. C’est normal : ne supprime rien pour l’instant.</span></p>
+        <p class="ios-warn"><span aria-hidden="true">⚠️</span><span data-i18n-html="nouveautes.ios.deux">Tu as maintenant <b>deux icônes</b>. C’est normal : ne supprime rien pour l’instant.</span></p>
       </section>
-      <section class="news-slide news-ios" aria-roledescription="diapositive">
-        <h2 id="newsTitleIos2">Puis supprime l’ancienne</h2>
+      <section class="news-slide news-ios" aria-roledescription="diapositive" data-i18n-aria-roledescription="nouveautes.diapositive">
+        <h2 id="newsTitleIos2" data-i18n="nouveautes.ios.titre2">Puis supprime l’ancienne</h2>
         <div class="ios-pair">
-          <figure><img src="icons/logo.svg" alt="Nouvelle icône : AS rouge sur fond noir" width="56" height="56"><figcaption class="keep">✓ Nouvelle : garde-la</figcaption></figure>
-          <figure><img src="icons/ancien-logo.svg" alt="Ancienne icône : AS blanc dans un carré rouge" width="56" height="56"><figcaption class="drop">✕ Ancienne : supprime-la</figcaption></figure>
+          <figure><img src="icons/logo.svg" alt="Nouvelle icône : AS rouge sur fond noir" data-i18n-alt="nouveautes.ios.altNouvelle" width="56" height="56"><figcaption class="keep" data-i18n="nouveautes.ios.garder">✓ Nouvelle : garde-la</figcaption></figure>
+          <figure><img src="icons/ancien-logo.svg" alt="Ancienne icône : AS blanc dans un carré rouge" data-i18n-alt="nouveautes.ios.altAncienne" width="56" height="56"><figcaption class="drop" data-i18n="nouveautes.ios.supprimer">✕ Ancienne : supprime-la</figcaption></figure>
         </div>
         <ol class="steps ios-steps">
-          <li><span class="n">4</span><span>Ouvre la <b>nouvelle icône</b> « AS Sport » et connecte-toi avec ton <b>e-mail et ton mot de passe</b>. Tu retrouves toutes tes séances.</span></li>
-          <li><span class="n">5</span><span>Tout est là ? <b>Appui long sur l’ancienne icône</b> « Agenda sportif » › <b>Supprimer le signet</b> (ou « Supprimer l’app »).</span></li>
+          <li><span class="n">4</span><span data-i18n-html="nouveautes.ios.e4">Ouvre la <b>nouvelle icône</b> « AS Sport » et connecte-toi avec ton <b>e-mail et ton mot de passe</b>. Tu retrouves toutes tes séances.</span></li>
+          <li><span class="n">5</span><span data-i18n-html="nouveautes.ios.e5">Tout est là ? <b>Appui long sur l’ancienne icône</b> « Agenda sportif » › <b>Supprimer le signet</b> (ou « Supprimer l’app »).</span></li>
         </ol>
-        <p class="hint">Mot de passe oublié ? Touche « Mot de passe oublié ? » sur l’écran de connexion : un e-mail arrive pour le changer.</p>
+        <p class="hint" data-i18n="nouveautes.ios.oublie">Mot de passe oublié ? Touche « Mot de passe oublié ? » sur l’écran de connexion : un e-mail arrive pour le changer.</p>
       </section>
-      <section class="news-slide" aria-roledescription="diapositive">
+      <section class="news-slide" aria-roledescription="diapositive" data-i18n-aria-roledescription="nouveautes.diapositive">
         <div class="news-visual" aria-hidden="true">
           <div class="mini-home">
-            <div class="mh-bar"><span class="mh-prof"><i></i>Profil</span></div>
+            <div class="mh-bar"><span class="mh-prof" data-i18n="nav.profil"><i></i>Profil</span></div>
             <div class="mh-title"><span>AS</span> Sport</div>
-            <div class="mh-toc"><b>Let’s go <i>›</i></b><b>Social <i>›</i></b><b>Nutrition <i>›</i></b></div>
-            <div class="mh-contact"><span class="mh-btn">Contact</span><span class="mh-arrow">‹ ici</span></div>
+            <div class="mh-toc"><b data-i18n="onglets.go">Let’s go <i>›</i></b><b data-i18n="social.titre">Social <i>›</i></b><b data-i18n="nutrition.titre">Nutrition <i>›</i></b></div>
+            <div class="mh-contact"><span class="mh-btn" data-i18n="contact.titre">Contact</span><span class="mh-arrow" data-i18n="nouveautes.contact.ici">‹ ici</span></div>
           </div>
-          <p class="mh-cap">En bas de la page d’accueil, sous « Nutrition »</p>
+          <p class="mh-cap" data-i18n="nouveautes.contact.legende">En bas de la page d’accueil, sous « Nutrition »</p>
         </div>
-        <h2 id="newsTitle2">Une idée ? Un bug ? Dites-le-moi !</h2>
-        <p>N’hésitez pas à m’écrire via le bouton Contact sur la page d’accueil. Une idée d’amélioration, un exercice qui manque, un bug repéré : tous vos retours m’aident à faire évoluer l’application.</p>
+        <h2 id="newsTitle2" data-i18n="nouveautes.contact.titre">Une idée ? Un bug ? Dites-le-moi !</h2>
+        <p data-i18n="nouveautes.contact.texte">N’hésitez pas à m’écrire via le bouton Contact sur la page d’accueil. Une idée d’amélioration, un exercice qui manque, un bug repéré : tous vos retours m’aident à faire évoluer l’application.</p>
       </section>
     </div>
   </div>
   <div class="tuto-dots news-dots" id="newsDots" aria-hidden="true"></div>
   <div class="news-nav">
-    <button type="button" class="btn" id="newsPrev">Précédent</button>
-    <button type="button" class="btn primary" id="newsNext">Suivant</button>
+    <button type="button" class="btn" id="newsPrev" data-i18n="commun.precedent">Précédent</button>
+    <button type="button" class="btn primary" id="newsNext" data-i18n="commun.suivant">Suivant</button>
   </div>
 </div>
 
 <!-- ============ BARRE D’ONGLETS (en bas de l’écran) ============ -->
-<nav class="tabbar" id="tabbar" aria-label="Navigation principale" hidden>
-  <button type="button" class="tab" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/></svg><span>Accueil</span></button>
-  <button type="button" class="tab" data-tab="seances"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Séances</span></button>
-  <button type="button" class="tab tab-go" data-tab="go"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></i><span>Let’s go</span></button>
-  <button type="button" class="tab" data-tab="social"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.6-3.2 3-5 6-5s5.4 1.8 6 5"/><circle cx="17" cy="9.5" r="2.4"/><path d="M16.5 14.6c2.3.2 4 1.7 4.5 4.4"/></svg><span>Social</span><b class="tab-dot" id="tabSocialDot" hidden></b></button>
-  <button type="button" class="tab" data-tab="profile"><span class="tab-av" id="tabAvatar"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c.8-3.8 3.8-6 7.5-6s6.7 2.2 7.5 6"/></svg></span><span>Vous</span></button>
+<nav class="tabbar" id="tabbar" aria-label="Navigation principale" data-i18n-aria-label="onglets.navigation" hidden>
+  <button type="button" class="tab" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/></svg><span data-i18n="nav.accueil">Accueil</span></button>
+  <button type="button" class="tab" data-tab="seances"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span data-i18n="nav.seances">Séances</span></button>
+  <button type="button" class="tab tab-go" data-tab="go"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></i><span data-i18n="onglets.go">Let’s go</span></button>
+  <button type="button" class="tab" data-tab="social"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.6-3.2 3-5 6-5s5.4 1.8 6 5"/><circle cx="17" cy="9.5" r="2.4"/><path d="M16.5 14.6c2.3.2 4 1.7 4.5 4.4"/></svg><span data-i18n="social.titre">Social</span><b class="tab-dot" id="tabSocialDot" hidden></b></button>
+  <button type="button" class="tab" data-tab="profile"><span class="tab-av" id="tabAvatar"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c.8-3.8 3.8-6 7.5-6s6.7 2.2 7.5 6"/></svg></span><span data-i18n="onglets.vous">Vous</span></button>
 </nav>
 
 <!-- ============ ASSISTANT (FAQ) ============ -->
-<button type="button" class="help-fab" id="helpFab" hidden aria-label="Ouvrir l’assistant">
+<button type="button" class="help-fab" id="helpFab" hidden aria-label="Ouvrir l’assistant" data-i18n-aria-label="assistant.ouvrir">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M9 10h.01M12 10h.01M15 10h.01"/></svg>
 </button>
 <div class="help-hint" id="helpHint" hidden>
-  <button type="button" class="hh-text" id="helpHintOpen">Besoin d’aide ? Je réponds à tes questions 👋</button>
-  <button type="button" class="hh-x" id="helpHintClose" aria-label="Fermer ce message">✕</button>
+  <button type="button" class="hh-text" id="helpHintOpen" data-i18n="assistant.bulle">Besoin d’aide ? Je réponds à tes questions 👋</button>
+  <button type="button" class="hh-x" id="helpHintClose" aria-label="Fermer ce message" data-i18n-aria-label="commun.fermerMessage">✕</button>
 </div>
-<section class="help-panel" id="helpPanel" hidden role="dialog" aria-label="Assistant">
+<section class="help-panel" id="helpPanel" hidden role="dialog" aria-label="Assistant" data-i18n-aria-label="assistant.titre">
   <header class="help-head">
     <span class="help-avatar">AS</span>
-    <div><b>Assistant</b><span>Réponses aux questions fréquentes</span></div>
-    <button type="button" class="help-x" id="helpClose" aria-label="Fermer">✕</button>
+    <div><b data-i18n="assistant.titre">Assistant</b><span data-i18n="assistant.sousTitre">Réponses aux questions fréquentes</span></div>
+    <button type="button" class="help-x" id="helpClose" aria-label="Fermer" data-i18n-aria-label="commun.fermer">✕</button>
   </header>
   <div class="help-msgs" id="helpMsgs"></div>
   <form class="help-form" id="helpForm" autocomplete="off">
-    <input id="helpInput" placeholder="Pose ta question…" maxlength="200" aria-label="Ta question">
-    <button class="btn primary" type="submit" aria-label="Envoyer">➤</button>
+    <input id="helpInput" placeholder="Pose ta question…" maxlength="200" aria-label="Ta question" data-i18n-placeholder="assistant.pose" data-i18n-aria-label="assistant.taQuestion">
+    <button class="btn primary" type="submit" aria-label="Envoyer" data-i18n-aria-label="commun.envoyer">➤</button>
   </form>
 </section>
 </body>

@@ -9,6 +9,7 @@ import { renderSound } from "../commun/timer.js";
 import { refreshInstallBtn } from "../commun/install.js";
 import { SOC, ensureSocialProfile, subscribeSocial } from "../amis/index.js";
 import { stopSubscriptions, subscribeData } from "../commun/main.js";
+import { LANGUE, existe, t, valeur } from "../commun/i18n.js";
 
 /* ============================================================
    Connexion / inscription
@@ -18,30 +19,20 @@ function setAuthMode(m) {
   authMode = m;
   $("tabIn").setAttribute("aria-selected", String(m === "in"));
   $("tabUp").setAttribute("aria-selected", String(m === "up"));
-  $("auSubmit").textContent = m === "in" ? "Se connecter" : "Créer mon compte";
+  $("auSubmit").textContent = t(m === "in" ? "connexion.seConnecter" : "connexion.creerCompte");
   $("auPass").autocomplete = m === "in" ? "current-password" : "new-password";
   $("auForgot").hidden = m !== "in";
   $("auErr").hidden = true; $("auOk").hidden = true;
 }
 $("tabIn").onclick = () => setAuthMode("in");
 $("tabUp").onclick = () => setAuthMode("up");
-const AUTH_ERRORS = {
-  "auth/invalid-email": "Cette adresse e-mail n’est pas valide.",
-  "auth/email-already-in-use": "Un compte existe déjà avec cet e-mail. Connecte-toi plutôt.",
-  "auth/weak-password": "Choisis un mot de passe d’au moins 6 caractères.",
-  "auth/invalid-credential": "E-mail ou mot de passe incorrect.",
-  "auth/wrong-password": "Mot de passe incorrect.",
-  "auth/user-not-found": "Aucun compte avec cet e-mail.",
-  "auth/too-many-requests": "Trop d’essais. Patiente quelques minutes puis réessaie.",
-  "auth/network-request-failed": "Pas de connexion internet. Vérifie ton réseau.",
-  "auth/missing-password": "Entre ton mot de passe."
-};
-const authMsg = e => AUTH_ERRORS[e && e.code] || "Une erreur est survenue. Réessaie.";
+// Erreurs de connexion : « auth/invalid-email » → connexion.erreurs.invalid-email
+const authMsg = e => { const k = "connexion.erreurs." + String((e && e.code) || "").replace("auth/", ""); return existe(k) ? t(k) : t("commun.erreur"); };
 $("authForm").addEventListener("submit", async e => {
   e.preventDefault();
   const email = $("auEmail").value.trim(), pass = $("auPass").value;
   $("auErr").hidden = true; $("auOk").hidden = true;
-  const btn = $("auSubmit"), label = btn.textContent; btn.disabled = true; btn.textContent = "Un instant…";
+  const btn = $("auSubmit"), label = btn.textContent; btn.disabled = true; btn.textContent = t("commun.unInstant");
   try {
     if (authMode === "in") await signInWithEmailAndPassword(auth, email, pass);
     else await createUserWithEmailAndPassword(auth, email, pass);
@@ -52,8 +43,8 @@ $("authForm").addEventListener("submit", async e => {
 $("auForgot").onclick = async () => {
   const email = $("auEmail").value.trim();
   $("auErr").hidden = true; $("auOk").hidden = true;
-  if (!email) { show($("auErr"), "Entre ton e-mail ci-dessus, puis touche « Mot de passe oublié ? »."); return; }
-  try { await sendPasswordResetEmail(auth, email); show($("auOk"), "Si un compte existe avec " + email + ", un e-mail vient de partir (expéditeur : noreply@agenda-du-sportif.firebaseapp.com). Regarde aussi dans tes spams ou courriers indésirables, il arrive en 1 à 5 minutes."); }
+  if (!email) { show($("auErr"), t("connexion.oublieSansEmail")); return; }
+  try { await sendPasswordResetEmail(auth, email); show($("auOk"), t("connexion.oublieEnvoye", { email })); }
   catch (err) { show($("auErr"), authMsg(err)); }
 };
 
@@ -63,11 +54,11 @@ $("auForgot").onclick = async () => {
 function fieldsHTML(px, p) {
   p = p || {};
   return `<div style="display:flex;flex-direction:column;gap:12px">
-  <label class="avatar-pick" for="${px}-photo"><span id="${px}-av">${avatarHTML(p, 64)}</span><span><b>Photo de profil</b><span class="hint">Touche pour ${p.photo ? "changer" : "ajouter"} ta photo</span></span><input id="${px}-photo" type="file" accept="image/*" data-px="${px}"></label>
-  <label class="field"><span>Pseudo *</span><input id="${px}-pseudo" value="${esc(p.pseudo)}" placeholder="ex. TheoFit" required maxlength="30"></label>
-  <div class="grid2"><label class="field"><span>Prénom</span><input id="${px}-prenom" value="${esc(p.prenom)}" maxlength="40"></label><label class="field"><span>Nom</span><input id="${px}-nom" value="${esc(p.nom)}" maxlength="40"></label></div>
-  <div class="grid3"><label class="field"><span>Âge</span><input id="${px}-age" inputmode="numeric" value="${esc(p.age)}" placeholder="ans"></label><label class="field"><span>Taille</span><input id="${px}-taille" inputmode="numeric" value="${esc(p.taille)}" placeholder="cm"></label><label class="field"><span>Poids</span><input id="${px}-poids" inputmode="decimal" value="${esc(p.poids)}" placeholder="kg"></label></div>
-  <div class="field"><span>Objectif</span><div class="chips" id="${px}-obj">${OBJECTIFS.map(o => `<button type="button" class="chip" data-obj="${esc(o)}" aria-pressed="${p.objectif === o}">${esc(o)}</button>`).join("")}</div></div>
+  <label class="avatar-pick" for="${px}-photo"><span id="${px}-av">${avatarHTML(p, 64)}</span><span><b>${t("profil.champs.photo")}</b><span class="hint">${t(p.photo ? "profil.champs.photoChanger" : "profil.champs.photoAjouter")}</span></span><input id="${px}-photo" type="file" accept="image/*" data-px="${px}"></label>
+  <label class="field"><span>${t("profil.champs.pseudo")}</span><input id="${px}-pseudo" value="${esc(p.pseudo)}" placeholder="${esc(t("profil.champs.pseudoExemple"))}" required maxlength="30"></label>
+  <div class="grid2"><label class="field"><span>${t("profil.champs.prenom")}</span><input id="${px}-prenom" value="${esc(p.prenom)}" maxlength="40"></label><label class="field"><span>${t("profil.champs.nom")}</span><input id="${px}-nom" value="${esc(p.nom)}" maxlength="40"></label></div>
+  <div class="grid3"><label class="field"><span>${t("profil.champs.age")}</span><input id="${px}-age" inputmode="numeric" value="${esc(p.age)}" placeholder="${esc(t("profil.champs.ans"))}"></label><label class="field"><span>${t("profil.champs.taille")}</span><input id="${px}-taille" inputmode="numeric" value="${esc(p.taille)}" placeholder="cm"></label><label class="field"><span>${t("profil.champs.poids")}</span><input id="${px}-poids" inputmode="decimal" value="${esc(p.poids)}" placeholder="kg"></label></div>
+  <div class="field"><span>${t("profil.champs.objectif")}</span><div class="chips" id="${px}-obj">${OBJECTIFS.map(o => `<button type="button" class="chip" data-obj="${esc(o)}" aria-pressed="${p.objectif === o}">${esc(valeur("valeurs.objectifs", o))}</button>`).join("")}</div></div>
   </div>`;
 }
 function readFields(px) {
@@ -97,17 +88,17 @@ function renderOnboard() { if (!$("su-pseudo")) { S.formPhoto.su = undefined; $(
 $("signup").addEventListener("submit", async e => {
   e.preventDefault();
   const f = readFields("su");
-  if (!f.pseudo) { show($("suErr"), "Choisis un pseudo pour terminer ton inscription."); return; }
-  if (!$("suTerms").checked) { show($("suErr"), "Accepte les conditions d’utilisation pour terminer ton inscription."); return; }
+  if (!f.pseudo) { show($("suErr"), t("inscription.choisisPseudo")); return; }
+  if (!$("suTerms").checked) { show($("suErr"), t("inscription.accepteConditions")); return; }
   $("suErr").hidden = true;
   try {
     await saveProfile({
-      ...f, photo: f.photo || null, email: S.email, createdAt: Date.now(), visits: 1, lastSeen: Date.now(),
-      typesV: TYPES_V, types: DEFAULT_TYPES.map(t => ({ ...t })), prefs: { creaDose: 5 }, goal: 3, seen: { amis1: true, v2: true, v3: true }, termsV: TERMS_V, termsAt: Date.now()
+      ...f, photo: f.photo || null, email: S.email, createdAt: Date.now(), visits: 1, lastSeen: Date.now(), lang: LANGUE,
+      typesV: TYPES_V, types: DEFAULT_TYPES.map(ty => ({ ...ty })), prefs: { creaDose: 5 }, goal: 3, seen: { amis1: true, v2: true, v3: true }, termsV: TERMS_V, termsAt: Date.now()
     });
     S.visitCounted = true;
     subscribeData(); ensureSocialProfile(); subscribeSocial(); go("home");
-  } catch (err) { S.profile = null; show($("suErr"), "Impossible d’enregistrer ton profil. Vérifie ta connexion et réessaie."); }
+  } catch (err) { S.profile = null; show($("suErr"), t("inscription.erreur")); }
 });
 
 /* ============================================================
@@ -118,16 +109,16 @@ function renderPfStats() {
   const n = Object.keys(S.days).filter(k => !isEmpty(S.days[k])).length;
   const f = Object.values(SOC.friends).filter(x => x.status === "accepted").length;
   const el = $("pfCounts"); if (!el) return;
-  el.innerHTML = `<button type="button" data-go="seances"><b>${n}</b><span>activité${n > 1 ? "s" : ""}</span></button><button type="button" data-go="friends"><b>${f}</b><span>ami${f > 1 ? "s" : ""}</span></button>`;
+  el.innerHTML = `<button type="button" data-go="seances"><b>${n}</b><span>${t("profil.activites", { n })}</span></button><button type="button" data-go="friends"><b>${f}</b><span>${t("profil.amis", { n: f })}</span></button>`;
 }
 function renderPfView(msg) {
   const p = S.profile || {}, name = [p.prenom, p.nom].filter(Boolean).join(" ");
-  const body = [p.age ? p.age + " ans" : "", p.taille ? p.taille + " cm" : "", p.poids ? nf.format(p.poids) + " kg" : ""].filter(Boolean).join(" · ");
+  const body = [p.age ? t("profil.age", { n: +p.age || 0 }) : "", p.taille ? p.taille + " cm" : "", p.poids ? nf.format(p.poids) + " kg" : ""].filter(Boolean).join(" · ");
   $("pfView").innerHTML = `<div class="pf-top">${avatarHTML(p, 84)}<div class="pf-counts" id="pfCounts"></div></div>
-    <div class="pf-id"><b>${esc(p.pseudo || "")}</b>${name ? `<span>${esc(name)}</span>` : ""}${body ? `<span class="hint">${esc(body)}</span>` : ""}${p.objectif ? `<span class="tag">${esc(p.objectif)}</span>` : ""}
-      ${p.createdAt ? `<span class="hint">Membre depuis ${esc(fmtDate(p.createdAt))}</span>` : ""}</div>
+    <div class="pf-id"><b>${esc(p.pseudo || "")}</b>${name ? `<span>${esc(name)}</span>` : ""}${body ? `<span class="hint">${esc(body)}</span>` : ""}${p.objectif ? `<span class="tag">${esc(valeur("valeurs.objectifs", p.objectif))}</span>` : ""}
+      ${p.createdAt ? `<span class="hint">${esc(t("profil.membreDepuis", { date: fmtDate(p.createdAt) }))}</span>` : ""}</div>
     ${msg ? `<p class="ok-msg">${esc(msg)}</p>` : ""}
-    <div class="grid2"><button type="button" class="btn" id="pfEdit">Modifier le profil</button><button type="button" class="btn primary" data-go="share">📤 Partager</button></div>`;
+    <div class="grid2"><button type="button" class="btn" id="pfEdit">${t("profil.modifier")}</button><button type="button" class="btn primary" data-go="share">${t("profil.partager")}</button></div>`;
   $("pfView").hidden = false; $("pfForm").hidden = true;
   renderPfStats();
   $("pfEdit").onclick = () => {
@@ -138,28 +129,28 @@ function renderPfView(msg) {
 $("pfCancel").onclick = () => renderPfView();
 function renderProfile() {
   renderPfView(); refreshInstallBtn(); renderTheme(); renderSound();
-  $("pfEmail").textContent = "Connecté avec " + (S.email || "ton e-mail");
+  $("pfEmail").textContent = S.email ? t("profil.connecteAvec", { email: S.email }) : t("profil.connecteAvecEmail");
   $("pwMsg").hidden = true; $("delForm").hidden = true; $("delAccount").hidden = false; $("delErr").hidden = true;
   $("adminBtn").hidden = !S.admin;
 }
 $("pfForm").addEventListener("submit", e => {
   e.preventDefault();
   const f = readFields("pf");
-  if (!f.pseudo) { show($("pfMsg"), "Le pseudo ne peut pas être vide."); return; }
+  if (!f.pseudo) { show($("pfMsg"), t("profil.pseudoVide")); return; }
   $("pfMsg").hidden = true;
   const btn = e.submitter || $("pfForm").querySelector("[type=submit]"); btn.disabled = true;
-  saveProfile(f).then(() => { renderPfView("Profil enregistré."); ensureSocialProfile(); }).catch(() => show($("pfMsg"), "Échec de l’enregistrement. Vérifie ta connexion et réessaie."))
+  saveProfile(f).then(() => { renderPfView(t("profil.enregistre")); ensureSocialProfile(); }).catch(() => show($("pfMsg"), t("profil.echec")))
     .finally(() => { btn.disabled = false; });
 });
 $("pwReset").onclick = async () => {
-  try { await sendPasswordResetEmail(auth, S.email); show($("pwMsg"), "E-mail envoyé à " + S.email + ". Suis le lien pour choisir un nouveau mot de passe (regarde aussi dans tes spams)."); }
+  try { await sendPasswordResetEmail(auth, S.email); show($("pwMsg"), t("profil.mdpEnvoye", { email: S.email })); }
   catch (err) { show($("pwMsg"), authMsg(err)); }
 };
 $("logout").onclick = () => signOut(auth);
 $("delAccount").onclick = () => { $("delAccount").hidden = true; $("delForm").hidden = false; $("delPass").focus(); };
 $("delForm").addEventListener("submit", async e => {
   e.preventDefault();
-  const btn = $("delGo"); btn.disabled = true; btn.textContent = "Suppression…"; $("delErr").hidden = true;
+  const btn = $("delGo"); btn.disabled = true; btn.textContent = t("profil.suppression"); $("delErr").hidden = true;
   try {
     const user = auth.currentUser;
     await reauthenticateWithCredential(user, EmailAuthProvider.credential(S.email, $("delPass").value));
@@ -176,8 +167,8 @@ $("delForm").addEventListener("submit", async e => {
     await deleteDoc(userRef());
     await deleteUser(user);
   } catch (err) {
-    show($("delErr"), err && err.code && err.code.startsWith("auth/") ? authMsg(err) : "La suppression a échoué. Réessaie.");
-    btn.disabled = false; btn.textContent = "Supprimer définitivement";
+    show($("delErr"), err && err.code && err.code.startsWith("auth/") ? authMsg(err) : t("profil.suppressionEchec"));
+    btn.disabled = false; btn.textContent = t("profil.supprimerDefinitivement");
   }
 });
 

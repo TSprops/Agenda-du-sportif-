@@ -2,7 +2,8 @@
 import { exHistory, exKey, setTxt } from "./derniere-fois.js";
 import { CF_CATS, CF_LIB, CORDES_EX, HYROX_EX, LEGACY_EX } from "../../data.js";
 import { howBtnHTML } from "../comment-faire/index.js";
-import { $, EQUIP, EXERCISES, GROUPS, KEYWORDS, MUSCLES, S, esc } from "../commun/core.js";
+import { $, EQUIP, EXERCISES, GROUPS, KEYWORDS, MUSCLES, S, esc, nomEx } from "../commun/core.js";
+import { canon, t } from "../commun/i18n.js";
 import { norm } from "../pages/faq.js";
 import { doneSet } from "../idees/index.js";
 import { muscleMini } from "../pages/muscles.js";
@@ -15,7 +16,7 @@ const LIB_ALL = EXERCISES.map(([name, m, sec, eq, hold]) => ({ name, m, s: sec, 
 const CF_ALL = CF_LIB.map(([name, cat, m, sec, eq]) => ({ name, cat, m, s: sec, eq, hold: false }));
 function libList() { return [...((S.profile && S.profile.customEx) || []).map(x => ({ name: x.name, m: x.m || [], s: x.s || [], eq: "", hold: !!x.hold, custom: true })), ...LIB_ALL]; }
 export function libFind(name) {
-  const k = exKey(name || ""), f = libList().find(x => exKey(x.name) === k); if (f) return f;
+  const k = exKey(canon("exercices.noms", name || "")), f = libList().find(x => exKey(x.name) === k); if (f) return f;
   const cf = CF_ALL.find(x => exKey(x.name) === k); if (cf) return cf;
   const hx = HYROX_EX.find(([n]) => exKey(n) === k); if (hx) return { name: hx[0], m: hx[3], s: hx[4], eq: "", hold: false };
   const old = LEGACY_EX.find(([n]) => exKey(n) === k);
@@ -32,8 +33,8 @@ const LIB = { cb: null, q: "", g: null, disc: "muscu" };
 export function openLib(cb, disc) {
   Object.assign(LIB, { cb, q: "", g: null, disc: disc || "muscu" });
   const cf = LIB.disc === "crossfit";
-  $("libTitle").textContent = cf ? "Mouvements" : "Exercices";
-  $("libQ").placeholder = cf ? "Chercher un mouvement ou crée le tien en l’écrivant" : "Chercher un exercice ou crée le tien en l’écrivant";
+  $("libTitle").textContent = t(cf ? "crossfit.mouvements" : "bibliotheque.titre");
+  $("libQ").placeholder = t(cf ? "bibliotheque.chercherMouvement" : "bibliotheque.chercher");
   $("libQ").value = ""; renderLibChips(); renderLib();
   $("libSheet").scrollTop = 0; $("libSheet").classList.add("open"); document.body.classList.add("sheet-open");
 }
@@ -42,7 +43,7 @@ function renderLibChips() {
   // Corde : uniquement les montées de corde, pas de filtre par muscle.
   $("libChips").hidden = LIB.disc === "cordes" || LIB.disc === "hyrox";
   // CrossFit : filtres par type de mouvement plutôt que par muscle.
-  $("libChips").innerHTML = `<button type="button" class="chip" data-lg="" aria-pressed="${!LIB.g}" style="--tc:var(--red)">Tous</button>` +
+  $("libChips").innerHTML = `<button type="button" class="chip" data-lg="" aria-pressed="${!LIB.g}" style="--tc:var(--red)">${t("bibliotheque.tous")}</button>` +
     (LIB.disc === "crossfit" ? CF_CATS : GROUPS).map(([id, n]) => `<button type="button" class="chip" data-lg="${id}" aria-pressed="${LIB.g === id}" style="--tc:var(--red)">${n}</button>`).join("");
 }
 function usedNames() {
@@ -54,7 +55,7 @@ function usedNames() {
 function libRow(x, before) {
   const h = exHistory(x.name, before || "9999"), mus = (x.m || []).map(m => MUSCLES[m]).join(", ");
   return `<div class="lib-item"><button type="button" class="lib-row" data-lib="${esc(x.name)}" data-hold="${x.hold ? 1 : ""}">${muscleMini(x.m || [], x.s || [])}
-    <span class="main"><b>${esc(x.name)}</b><span>${esc([mus, EQUIP[x.eq]].filter(Boolean).join(" · ") || "Exercice perso")}</span>
+    <span class="main"><b>${esc(nomEx(x.name))}</b><span>${esc([mus, EQUIP[x.eq]].filter(Boolean).join(" · ") || t("bibliotheque.perso"))}</span>
     ${h ? `<span class="lib-last">↺ ${esc(h.ex.sets.filter(doneSet).map(st => setTxt(st, h.ex.hold)).slice(0, 3).join(" · "))}</span>` : ""}</span><span class="plus" aria-hidden="true">+</span></button>${howBtnHTML(x.name, "lib")}</div>`;
 }
 function renderLib() {
@@ -64,7 +65,9 @@ function renderLib() {
   const byKey = new Map(all.map(x => [exKey(x.name), x]));
   // Exercices déjà faits mais absents de la bibliothèque (noms tapés à la main).
   usedNames().forEach((n, k) => { if (!byKey.has(k)) { const mu = musclesOf(n); const x = { name: n, m: mu ? mu.p : [], s: mu ? mu.s : [], eq: "", hold: false, custom: true }; all.unshift(x); byKey.set(k, x); } });
-  let list = all.filter(x => (!q || exKey(x.name).includes(q)) && (!grp || (x.m || []).some(m => grp[2].includes(m))));
+  // Recherche dans le nom affiché (langue choisie) et dans le nom de référence (français).
+  const found = x => exKey(nomEx(x.name)).includes(q) || exKey(x.name).includes(q);
+  let list = all.filter(x => (!q || found(x)) && (!grp || (x.m || []).some(m => grp[2].includes(m))));
   if (cf && !q) list = CF_ALL.filter(x => !LIB.g || x.cat === LIB.g);
   if (LIB.disc === "calis" && !q && !grp) list = list.filter(x => x.eq === "C" || x.custom);
   // Corde : exactement les trois montées de corde (sans « récents » ni autres exercices) ; la recherche reste possible.
@@ -74,11 +77,11 @@ function renderLib() {
   const hyrox = LIB.disc === "hyrox" && !q;
   if (hyrox) list = HYROX_EX.map(([name, , , m, s]) => ({ name, m, s, eq: "", hold: false }));
   const recent = !q && !grp && !(cf && LIB.g) && !cordes && !hyrox ? [...usedNames().keys()].slice(0, 8).map(k => byKey.get(k)).filter(Boolean) : [];
-  const exact = q && all.some(x => exKey(x.name) === q);
-  $("libList").innerHTML = `${q && !exact ? `<button type="button" class="lib-row lib-new" data-libnew="1"><span class="plus-big">+</span><span class="main"><b>Créer « ${esc(LIB.q.trim())} »</b><span>Ajouter ton propre ${cf ? "mouvement" : "exercice"}</span></span></button>` : ""}
-    ${recent.length ? `<h3 class="h2">${cf ? "Tes mouvements récents" : "Tes exercices récents"}</h3><div class="lib-group">${recent.map(x => libRow(x, before)).join("")}</div>` : ""}
-    ${list.length ? `<h3 class="h2">${q || grp || (cf && LIB.g) ? list.length + (cf ? " mouvement" : " exercice") + (list.length > 1 ? "s" : "") : hyrox ? "Ateliers Hyrox" : cf ? "Tous les mouvements" : "Tous les exercices"}</h3><div class="lib-group">${list.filter(x => !recent.includes(x)).map(x => libRow(x, before)).join("")}</div>`
-      : q ? "" : `<p class="hint">Aucun exercice dans ce groupe.</p>`}`;
+  const exact = q && all.some(x => exKey(x.name) === q || exKey(nomEx(x.name)) === q);
+  $("libList").innerHTML = `${q && !exact ? `<button type="button" class="lib-row lib-new" data-libnew="1"><span class="plus-big">+</span><span class="main"><b>${esc(t("bibliotheque.creer", { nom: LIB.q.trim() }))}</b><span>${t(cf ? "bibliotheque.ajouterMouvement" : "bibliotheque.ajouterExercice")}</span></span></button>` : ""}
+    ${recent.length ? `<h3 class="h2">${t(cf ? "bibliotheque.mouvementsRecents" : "bibliotheque.exercicesRecents")}</h3><div class="lib-group">${recent.map(x => libRow(x, before)).join("")}</div>` : ""}
+    ${list.length ? `<h3 class="h2">${q || grp || (cf && LIB.g) ? t(cf ? "bibliotheque.nMouvements" : "bibliotheque.nExercices", { n: list.length }) : t(hyrox ? "bibliotheque.ateliersHyrox" : cf ? "bibliotheque.tousMouvements" : "bibliotheque.tousExercices")}</h3><div class="lib-group">${list.filter(x => !recent.includes(x)).map(x => libRow(x, before)).join("")}</div>`
+      : q ? "" : `<p class="hint">${t("bibliotheque.groupeVide")}</p>`}`;
 }
 $("libQ").addEventListener("input", e => { LIB.q = e.target.value; renderLib(); });
 $("libSheet").addEventListener("click", e => {

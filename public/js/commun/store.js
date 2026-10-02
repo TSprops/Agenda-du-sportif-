@@ -17,6 +17,7 @@ import { renderMuscles } from "../pages/muscles.js";
 import { renderTrophees } from "../pages/trophees.js";
 import { maybeResetTours, renderTutos, tourCheck } from "./tutoriel.js";
 import { updateTabbar } from "./barre-onglets.js";
+import { t } from "./i18n.js";
 
 /* ============================================================
    Accès aux données
@@ -44,7 +45,7 @@ function persistDay(k, data) {
   const ref = subDoc("seances", k);
   dChain = dChain.then(() => data ? setDoc(ref, data) : deleteDoc(ref))
     .then(() => setSave(""))
-    .catch(() => setSave("Non enregistré : vérifie ta connexion"));
+    .catch(() => setSave(t("seances.nonEnregistre")));
   syncStats();
 }
 function persistTypes() { saveProfile({ types: clone(S.types), typesV: TYPES_V }); }
@@ -59,7 +60,7 @@ function syncStats() {
     const ks = Object.keys(S.days).sort(), byType = {};
     let ex = 0, vol = 0, photos = 0;
     ks.forEach(k => {
-      const d = S.days[k], n = dayMeta(d).name;
+      const d = S.days[k], n = dayMeta(d).ref; // nom de référence (français), le même quelle que soit la langue
       byType[n] = (byType[n] || 0) + 1; ex += (d.exercises || []).length; vol += dayVolume(d); photos += (d.photos || []).length;
     });
     const nk = Object.keys(S.nut);
@@ -84,7 +85,7 @@ const RENDER = {
 function go(v) {
   if (v === "feed") v = "social"; // le fil d'actu est maintenant sur la page Social
   if (v === "complements" && !S.cpDay) S.cpDay = todayK();
-  if (v === "creatine" && !S.crView) { const t = new Date(); S.crView = new Date(t.getFullYear(), t.getMonth(), 1); }
+  if (v === "creatine" && !S.crView) { const d = new Date(); S.crView = new Date(d.getFullYear(), d.getMonth(), 1); }
   if (v === "contactform") { $("ctForm").hidden = false; $("ctDone").hidden = true; $("ctErr").hidden = true; renderObjets(); }
   S.screen = v;
   window.scrollTo(0, 0); // avant de changer de page : sur iPhone, une page qui raccourcit en étant défilée décale la barre du bas

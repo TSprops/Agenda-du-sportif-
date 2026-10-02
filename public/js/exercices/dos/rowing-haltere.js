@@ -1,7 +1,8 @@
 // Fiche « Comment faire » : Rowing haltère.
+import { t } from "../../commun/i18n.js";
 import { side } from "../_communs.js";
 import { benchRow } from "./_communs.js";
 
-export default { views: [side([benchRow(0), benchRow(1)], ["Bras tendu", "Coude tiré vers l’arrière"])],
-    cue: "Une main et un genou sur le banc, dos plat : tire l’haltère vers la hanche, coude près du corps, puis redescends.",
-    tips: ["Dos plat, parallèle au sol.", "Tire le coude vers la hanche, pas vers l’épaule.", "Le buste ne tourne pas pendant le mouvement."] };
+export default { views: [side([benchRow(0), benchRow(1)], [t("fiches.rowing-haltere.legende1"), t("fiches.rowing-haltere.legende2")])],
+    cue: t("fiches.rowing-haltere.consigne"),
+    tips: [t("fiches.rowing-haltere.conseil1"), t("fiches.rowing-haltere.conseil2"), t("fiches.rowing-haltere.conseil3")] };

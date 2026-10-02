@@ -3,6 +3,7 @@ import { $h, playViews, stopLive } from "./lecture.js";
 import { GRIPS, gripSVG } from "./mains.js";
 import { moveOf } from "./recherche.js";
 import { esc } from "../commun/core.js";
+import { t, valeur } from "../commun/i18n.js";
 import { bodySVG } from "../pages/muscles.js";
 import { figure, frameBox } from "../silhouette/index.js";
 import { musclesOf } from "../entrainement/index.js";
@@ -11,7 +12,7 @@ import { musclesOf } from "../entrainement/index.js";
 // i : numéro de l'exercice dans la séance, ou "lib" dans la recherche d'exercices.
 export function howBtnHTML(name, i) {
   if (!moveOf(name)) return "";
-  return `<button type="button" class="how-btn" data-how="${i}" data-name="${esc(name)}" aria-label="Comment faire : ${esc(name)}"><span aria-hidden="true">?</span></button>`;
+  return `<button type="button" class="how-btn" data-how="${i}" data-name="${esc(name)}" aria-label="${esc(t("commentFaire.aria", { nom: valeur("exercices.noms", name) }))}"><span aria-hidden="true">?</span></button>`;
 }
 let opener = null, inerted = [];
 // Une vue : les images clés côte à côte (Départ / Arrivée…) et, cachée, la même vue animée (bouton « Voir le mouvement »).
@@ -23,8 +24,8 @@ export function animViewsOf(def) {
   return def.anim ? def.views.filter(v => v.label === def.anim) : def.views;
 }
 function viewHTML(v, draw, many, k) {
-  const n = v.frames.length, caps = v.caps || (n === 1 ? ["Position à tenir"] : n === 2 ? ["Départ", "Arrivée"] : []);
-  return `<div class="how-view">${many ? `<p class="how-vt">${v.label}</p>` : ""}
+  const n = v.frames.length, caps = v.caps || (n === 1 ? [t("commentFaire.position")] : n === 2 ? [t("commentFaire.depart"), t("commentFaire.arrivee")] : []);
+  return `<div class="how-view">${many ? `<p class="how-vt">${valeur("valeurs.vues", v.label)}</p>` : ""}
     <div class="how-frames${n > 1 ? " multi" : ""}">${v.frames.map((p, i) => `<figure>${draw(p)}<figcaption>${caps[i] || ""}</figcaption></figure>`).join("")}</div>
     </div>`;
 }
@@ -40,20 +41,20 @@ function openHow(name, btn) {
   const target = def.t || mus.p;
   const anim = animViewsOf(def).filter(v => v.frames.length > 1), moving = anim.length > 0;
   const html = def.views.map((v, k) => { const b = frameBox(v.frames); return viewHTML(v, p => figure(p, target, b), def.views.length > 1, k); }).join("")
-    + `<div class="how-lives">${anim.map((v, k) => `<figure class="how-live" data-live="${k}" role="img" aria-label="Animation ${v.label.toLowerCase()}, en boucle">${anim.length > 1 ? `<p class="how-vt">${v.label}</p>` : ""}<div class="how-live-fig"></div><figcaption></figcaption></figure>`).join("")}</div>`;
+    + `<div class="how-lives">${anim.map((v, k) => `<figure class="how-live" data-live="${k}" role="img" aria-label="${t("commentFaire.animation", { vue: valeur("valeurs.vues", v.label) })}">${anim.length > 1 ? `<p class="how-vt">${valeur("valeurs.vues", v.label)}</p>` : ""}<div class="how-live-fig"></div><figcaption></figcaption></figure>`).join("")}</div>`;
   current = { views: anim, target };
   const info = def;
-  $h("howTitle").textContent = name;
+  $h("howTitle").textContent = valeur("exercices.noms", name);
   $h("howStage").className = "how-stage";
-  $h("howStage").innerHTML = html + (moving && !reduce ? `<button type="button" class="btn how-play" id="howPlay" aria-pressed="false"><span aria-hidden="true">▶</span> Voir le mouvement</button>` : "");
+  $h("howStage").innerHTML = html + (moving && !reduce ? `<button type="button" class="btn how-play" id="howPlay" aria-pressed="false"><span aria-hidden="true">▶</span> ${t("commentFaire.voir")}</button>` : "");
   $h("howTips").hidden = !info.tips;
-  $h("howTips").innerHTML = info.tips ? `<p class="how-vt">Repères pour débuter</p><ul>${info.tips.map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : "";
+  $h("howTips").innerHTML = info.tips ? `<p class="how-vt">${t("commentFaire.reperes")}</p><ul>${info.tips.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : "";
   const grip = GRIPS[info.grip];
   $h("howGrip").hidden = !grip;
-  $h("howGrip").innerHTML = grip ? `<p class="how-vt">Placement des mains</p>${gripSVG(info.grip)}<p>${grip.txt}</p>` : "";
+  $h("howGrip").innerHTML = grip ? `<p class="how-vt">${t("commentFaire.mains")}</p>${gripSVG(info.grip)}<p>${t("commentFaire.prises." + info.grip)}</p>` : "";
   $h("howCue").textContent = info.cue;
-  $h("howMap").innerHTML = `<figure>${bodySVG("front", lv)}<figcaption>Face</figcaption></figure><figure>${bodySVG("back", lv)}<figcaption>Dos</figcaption></figure>
-    <p class="how-legend"><span><i class="lp"></i>Muscles principaux</span><span><i class="ls"></i>Muscles qui aident</span></p>`;
+  $h("howMap").innerHTML = `<figure>${bodySVG("front", lv)}<figcaption>${t("commentFaire.face")}</figcaption></figure><figure>${bodySVG("back", lv)}<figcaption>${t("commentFaire.dos")}</figcaption></figure>
+    <p class="how-legend"><span><i class="lp"></i>${t("commentFaire.principaux")}</span><span><i class="ls"></i>${t("commentFaire.aident")}</span></p>`;
   // Le reste de l'app devient inerte tant que la fenêtre est ouverte.
   inerted = [...document.body.children].filter(el => el.id !== "howSheet" && el.id !== "howBackdrop" && !el.inert);
   inerted.forEach(el => { el.inert = true; });
@@ -89,6 +90,6 @@ $h("howStage").addEventListener("click", e => {
   const on = $h("howStage").classList.toggle("playing");
   b.setAttribute("aria-pressed", on);
   if (on && current) playViews(current.views, current.target); else stopLive();
-  b.innerHTML = on ? `<span aria-hidden="true">■</span> Revoir départ et arrivée` : `<span aria-hidden="true">▶</span> Voir le mouvement`;
+  b.innerHTML = on ? `<span aria-hidden="true">■</span> ${t("commentFaire.revoir")}` : `<span aria-hidden="true">▶</span> ${t("commentFaire.voir")}`;
 });
 $h("howBackdrop").onclick = closeHow;

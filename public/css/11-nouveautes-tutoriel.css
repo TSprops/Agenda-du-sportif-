@@ -63,8 +63,8 @@
 /* Petits écrans (iPhone SE) : tout tient sans défilement */
 @media (max-height:640px){.news-slide h2{font-size:22px}.news-slide p{font-size:13px;line-height:1.38}.nh-figs .fg{max-height:52px}.news-visual{padding:8px}.nh-play{display:none}.install.news{gap:9px;padding-top:6px}.mh-toc b{padding:2px 0;font-size:12.5px}.mh-title{font-size:16px}}
 /* Accueil : boutons Tutoriel et Contact, côte à côte, bien visibles */
-.home-links{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:76px}
-.home-link{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 14px;border-radius:16px;border:1.5px solid color-mix(in srgb,var(--red) 60%,var(--line));background:var(--red-soft);color:var(--ink);font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:.04em;text-transform:uppercase}
+.home-links{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-bottom:76px}
+.home-link{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 14px;border-radius:16px;border:1.5px solid color-mix(in srgb,var(--red) 60%,var(--line));background:var(--red-soft);color:var(--ink);font-family:var(--display);font-weight:800;font-size:clamp(15px,5vw,19px);letter-spacing:.04em;text-transform:uppercase;min-width:0;text-align:center;line-height:1.05}
 .home-link svg{width:22px;height:22px;flex:none;fill:none;stroke:var(--red-hi);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .home-link:active{transform:scale(.97)}
 /* Tutoriel guidé : écran assombri sauf l'élément expliqué, bulle à côté */

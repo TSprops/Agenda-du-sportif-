@@ -1,10 +1,11 @@
 // Social : fil d'actualité des amis et réactions.
 import { acceptedFriends, bannedStop } from "./accueil.js";
 import { commentsHTML } from "./commentaires.js";
-import { $, DAYS, DEFAULT_TYPES, S, cap, clone, collection, dayMeta, dayOf, db, deleteDoc, discOf, doc, esc, getDoc, getDocs, isEmpty, limit, orderBy, parse, query, setDoc, titleOf, where } from "../commun/core.js";
+import { $, DEFAULT_TYPES, S, clone, collection, dayMeta, dayOf, db, deleteDoc, discOf, doc, esc, getDoc, getDocs, isEmpty, limit, orderBy, parse, prTexte, query, setDoc, titleOf, where } from "../commun/core.js";
+import { dateFormat, majuscule, t } from "../commun/i18n.js";
 import { cordesOf, toast } from "../entrainement/index.js";
 import { REACTS, SOC, dirOf, friendSessionDetail, who } from "../amis/index.js";
-import { MONTHS_S, tryIdea } from "../idees/index.js";
+import { tryIdea } from "../idees/index.js";
 import { hyroxEx, restOf, sessionSummary } from "../seances/index.js";
 
 /* ---------- Fil d'actualité ---------- */
@@ -43,10 +44,10 @@ function feedItems() {
 }
 export function renderFeed() {
   const F = SOC.feed || { by: {} }, items = feedItems(), fr = acceptedFriends();
-  const head = `<button class="btn" id="feedRefresh"${F.loading ? " disabled" : ""}>${F.loading ? "Chargement…" : "↻ Actualiser"}</button>`;
-  if (!fr.length) { $("feedBody").innerHTML = `<div class="empty">Ajoute des amis pour voir leurs séances ici.</div><button class="btn primary" data-go="friends">Ajouter des amis</button>`; return; }
+  const head = `<button class="btn" id="feedRefresh"${F.loading ? " disabled" : ""}>${t(F.loading ? "commun.chargementPoints" : "social.actualiser")}</button>`;
+  if (!fr.length) { $("feedBody").innerHTML = `<div class="empty">${t("social.ajouteAmisFil")}</div><button class="btn primary" data-go="friends">${t("social.ajouterAmis")}</button>`; return; }
   $("feedBody").innerHTML = head + (items.length ? `<div class="list">${items.map(it => feedCard(it.uid, it.s, F.by[it.uid])).join("")}</div>`
-    : F.loading ? "" : `<div class="empty">Pas encore de séance chez tes amis.</div>`);
+    : F.loading ? "" : `<div class="empty">${t("social.filVide")}</div>`);
 }
 function feedCard(uid, s, x) {
   const mine = uid === S.uid, w = who(uid, 40), types = !mine && x && x.share && Array.isArray(x.share.types) && x.share.types.length ? x.share.types : mine ? S.types : DEFAULT_TYPES;
@@ -56,10 +57,10 @@ function feedCard(uid, s, x) {
     return mine ? (n ? `<span class="react">${em} ${n}</span>` : "") : `<button type="button" class="react${me ? " on" : ""}" data-freact="${uid}|${esc(s.k)}|${id}">${em}${n ? " " + n : ""}</button>`; }).join("");
   const d = parse(s.k);
   return `<article class="feed-card" style="--tc:${mt.color}">
-    <header>${w.av}<span class="main"><b>${esc(mine ? "Toi" : w.d.pseudo)}</b><span>${esc(cap(DAYS[d.getDay()]))} ${d.getDate()} ${esc(MONTHS_S[d.getMonth()])} · ${esc(mt.name)}</span></span></header>
+    <header>${w.av}<span class="main"><b>${esc(mine ? t("social.toi") : w.d.pseudo)}</b><span>${esc(majuscule(dateFormat(d, { weekday: "long", day: "numeric", month: "short" })))} · ${esc(mt.name)}</span></span></header>
     <button type="button" class="fc-body" data-fopen2="${uid}|${esc(s.k)}"><b>${esc(titleOf(s, types))}</b><span>${esc(sessionSummary(s, types))}</span><span class="arrow" aria-hidden="true">${open ? "−" : "+"}</span></button>
-    ${(s.prs || []).length ? `<div class="pr-badges">${s.prs.slice(0, 4).map(p => `<span class="pr-badge">🏆 ${esc(p)}</span>`).join("")}</div>` : ""}
-    ${open ? friendSessionDetail(s, types) + (mine ? "" : `<button type="button" class="btn primary idea-go" data-ftry2="${uid}|${esc(s.k)}">Essayer cette séance</button>`) : ""}
+    ${(s.prs || []).length ? `<div class="pr-badges">${s.prs.slice(0, 4).map(p => `<span class="pr-badge">🏆 ${esc(prTexte(p))}</span>`).join("")}</div>` : ""}
+    ${open ? friendSessionDetail(s, types) + (mine ? "" : `<button type="button" class="btn primary idea-go" data-ftry2="${uid}|${esc(s.k)}">${t("social.essayerSeance")}</button>`) : ""}
     ${rx ? `<div class="reacts">${rx}</div>` : ""}
     ${commentsHTML(comments, uid, s.k, { all: SOC.openCmt === s.k })}
   </article>`;
@@ -72,8 +73,8 @@ $("feedBody").addEventListener("click", async e => {
     const [uid, k, id] = r.dataset.freact.split("|"), x = SOC.feed.by[uid]; if (!x) return;
     await toggleReact(uid, k, id, x); renderFeed(); return;
   }
-  const t = e.target.closest("[data-ftry2]");
-  if (t) { const [uid, k] = t.dataset.ftry2.split("|"), x = SOC.feed.by[uid], s = x && x.days.find(d => d.k === k); if (s) trySession(t, uid, s, (x.share && x.share.types) || DEFAULT_TYPES); }
+  const tr = e.target.closest("[data-ftry2]");
+  if (tr) { const [uid, k] = tr.dataset.ftry2.split("|"), x = SOC.feed.by[uid], s = x && x.days.find(d => d.k === k); if (s) trySession(tr, uid, s, (x.share && x.share.types) || DEFAULT_TYPES); }
 });
 export async function toggleReact(uid, k, id, holder) {
   if (bannedStop()) return;
@@ -81,7 +82,7 @@ export async function toggleReact(uid, k, id, holder) {
   try {
     if (mine && mine.emoji === id) { await deleteDoc(ref); holder.reacts = holder.reacts.filter(r => r !== mine); }
     else { const r = { date: k, from: S.uid, emoji: id, at: Date.now() }; await setDoc(ref, r); holder.reacts = holder.reacts.filter(x => x !== mine).concat(r); }
-  } catch (x) { toast("Réaction impossible (connexion ?)"); }
+  } catch (x) { toast(t("social.reactionImpossible")); }
 }
 export function trySession(btn, uid, s, types) {
   const disc = discOf(s);

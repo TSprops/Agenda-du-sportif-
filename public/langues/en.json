@@ -1,0 +1,3635 @@
+{
+  "_langue": {
+    "nom": "English",
+    "locale": "en-US"
+  },
+  "app": {
+    "titre": "AS Sport · The Athlete’s Planner",
+    "description": "Log your workouts and nutrition, and track your progress.",
+    "devise": "The Athlete’s Planner"
+  },
+  "secours": {
+    "lent": "The app is taking a while to start.",
+    "reparer": "Repair and reload",
+    "donnees": "Your data won’t be deleted."
+  },
+  "config": {
+    "badge": "Setup",
+    "titre": "Firebase isn’t set up yet",
+    "texte": "Paste the <code>firebaseConfig</code> block from your Firebase console into <code>public/firebase-config.js</code>, then redeploy. README.md walks you through each step."
+  },
+  "commun": {
+    "chargement": "Loading",
+    "emailExemple": "name@example.com",
+    "masquerMessage": "Hide this message",
+    "moisPrecedent": "Previous month",
+    "moisSuivant": "Next month",
+    "joursCourts": {
+      "lun": "Mon",
+      "mar": "Tue",
+      "mer": "Wed",
+      "jeu": "Thu",
+      "ven": "Fri",
+      "sam": "Sat",
+      "dim": "Sun"
+    },
+    "jourPrecedent": "Previous day",
+    "jourSuivant": "Next day",
+    "ajouter": "Add",
+    "retour": "Back",
+    "envoyer": "Send",
+    "annuler": "Cancel",
+    "enregistrer": "Save",
+    "precedent": "Previous",
+    "suivant": "Next",
+    "horsConnexion": "Offline · everything will sync when you’re back online",
+    "fermer": "Close",
+    "passer": "Skip",
+    "plusTard": "Later",
+    "fermerMessage": "Close this message",
+    "jamais": "never",
+    "dureeHeures": "{h}h {m}",
+    "echecReessaie": "Failed, try again",
+    "ok": "OK",
+    "aujourdhui": "Today",
+    "erreur": "Something went wrong. Try again.",
+    "unInstant": "One moment…",
+    "aHeure": "at {heure}",
+    "confirmer": "Confirm",
+    "chargementPoints": "Loading…",
+    "confirmerQ": "Confirm?",
+    "heures": "Hours"
+  },
+  "connexion": {
+    "bienvenue": "Welcome",
+    "accroche": "Workouts, nutrition and progress, all in one place.",
+    "ongletConnexion": "Log in",
+    "ongletInscription": "Sign up",
+    "email": "Email",
+    "motDePasse": "Password",
+    "motDePasseMin": "At least 6 characters",
+    "seConnecter": "Log in",
+    "oublie": "Forgot your password?",
+    "erreurChargement": "Couldn’t load your account. Check your connection and try again.",
+    "creerCompte": "Create my account",
+    "erreurs": {
+      "invalid-email": "This email address isn’t valid.",
+      "email-already-in-use": "An account already exists with this email. Log in instead.",
+      "weak-password": "Choose a password of at least 6 characters.",
+      "invalid-credential": "Incorrect email or password.",
+      "wrong-password": "Incorrect password.",
+      "user-not-found": "No account with this email.",
+      "too-many-requests": "Too many attempts. Wait a few minutes and try again.",
+      "network-request-failed": "No internet connection. Check your network.",
+      "missing-password": "Enter your password."
+    },
+    "oublieSansEmail": "Enter your email above, then tap “Forgot your password?”.",
+    "oublieEnvoye": "If an account exists for {email}, an email is on its way (from: noreply@agenda-du-sportif.firebaseapp.com). Check your spam or junk folder too; it arrives within 1 to 5 minutes."
+  },
+  "legal": {
+    "conditions": "Terms of use",
+    "confidentialite": "Privacy"
+  },
+  "inscription": {
+    "badge": "Last step",
+    "titre": "Your <span>profile</span>",
+    "presenteToi": "Introduce yourself",
+    "intro": "Your account is yours alone: all your data is there every time you log in, on all your devices.",
+    "accepte": "I’m at least 15 years old and I accept the <a href=\"conditions.html\" target=\"_blank\" rel=\"noopener\">terms of use</a> and the <a href=\"confidentialite.html\" target=\"_blank\" rel=\"noopener\">privacy policy</a>.",
+    "terminer": "Finish signing up",
+    "choisisPseudo": "Choose a username to finish signing up.",
+    "accepteConditions": "Accept the terms of use to finish signing up.",
+    "erreur": "Couldn’t save your profile. Check your connection and try again."
+  },
+  "installation": {
+    "banniereTitre": "Install the app on your phone",
+    "banniereTexte": "One tap away, full screen",
+    "titre": "Install the app",
+    "gratuit": "AS Sport · free",
+    "texte": "Add the app to your home screen: it opens full screen in one tap, just like a real app.",
+    "pleinEcran": "Full screen",
+    "unToucher": "One-tap access",
+    "horsConnexion": "Works offline",
+    "ancienneIos": "<b>Delete the old icon</b>: long-press it › <b>Delete Bookmark</b> (or “Delete App”).",
+    "ancienneAndroid": "<b>Delete the old icon</b>: long-press it › <b>Remove</b> (or “Uninstall”).",
+    "titreBienvenue": "Put the app on your phone",
+    "nouvelleAdresse": "The app has a new address! 🏠 Add the new icon to your home screen, then <b>delete the old one</b>: it no longer works.",
+    "bienvenue": "Welcome! 🏠 Add the app to your home screen to open it in one tap, full screen.",
+    "autreApp1": "You opened the link from another app (Snapchat, Instagram…). You need to open it in <b>{nav}</b>.",
+    "autreApp2Ios": "Tap <b>•••</b> or the <b>compass</b> icon, then <b>Open in Safari</b>.",
+    "autreApp2Android": "Tap <b>•••</b> or the <b>browser</b> icon, then <b>Open in browser</b>.",
+    "autreApp3": "Can’t find it? Copy the link and paste it into {nav}.",
+    "copierLien": "Copy link",
+    "installer": "Install the app",
+    "ios1": "Tap <b>Share</b> at the bottom of Safari",
+    "ios2": "Choose <b>Add to Home Screen</b>",
+    "ios3": "Tap <b>Add</b>, and you’re done!",
+    "iosAide": "Don’t see “Share”? It’s sometimes in the <b>•••</b> menu. In a browser other than Safari, open this link in Safari first.",
+    "android1": "Tap the <b>⋮</b> menu at the top right",
+    "android2": "Choose <b>Install app</b> or <b>Add to Home screen</b>",
+    "lienCopie": "Link copied ✓",
+    "lienSelectionne": "Link selected: copy it"
+  },
+  "tutoriel": {
+    "titre": "Tutorial",
+    "intro": "Pick a part of the app: we’ll take you there and show you around step by step.",
+    "passer": "Skip the tutorial",
+    "pages": {
+      "home": {
+        "nom": "Home",
+        "sous": "Your dashboard and the bottom bar",
+        "e1": "Choose how many workouts you want to do per week: every successful week grows your streak 🔥.",
+        "e2": "Your live dashboard: muscle map, progress, nutrition, trophies, PRs, recap, calendar. Tap a card to open it.",
+        "e3": "The + button opens today’s workout directly.",
+        "e4": "At the bottom: Workouts (routines, programs, ideas, free workout), Social and your profile (“You”).",
+        "e5": "Replay these tips anytime with “Tutorial”. A question? “Contact”."
+      },
+      "go": {
+        "nom": "Workouts",
+        "sous": "Free workout, routines, programs, ideas",
+        "e1": "Free workout: build your own workout on any day. Tap the day in the calendar, then add your exercises.",
+        "e2": "Your saved workouts, ready to start again in one tap.",
+        "e3": "Multi-week plans: the app suggests the right workout every time.",
+        "e4": "Ready-made workouts if you’re short on ideas. It’s optional!"
+      },
+      "seances": {
+        "nom": "Calendar",
+        "sous": "Create a free workout on any day",
+        "e1": "Tap the day of your workout: today, a past day or an upcoming one.",
+        "e2": "Or this shortcut for today’s workout.",
+        "e3": "To delete a workout, swipe it to the right."
+      },
+      "seance-choix": {
+        "nom": "Create a workout",
+        "sous": "Choose your sport and add your exercises",
+        "e1": "Choose your sport. No need for a ready-made plan: you build your workout yourself."
+      },
+      "seance": {
+        "e1": "Add your exercises one by one, with your sets and weights: it’s your workout, your way.",
+        "e2": "Choose the type (Push, Pull, Legs…) to find your way around the calendar.",
+        "e3": "Wrong sport? Go back to choosing the activity here.",
+        "e4": "Everything saves automatically. To erase the workout: “Delete workout”, at the very bottom."
+      },
+      "routines": {
+        "nom": "My routines",
+        "sous": "Your saved workouts, ready to go",
+        "e1": "Save your favorite workouts to start them again in one tap.",
+        "e2": "Start a routine: your weights from last time are already filled in."
+      },
+      "programs": {
+        "nom": "Programs",
+        "sous": "Multi-week plans",
+        "e1": "A multi-week plan: the app suggests the right workout every time.",
+        "e2": "Pick one to get started."
+      },
+      "types": {
+        "nom": "Workout ideas",
+        "sous": "Ready-made workouts (optional)",
+        "e1": "Ready-made workouts, by activity. It’s optional: you can create your own with “Free workout”."
+      },
+      "hub": {
+        "e1": "“Try today” copies this workout into today’s calendar."
+      },
+      "records": {
+        "nom": "My PRs",
+        "sous": "Your best performances",
+        "e1": "Pick a category to view and add your PRs."
+      },
+      "progress": {
+        "nom": "My progress",
+        "sous": "Your charts, workout after workout",
+        "e1": "Pick a category to see your charts, workout after workout."
+      },
+      "muscles": {
+        "nom": "Muscle map",
+        "sous": "The muscles you’ve worked",
+        "e1": "View the last 7 or 30 days.",
+        "e2": "The redder it is, the more the muscle has worked. Tap a muscle to see its sets."
+      },
+      "recap": {
+        "nom": "Monthly recap",
+        "sous": "Your numbers to share",
+        "e1": "Your month in numbers.",
+        "e2": "Create an image to share in a story."
+      },
+      "social": {
+        "nom": "Social",
+        "sous": "Feed, friends, challenges, messages",
+        "e1": "Your friends, challenges and leaderboards.",
+        "e2": "Find friends 🔍 or open your messages 💬.",
+        "e3": "The feed: your friends’ latest workouts. React and comment!"
+      },
+      "friends": {
+        "nom": "Friends",
+        "sous": "Add friends with their code",
+        "e1": "Share your friend code so people can add you.",
+        "e2": "Or enter a friend’s code to add them."
+      },
+      "challenges": {
+        "nom": "Challenges",
+        "sous": "Challenge your friends",
+        "e1": "Challenge your friends: workouts, km, volume…"
+      },
+      "nutrition": {
+        "nom": "Nutrition",
+        "sous": "Supplements and creatine",
+        "e1": "Log your supplements and check off your creatine."
+      },
+      "creatine": {
+        "nom": "Creatine",
+        "sous": "Check off today’s dose",
+        "e1": "Tap this button once you’ve taken today’s creatine.",
+        "e2": "Forgot a day? Tap the date to check it off."
+      },
+      "complements": {
+        "nom": "Supplements",
+        "sous": "Log what you take",
+        "e1": "One tap to add a supplement.",
+        "e2": "Or add another one, with its dose."
+      },
+      "contact": {
+        "nom": "Contact",
+        "sous": "Send me an idea, a bug…",
+        "e1": "An idea, a bug, a question: write to me here."
+      },
+      "profile": {
+        "nom": "Profile",
+        "sous": "Your info, colors and settings",
+        "e1": "Your profile: your activities, your friends. “Share” shows your QR code so people can add you.",
+        "e2": "Choose your color and display mode.",
+        "e3": "Replay the tutorials whenever you like.",
+        "langue": "Choose the app’s language: it follows you on all your devices."
+      }
+    },
+    "terminer": "Finish",
+    "remisAZero": "✓ Tutorials reset"
+  },
+  "contact": {
+    "titre": "Contact",
+    "formTitre": "Contact me",
+    "formTexte": "Help, complaint, idea or problem: your message comes straight to me.",
+    "mesMessages": "My sent messages",
+    "objet": "Subject",
+    "objetMessage": "Message subject",
+    "explique": "Tell me in a few lines…",
+    "emailReponse": "Your email for the reply (optional)",
+    "envoye": "Sent",
+    "merci": "Message sent, thank you!",
+    "merciTexte": "I’ll read it as soon as I can. You’ll find your messages and their status on the Contact page.",
+    "retourAccueil": "Back to home",
+    "lu": "Read",
+    "choisisObjet": "Choose a subject for your message.",
+    "ecrisMessage": "Write your message before sending it.",
+    "envoi": "Sending…",
+    "echec": "Your message couldn’t be sent. Check your connection and try again."
+  },
+  "nav": {
+    "seances": "Workouts",
+    "accueil": "Home",
+    "nutrition": "Nutrition",
+    "idees": "Workout ideas",
+    "routines": "My routines",
+    "social": "Social",
+    "defis": "Challenges",
+    "amis": "Friends",
+    "records": "My PRs",
+    "progression": "My progress",
+    "contact": "Contact",
+    "profil": "Profile",
+    "admin": "Admin"
+  },
+  "nutrition": {
+    "titre": "Nutrition",
+    "rienAujourdhui": "Nothing logged today",
+    "priseA": "Taken today at {heure}",
+    "prise": "Taken today",
+    "pasPrise": "Not taken yet today"
+  },
+  "complements": {
+    "titre": "Supplements",
+    "ajoutRapide": "Quick add",
+    "autre": "Other supplement",
+    "nom": "Name",
+    "nomExemple": "e.g. Whey",
+    "dose": "Dose",
+    "doseExemple": "e.g. 30 g",
+    "prisCeJour": "Taken that day",
+    "aujourdhuiDate": "today, {date}",
+    "prisCeJourN": "Taken that day · {n}",
+    "doseNonPrecisee": "No dose given",
+    "retirer": "Remove",
+    "rien": "Nothing logged that day. Tap a supplement above to add it."
+  },
+  "creatine": {
+    "titre": "Creatine",
+    "calendrier": "Creatine calendar",
+    "oublie": "Forgot another day? Tap the date to check or uncheck it.",
+    "doseQuotidienne": "Daily dose",
+    "enGrammes": "in grams",
+    "prise": "Taken",
+    "aPrendre": "To take",
+    "toucherConfirmer": "Tap to confirm<br>{dose} g today",
+    "annuler": "Tap again to undo.",
+    "priseAria": ", taken",
+    "daffilee_one": "day in a row",
+    "daffilee_other": "days in a row",
+    "joursCeMois": "days this month",
+    "grammesCeMois": "g this month"
+  },
+  "idees": {
+    "titre": "Workout ideas",
+    "intro": "Pick an activity to see workout ideas to try.",
+    "muscu": {
+      "pushForce": {
+        "nom": "Push strength"
+      },
+      "pushVolume": {
+        "nom": "Push volume"
+      },
+      "pullForce": {
+        "nom": "Pull strength"
+      },
+      "pullDos": {
+        "nom": "Pull: wide back"
+      },
+      "jambesCompletes": {
+        "nom": "Full leg day"
+      },
+      "quadsFessiers": {
+        "nom": "Quads & glutes"
+      },
+      "hautComplet": {
+        "nom": "Full upper body"
+      },
+      "hautExpress": {
+        "nom": "Quick upper body"
+      },
+      "basForce": {
+        "nom": "Lower body strength"
+      },
+      "fessiersIschios": {
+        "nom": "Glutes & hamstrings"
+      }
+    },
+    "calis": {
+      "debutant": {
+        "nom": "Beginner full body"
+      },
+      "tiragePoussee": {
+        "nom": "Pull & push"
+      },
+      "skills": {
+        "nom": "Skills: balances and levers"
+      },
+      "pyramide": {
+        "nom": "Endurance pyramid"
+      },
+      "muscleUp": {
+        "nom": "Muscle-up progression"
+      }
+    },
+    "course": {
+      "footing": {
+        "nom": "Easy run",
+        "note": "Comfortable pace: you should be able to talk."
+      },
+      "sortieLongue": {
+        "nom": "Long run",
+        "note": "Easy pace, steady from start to finish. Stay hydrated."
+      },
+      "lignesDroites": {
+        "nom": "Easy run + strides",
+        "note": "40 min easy, then 5 progressive 100 m strides, walking back."
+      },
+      "seuil3x10": {
+        "nom": "Tempo 3 × 10 min",
+        "note": "15 min easy warm-up, 10 min cool-down."
+      },
+      "seuil2x15": {
+        "nom": "Tempo 2 × 15 min",
+        "note": "15 min easy warm-up, 10 min cool-down."
+      },
+      "tempo20": {
+        "nom": "Tempo 20 min",
+        "note": "15 min warm-up, 20 min continuous at a comfortably hard pace, 10 min cool-down."
+      },
+      "vma400": {
+        "nom": "Intervals 10 × 400 m",
+        "note": "20 min easy warm-up + drills. Jog recoveries."
+      },
+      "trenteTrente": {
+        "nom": "30/30 × 2 sets",
+        "note": "2 sets of 10 × 30 s fast / 30 s easy, 3 min recovery between sets."
+      },
+      "pyramide": {
+        "nom": "200–800 m pyramid",
+        "note": "Recovery = same time as the effort, jogging."
+      },
+      "cotes": {
+        "nom": "Hills 8 × 30 s",
+        "note": "Moderate slope, powerful uphill, jog down to recover."
+      }
+    },
+    "allures": {
+      "semi": "half-marathon pace",
+      "dixKm": "10K pace +10 s",
+      "vma95": "95% vVO2max",
+      "vma": "vVO2max",
+      "vma90": "90% vVO2max",
+      "cote": "hard uphill"
+    },
+    "objectif": "Target: {reps}",
+    "recupDe": "{duree} recovery",
+    "reposDe": "rest {duree}",
+    "essayer": "Try today",
+    "ajouteeComme": "Added as workout no. {n} today",
+    "titreActivite": "Ideas · {activite}"
+  },
+  "routines": {
+    "routine": "Routine",
+    "enregistree": "✓ Routine saved",
+    "enregistreeNom": "☆ Routine “{nom}” saved",
+    "creer": "+ Create a routine",
+    "astuce": "Tip: in a workout, tap “☆ Save as routine” to do it again in one tap.",
+    "modifier": "Edit",
+    "lancer": "Start",
+    "vide": "No routines yet. Create your first one: your exercises, sets and rest times, ready to go.",
+    "nouvelle": "New routine",
+    "nom": "Routine name",
+    "nomExemple": "e.g. Monday push",
+    "moinsSeries": "Fewer sets",
+    "plusSeries": "More sets",
+    "secondes": "Seconds",
+    "enregistrer": "Save routine",
+    "supprimer": "Delete routine",
+    "nomManquant": "Give your routine a name.",
+    "exerciceManquant": "Add at least one exercise."
+  },
+  "programmes": {
+    "titre": "Programs",
+    "monProgramme": "My program",
+    "termine": "Program complete, well done! 🎉",
+    "avancement": "Week {semaine} / {semaines} · workout {seance} / {seances}",
+    "autre": "Choose another program",
+    "lancer": "▶ Start: {seance}",
+    "arreter": "Stop this program",
+    "intro": "Choose a program: the app suggests the right workout every time, with your weights from last time.",
+    "duree_one": "{n} week",
+    "duree_other": "{n} weeks",
+    "parSemaine_one": "{n} workout per week",
+    "parSemaine_other": "{n} workouts per week",
+    "enCours": "Current program",
+    "suivre": "Follow this program",
+    "remplacer": "Replace your current program?",
+    "choisi": "✓ Program chosen: let’s go!",
+    "toucherArreter": "Tap again to stop",
+    "liste": {
+      "full3": {
+        "nom": "Beginner full body",
+        "desc": "Your whole body every workout, 3 times a week. Ideal for starting out or getting back into it.",
+        "conseil": "Add a little weight as soon as you complete all your sets with good form."
+      },
+      "ppl": {
+        "nom": "Push Pull Legs",
+        "desc": "The great classic: push, pull, legs. 3 workouts a week (or 6 if you run it twice).",
+        "conseil": "Keep 1 to 2 reps in reserve (RPE 8) on most sets."
+      },
+      "upper4": {
+        "nom": "Upper / Lower",
+        "desc": "4 workouts: 2 upper body, 2 lower body. Perfect for building mass.",
+        "conseil": "Workout A heavy (few reps), workout B lighter (more reps)."
+      },
+      "force5": {
+        "nom": "Strength 5×5",
+        "desc": "Few exercises, lots of strength: 5 sets of 5 on the big lifts, alternating 2 workouts.",
+        "conseil": "Add 2.5 kg after every successful workout (5 kg on the deadlift). If you fail 3 times, drop 10%."
+      },
+      "calis1": {
+        "nom": "Beginner calisthenics",
+        "desc": "Bodyweight, no gym: the basics for your first pull-ups and dips.",
+        "conseil": "When you get through all the sets easily, move to the harder variation (e.g. push-ups → diamond push-ups)."
+      },
+      "run10": {
+        "nom": "10K training plan",
+        "desc": "8 weeks to run 10K: one easy run, one speed session and one long run a week.",
+        "conseil": "Keep the easy run and the long run conversational: you should be able to talk."
+      }
+    },
+    "seances": {
+      "fullA": "Full body A",
+      "fullB": "Full body B",
+      "fullC": "Full body C",
+      "push": "Push",
+      "pull": "Pull",
+      "jambes": "Legs",
+      "hautA": "Upper A (strength)",
+      "basA": "Lower A (strength)",
+      "hautB": "Upper B (volume)",
+      "basB": "Lower B (volume)",
+      "seanceA": "Workout A",
+      "seanceB": "Workout B",
+      "tirageAbdos": "Pull & abs",
+      "pousseeJambes": "Push & legs",
+      "fullBody": "Full body",
+      "footing": "Easy run",
+      "fracCourt": "Short intervals",
+      "seuil": "Tempo",
+      "sortieLongue": "Long run"
+    },
+    "max": "max",
+    "allure5km": "5K pace",
+    "allureSeuil": "tempo",
+    "course": {
+      "footing": "Week {semaine}: {min} min at an easy pace.",
+      "fracCourt": "Week {semaine}: {n} × 400 m fast, 1:30 jogging recovery.",
+      "seuil": "Week {semaine}: {n} × {min} min at tempo pace, 2:00 recovery.",
+      "jourJ": "Week 8: it’s race day, run your 10K!",
+      "sortieLongue": "Week {semaine}: {km} km easy."
+    }
+  },
+  "muscles": {
+    "titre": "Muscle map",
+    "vueFace": "Front view",
+    "vueDos": "Back view",
+    "niveaux": {
+      "n0": "Not worked",
+      "n1": "A little",
+      "n2": "Well",
+      "n3": "A lot",
+      "n4": "Heavily"
+    },
+    "derniersJours": "Last {n} days",
+    "face": "Front",
+    "dos": "Back",
+    "toucher": "Tap a muscle to see how many sets it got.",
+    "vide": "No workouts in this period: your muscles will light up as you train.",
+    "aTravailler": "To work on",
+    "aucuneSerie": "No sets for these muscles in the last {n} days.",
+    "seriesParMuscle": "Sets per muscle",
+    "calcul": "A set counts as 1 for the exercise’s main muscles and 0.5 for the assisting muscles.",
+    "seriesSur_one": "{n} set in the last {jours} days",
+    "seriesSur_other": "{n} sets in the last {jours} days",
+    "noms": {
+      "pecs": "Chest",
+      "epaules": "Shoulders",
+      "biceps": "Biceps",
+      "triceps": "Triceps",
+      "avantbras": "Forearms",
+      "abdos": "Abs",
+      "obliques": "Obliques",
+      "trapezes": "Traps",
+      "dorsaux": "Lats",
+      "lombaires": "Lower back",
+      "fessiers": "Glutes",
+      "quadriceps": "Quads",
+      "ischios": "Hamstrings",
+      "mollets": "Calves"
+    }
+  },
+  "bilan": {
+    "titre": "Monthly recap",
+    "vide": "No workouts in {mois}. Your recap will appear here after your first workout.",
+    "seances_one": "workout",
+    "seances_other": "workouts",
+    "joursActifs_one": "active day",
+    "joursActifs_other": "active days",
+    "recordsBattus_one": "PR set",
+    "recordsBattus_other": "PRs set",
+    "tonnesSoulevees": "lifted",
+    "kgSouleves": "kg lifted",
+    "kmCourus": "km run",
+    "semainesRecord": "🔥 weeks (best)",
+    "moisAvant": "Compared with last month",
+    "dePlus_one": "{n} more workout",
+    "dePlus_other": "{n} more workouts",
+    "deMoins_one": "{n} fewer workout",
+    "deMoins_other": "{n} fewer workouts",
+    "autant": "Same number of workouts",
+    "activiteFavorite": "Favorite activity",
+    "exercicePlusFait": "Most done exercise",
+    "fois_one": "{nom} ({n} time)",
+    "fois_other": "{nom} ({n} times)",
+    "musclePlusTravaille": "Most worked muscle",
+    "tempsCourse": "Running time",
+    "partager": "📲 Share as a story",
+    "partagerAide": "An image of your recap is created: share it on Insta, Snap or WhatsApp.",
+    "apercu": "Preview of the recap image",
+    "image": {
+      "titre": "MY MONTHLY RECAP",
+      "seances": "WORKOUTS",
+      "joursActifs": "ACTIVE DAYS",
+      "souleves": "LIFTED",
+      "courus": "RUN",
+      "records": "PRs SET",
+      "semaines": "🔥 WEEKS",
+      "favori": "Favorite exercise: {nom}",
+      "devise1": "THE ATHLETE’S ",
+      "devise2": "PLANNER"
+    },
+    "creation": "Creating the image…",
+    "fichier": "recap-{mois}",
+    "titrePartage": "My monthly recap",
+    "appuiLong": "You can also long-press the image to save it.",
+    "telechargee": "Image downloaded. On iPhone, long-press the image to save it.",
+    "impossible": "Couldn’t create the image. Try again."
+  },
+  "trophees": {
+    "titre": "My trophies",
+    "familles": {
+      "seances": "Workouts",
+      "regularite": "Consistency",
+      "records": "PRs",
+      "variete": "Variety",
+      "course": "Running",
+      "volume": "Volume"
+    },
+    "liste": {
+      "s1": {
+        "nom": "First step",
+        "desc": "Your first logged workout"
+      },
+      "s10": {
+        "nom": "Regular",
+        "desc": "{n} workouts"
+      },
+      "s25": {
+        "nom": "Dedicated",
+        "desc": "{n} workouts"
+      },
+      "s50": {
+        "nom": "Machine",
+        "desc": "{n} workouts"
+      },
+      "s100": {
+        "nom": "Legend",
+        "desc": "{n} workouts"
+      },
+      "w2": {
+        "nom": "Up and running",
+        "desc": "Weekly goal hit {n} weeks in a row"
+      },
+      "w4": {
+        "nom": "One month",
+        "desc": "{n} weeks in a row"
+      },
+      "w8": {
+        "nom": "Discipline",
+        "desc": "{n} weeks in a row"
+      },
+      "w12": {
+        "nom": "Unstoppable",
+        "desc": "{n} weeks in a row"
+      },
+      "r1": {
+        "nom": "First PR",
+        "desc": "A PR set during a workout"
+      },
+      "r10": {
+        "nom": "Hunter",
+        "desc": "{n} PRs set"
+      },
+      "r25": {
+        "nom": "Collector",
+        "desc": "{n} PRs set"
+      },
+      "d3": {
+        "nom": "All-rounder",
+        "desc": "{n} different activities done"
+      },
+      "d5": {
+        "nom": "Complete athlete",
+        "desc": "All {n} of the app’s activities done"
+      },
+      "k10": {
+        "nom": "First km",
+        "desc": "{n} km run in total"
+      },
+      "k25": {
+        "nom": "Enduring",
+        "desc": "{n} km run in total"
+      },
+      "k50": {
+        "nom": "Long haul",
+        "desc": "{n} km run in total"
+      },
+      "k100": {
+        "nom": "Centurion",
+        "desc": "{n} km run in total"
+      },
+      "k200": {
+        "nom": "Ultra",
+        "desc": "{n} km run in total"
+      },
+      "k500": {
+        "nom": "Globetrotter",
+        "desc": "{n} km run in total"
+      },
+      "t10": {
+        "nom": "10 tons",
+        "desc": "{n} tons lifted in total in the gym"
+      },
+      "t25": {
+        "nom": "Strong",
+        "desc": "{n} tons lifted in total"
+      },
+      "t50": {
+        "nom": "Brute force",
+        "desc": "{n} tons lifted in total"
+      },
+      "t100": {
+        "nom": "Titan",
+        "desc": "{n} tons lifted in total"
+      },
+      "t200": {
+        "nom": "Colossus",
+        "desc": "{n} tons lifted in total"
+      },
+      "t500": {
+        "nom": "Hercules",
+        "desc": "{n} tons lifted in total"
+      }
+    },
+    "atteint": "Done!",
+    "bravo_one": "{n} workout this week, well done.",
+    "bravo_other": "{n} workouts this week, well done.",
+    "debloque": "Trophy unlocked",
+    "semAbrege": "wks",
+    "bandeau": "My trophies · {n}/{total}",
+    "prochain": "Next: {nom} ({etat})",
+    "tous": "All unlocked, respect!",
+    "intro_one": "{n} of {total} unlocked, grouped by family. Tap a badge for details.",
+    "intro_other": "{n} of {total} unlocked, grouped by family. Tap a badge for details.",
+    "obtenuLe": "Earned on {date}",
+    "obtenu": "Earned",
+    "ariaObtenu": "{nom}: earned",
+    "ariaADebloquer": "{nom}: locked",
+    "ariaBarre": "{v} of {objectif}"
+  },
+  "social": {
+    "titre": "Social",
+    "rechercherAmis": "Find friends",
+    "taSeance": "your workout",
+    "suspenduToast": "⛔ Account suspended from social features",
+    "unAmi": "A friend",
+    "aReagi": "reacted {emoji} to {seance}",
+    "aCommente": "commented: “{texte}”",
+    "suspendu": "⛔ Account suspended",
+    "suspenduTexte": "Your account has been suspended from social features following reports. To talk about it, write from the Contact page.",
+    "rubriques": "Sections",
+    "classement": "Leaderboard",
+    "nouveau": "New on your workouts",
+    "activite": "Activity on your workouts",
+    "fil": "Feed",
+    "actualiser": "↻ Refresh",
+    "ajouteAmisFil": "Add friends to see their workouts here.",
+    "ajouterAmis": "Add friends",
+    "filVide": "Your friends haven’t logged any workouts yet.",
+    "toi": "You",
+    "essayerSeance": "Try this workout",
+    "reactionImpossible": "Couldn’t react (connection?)",
+    "ami": "Friend"
+  },
+  "messages": {
+    "titre": "Messages",
+    "toiTexte": "You: {texte}",
+    "demarrer": "Start the conversation",
+    "ajouteAmis": "Add friends so you can message them.",
+    "aucune": "No conversations yet. Pick a friend below to message them.",
+    "ecrireAmi": "Message a friend"
+  },
+  "defis": {
+    "titre": "Challenges",
+    "defi": "Challenge",
+    "mesures": {
+      "seances": "Workouts",
+      "jours": "Active days",
+      "km": "Km run",
+      "volume": "Volume lifted"
+    },
+    "joursRestants_one": "{n} day left",
+    "joursRestants_other": "{n} days left",
+    "dernierJour": "last day!",
+    "termine": "over",
+    "participants_one": "{n} participant",
+    "participants_other": "{n} participants",
+    "nouveau": "New challenge",
+    "quoi": "What counts",
+    "duree": "Duration (starting today)",
+    "nom": "Challenge name",
+    "invites": "Friends invited",
+    "ajouteAmis": "Add some friends first to challenge them.",
+    "lancer": "Start the challenge",
+    "nouveauBouton": "+ New challenge",
+    "enCours": "In progress",
+    "aucun": "No challenges in progress. Start one against your friends: workouts, km, volume…",
+    "termines": "Finished",
+    "durees": {
+      "j7": "1 week",
+      "j14": "2 weeks",
+      "j30": "1 month"
+    },
+    "noms": {
+      "seances": {
+        "j7": "Most workouts this week",
+        "j30": "Most workouts this month",
+        "j14": "Most workouts in 2 weeks"
+      },
+      "jours": {
+        "j7": "Most active days this week",
+        "j30": "Most active days this month",
+        "j14": "Most active days in 2 weeks"
+      },
+      "km": {
+        "j7": "Most km this week",
+        "j30": "Most km this month",
+        "j14": "Most km in 2 weeks"
+      },
+      "volume": {
+        "j7": "Biggest volume this week",
+        "j30": "Biggest volume this month",
+        "j14": "Biggest volume in 2 weeks"
+      }
+    },
+    "inviteAmi": "Invite at least one friend.",
+    "lance": "🏁 Challenge on!",
+    "erreur": "Couldn’t create the challenge. Check your connection.",
+    "duAu": "from {debut} to {fin}",
+    "scoresMaj": "Scores update whenever each person opens the app.",
+    "supprimer": "Delete challenge",
+    "signaler": "⚑ Report",
+    "quitter": "Leave challenge",
+    "signalementTexte": "Challenge “{nom}”",
+    "signale": "Reported ✓",
+    "toucherQuitter": "Tap again to leave"
+  },
+  "classements": {
+    "titre": "Leaderboards",
+    "ceMois": "This month",
+    "parExercice": "By exercise",
+    "ajouteAmis": "Add friends to compare yourself with them.",
+    "mesures": {
+      "seances": "Workouts",
+      "jours": "Active days",
+      "km": "Km",
+      "volume": "Volume",
+      "streak": "Streak 🔥"
+    },
+    "unites": {
+      "seances_one": "workout",
+      "seances_other": "workouts",
+      "jours_one": "day",
+      "jours_other": "days",
+      "streak": "wks"
+    },
+    "aucunExercice": "No exercises logged with weights yet.",
+    "meilleureSerie": "Best set logged in workouts (heaviest weight, then most reps).",
+    "chargement": "Loading friends…"
+  },
+  "amis": {
+    "titre": "Friends",
+    "monCode": "My friend code",
+    "donneCode": "Give this code to your friends so they can add you.",
+    "monQr": "🔳 My QR code",
+    "partagees": "✓ My workouts are shared",
+    "nonPartagees": "My workouts aren’t shared",
+    "ajouter": "Add a friend",
+    "codeOuPseudo": "Friend code or username",
+    "chercher": "Search",
+    "scanner": "📷 Scan a QR code",
+    "demandeEnvoyee": "Request sent",
+    "accepter": "Accept",
+    "bloque": "Blocked",
+    "demandesRecues": "Requests received · {n}",
+    "veutAjouter": "wants to add you as a friend",
+    "refuser": "Decline",
+    "mesAmis": "My friends · {n}",
+    "ecrireA": "Message {pseudo}",
+    "aucun": "No friends yet. Search for a username or enter someone’s friend code above.",
+    "demandesEnvoyees": "Requests sent",
+    "enAttente": "pending",
+    "bloquees": "Blocked people",
+    "debloquer": "Unblock",
+    "recherche": "Searching…",
+    "deuxLettres": "Type at least 2 letters.",
+    "aucunResultat": "No results. Check the code or username.",
+    "rechercheEchec": "Search failed. Check your connection.",
+    "demandeImpossible": "Couldn’t send the request.",
+    "kmEn": "{km} in {duree}",
+    "score": "Score: {score}",
+    "message": "💬 Message",
+    "sesRecords": "Their PRs",
+    "sesSeances": "Their workouts",
+    "nePartagePas": "{pseudo} isn’t sharing their workouts for now.",
+    "aucuneSeance": "No workouts logged yet.",
+    "voirPlus": "See more workouts",
+    "signalementProfil": "Profile “{pseudo}”",
+    "signalementObjectif": "goal: {objectif}",
+    "signalementPhoto": "with photo",
+    "deTesAmis": "from your friends"
+  },
+  "partage": {
+    "titre": "Share my profile",
+    "compteurs": "{activites} · {amis}",
+    "activites_one": "{n} activity",
+    "activites_other": "{n} activities",
+    "amis_one": "{n} friend",
+    "amis_other": "{n} friends",
+    "qrAria": "QR code for my profile",
+    "copier": "📋 Copy",
+    "envoyerLien": "📤 Send the link",
+    "aide": "Your friend points their phone camera at the QR code (or uses the app’s “Scan” button) and lands straight on your profile.",
+    "scanner": "Scan a friend’s code",
+    "ouvrePhoto": "Opens the camera",
+    "copieImpossible": "Couldn’t copy: {texte}",
+    "message": "Add me on AS Sport! My friend code: {code}",
+    "scannerAria": "Scan a QR code",
+    "vise": "Point at your friend’s QR code.",
+    "taperCode": "Type the code",
+    "navigateurIncompatible": "Your browser can’t read QR codes. Open your phone’s camera and point it at the QR code: the link opens by itself. Or type the friend code.",
+    "tonCode": "That’s your own code 😉",
+    "pasAsSport": "This QR code isn’t from AS Sport.",
+    "accesRefuse": "Camera access denied. Allow it in your settings, or type the friend code."
+  },
+  "seances": {
+    "calendrier": "Calendar",
+    "noterDuJour": "Log today’s workout",
+    "types": "Types",
+    "seance": "Workout",
+    "court": {
+      "course": "Run",
+      "calis": "Calis",
+      "muscu": "Gym"
+    },
+    "nonEnregistre": "Not saved: check your connection",
+    "autresActivites": "Other activities",
+    "enChiffres": "{mois} in numbers",
+    "glisserSupprimer": "🗑 Delete",
+    "photos_one": "{n} photo",
+    "photos_other": "{n} photos",
+    "astuceGlisser": "Tip: swipe a workout to the right to delete it.",
+    "aucuneMois": "No workouts in {mois}. Tap a day in the calendar to log your training.",
+    "ateliers_one": "{n} station",
+    "ateliers_other": "{n} stations",
+    "exercices_one": "{n} exercise",
+    "exercices_other": "{n} exercises",
+    "supprimee": "🗑 Workout deleted",
+    "wodDuJour": "WOD of the day",
+    "changerActivite": "Change activity",
+    "titreSeance": "Workout title",
+    "ressenti": "How did it feel?",
+    "notePlaceholder": "Sleep, energy, what to change next time…",
+    "photosTitre": "Photos",
+    "toucherEfface": "Tap again: the content will be erased",
+    "toucherSupprimer": "Tap again to delete",
+    "quelleActivite": "Which activity?",
+    "choisisSport": "Choose today’s sport: each activity has its own log.",
+    "reprendreType": "Repeat last {type} workout",
+    "exercicesPreremplis_one": "{n} exercise, weights prefilled",
+    "exercicesPreremplis_other": "{n} exercises, weights prefilled",
+    "ajouterExercice": "+ Add an exercise",
+    "enregistrerRoutine": "☆ Save as routine",
+    "reprendreDerniere": "Repeat your last workout",
+    "duJour": "Today’s workouts",
+    "numero": "Workout {n}",
+    "autre": "+ Another workout"
+  },
+  "conversation": {
+    "plusOptions": "More options",
+    "voirSeances": "See their workouts",
+    "signaler": "Report conversation",
+    "bloquer": "Block",
+    "ecrire": "Write a message…",
+    "tonMessage": "Your message",
+    "indisponible": "Conversation unavailable.",
+    "signalerMessage": "Report this message",
+    "vide": "Say hi 👋<br>Messages are only visible to the two of you.",
+    "nonEnvoye": "Message not sent: you may no longer be friends.",
+    "signale": "Reported ✓ Thanks",
+    "citation": "“{texte}”",
+    "videSignalement": "(empty conversation)",
+    "signalee": "Conversation reported ✓",
+    "toucherBloquer": "Tap again to block"
+  },
+  "records": {
+    "intro": "Pick a category to view and add your PRs.",
+    "nouveau": "New PR!",
+    "muscu": {
+      "bench": "Bench press",
+      "squat": "Squat",
+      "dl": "Deadlift",
+      "ohp": "Overhead press",
+      "pullw": "Weighted pull-up (added weight)",
+      "row": "Barbell row"
+    },
+    "course": {
+      "5k": "5K",
+      "10k": "10K",
+      "semi": "Half marathon",
+      "marathon": "Marathon"
+    },
+    "calis": {
+      "pullups": "Pull-ups",
+      "dips": "Dips",
+      "pushups": "Push-ups",
+      "muscleup": "Muscle-up",
+      "frontlever": "Front lever",
+      "planche": "Planche",
+      "handstand": "Handstand",
+      "lsit": "L-sit"
+    },
+    "aucun": "No PR yet",
+    "leDate": "on {date}",
+    "estime": "≈ estimated 1RM: {rm} ({kg} kg × {reps}, on {date})",
+    "nouvelleCharge": "New weight (kg)",
+    "tonTemps": "Your time (h : min : s)",
+    "dureeTenue": "Hold time (seconds)",
+    "repsAffilee": "Reps in a row",
+    "ex15": "e.g. 15",
+    "titreActivite": "PRs · {activite}",
+    "aide": {
+      "muscu": "Your max weight for one rep (or your best heavy set). The estimated 1RM is worked out from your workouts.",
+      "course": "Your best time over each distance. Pace is calculated automatically.",
+      "calis": "Your max reps in a row, or your longest hold."
+    },
+    "toucherPlus": "Tap + to add a PR."
+  },
+  "progression": {
+    "intro": "Pick a category to see your charts, workout after workout.",
+    "ariaCourbe_one": "Progress chart, {n} workout",
+    "ariaCourbe_other": "Progress chart, {n} workouts",
+    "uneSeance": "1 workout so far",
+    "stable": "steady",
+    "depuis": "{ecart} since {date}",
+    "record": "Best",
+    "valeurs": "See the values",
+    "titreActivite": "Progress · {activite}",
+    "videMuscu": "No strength workouts yet. Log your workouts with their weights: your progress will show up here, exercise by exercise.",
+    "valeurAffichee": "Value shown",
+    "chargeMax": "Max weight",
+    "rmEstime": "Estimated 1RM",
+    "aide1rm": "Estimated 1RM (Epley formula, sets of 12 reps or fewer) for each {type} workout.",
+    "aideMax": "Max weight lifted in each {type} workout.",
+    "toucherCourbe": "Tap a chart for details.",
+    "aucunPoids": "No weights logged in your {type} workouts yet.",
+    "aideCalis": "Your best result per workout: reps, or seconds for held skills.",
+    "max": "Max",
+    "videCalis": "No calisthenics workouts logged yet. Your progress will show up here, exercise by exercise.",
+    "toutes": "All",
+    "allureMoyenne": "Average pace",
+    "meilleure": "Best",
+    "plusLongue": "Longest",
+    "aideAllure": "For pace, the lower the line, the faster you run.",
+    "videCourse": "No runs with distance and time yet. Enter them in your running workouts: your pace and distances will show up here.",
+    "records1rm": "1RM PRs",
+    "videCrossfit": "Log your benchmark WOD results (Fran, Murph…) and your 1RMs in “My PRs”: how they evolve will show up here.",
+    "aideWod": "For a timed WOD, the lower the line, the faster you are."
+  },
+  "crossfit": {
+    "noterWod": "Log today’s WOD",
+    "mesRecords": "My PRs (1RM)",
+    "wodReference": "Benchmark WODs",
+    "wodReferenceTexte": "The “Girls” and the “Hero WODs”: redo them regularly to measure your progress. Loads shown men / women.",
+    "score": {
+      "tours_one": "{n} round",
+      "tours_other": "{n} rounds",
+      "toursReps_one": "{n} round + {reps}",
+      "toursReps_other": "{n} rounds + {reps}",
+      "emom_one": "{n} min completed",
+      "emom_other": "{n} min completed",
+      "reps_one": "{n} rep",
+      "reps_other": "{n} reps"
+    },
+    "formats": {
+      "fortime": "For Time",
+      "amrap": "AMRAP",
+      "emom": "EMOM",
+      "tabata": "Tabata",
+      "chipper": "Chipper",
+      "force": "Strength"
+    },
+    "formatsAide": {
+      "fortime": "Finish the work as fast as possible. Your score = your time.",
+      "amrap": "“As Many Rounds As Possible” in the time given.",
+      "emom": "“Every Minute On the Minute”: one block at the start of each minute, rest for the remainder.",
+      "tabata": "8 rounds of 20 s work / 10 s rest per movement.",
+      "chipper": "A long list of movements to chip away at once through, for time.",
+      "force": "Heavy lifting (e.g. 5×5, 1RM). Your score = your max load."
+    },
+    "bench": {
+      "fran": "21-15-9: Thrusters (43/29 kg), Pull-ups",
+      "grace": "30 Clean & jerks (61/43 kg)",
+      "isabel": "30 Snatches (61/43 kg)",
+      "diane": "21-15-9: Deadlifts (102/70 kg), Handstand push-ups",
+      "elizabeth": "21-15-9: Squat cleans (61/43 kg), Ring dips",
+      "helen": "3 rounds: 400 m run, 21 KB swings (24/16 kg), 12 pull-ups",
+      "karen": "150 Wall balls (9/6 kg)",
+      "annie": "50-40-30-20-10: Double unders, Sit-ups",
+      "jackie": "1,000 m row, 50 Thrusters (20/15 kg), 30 Pull-ups",
+      "cindy": "AMRAP 20 min: 5 Pull-ups, 10 Push-ups, 15 Air squats",
+      "murph": "1.6 km run, 100 pull-ups, 200 push-ups, 300 squats, 1.6 km run (9/6 kg vest)",
+      "tours_one": "{n} round",
+      "tours_other": "{n} rounds"
+    },
+    "lifts": {
+      "bsquat": "Back squat",
+      "fsquat": "Front squat",
+      "dl": "Deadlift",
+      "clean": "Clean",
+      "cj": "Clean & jerk",
+      "snatch": "Snatch",
+      "spress": "Strict press",
+      "ppress": "Push press",
+      "bench": "Bench press"
+    },
+    "dureeMin": "Duration (min)",
+    "timeCap": "Time cap (min)",
+    "toursComplets": "Full rounds",
+    "ex12": "e.g. 12",
+    "plusReps": "+ Reps",
+    "minutesReussies": "Minutes completed",
+    "repsTotal": "Total reps",
+    "chargeMax": "Max load (kg)",
+    "ex100": "e.g. 100",
+    "tempsFinal": "Final time (min : s)",
+    "formatWod": "WOD format",
+    "leWod": "The WOD",
+    "nomWod": "WOD name (optional)",
+    "nomWodExemple": "e.g. Fran, Murph, WOD of the day",
+    "mouvements": "Movements",
+    "repetitions": "Reps",
+    "changerMouvement": "Change movement: {nom}",
+    "choisirMouvement": "Choose the movement",
+    "choisir": "Choose…",
+    "chargeKg": "Load in kg",
+    "supprimerMouvement": "Delete movement",
+    "ajouterMouvement": "+ Add a movement",
+    "monScore": "My score",
+    "rx": "Rx (official loads)",
+    "scaled": "Scaled (adapted)",
+    "forceTechnique": "Strength / skill (optional)",
+    "forceExemple": "e.g. Back squat 5×5 at 100 kg",
+    "intensite": "Perceived intensity",
+    "how": {
+      "fran": {
+        "etapes": {
+          "e1": "21 thrusters, then 21 pull-ups",
+          "e2": "15 thrusters, then 15 pull-ups",
+          "e3": "9 thrusters, then 9 pull-ups"
+        },
+        "rx": "43 kg bar for men, 29 kg for women.",
+        "scaled": "20 or 15 kg bar, banded pull-ups or ring rows.",
+        "tip": "Break up the pull-ups from the first round (e.g. 11 + 10) so you don’t blow up your forearms."
+      },
+      "grace": {
+        "etapes": {
+          "e1": "30 clean & jerks, however you like: unbroken, in sets or one at a time"
+        },
+        "rx": "61 kg bar for men, 43 kg for women.",
+        "scaled": "A weight you can lift 10 times in a row without straining (e.g. 40 / 25 kg).",
+        "tip": "Do steady singles (one rep every 5 to 10 s) rather than big sets that wreck you."
+      },
+      "isabel": {
+        "etapes": {
+          "e1": "30 snatches, bar from the floor to overhead in one movement"
+        },
+        "rx": "61 kg bar for men, 43 kg for women.",
+        "scaled": "Light power snatch (e.g. 35 / 25 kg) or alternating dumbbell snatch.",
+        "tip": "Like Grace: fast singles, keeping your back braced on every rep."
+      },
+      "diane": {
+        "etapes": {
+          "e1": "21 deadlifts, then 21 handstand push-ups",
+          "e2": "15 deadlifts, then 15 handstand push-ups",
+          "e3": "9 deadlifts, then 9 handstand push-ups"
+        },
+        "rx": "102 kg bar for men, 70 kg for women. Handstand push-ups against the wall.",
+        "scaled": "60 / 40 kg bar, pike push-ups or dumbbell overhead press.",
+        "tip": "The deadlifts go fast: save energy for the handstand push-ups, broken into small sets."
+      },
+      "elizabeth": {
+        "etapes": {
+          "e1": "21 squat cleans, then 21 ring dips",
+          "e2": "15 squat cleans, then 15 dips",
+          "e3": "9 squat cleans, then 9 dips"
+        },
+        "rx": "61 kg bar for men, 43 kg for women.",
+        "scaled": "Lighter bar (40 / 25 kg), bar or bench dips.",
+        "tip": "Link the cleans touch-and-go as long as your technique holds, then switch to singles."
+      },
+      "helen": {
+        "etapes": {
+          "e1": "400 m run",
+          "e2": "21 kettlebell swings",
+          "e3": "12 pull-ups",
+          "e4": "Repeat: 3 rounds in total"
+        },
+        "rx": "24 kg kettlebell for men, 16 kg for women. Overhead swings.",
+        "scaled": "16 / 12 kg kettlebell, banded pull-ups.",
+        "tip": "Recover on the run without slowing down: that’s where you gain time by going straight into the swings."
+      },
+      "karen": {
+        "etapes": {
+          "e1": "150 wall balls: full squat with the medicine ball, then throw it to the target"
+        },
+        "rx": "9 kg ball to 3 m for men, 6 kg to 2.70 m for women.",
+        "scaled": "Lighter ball (6 / 4 kg) or a lower target.",
+        "tip": "Set your sets from the start (e.g. 15 reps then 3 breaths), before you get tired."
+      },
+      "annie": {
+        "etapes": {
+          "e1": "50 double unders, then 50 sit-ups",
+          "e2": "40 + 40",
+          "e3": "30 + 30",
+          "e4": "20 + 20",
+          "e5": "10 + 10"
+        },
+        "rx": "Double unders: the rope passes under your feet twice on each jump.",
+        "scaled": "Single unders (twice as many jumps) or fewer reps.",
+        "tip": "Keep a steady rhythm on the sit-ups: they’re what slows you down most at the end of the WOD."
+      },
+      "jackie": {
+        "etapes": {
+          "e1": "1,000 m row",
+          "e2": "50 thrusters",
+          "e3": "30 pull-ups"
+        },
+        "rx": "20 kg bar for men, 15 kg for women.",
+        "scaled": "A lighter empty bar, banded pull-ups or ring rows.",
+        "tip": "Don’t start too fast on the rower: your breathing needs to be ready for the 50 thrusters."
+      },
+      "cindy": {
+        "etapes": {
+          "e1": "5 pull-ups",
+          "e2": "10 push-ups",
+          "e3": "15 air squats",
+          "e4": "Repeat as many rounds as possible in 20 minutes"
+        },
+        "rx": "Bodyweight. Chest-to-floor push-ups, squats below parallel.",
+        "scaled": "Banded pull-ups, knee push-ups or hands elevated.",
+        "tip": "Keep a steady pace, about one round per minute, rather than starting too fast.",
+        "score": "Your score: the number of full rounds + the reps of the round in progress.",
+        "lv1": "25+ rounds",
+        "lv2": "15–24 rounds",
+        "lv3": "8–14 rounds"
+      },
+      "murph": {
+        "etapes": {
+          "e1": "1.6 km run",
+          "e2": "100 pull-ups, 200 push-ups, 300 air squats (split them however you like, e.g. 20 rounds of 5-10-15)",
+          "e3": "1.6 km run"
+        },
+        "rx": "Wearing a 9 kg weighted vest for men, 6 kg for women.",
+        "scaled": "No vest, half the reps (“half Murph”) or banded pull-ups.",
+        "tip": "Split it into 20 rounds of 5 pull-ups, 10 push-ups, 15 squats: it’s the easiest way to get through."
+      },
+      "deroule": "How it goes",
+      "pendant": "For {n} minutes, cycle through:",
+      "chrono": "The clock starts on “3, 2, 1, go” and stops on the last rep. Your score is your time.",
+      "charges": "Loads (Rx)",
+      "adaptee": "Scaled version",
+      "reperes": "Benchmarks",
+      "reperesTemps": "Time benchmarks",
+      "niveau1": "Elite",
+      "niveau2": "Experienced",
+      "niveau3": "Beginner",
+      "conseil": "Tip"
+    },
+    "mesTemps": "My benchmark WOD times",
+    "aEssayer": "Benchmark WODs to try",
+    "wodCeMois": "WODs this month",
+    "wodTotal": "WODs in total",
+    "nRecords_one": "PR",
+    "nRecords_other": "PRs",
+    "tonRecord": "your PR",
+    "commentCaMarche": "How it works",
+    "record": "PR",
+    "aTenter": "To try",
+    "tours": "Rounds",
+    "tonTemps": "Your time (min : s)",
+    "enregistrerResultat": "Save my result",
+    "seance": "workout"
+  },
+  "profil": {
+    "modifierInfos": "Edit my details",
+    "apparence": "Appearance",
+    "couleur": "Main color",
+    "mode": "Mode",
+    "modeAffichage": "Display mode",
+    "langue": "Language",
+    "langueAide": "Saved to your account: it follows you on all your devices.",
+    "son": "Timer sound",
+    "volume": "Volume",
+    "volumeMinuteur": "Timer volume",
+    "typeSon": "Sound type",
+    "bips": "3-2-1 beeps before the end",
+    "tester": "🔊 Test the sound",
+    "sonIphone": "On iPhone, there’s no sound when the silent switch (on the side of the phone) is on. Turn up the phone’s volume too.",
+    "monCompte": "My account",
+    "installer": "📲 Install the app on my phone",
+    "revoirTuto": "🎓 Replay the tutorial",
+    "contact": "✉️ Contact",
+    "exporter": "📦 Download my data",
+    "changerMdp": "🔑 Change my password",
+    "deconnexion": "Log out",
+    "zoneSensible": "Danger zone",
+    "supprimerCompte": "Delete my account and data",
+    "supprimerTexte": "This permanently deletes your account, workouts, nutrition, photos and messages. Enter your password to confirm.",
+    "supprimerDefinitivement": "Delete permanently",
+    "couleurs": {
+      "rouge": "Red",
+      "bleu": "Blue",
+      "vert": "Green",
+      "violet": "Purple",
+      "orange": "Orange",
+      "rose": "Pink",
+      "or": "Gold",
+      "argent": "Silver"
+    },
+    "modes": {
+      "noir": "Dark",
+      "anthracite": "Charcoal",
+      "clair": "Light"
+    },
+    "export": {
+      "preparation": "Preparing…",
+      "fichier": "my-data-as-sport",
+      "ok": "✓ Data downloaded"
+    },
+    "champs": {
+      "photo": "Profile photo",
+      "photoChanger": "Tap to change your photo",
+      "photoAjouter": "Tap to add your photo",
+      "pseudo": "Username *",
+      "pseudoExemple": "e.g. TheoFit",
+      "prenom": "First name",
+      "nom": "Last name",
+      "age": "Age",
+      "ans": "yrs",
+      "taille": "Height",
+      "poids": "Weight",
+      "objectif": "Goal"
+    },
+    "activites_one": "activity",
+    "activites_other": "activities",
+    "amis_one": "friend",
+    "amis_other": "friends",
+    "age_one": "{n} yr",
+    "age_other": "{n} yrs",
+    "membreDepuis": "Member since {date}",
+    "modifier": "Edit profile",
+    "partager": "📤 Share",
+    "connecteAvec": "Logged in as {email}",
+    "connecteAvecEmail": "Logged in with your email",
+    "pseudoVide": "Username can’t be empty.",
+    "enregistre": "Profile saved.",
+    "echec": "Saving failed. Check your connection and try again.",
+    "mdpEnvoye": "Email sent to {email}. Follow the link to choose a new password (check your spam folder too).",
+    "suppression": "Deleting…",
+    "suppressionEchec": "Deletion failed. Try again."
+  },
+  "admin": {
+    "badge": "Admin access",
+    "sauvegardeEnCours": "Backing up… {i} / {n}",
+    "sauvegardeFichier": "as-sport-backup-{date}",
+    "sauvegardeOk": "✓ Backup downloaded",
+    "reserve": "Admin access only.",
+    "sauvegarde": "Backup",
+    "sauvegardeAide": "Download a copy of the whole database (profiles, workouts, nutrition, without photos). Do it about once a month and keep it in Files or iCloud.",
+    "derniereSauvegarde": "Last backup: {date}.",
+    "aucuneSauvegarde": "No backup made from this device.",
+    "sauvegardeComplete": "💾 Full backup",
+    "inscrits": "registered users",
+    "actifs": "active in the last 7 days",
+    "seancesEnregistrees": "workouts logged",
+    "visites": "total visits",
+    "parType": "Workouts by type",
+    "aucuneSeance": "No workouts logged yet.",
+    "utilisateurs": "Users · {n}",
+    "toi": "you",
+    "ligneUtilisateur": "Seen {vu} · {seances} · {visites}",
+    "personne": "Nobody has signed up yet.",
+    "signalements": "Reports · {n}",
+    "aucunSignalement": "No reports.",
+    "utilisateur": "User",
+    "repondreA": "Reply to:",
+    "marquerNonLu": "Mark as unread",
+    "marquerLu": "Mark as read",
+    "aucunMessage": "No messages yet.",
+    "nSeances_one": "{n} workout",
+    "nSeances_other": "{n} workouts",
+    "nVisites_one": "{n} visit",
+    "nVisites_other": "{n} visits",
+    "messagesRecus_one": "Messages received · {n} unread",
+    "messagesRecus_other": "Messages received · {n} unread",
+    "signalement": {
+      "message": "Message",
+      "conversation": "Conversation",
+      "comment": "Comment",
+      "profile": "Profile",
+      "challenge": "Challenge",
+      "autre": "Report"
+    },
+    "banni": "Banned",
+    "signalePar": "reported by {pseudo} · {date}",
+    "supprimerContenu": "🗑 Delete content",
+    "retirerRecherche": "Remove from search",
+    "debannir": "Unban",
+    "bannir": "⛔ Ban",
+    "traite": "✓ Handled",
+    "actionImpossibleRegles": "Action failed. Check the Firebase rules.",
+    "contenuSupprime": "🗑 Content deleted",
+    "suppressionImpossible": "Deletion failed. Check the Firebase rules.",
+    "profilRetire": "Profile removed from search",
+    "actionImpossible": "Action failed.",
+    "fiche": {
+      "pseudo": "Username",
+      "email": "Email",
+      "prenom": "First name",
+      "nom": "Last name",
+      "age": "Age",
+      "taille": "Height",
+      "poids": "Weight",
+      "objectif": "Goal",
+      "inscritLe": "Signed up on",
+      "derniereVisite": "Last visit",
+      "visitesN": "Visits",
+      "volumeTotal": "Total volume",
+      "distance": "Distance run",
+      "photos": "Photos"
+    },
+    "joursCreatine": "creatine days",
+    "complementsNotes": "supplements logged",
+    "informations": "Details",
+    "dernieresSeances": "Latest workouts",
+    "aucuneSeanceUtilisateur": "No workouts logged.",
+    "debannirPseudo": "Unban {pseudo}",
+    "bannirPseudo": "⛔ Ban {pseudo}",
+    "joursNutrition_one": "{n} day of nutrition logged.",
+    "joursNutrition_other": "{n} days of nutrition logged."
+  },
+  "bibliotheque": {
+    "titreLong": "Exercise library",
+    "titre": "Exercises",
+    "chercher": "Search for an exercise, or type to create your own",
+    "chercherAria": "Search for an exercise or type to create your own",
+    "aide": "Can’t find your exercise? Type its full name: a “+ Create” button appears at the top of the list.",
+    "chercherMouvement": "Search for a movement, or type to create your own",
+    "tous": "All",
+    "perso": "Custom exercise",
+    "creer": "Create “{nom}”",
+    "ajouterMouvement": "Add your own movement",
+    "ajouterExercice": "Add your own exercise",
+    "mouvementsRecents": "Your recent movements",
+    "exercicesRecents": "Your recent exercises",
+    "ateliersHyrox": "Hyrox stations",
+    "tousMouvements": "All movements",
+    "tousExercices": "All exercises",
+    "groupeVide": "No exercises in this group.",
+    "nMouvements_one": "{n} movement",
+    "nMouvements_other": "{n} movements",
+    "nExercices_one": "{n} exercise",
+    "nExercices_other": "{n} exercises",
+    "groupes": {
+      "pecs": "Chest",
+      "dos": "Back",
+      "epaules": "Shoulders",
+      "bras": "Arms",
+      "jambes": "Legs",
+      "fessiers": "Glutes",
+      "abdos": "Abs"
+    },
+    "materiel": {
+      "B": "Barbell",
+      "H": "Dumbbells",
+      "M": "Machine",
+      "P": "Cable",
+      "C": "Bodyweight",
+      "K": "Kettlebell",
+      "E": "Band"
+    },
+    "categoriesCf": {
+      "halt": "Weightlifting",
+      "force": "Strength",
+      "gym": "Gymnastics",
+      "cardio": "Cardio"
+    }
+  },
+  "types": {
+    "titre": "Workout types",
+    "aide": "Each type has its own color in the calendar. Tap the dot to change color.",
+    "changerCouleur": "Change the color of {nom}",
+    "nom": "Type name",
+    "nouveau": "+ New type",
+    "reinitialiser": "Reset to default types",
+    "nomNouveau": "New type"
+  },
+  "photos": {
+    "photo": "Photo",
+    "supprimer": "Delete photo",
+    "photoSeance": "Workout photo",
+    "envoi": "Uploading…",
+    "prendre": "Take a photo",
+    "voir": "View photo {n}",
+    "erreur": "The photo couldn’t be added. Try again.",
+    "confirmer": "Confirm deletion"
+  },
+  "minuteur": {
+    "repos": "Rest",
+    "plus15": "+15 s",
+    "sons": {
+      "bip": "Beep",
+      "alarme": "Alarm",
+      "sifflet": "Whistle",
+      "gong": "Gong"
+    },
+    "reposNom": "Rest · {nom}",
+    "departReste": "Set {i}/{n} · {reste} left",
+    "departNom": "Set {i} / {n} · {nom}",
+    "termine_one": "Done · {n} set",
+    "termine_other": "Done · {n} sets",
+    "dernier": "Set {n} / {n} · last one!",
+    "reparti": "Back to work!",
+    "indiqueTemps": "Enter the time between two sets.",
+    "departSeul": "Go · {nom}",
+    "indiqueTempsDuree": "Enter the time between two sets and the duration.",
+    "corde": "Rope",
+    "depart": "Set"
+  },
+  "regles": {
+    "titre": "Our rules",
+    "sousTitre": "For a friendly, safe community",
+    "r1": "<b>Respect</b>: no insults, harassment or offensive content.",
+    "r2": "<b>Report</b> anything that’s wrong (⚑) and <b>block</b> anyone you want.",
+    "r3": "Your data belongs to you: you can <b>download</b> or <b>delete</b> it from your profile.",
+    "continuer": "By continuing, you confirm you’re at least 15 years old and accept the <a href=\"conditions.html\" target=\"_blank\" rel=\"noopener\">terms of use</a> and the <a href=\"confidentialite.html\" target=\"_blank\" rel=\"noopener\">privacy policy</a>.",
+    "accepte": "I accept"
+  },
+  "ancienneIcone": {
+    "titre": "Installed ✓",
+    "sousTitre": "The app’s new address",
+    "texte": "Remember to <b>delete the old app icon</b> from your home screen: it no longer works. Keep only this one.",
+    "fait": "Done"
+  },
+  "commentFaire": {
+    "titre": "How to do it",
+    "aria": "How to: {nom}",
+    "position": "Hold this position",
+    "depart": "Start",
+    "arrivee": "Finish",
+    "animation": "Looping animation ({vue})",
+    "voir": "Watch the movement",
+    "reperes": "Beginner cues",
+    "mains": "Hand placement",
+    "face": "Front",
+    "dos": "Back",
+    "principaux": "Primary muscles",
+    "aident": "Assisting muscles",
+    "revoir": "Show start and finish",
+    "prises": {
+      "floor": "Hands on the floor slightly wider than your shoulders, fingers pointing forward, elbows at about 45° from your body.",
+      "wide": "Hands on the floor much wider than your shoulders (about one and a half times).",
+      "diamond": "Hands together under your chest: thumbs and index fingers touch to form a diamond. Elbows tucked in along your body.",
+      "bench": "Hands on the bar slightly wider than your shoulders: at the bottom of the rep, your forearms are vertical.",
+      "close": "Hands shoulder-width apart, no narrower, to protect your wrists.",
+      "pro": "Overhand grip (palms facing the bar), hands slightly wider than your shoulders, fingers wrapped around the bar.",
+      "sup": "Underhand grip (palms facing you), hands shoulder-width apart.",
+      "row": "Overhand grip (backs of your hands facing forward, thumbs in), hands shoulder-width apart.",
+      "dips": "One hand on each parallel bar, arms straight, shoulders down and away from your ears."
+    },
+    "largeurEpaules": "shoulder width"
+  },
+  "confirmation": {
+    "titre": "Delete this workout?",
+    "bouton": "Delete workout",
+    "texte": "“{titre}” on {date} will be deleted, along with its photos. This can’t be undone."
+  },
+  "nouveautes": {
+    "titre": "What’s new",
+    "diapositive": "slide",
+    "nom": {
+      "titre": "New name, new logo!",
+      "texte": "L’agenda du sportif is now <b>AS Sport</b>. Same app, same workouts, same friends: only the name and logo change. “The Athlete’s Planner” remains our motto."
+    },
+    "ios": {
+      "titre1": "On iPhone: add the new icon",
+      "garde": "Keep the old icon for now: you’ll delete it at the end.",
+      "copie": "Copy the app’s address",
+      "copier": "Copy",
+      "e2": "Open <b>Safari</b>, tap the address bar, <b>paste</b> and open the page.",
+      "e3": "Tap <b>Share</b> <svg class=\"ios-share\" viewBox=\"0 0 24 24\" aria-label=\"(square with arrow icon)\"><path d=\"M12 3v12M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1\"/></svg> then <b>Add to Home Screen</b> › <b>Add</b>.",
+      "deux": "You now have <b>two icons</b>. That’s normal: don’t delete anything yet.",
+      "titre2": "Then delete the old one",
+      "altNouvelle": "New icon: red AS on a black background",
+      "garder": "✓ New: keep it",
+      "altAncienne": "Old icon: white AS in a red square",
+      "supprimer": "✕ Old: delete it",
+      "e4": "Open the <b>new icon</b> “AS Sport” and log in with your <b>email and password</b>. All your workouts are there.",
+      "e5": "Everything there? <b>Long-press the old icon</b> “Agenda sportif” › <b>Delete Bookmark</b> (or “Delete App”).",
+      "oublie": "Forgot your password? Tap “Forgot your password?” on the login screen: you’ll get an email to change it."
+    },
+    "contact": {
+      "ici": "‹ here",
+      "legende": "At the bottom of the home page, under “Nutrition”",
+      "titre": "Got an idea? Found a bug? Let me know!",
+      "texte": "Feel free to write to me using the Contact button on the home page. An idea for an improvement, a missing exercise, a bug you’ve spotted: all your feedback helps me make the app better."
+    },
+    "position": "{i} of {n}",
+    "cestParti": "Let’s go!",
+    "copie": "Copied ✓",
+    "selectionnee": "Selected: copy it"
+  },
+  "onglets": {
+    "go": "Let’s go",
+    "navigation": "Main navigation",
+    "vous": "You"
+  },
+  "assistant": {
+    "ouvrir": "Open the assistant",
+    "bulle": "Need help? I’ll answer your questions 👋",
+    "titre": "Assistant",
+    "sousTitre": "Answers to frequently asked questions",
+    "pose": "Ask your question…",
+    "taQuestion": "Your question",
+    "faq": {
+      "commentFaire": {
+        "q": "How do I learn to do an exercise?",
+        "mots": "how to do exercise movement technique form animation figure help perform",
+        "r": "Tap the little red “?”: in your workout next to the exercise name, or right in the exercise search (without adding it).\nThe movement is animated from the side and the front (start then finish, on a loop), with a technique tip and, for push-ups, presses and pull-ups, a diagram of hand placement.\nThe working muscles are shown in red."
+      },
+      "boutonGo": {
+        "q": "What’s the + Let’s go button?",
+        "mots": "lets go let go start begin workout home plus button bar",
+        "r": "The big + button in the middle of the bottom bar opens today’s workout directly.\nThe “Workouts” tab brings together free workouts (calendar), your routines, programs and workout ideas. Home shows your muscle map, progress, trophies, PRs and recap."
+      },
+      "creerRoutine": {
+        "q": "How do I create a routine?",
+        "mots": "routine save template repeat workout favorite",
+        "r": "Two ways:\n• in a workout, tap “☆ Save as routine”;\n• or Workouts › My routines › “+ Create a routine”.\nThen one tap on “Start” and the workout is ready, with your weights from last time."
+      },
+      "suivreProgramme": {
+        "q": "How do I follow a program?",
+        "mots": "program plan weeks ppl full body 5x5 10k training follow",
+        "r": "Workouts › Programs, then “Follow this program”.\nThe app then suggests the right workout each time (“▶ Start”), week after week."
+      },
+      "derniereFois": {
+        "q": "What’s “last time”?",
+        "mots": "last time history previous weight prefilled before",
+        "r": "When you add an exercise you’ve done before, the app shows what you did last time (↺) and reuses your weights. Reps are suggested in gray: type yours or confirm the set."
+      },
+      "recordsDirect": {
+        "q": "How do live PRs work?",
+        "mots": "record new pr personal best beat trophy live",
+        "r": "When you complete a set heavier than your best (or more reps at the same weight), a “New PR!” message appears, with confetti. For running: your longest run and your best pace. Your friends see your PRs in the feed."
+      },
+      "serie": {
+        "q": "What’s the 🔥 streak?",
+        "mots": "streak flame goal week weekly ring",
+        "r": "On Home, choose your goal of workouts per week (tap the ring). Every week you hit it grows your 🔥 streak. “Rest” days don’t count."
+      },
+      "plusieursSeances": {
+        "q": "Several workouts on the same day?",
+        "mots": "several two workouts same day morning evening double",
+        "r": "Yes: in a workout, tap “+ Another workout” at the top, or “+ New” in Workouts. The day’s workouts show up as tabs."
+      },
+      "carteMusculaire": {
+        "q": "What’s the muscle map?",
+        "mots": "muscle map muscles body worked forgotten",
+        "r": "Home › Muscle map: the muscles worked over 7 or 30 days light up, from lightest to reddest. Tap a muscle to see how many sets it got."
+      },
+      "partagerBilan": {
+        "q": "How do I share my recap?",
+        "mots": "recap month story share instagram image summary",
+        "r": "Home › Monthly recap, then “📲 Share as a story”. An image is created with your numbers for the month: share it on Insta, Snap or WhatsApp."
+      },
+      "cordes": {
+        "q": "How do I log a rope workout?",
+        "mots": "rope ropes climb rope climb set start weight",
+        "r": "Tap a day, then choose “Ropes”. For each exercise: number of climbs, a new set every X seconds or minutes, with or without added weight.\n“⏱ Start the sets” makes the timer ring at each set."
+      },
+      "defi": {
+        "q": "How do I start a challenge?",
+        "mots": "challenge competition friends contest",
+        "r": "Social › Challenges › “+ New challenge”: choose what counts (workouts, active days, km or volume), the duration and the friends you invite. The leaderboard updates automatically."
+      },
+      "commenter": {
+        "q": "How do I comment on a workout?",
+        "mots": "comment comments feed news",
+        "r": "Social: in the feed, under each of your friends’ workouts, write your comment and tap “Send”. You see comments on your workouts in Social and on the workout itself."
+      },
+      "noterSeance": {
+        "q": "How do I log a workout?",
+        "mots": "log workout add training day calendar create",
+        "r": "Go to Workouts, then tap the day you want in the calendar (or “Log today’s workout”).\nChoose your activity: Strength training, CrossFit, Calisthenics or Running. Each activity has its own tailored log."
+      },
+      "ajouterSeries": {
+        "q": "How do I add sets?",
+        "mots": "set sets reps repetitions weight kg exercise add",
+        "r": "In your workout, tap “+ Add an exercise”, type its name, then fill in Reps and Weight for each set.\n“+ Add a set” copies the previous set to save time."
+      },
+      "repos": {
+        "q": "How does rest time work?",
+        "mots": "rest timer stopwatch time break recovery",
+        "r": "Under each exercise, set your rest time with − and + (in 15 s steps).\nAfter your set, tap “✓ Set 1 done · rest”: the set turns green and the timer starts. When the rest is over, the next set lights up on its own. “+15 s” adds time, “Skip” goes straight to the next set."
+      },
+      "enregistrement": {
+        "q": "Is my workout saved?",
+        "mots": "save saved backup lost lose button confirm",
+        "r": "Yes, everything saves automatically as you type, no button needed.\nA red message appears at the top only if there’s a connection problem."
+      },
+      "rpe": {
+        "q": "What’s RPE?",
+        "mots": "rpe difficulty hard effort rating",
+        "r": "RPE rates difficulty from 1 to 10.\n8 = you had 2 reps left in the tank, 9 = 1 rep, 10 = failure. It helps you know when to increase the weight."
+      },
+      "photo": {
+        "q": "How do I add a photo?",
+        "mots": "photo picture camera take physique",
+        "r": "Open your workout and scroll down to “Photos”, then tap “+ Take a photo”.\nTap a photo to enlarge or delete it."
+      },
+      "reprendre": {
+        "q": "How do I repeat my last workout?",
+        "mots": "repeat copy last previous same",
+        "r": "On an empty day, choose the workout type: a “Repeat last workout” button appears. It copies your exercises and weights."
+      },
+      "types": {
+        "q": "How do I change types and colors?",
+        "mots": "type color edit push pull legs cardio ropes rest",
+        "r": "In Workouts, tap the “Types” button. You can rename a type, change its color (tap the dot), add or remove types."
+      },
+      "creatine": {
+        "q": "How do I log my creatine?",
+        "mots": "creatine dose taken",
+        "r": "Nutrition › Creatine: tap the big circle, it turns red = taken.\nForgot a day? Tap the date in the calendar below. The dose is set at the bottom of the page."
+      },
+      "complement": {
+        "q": "How do I add a supplement?",
+        "mots": "supplement whey protein omega vitamin magnesium",
+        "r": "Nutrition › Supplements: tap a supplement in “Quick add”, or type a new one with its dose. The arrows at the top change the day."
+      },
+      "installer": {
+        "q": "How do I install the app on my phone?",
+        "mots": "install app application home screen download icon",
+        "r": "On iPhone: in Safari, tap Share then “Add to Home Screen”.\nOn Android: ⋮ menu then “Install app”.\nThere’s also a button in your Profile."
+      },
+      "modifierProfil": {
+        "q": "How do I edit my profile?",
+        "mots": "profile edit photo username weight height age goal info",
+        "r": "Tap “You” at the bottom right, then “Edit profile”. Change whatever you want and tap “Save”."
+      },
+      "motDePasse": {
+        "q": "I forgot my password",
+        "mots": "password forgot forgotten reset login log in",
+        "r": "On the login screen, type your email then tap “Forgot your password?”. You’ll get a link by email (check your spam folder too)."
+      },
+      "donneesPrivees": {
+        "q": "Is my data private?",
+        "mots": "private data security see privacy",
+        "r": "Other users can’t see your data.\nThe app’s administrator can view accounts to manage the app and help you."
+      },
+      "horsConnexion": {
+        "q": "Does it work without internet?",
+        "mots": "internet offline network wifi connection",
+        "r": "Yes, the app opens without a connection and keeps your changes. They’re sent as soon as you’re back online."
+      },
+      "supprimerCompte": {
+        "q": "How do I delete my account?",
+        "mots": "delete account erase unsubscribe remove",
+        "r": "You › “Delete my account and data”, then confirm with your password. Everything is permanently erased."
+      },
+      "course": {
+        "q": "How do I log a run?",
+        "mots": "run running jog jogging easy run tempo intervals vo2 pace distance km",
+        "r": "Tap a day › Running, then choose Easy run, Tempo or Intervals.\nEnter the distance and time: your pace (min/km) and speed are calculated automatically. For tempo and interval runs, add your blocks (e.g. 10 × 400 m, 1:00 recovery) and start the recovery timer."
+      },
+      "wod": {
+        "q": "How do I log a CrossFit WOD?",
+        "mots": "crossfit wod log save score",
+        "r": "Tap a day › CrossFit. Choose the format (For Time, AMRAP, EMOM…), write the movements, then your score and Rx or Scaled.\nType “Fran”, “Murph”… in the WOD name: the movements fill in automatically."
+      },
+      "recordsCrossfit": {
+        "q": "Where do I see my CrossFit PRs?",
+        "mots": "record 1rm pr max load benchmark girls fran murph cindy",
+        "r": "On Home, tap CrossFit: that’s where you log your PRs (1RM) in back squat, clean, snatch… and your times on benchmark WODs like Fran or Murph."
+      },
+      "calis": {
+        "q": "How do I log a calisthenics workout?",
+        "mots": "calisthenics street workout pull up dips muscle front lever planche handstand bodyweight",
+        "r": "Tap a day › Calisthenics. Add your exercises in one tap (Pull-ups, Dips, Front lever…). For held skills, tap “Reps ⇄” to log seconds. The Added weight column is for when you go weighted."
+      },
+      "idees": {
+        "q": "Where can I find workout ideas?",
+        "mots": "idea ideas workout type program example inspiration try",
+        "r": "On Home, tap “Workout ideas” then choose your activity: Strength training (Push, Pull, Legs…), CrossFit, Calisthenics or Running.\nEach idea has a “Try today” button that fills in today’s workout."
+      },
+      "recordsPR": {
+        "q": "Where do I log my PRs?",
+        "mots": "record pr 5k 10k half marathon bench press squat deadlift",
+        "r": "Home › PRs, then choose your category: Strength training, CrossFit, Calisthenics or Running. Tap + to add a PR: your best shows up in big numbers."
+      },
+      "progression": {
+        "q": "Where can I see my progress?",
+        "mots": "progress chart graph curve evolution stats statistics",
+        "r": "Home › Progress, then choose your category. In strength training, choose Push, Pull…: each exercise has its own chart with your max weight for every workout. Tap a chart to see a workout’s value."
+      },
+      "son": {
+        "q": "How do I set the timer sound?",
+        "mots": "sound volume timer stopwatch beep alarm hear loud",
+        "r": "You › “Timer sound”: set the volume, choose Beep, Alarm, Whistle or Gong, and tap “Test the sound”.\nOn iPhone, there’s no sound when the silent switch (on the side) is on."
+      },
+      "serieCouleur": {
+        "q": "What’s the colored set?",
+        "mots": "set color current highlighted green",
+        "r": "In a workout, the set you’re on is outlined in your main color (“Current set”). Fill in your reps and weight, then tap “✓ Set done”: it turns green, the rest starts, and the next one lights up when the timer ends."
+      },
+      "ajouterAmi": {
+        "q": "How do I add a friend?",
+        "mots": "friend friends add code username request accept",
+        "r": "Social › Friends (or the 🔍 magnifier). Show your QR code (You › Share) or give your friend code (e.g. THEO-4821) to your buddies, or search for their code or username, then tap “Add”. Your friend accepts the request and you’re done."
+      },
+      "messageAmi": {
+        "q": "How do I message a friend?",
+        "mots": "message messages write chat conversation talk",
+        "r": "Social › 💬 at the top right, or Friends then tap 💬 next to your friend. Messages are only visible to the two of you. A red dot shows new messages."
+      },
+      "essayerSeanceAmi": {
+        "q": "How do I try a friend’s workout?",
+        "mots": "workout friend try copy follow see",
+        "r": "Social › Friends, tap your friend then one of their workouts, and “Try this workout”: it’s copied into today’s workout, with their weights as a target. You can also react with 💪 🔥 👏."
+      },
+      "quiVoit": {
+        "q": "Who can see my workouts?",
+        "mots": "see workouts private share sharing privacy friends",
+        "r": "Only your accepted friends, and only if “Share my workouts with my friends” is on (Social › Friends). Your nutrition and personal info are never shared."
+      },
+      "bloquer": {
+        "q": "How do I block or report someone?",
+        "mots": "block report harassment problem insult",
+        "r": "In a conversation, tap ••• then “Block” or “Report”. You can also tap a message to report it. Reports go to the administrator."
+      },
+      "contacter": {
+        "q": "How do I contact the creator?",
+        "mots": "contact creator problem bug help complaint idea",
+        "r": "Tap “Contact” at the bottom of Home, choose a subject and write your message: it comes straight to me."
+      }
+    },
+    "lexique": {
+      "3030": {
+        "termes": "3030",
+        "q": "What’s a 30/30?",
+        "mots": "30 30 thirty intervals short",
+        "r": "30/30 = 30 seconds fast (around your vVO2max) then 30 seconds easy, repeated (e.g. 2 × 10 times). It’s a classic short interval session."
+      },
+      "21159": {
+        "termes": "21159",
+        "q": "What does 21-15-9 mean?",
+        "mots": "21 15 9 rep scheme",
+        "r": "It’s a rep scheme: 21 of each movement, then 15, then 9.\nE.g. Fran: 21 thrusters, 21 pull-ups, 15 thrusters, 15 pull-ups, 9 thrusters, 9 pull-ups."
+      },
+      "wod": {
+        "termes": "wod",
+        "q": "What’s a WOD?",
+        "mots": "wod workout day session today",
+        "r": "WOD = “Workout Of the Day”.\nIn CrossFit, it’s the main part of the class: often short (5 to 20 min) and intense, mixing cardio, gymnastics and weightlifting."
+      },
+      "rx": {
+        "termes": "rx scaled scale",
+        "q": "What do Rx and Scaled mean?",
+        "mots": "rx scaled prescribed adapted level",
+        "r": "Rx (“as prescribed”) = you do the WOD exactly as written: official loads, movements and reps.\nScaled = a version adapted to your level: lighter weight, banded pull-ups, knee push-ups…\nThere’s no shame in going Scaled: that’s how you progress without getting hurt."
+      },
+      "fortime": {
+        "termes": "fortime",
+        "q": "What’s a For Time?",
+        "mots": "for time clock fast possible time",
+        "r": "For Time = you do all the work as fast as possible. Your score is your time.\nThere’s often a “time cap” (maximum time)."
+      },
+      "timecap": {
+        "termes": "cap timecap",
+        "q": "What’s a time cap?",
+        "mots": "time cap limit maximum",
+        "r": "The time cap is the maximum time allowed for a WOD.\nIf you haven’t finished in time, your score = the number of reps completed (written e.g. “CAP + 12”)."
+      },
+      "amrap": {
+        "termes": "amrap",
+        "q": "What’s an AMRAP?",
+        "mots": "amrap many rounds possible max rounds",
+        "r": "AMRAP = “As Many Rounds As Possible” in a given time.\nE.g. AMRAP 12 min of 5 pull-ups, 10 push-ups, 15 squats. You keep going round after round until the beep.\nScore = full rounds + reps of the round in progress (e.g. 8 rounds + 7)."
+      },
+      "emom": {
+        "termes": "emom e2mom",
+        "q": "What’s an EMOM?",
+        "mots": "emom every minute each minute",
+        "r": "EMOM = “Every Minute On the Minute”: at the start of each minute, you do the work, then rest for the rest of the minute.\nE.g. EMOM 10 min: 3 power cleans. The faster you go, the more you rest.\nAn “E2MOM” = every 2 minutes."
+      },
+      "tabata": {
+        "termes": "tabata",
+        "q": "What’s a Tabata?",
+        "mots": "tabata 20 10 seconds interval",
+        "r": "Tabata = 8 rounds of 20 seconds all-out / 10 seconds rest, so 4 minutes.\nScore: total reps, or your weakest round, depending on the instructions."
+      },
+      "chipper": {
+        "termes": "chipper",
+        "q": "What’s a Chipper?",
+        "mots": "chipper long list",
+        "r": "A Chipper is a long list of high-rep movements, done just once, in order.\nYou “chip away” at them little by little. E.g. 50 box jumps, 50 wall balls, 50 burpees…"
+      },
+      "1rm": {
+        "termes": "1rm rm pr",
+        "q": "What are a 1RM and a PR?",
+        "mots": "1rm rm pr personal record max load rep",
+        "r": "1RM = “1 Repetition Max”: the heaviest weight you can lift once.\nPR = “Personal Record”, your personal best. Log them in the CrossFit tab to track your progress."
+      },
+      "girls": {
+        "termes": "girls girl hero heroes benchmark",
+        "q": "What are the Girls and Hero WODs?",
+        "mots": "girls hero benchmark reference fran murph grace cindy",
+        "r": "They’re benchmark WODs, always the same, to measure your progress.\nThe “Girls” have women’s names (Fran, Grace, Cindy…). The “Hero WODs” honor soldiers or firefighters who died in the line of duty (Murph…).\nYou’ll find them all in the CrossFit tab."
+      },
+      "charges": {
+        "termes": "kg",
+        "q": "What does 43/29 kg mean?",
+        "mots": "load men women slash two weights",
+        "r": "Two loads separated by “/” = men’s load / women’s load.\nE.g. Thrusters 43/29 kg: 43 kg for men, 29 kg for women (Rx version)."
+      },
+      "metcon": {
+        "termes": "metcon",
+        "q": "What’s a Metcon?",
+        "mots": "metcon metabolic conditioning cardio",
+        "r": "Metcon = “metabolic conditioning”: the intense, cardio part of the WOD that gets your heart rate up (often a For Time or an AMRAP)."
+      },
+      "box": {
+        "termes": "box",
+        "q": "What’s a box?",
+        "mots": "box gym crossfit",
+        "r": "A “box” is a CrossFit gym."
+      },
+      "kipping": {
+        "termes": "kipping strict butterfly",
+        "q": "Kipping or strict, what’s the difference?",
+        "mots": "kipping strict swing momentum pull up",
+        "r": "Strict = a movement with no momentum (e.g. a strict pull-up).\nKipping = you use a body swing to link reps faster (pull-ups, toes to bar, HSPU). “Butterfly” is an even faster kipping style."
+      },
+      "unbroken": {
+        "termes": "unbroken",
+        "q": "What does Unbroken mean?",
+        "mots": "unbroken no break drop",
+        "r": "Unbroken = all the reps of a set without stopping or dropping the bar."
+      },
+      "thruster": {
+        "termes": "thruster thrusters",
+        "q": "What’s a thruster?",
+        "mots": "thruster squat press",
+        "r": "A thruster = a front squat linked with an overhead press in one fluid movement: you use the drive out of the squat to push the bar up."
+      },
+      "wallball": {
+        "termes": "wall wallball wallballs",
+        "q": "What’s a wall ball?",
+        "mots": "wall ball medicine ball wall target",
+        "r": "Wall ball = a squat holding a medicine ball at your chest, then you throw the ball to a target on the wall (3 m for men, 2.70 m for women) and catch it."
+      },
+      "doubleunder": {
+        "termes": "double unders du",
+        "q": "What’s a double under?",
+        "mots": "double under rope jump",
+        "r": "Double under = with a jump rope, the rope passes under your feet twice in a single jump."
+      },
+      "t2b": {
+        "termes": "t2b toes",
+        "q": "What’s a toes to bar?",
+        "mots": "toes to bar feet bar hanging abs",
+        "r": "Toes to bar = hanging from the bar, you raise your feet until they touch the bar."
+      },
+      "muscleup": {
+        "termes": "muscleup muscle",
+        "q": "What’s a muscle-up?",
+        "mots": "muscle up rings bar pull up dips",
+        "r": "Muscle-up = a pull-up linked with a dip to get your chest above the bar or rings. It’s an advanced movement."
+      },
+      "hspu": {
+        "termes": "hspu",
+        "q": "What’s an HSPU?",
+        "mots": "hspu handstand push up balance",
+        "r": "HSPU = “Handstand Push-Up”: a push-up in a handstand, feet against the wall."
+      },
+      "halterophilie": {
+        "termes": "clean snatch jerk",
+        "q": "Clean, snatch, jerk: what are they?",
+        "mots": "clean snatch jerk olympic weightlifting",
+        "r": "They’re the Olympic weightlifting movements:\n• Clean: the bar goes from the floor to your shoulders.\n• Jerk: from your shoulders to overhead.\n• Clean & jerk: both linked.\n• Snatch: from the floor to overhead in one movement.\n“Power” = catching in a half squat instead of a full squat."
+      },
+      "kbswing": {
+        "termes": "kb kettlebell swing swings",
+        "q": "What’s a KB swing?",
+        "mots": "kb kettlebell swing",
+        "r": "KB swing = you swing a kettlebell between your legs then up to eye level (Russian swing) or overhead (American swing), driven by your hips."
+      },
+      "burpee": {
+        "termes": "burpee burpees",
+        "q": "What’s a burpee?",
+        "mots": "burpee",
+        "r": "Burpee = you drop your chest to the floor, get back up and jump, clapping your hands overhead."
+      },
+      "ef": {
+        "termes": "easy zone2 base",
+        "q": "What’s an easy run?",
+        "mots": "easy run base zone 2 slow jog aerobic",
+        "r": "An easy run is a slow, comfortable pace: you can talk while running. About 60 to 75% of your max heart rate.\nIt makes up most of a runner’s training: it builds your “engine” without wearing you out."
+      },
+      "seuil": {
+        "termes": "tempo threshold",
+        "q": "What’s tempo (threshold) running?",
+        "mots": "tempo threshold lactate pace",
+        "r": "Threshold is a comfortably hard pace that you could hold for about 45 min to 1 hour in a race. About 85 to 90% of your max HR.\nIn training, you work on it in blocks (e.g. 3 × 10 min at threshold, 2 min recovery)."
+      },
+      "fractionne": {
+        "termes": "intervals interval repeats",
+        "q": "What are intervals?",
+        "mots": "intervals interval speed repeats",
+        "r": "Intervals alternate fast efforts and recoveries.\nE.g. 10 × 400 m fast with 1 min recovery, or 30/30. That’s what improves your speed and VO2 max."
+      },
+      "vma": {
+        "termes": "vma vvo2 vo2",
+        "q": "What’s VO2 max speed (vVO2max)?",
+        "mots": "vo2 max speed maximal aerobic",
+        "r": "vVO2max (called VMA in French) = Maximal Aerobic Speed: the speed at which you use the most oxygen. You can hold it for about 4 to 7 minutes.\nIt’s used to set interval paces (e.g. 30/30 at 100% of vVO2max)."
+      },
+      "allure": {
+        "termes": "pace",
+        "q": "What’s pace?",
+        "mots": "pace min km speed",
+        "r": "Pace is the time it takes to cover 1 km (e.g. 5:00 /km).\n5:00 /km = 12 km/h, 6:00 /km = 10 km/h, 4:00 /km = 15 km/h. The app works it out for you from your distance and time."
+      },
+      "fc": {
+        "termes": "hr bpm heart rate",
+        "q": "What’s max HR?",
+        "mots": "hr max heart rate bpm",
+        "r": "Max HR is your maximum heart rate (in beats per minute). A simple estimate: 220 − your age, but it varies a lot from person to person.\nYour run’s average HR is on your watch."
+      }
+    },
+    "wodRef": {
+      "notes": {
+        "murph": "You can split the pull-ups, push-ups and squats however you like (e.g. 20 rounds of 5-10-15), but the run is done at the start and the end.",
+        "cindy": "Keep cycling rounds without stopping for 20 minutes: your score = rounds + reps.",
+        "fran": "It’s one of the best-known WODs: very short (often 3 to 10 min) but very intense.",
+        "helen": "Go through it 3 times: the run, the swings, then the pull-ups.",
+        "annie": "50 double unders and 50 sit-ups, then 40 and 40, and so on down to 10."
+      },
+      "question": "What’s the {nom} WOD?",
+      "description": "{nom}: {desc}.",
+      "amrap": "It’s a {n}-min AMRAP: your score is your rounds + reps.",
+      "fortime": "It’s a For Time: your score is your time.",
+      "noter": "Log your result in the CrossFit tab."
+    },
+    "motsVides": "i you he she it the a an of to in on at and or is are am be do does did how what which who why when where my your his her its our their can could would should will with for about this that these those me want know help app application mean means explain please not no more less all",
+    "ecrireCreateur": "✉️ Write to the creator",
+    "bonjourPseudo": "Hi {pseudo} 👋 I answer frequently asked questions about the app. Pick a question or type your own.",
+    "bonjour": "Hi 👋 I answer frequently asked questions about the app. Pick a question or type your own.",
+    "rubriques": {
+      "cf": "CrossFit glossary",
+      "wod": "WODs explained",
+      "run": "Running glossary"
+    },
+    "choisisMot": "Pick the word or WOD you want explained:",
+    "aussi": "This might help too:",
+    "pasTrouve": "I couldn’t find an answer to your question. You can write directly to the app’s creator, who’ll get back to you."
+  },
+  "valeurs": {
+    "types": {
+      "push": "Push",
+      "pull": "Pull",
+      "jambes": "Legs",
+      "haut": "Upper body",
+      "bas": "Lower body",
+      "cardio": "Cardio",
+      "cordes": "Ropes",
+      "repos": "Rest"
+    },
+    "humeurs": {
+      "forme": "Feeling great",
+      "normal": "Normal",
+      "fatigue": "Tired",
+      "douleur": "Sore"
+    },
+    "objectifs": {
+      "masse": "Bulking",
+      "seche": "Cutting",
+      "force": "Strength",
+      "maintien": "Maintain strength",
+      "forme": "Get back in shape",
+      "endurance": "Endurance"
+    },
+    "objets": {
+      "aide": "Help",
+      "reclamation": "Complaint",
+      "amelioration": "Suggest an improvement",
+      "probleme": "Problem with the app"
+    },
+    "complements": {
+      "whey": "Whey",
+      "omega3": "Omega-3",
+      "vitd": "Vitamin D",
+      "magnesium": "Magnesium",
+      "multi": "Multivitamins",
+      "cafeine": "Caffeine",
+      "creatine": "Creatine"
+    },
+    "doses": {
+      "gelules2": "2 capsules",
+      "comprime1": "1 tablet",
+      "ui1000": "1,000 IU"
+    },
+    "seances": {
+      "muscu": "Strength training",
+      "crossfit": "CrossFit",
+      "calis": "Calisthenics",
+      "course": "Running",
+      "cordes": "Ropes",
+      "hyrox": "Hyrox",
+      "ef": "Easy run",
+      "seuil": "Tempo",
+      "frac": "Intervals"
+    },
+    "records": {
+      "plusLongue": "Longest run",
+      "meilleureAllure": "Best pace"
+    },
+    "vues": {
+      "profil": "Side view",
+      "face": "Front view",
+      "dessus": "Top view"
+    }
+  },
+  "disciplines": {
+    "muscu": "Push, pull, legs… sets, reps and weights",
+    "crossfit": "WODs, AMRAP, EMOM, For Time, PRs",
+    "calis": "Bodyweight: pull-ups, dips, skills…",
+    "course": "Easy runs, tempo, intervals",
+    "cordes": "Rope climbs: count, sets, added weight",
+    "hyrox": "Running + SkiErg, RowErg, sleds, lunges, wall balls…"
+  },
+  "course": {
+    "court": {
+      "ef": "Easy",
+      "seuil": "Tempo",
+      "frac": "Int."
+    },
+    "aide": {
+      "ef": "Easy pace: you should be able to talk while running (60–75% of your max HR).",
+      "seuil": "Comfortably hard pace you could hold for 30–60 min in a race (85–90% of your max HR).",
+      "frac": "Short, fast efforts with recoveries in between (VO2 max, hills, 30/30…)."
+    },
+    "calculAide": "Enter the distance and time: your pace and speed are calculated automatically.",
+    "auTotal": "{duree} total",
+    "recup": "Recovery",
+    "unites": {
+      "m": "Meters",
+      "km": "Kilometers",
+      "min": "Minutes",
+      "s": "Seconds"
+    },
+    "distanceParcourue": "Distance covered {km}",
+    "ajouteAllure": "Add a target pace (e.g. 4:30) to work out the distance covered.",
+    "totalParcouru": "Total covered {km}",
+    "blocValide": "exercise<br>done ✓",
+    "seriesRestantes_one": "rep<br>left",
+    "seriesRestantes_other": "reps<br>left",
+    "lancerRecup": "⏱ Start recovery",
+    "terminer": "✓ Finish",
+    "apercu": "Preview: {bloc}",
+    "uniteBloc": "Unit for block {n}",
+    "ancienneUnite": "old unit",
+    "series": "reps",
+    "duree": "time",
+    "dureeDistance": "time / distance",
+    "unite": "unit",
+    "allureCible": "Target pace",
+    "valider": "✓ Complete the exercise",
+    "rouvrir": "Reopen",
+    "supprimerBloc": "Delete block {n}",
+    "supprimer": "Delete",
+    "typeSortie": "Run type",
+    "maSortie": "My run",
+    "distanceKm": "Distance (km)",
+    "exDistance": "e.g. 8.5",
+    "dureeHms": "Time (h : min : s)",
+    "fcMoyenne": "Average HR (bpm)",
+    "exFc": "e.g. 145",
+    "denivele": "Elevation gain (m)",
+    "exDenivele": "e.g. 120",
+    "blocsSeuil": "Tempo blocks",
+    "fractions": "Intervals",
+    "exSeuil": "E.g. 3 × 10 min at tempo pace, 2:00 recovery",
+    "exFractions": "E.g. 10 × 200 m at 3:45 /km, 1:00 recovery",
+    "ajouterBloc": "+ Add a block",
+    "effortRessenti": "Perceived effort"
+  },
+  "fete": {
+    "continuer": "Continue"
+  },
+  "accueil": {
+    "serie": {
+      "depasse": "Goal smashed, huge 💪",
+      "atteint": "Weekly goal reached ✓",
+      "garder_one": "{n} more workout to keep your streak",
+      "garder_other": "{n} more workouts to keep your streak",
+      "lancer_one": "{n} more workout to start your streak",
+      "lancer_other": "{n} more workouts to start your streak",
+      "aria": "Weekly goal: {fait} of {objectif}. Tap to change it.",
+      "objectif": "Weekly goal",
+      "record_one": "Best: {n} week",
+      "record_other": "Best: {n} weeks",
+      "continue": "You’re beating your streak, keep going!",
+      "joursRestants_one": "{n} day left",
+      "joursRestants_other": "{n} days left",
+      "semaines_one": "week",
+      "semaines_other": "weeks",
+      "combien": "How many workouts per week?",
+      "aide": "Your 🔥 streak counts the weeks in a row you hit this goal. “Rest” days don’t count."
+    },
+    "progEx": "{nom}: {de} → {a} kg",
+    "seancesParSemaine": "Workouts per week (8 wks)",
+    "courbesBientot": "Your charts will appear after your first workouts.",
+    "septJours": "7 days",
+    "plusTravailles": "Most worked: {muscles}",
+    "aucuneSeance7j": "No workouts in the last 7 days",
+    "progression": "Progress",
+    "complements_one": "{nb} supplement",
+    "complements_other": "{nb} supplements",
+    "records": "PRs",
+    "dernierRecord": "Latest: {record}",
+    "premierRecord": "Set your first PR!",
+    "seancesEnMois_one": "workout in {mois}",
+    "seancesEnMois_other": "workouts in {mois}",
+    "aujourdhuiSeance": "Today: {seance}",
+    "prochaineSeance": "Next workout: {seance}",
+    "toutesSeances": "All your workouts, day by day"
+  },
+  "go": {
+    "tuiles": {
+      "seances": {
+        "nom": "Free workout",
+        "texte": "Create your workout in the calendar"
+      },
+      "routines": {
+        "nom": "My routines",
+        "texte": "Your saved workouts, ready to go"
+      },
+      "programs": {
+        "nom": "Programs",
+        "texte": "Multi-week plans"
+      },
+      "types": {
+        "nom": "Workout ideas",
+        "texte": "Gym, CrossFit, calisthenics, running"
+      }
+    },
+    "routinesEnregistrees_one": "{n} saved routine",
+    "routinesEnregistrees_other": "{n} saved routines",
+    "enCours": "In progress: {seance}",
+    "nouvelle": "+ New",
+    "lancerRoutine": "Start a routine"
+  },
+  "series": {
+    "tenueS": "Hold (s)",
+    "reps": "Reps",
+    "lestKg": "Added (kg)",
+    "poidsKg": "Weight (kg)",
+    "exempleCalis": "e.g. Pull-ups",
+    "nomExercice": "Exercise name",
+    "changerTenue": "Switch between reps and hold",
+    "tenue": "Hold",
+    "supprimerExercice": "Delete exercise",
+    "facon": "How to do the exercise",
+    "series": "Sets",
+    "departs": "EMOM sets",
+    "serie": "Set",
+    "passerA": "Go to set {n}, or check it off",
+    "champSerie": "{champ} set {n}",
+    "supprimerSerie": "Delete set {n}",
+    "exerciceFini": "✓ Exercise done",
+    "ajouterSerie": "+ Add a set",
+    "reposEntre": "Rest between sets",
+    "moinsRepos": "Less rest",
+    "plusRepos": "More rest",
+    "difficulte": "Difficulty (RPE)",
+    "difficulteAria": "Difficulty from 1 to 10",
+    "notePlaceholder": "How it felt: technique, sensations, pain…",
+    "effortAria": "Effort from 1 to 10",
+    "repsCourt": "reps",
+    "aucunRepos": "None",
+    "aucuneRemplie": "No sets filled in",
+    "nSeries_one": "{n} set",
+    "nSeries_other": "{n} sets",
+    "totalTenue": "{n} s held in total",
+    "totalReps": "{n} reps in total",
+    "lestMax": "max added weight {kg} kg",
+    "max": "max {kg} kg",
+    "volume": "volume {kg} kg",
+    "toutesFaites": "✓ All sets done",
+    "derniereFaite": "✓ Last set done · rest",
+    "reposEnsuite": "⏸ Rest · set {n} next",
+    "enCours": "Current set: {i} / {n}",
+    "aFaire_one": "To do · {fait} / {n} set",
+    "aFaire_other": "To do · {fait} / {n} sets",
+    "reposEnCours": "⏸ Resting…",
+    "lancerRepos": "⏱ Start a rest",
+    "serieFinie": "✓ Set {n} done · rest {repos}"
+  },
+  "departs": {
+    "aideCalis": "A new set every X seconds or minutes, for the time you choose. Do your reps, then rest until the next set.",
+    "repsParDepart": "Reps per set",
+    "exemple5": "e.g. 5",
+    "lest": "Added weight",
+    "sansLest": "Bodyweight",
+    "leste": "Weighted",
+    "poidsLest": "Added weight (kg)",
+    "reussis": "Sets completed (fill in afterwards)",
+    "surN": "out of {n}",
+    "lancer": "⏱ Start the sets",
+    "repsParDepartN_one": "{n} rep per set",
+    "repsParDepartN_other": "{n} reps per set",
+    "toutesLes": "every {duree}",
+    "pendant": "for {duree}",
+    "reussisSur_one": "{ok} / {n} set completed",
+    "reussisSur_other": "{ok} / {n} sets completed",
+    "nDeparts_one": "{n} set",
+    "nDeparts_other": "{n} sets",
+    "lestKg": "{kg} kg added",
+    "totalCordes_one": "{n} climb in total",
+    "totalCordes_other": "{n} climbs in total",
+    "totalReps_one": "{n} rep in total",
+    "totalReps_other": "{n} reps in total",
+    "cordesParDepart_one": "{n} climb per set",
+    "cordesParDepart_other": "{n} climbs per set",
+    "nCordes_one": "{n} climb",
+    "nCordes_other": "{n} climbs",
+    "departToutesLes": "a set every {duree}",
+    "lesteKg": "weighted {kg} kg",
+    "lesteMin": "weighted",
+    "sansLestMin": "no added weight",
+    "toutesLesTitre": "Every",
+    "pendantTitre": "For",
+    "changerUnite": "Switch between seconds and minutes"
+  },
+  "cordes": {
+    "aide": "For each exercise: climbs per set, a new set every X seconds or minutes, for how long, with or without added weight.",
+    "reprendre": "Repeat your last Ropes workout",
+    "exemple": "e.g. Rope climb",
+    "parDepart": "Per set",
+    "ex1": "e.g. 1",
+    "notePlaceholder": "How it felt: grip, technique, fatigue…"
+  },
+  "hyrox": {
+    "total": "Total: {duree}",
+    "exemple": "e.g. SkiErg",
+    "distance": "Distance",
+    "changerUnite": "Switch between meters and reps",
+    "calories": "Calories",
+    "ex68": "e.g. 68",
+    "chargeKg": "Load (kg)",
+    "ex20": "e.g. 20",
+    "temps": "Time",
+    "notePlaceholder": "How it felt: pace, transitions, fatigue…",
+    "aide": "Add the stations you want, in any order. Log the distance or reps, the load (or calories on SkiErg and RowErg) and your time (e.g. 4:12).",
+    "formats": {
+      "open": "Solo Open",
+      "pro": "Solo Pro",
+      "double": "Doubles"
+    },
+    "categories": {
+      "h": "Men",
+      "f": "Women",
+      "x": "Mixed"
+    },
+    "formatsAide": {
+      "open": "The standard category, open to everyone. 8 × (1 km run + 1 station), non-stop: the clock runs from start to finish.",
+      "pro": "The same 8 stations as Open, with heavier loads. For experienced athletes.",
+      "double": "As a pair: you run the 8 km together. At each station you split the work however you like, but only one of you works at a time."
+    },
+    "duree": {
+      "open": "1h to 1h 45",
+      "pro": "1h to 1h 30",
+      "double": "55 min to 1h 30"
+    },
+    "nom": "Hyrox {format} · {categorie}",
+    "wallBalls": "Wall balls × {n} (target {cible})",
+    "huitKm": "8 km of running · 8 stations",
+    "unKm": "1 km run",
+    "mixte": "Wall balls: 6 kg to 3 m for the man, 4 kg to 2.70 m for the woman. Sleds, farmers and sandbag at Open Men’s loads.",
+    "precisions": "Sleds: sled weight included. Farmers carry: one weight in each hand."
+  },
+  "rpe": {
+    "aucun": "Not rated",
+    "facile": "Easy",
+    "moderee": "Moderate",
+    "reserve3": "3 reps in reserve",
+    "reserve2": "2 reps in reserve",
+    "reserve1": "1 rep in reserve",
+    "echec": "Failure"
+  },
+  "effort": {
+    "aucun": "Not rated",
+    "tresFacile": "Very easy",
+    "facile": "Easy",
+    "soutenu": "Hard",
+    "tresDur": "Very hard",
+    "maximal": "All-out"
+  },
+  "derniereFois": {
+    "suggestion": "💡 You nailed every set at {de} kg last time: try {kg}",
+    "appliquer": "Apply"
+  },
+  "niveaux": {
+    "debutant": "Beginner",
+    "intermediaire": "Intermediate",
+    "confirme": "Experienced",
+    "avance": "Advanced",
+    "tous": "All levels",
+    "debutantInter": "Beginner to intermediate"
+  },
+  "categories": {
+    "ideas": {
+      "muscu": "Push, Pull, Legs, Upper and Lower body",
+      "crossfit": "Benchmark WODs to try",
+      "calis": "From beginner to skills",
+      "course": "Easy runs, tempo and intervals",
+      "hyrox": "Solo Open, Solo Pro and Doubles: the race formats"
+    },
+    "rec": {
+      "muscu": "Bench press, squat, deadlift…",
+      "crossfit": "1RMs and benchmark WOD times",
+      "calis": "Max pull-ups, dips, holds…",
+      "course": "5K, 10K, half and full marathon"
+    },
+    "prog": {
+      "muscu": "Your weights, exercise by exercise",
+      "crossfit": "Your benchmark WODs and 1RMs",
+      "calis": "Your reps and holds",
+      "course": "Your pace and distances"
+    }
+  },
+  "commentaires": {
+    "voirTous": "See all {n} comments",
+    "supprimer": "Delete comment",
+    "signaler": "Report comment",
+    "repondre": "Reply…",
+    "ecrire": "Write a comment…",
+    "commentaire": "Comment",
+    "deTesAmis": "Comments from your friends",
+    "nonEnvoye": "Comment not sent. Check your connection.",
+    "signalerQ": "Report?",
+    "dejaSignale": "Already reported, thanks!",
+    "signale": "⚑ Thanks, the comment has been reported",
+    "signalementImpossible": "Couldn’t send the report. Try again.",
+    "supprimerQ": "Delete?",
+    "suppressionImpossible": "Couldn’t delete."
+  },
+  "exercices": {
+    "noms": {
+      "developpe-couche": "Bench press",
+      "developpe-couche-halteres": "Dumbbell bench press",
+      "developpe-incline": "Incline bench press",
+      "developpe-incline-halteres": "Incline dumbbell press",
+      "developpe-decline": "Decline bench press",
+      "ecarte-halteres": "Dumbbell fly",
+      "ecarte-poulie-haute": "High cable fly",
+      "ecarte-poulie-moyenne": "Mid cable fly",
+      "ecarte-poulie-basse": "Low cable fly",
+      "pec-deck-butterfly": "Pec deck (butterfly)",
+      "presse-pectoraux": "Chest press machine",
+      "pompes": "Push-ups",
+      "pompes-diamant": "Diamond push-ups",
+      "dips": "Dips",
+      "pull-over": "Pullover",
+      "tractions": "Pull-ups",
+      "tractions-lestees": "Weighted pull-ups",
+      "tractions-supination-chin-up": "Chin-ups",
+      "tractions-australiennes": "Inverted rows",
+      "tirage-vertical": "Lat pulldown",
+      "tirage-vertical-prise-serree": "Close-grip lat pulldown",
+      "tirage-horizontal": "Seated cable row",
+      "rowing-barre": "Barbell row",
+      "rowing-haltere": "Dumbbell row",
+      "rowing-t-bar": "T-bar row",
+      "rowing-machine": "Machine row",
+      "souleve-de-terre": "Deadlift",
+      "souleve-de-terre-roumain": "Romanian deadlift",
+      "souleve-de-terre-sumo": "Sumo deadlift",
+      "shrugs": "Shrugs",
+      "face-pull": "Face pull",
+      "extension-lombaire": "Back extension",
+      "good-morning": "Good morning",
+      "developpe-militaire": "Overhead press",
+      "developpe-arnold": "Arnold press",
+      "elevations-laterales": "Lateral raises",
+      "elevations-laterales-a-la-poulie": "Cable lateral raises",
+      "elevations-frontales": "Front raises",
+      "oiseau-arriere-d-epaule": "Reverse fly (rear delts)",
+      "rowing-menton": "Upright row",
+      "push-press": "Push press",
+      "curl-barre": "Barbell curl",
+      "curl-halteres": "Dumbbell curl",
+      "curl-marteau": "Hammer curl",
+      "curl-incline": "Incline curl",
+      "curl-pupitre": "Preacher curl",
+      "curl-a-la-poulie": "Cable curl",
+      "extension-triceps-a-la-poulie": "Triceps pushdown",
+      "extension-triceps-nuque": "Overhead triceps extension",
+      "barre-au-front": "Skull crushers",
+      "developpe-couche-prise-serree": "Close-grip bench press",
+      "kickback-triceps": "Triceps kickback",
+      "curl-poignets": "Wrist curls",
+      "farmer-walk": "Farmer’s walk",
+      "montee-de-corde": "Rope climb",
+      "montee-de-corde-avec-jambes": "Rope climb with legs",
+      "montee-de-corde-depart-assis": "Rope climb from seated",
+      "squat": "Squat",
+      "front-squat": "Front squat",
+      "squat-goblet": "Goblet squat",
+      "hack-squat": "Hack squat",
+      "presse-a-cuisses": "Leg press",
+      "fentes": "Lunges",
+      "fentes-bulgares": "Bulgarian split squats",
+      "leg-extension": "Leg extension",
+      "leg-curl": "Leg curl",
+      "hip-thrust": "Hip thrust",
+      "pont-fessier": "Glute bridge",
+      "abducteurs-machine": "Hip abduction machine",
+      "step-up": "Step-ups",
+      "mollets-debout": "Standing calf raises",
+      "mollets-assis": "Seated calf raises",
+      "squats-poids-du-corps": "Bodyweight squats",
+      "pistol-squat": "Pistol squat",
+      "box-jumps": "Box jumps",
+      "crunch": "Crunches",
+      "crunch-a-la-poulie": "Cable crunch",
+      "releves-de-jambes": "Leg raises",
+      "toes-to-bar": "Toes to bar",
+      "gainage": "Plank",
+      "gainage-lateral": "Side plank",
+      "russian-twist": "Russian twist",
+      "roue-abdominale": "Ab wheel rollout",
+      "mountain-climbers": "Mountain climbers",
+      "sit-ups": "Sit-ups",
+      "l-sit": "L-sit",
+      "hollow-hold": "Hollow hold",
+      "muscle-up": "Muscle-up",
+      "handstand-push-up": "Handstand push-up",
+      "pompes-pike": "Pike push-ups",
+      "pompes-archer": "Archer push-ups",
+      "front-lever": "Front lever",
+      "back-lever": "Back lever",
+      "planche": "Planche",
+      "handstand": "Handstand",
+      "human-flag": "Human flag",
+      "dips-aux-anneaux": "Ring dips",
+      "kettlebell-swings": "Kettlebell swings",
+      "thrusters": "Thrusters",
+      "clean": "Clean",
+      "snatch": "Snatch",
+      "burpees": "Burpees",
+      "wall-balls": "Wall balls",
+      "power-clean": "Power clean",
+      "power-snatch": "Power snatch",
+      "clean-jerk": "Clean & jerk",
+      "back-squat": "Back squat",
+      "overhead-squat": "Overhead squat",
+      "air-squats": "Air squats",
+      "double-unders": "Double unders",
+      "rameur": "Rower",
+      "air-bike": "Air bike",
+      "course": "Run",
+      "skierg": "SkiErg",
+      "sled-push": "Sled push",
+      "sled-pull": "Sled pull",
+      "burpees-sautes": "Burpee broad jumps",
+      "rowerg": "RowErg",
+      "farmers-carry": "Farmers carry",
+      "fentes-sandbag": "Sandbag lunges",
+      "montee-de-corde-sans-jambes": "Legless rope climb",
+      "squats": "Squats",
+      "handstand-push-ups": "Handstand push-ups",
+      "squat-clean": "Squat clean",
+      "course-m-400": "Run (m) 400",
+      "rameur-m": "Row (m)",
+      "course-m": "Run (m)",
+      "dips-lestes": "Weighted dips",
+      "extensions-triceps-poulie": "Cable triceps extensions",
+      "developpe-couche-machine": "Machine chest press",
+      "ecartes-poulie": "Cable flyes",
+      "extensions-triceps-corde": "Rope triceps extensions",
+      "fentes-marchees": "Walking lunges",
+      "fentes-arriere": "Reverse lunges",
+      "abduction-machine": "Hip abduction machine",
+      "kickback-poulie": "Cable glute kickback",
+      "pompes-pieds-sureleves": "Decline push-ups (feet elevated)"
+    }
+  },
+  "fiches": {
+    "communs": {
+      "legende1": "Start",
+      "legende2": "Finish"
+    },
+    "crunch-a-la-poulie": {
+      "legende1": "Kneeling, rope behind your head",
+      "legende2": "Back curled toward the floor",
+      "consigne": "Kneeling facing the high pulley, rope held behind your head: curl your back toward the floor by squeezing your abs, then come back up slowly.",
+      "conseil1": "Your hips stay above your knees and don’t move.",
+      "conseil2": "Hands fixed against your head: it’s your back that curls.",
+      "conseil3": "Breathe out on the way down."
+    },
+    "crunch": {
+      "legende1": "Lying down, knees bent",
+      "legende2": "Upper back curled, lower back on the floor",
+      "consigne": "Lying on your back, knees bent and feet flat: curl your upper back as you breathe out, without pulling on your neck, then lower back down.",
+      "conseil1": "Feet flat on the floor, heels close to your glutes.",
+      "conseil2": "Your lower back stays on the floor: only your shoulders lift.",
+      "conseil3": "Hands against your temples, without pulling on your head."
+    },
+    "gainage-lateral": {
+      "legende1": "Position to hold",
+      "consigne": "On one forearm, elbow under your shoulder: body in a straight line from head to feet, without letting your hips drop or rise.",
+      "conseil1": "Elbow right under your shoulder.",
+      "conseil2": "Body in line: your hips don’t rise or sag.",
+      "conseil3": "Too hard? Put your bottom knee on the floor."
+    },
+    "gainage": {
+      "legende1": "Position to hold",
+      "consigne": "On your forearms, elbows under your shoulders, forearms pointing forward: body in a straight line from shoulders to heels.",
+      "conseil1": "Elbows under your shoulders, forearms parallel and pointing forward.",
+      "conseil2": "Body straight: no butt in the air, no sagging belly.",
+      "conseil3": "Squeeze your abs and glutes, breathe normally."
+    },
+    "hollow-hold": {
+      "legende1": "Position to hold",
+      "consigne": "Lying on your back, lower back pressed into the floor: arms straight behind your head and legs straight, both lifted off the floor.",
+      "conseil1": "Your lower back stays on the floor.",
+      "conseil2": "Shoulders and feet a few centimeters off the floor.",
+      "conseil3": "Too hard? Bend your knees or keep your arms by your sides."
+    },
+    "mountain-climbers": {
+      "legende1": "Right knee to chest",
+      "legende2": "Plank",
+      "legende3": "Left knee to chest",
+      "consigne": "In a high plank, arms straight: drive one knee toward your chest, then the other, alternating fast without lifting your hips.",
+      "conseil1": "One knee after the other, never both at once.",
+      "conseil2": "Hands under your shoulders, arms straight.",
+      "conseil3": "Hips low, back flat."
+    },
+    "releves-de-jambes": {
+      "legende1": "Hanging, legs straight",
+      "legende2": "Legs horizontal",
+      "consigne": "Hanging from the bar without swinging: raise your straight legs to horizontal, then lower them slowly.",
+      "conseil1": "Arms straight, shoulders engaged.",
+      "conseil2": "No momentum: your legs go up and down slowly.",
+      "conseil3": "Too hard? Raise your knees bent."
+    },
+    "roue-abdominale": {
+      "legende1": "Kneeling, wheel under your shoulders",
+      "legende2": "Roll forward, back flat",
+      "consigne": "Kneeling, hands on the wheel under your shoulders: roll forward keeping your back flat, then come back by squeezing your abs.",
+      "conseil1": "Back flat, glutes tight: your lower back never arches.",
+      "conseil2": "Don’t go further than you can control.",
+      "conseil3": "Beginner: short range of motion, or roll toward a wall."
+    },
+    "russian-twist": {
+      "legende1": "Seated, torso leaning back",
+      "legende2": "Weight to the right",
+      "legende3": "Weight to the left",
+      "consigne": "Seated, torso leaning back as at the top of a crunch, feet off the floor: move the weight from side to side by rotating your shoulders.",
+      "conseil1": "Back straight (not rounded), torso leaning at about 45°.",
+      "conseil2": "Your shoulders rotate, the weight follows.",
+      "conseil3": "Too hard? Keep your heels on the floor."
+    },
+    "sit-ups": {
+      "legende1": "Lying down, knees bent",
+      "legende2": "Torso raised up to your knees",
+      "consigne": "Lying down, knees bent, feet flat (anchored if needed): raise your whole torso up to your knees, then lower back down gently.",
+      "conseil1": "Feet flat, toes forward, tucked under a support if needed.",
+      "conseil2": "Roll up through your back on the way up, lower slowly.",
+      "conseil3": "Hands against your temples or arms crossed over your chest."
+    },
+    "toes-to-bar": {
+      "legende1": "Hanging",
+      "legende2": "Legs horizontal",
+      "legende3": "Toes to the bar",
+      "consigne": "Hanging from the bar: raise your feet until they touch the bar, legs straight, then lower them under control.",
+      "conseil1": "Your toes touch the bar, between your hands.",
+      "conseil2": "Arms straight, shoulders pulling down.",
+      "conseil3": "Control the descent so you don’t swing."
+    },
+    "communs-bras": {
+      "consigne": "Elbows tucked in, thumbs up: curl the dumbbells up without swinging, then lower them slowly.",
+      "conseil1": "Hammer grip: thumbs up throughout the movement.",
+      "conseil2": "Elbows fixed at your sides.",
+      "conseil3": "No momentum: if you swing, go lighter."
+    },
+    "barre-au-front": {
+      "legende1": "Bar near your forehead",
+      "legende2": "Arms straight",
+      "consigne": "Lying on a bench, bar held with arms straight above your face: bend your elbows to lower the bar toward your forehead, then straighten your arms.",
+      "conseil1": "Hands shoulder-width apart (straight or EZ bar).",
+      "conseil2": "Your elbows stay fixed, pointing at the ceiling.",
+      "conseil3": "Lower slowly toward your forehead, without touching it."
+    },
+    "curl-a-la-poulie": {
+      "legende1": "Arms straight toward the pulley",
+      "legende2": "Bar at your shoulders",
+      "consigne": "Facing the low pulley, bar in hand: curl the bar toward your shoulders keeping your elbows fixed, then lower it slowly.",
+      "conseil1": "Take a step back so the cable stays taut at the bottom.",
+      "conseil2": "Elbows tucked in.",
+      "conseil3": "Cable tension stays constant: lower slowly."
+    },
+    "curl-barre": {
+      "legende1": "Arms straight",
+      "legende2": "Bar at your shoulders, elbows fixed",
+      "legende3": "EZ bar, hands shoulder-width apart",
+      "legende4": "Elbows at your sides",
+      "consigne": "EZ bar in hand, palms facing forward, elbows tucked in: curl the bar up without swinging, then lower it slowly.",
+      "conseil1": "EZ (cambered) bar: easier on the wrists.",
+      "conseil2": "Only your forearms move, your elbows stay at your sides.",
+      "conseil3": "No swinging with your back."
+    },
+    "curl-halteres": {
+      "legende1": "Thumbs forward",
+      "legende2": "Palms toward your shoulders",
+      "legende3": "Palms facing your body",
+      "legende4": "Rotation: palms up",
+      "consigne": "Dumbbells at your sides, palms facing your thighs: curl up while turning your wrists so your palms finish facing your shoulders, then lower while turning back.",
+      "conseil1": "Supination: your wrist turns on the way up (palms up at the top).",
+      "conseil2": "Elbows fixed at your sides.",
+      "conseil3": "Go up and down slowly, without momentum."
+    },
+    "curl-incline": {
+      "legende1": "Arms hanging behind your torso",
+      "legende2": "Dumbbells toward your shoulders",
+      "consigne": "Seated on an incline bench, arms hanging behind your torso: curl the dumbbells up without bringing your elbows forward, then lower slowly.",
+      "conseil1": "Bench at 45–60°, back and head against the backrest.",
+      "conseil2": "Arms vertical at the start, behind your torso: your elbows don’t move.",
+      "conseil3": "Lighter weight than a standing curl."
+    },
+    "curl-marteau": {
+      "legende1": "Arms straight",
+      "legende2": "Thumbs up",
+      "legende3": "Palms facing your body"
+    },
+    "curl-poignets": {
+      "legende1": "Wrists down",
+      "legende2": "Wrists curled up",
+      "consigne": "Seated, forearms resting on your thighs, wrists over the edge, palms up: curl your wrists up, then lower them.",
+      "conseil1": "Forearms flat on your thighs, wrists past your knees.",
+      "conseil2": "Only your wrists move.",
+      "conseil3": "Light weight, lots of reps."
+    },
+    "curl-pupitre": {
+      "legende1": "Arms almost straight on the pad",
+      "legende2": "Bar toward your shoulders",
+      "consigne": "Seated, backs of your arms on the preacher pad: curl the bar toward your shoulders, then lower slowly without snapping your arms straight.",
+      "conseil1": "Armpits snug at the top of the pad.",
+      "conseil2": "The backs of your arms stay on the pad.",
+      "conseil3": "Keep a slight bend in your elbows at the bottom."
+    },
+    "extension-triceps-a-la-poulie": {
+      "legende1": "Forearms raised",
+      "legende2": "Arms straight",
+      "legende3": "Elbows tucked in",
+      "consigne": "Facing the high pulley, elbows tucked in: push your arms fully straight down, then come back up under control.",
+      "conseil1": "Elbows fixed at your sides.",
+      "conseil2": "Fully straighten your arms at the bottom.",
+      "conseil3": "Come back up slowly until your forearms are horizontal."
+    },
+    "extension-triceps-nuque": {
+      "legende1": "Dumbbell behind your head",
+      "legende2": "Arms straight overhead",
+      "legende3": "Elbows pointing up",
+      "legende4": "Arms straight",
+      "consigne": "Dumbbell held in both hands overhead: lower it behind your neck by bending your elbows, then straighten your arms upward.",
+      "conseil1": "Elbows pointing up, close to your head.",
+      "conseil2": "Only your forearms move.",
+      "conseil3": "Abs tight so you don’t arch (or sit with your back supported)."
+    },
+    "kickback-triceps": {
+      "legende1": "Elbow at 90°",
+      "legende2": "Arm straight back",
+      "consigne": "One knee and one hand on a bench, back flat, upper arm against your body: extend your forearm backward, then return slowly.",
+      "conseil1": "Knee and hand on the same side on the bench, back parallel to the floor.",
+      "conseil2": "Your upper arm stays against your body and doesn’t move.",
+      "conseil3": "Light weight, slow movement."
+    },
+    "communs-calisthenie": {
+      "legende1": "Arms straight",
+      "legende2": "Chest toward the bar",
+      "legende3": "Chin over the bar",
+      "conseil1": "Start with your arms fully straight, shoulders down.",
+      "conseil2": "Head straight, eyes forward: your chest rises to the bar, your head doesn’t go under it.",
+      "conseil3": "Drive your elbows down and back, without swinging your legs.",
+      "conseil4": "Lower slowly until your arms are straight."
+    },
+    "back-lever": {
+      "legende1": "Position to hold",
+      "consigne": "Hanging, arms straight behind your back: body tight and horizontal, face down.",
+      "conseil1": "Face down, body straight from shoulders to feet.",
+      "conseil2": "Arms straight, shoulders forward.",
+      "conseil3": "Progression: tucked legs, then one leg straight."
+    },
+    "dips-aux-anneaux": {
+      "legende1": "Arms straight",
+      "legende2": "Elbows at 90°",
+      "legende3": "Arms straight, rings tight",
+      "consigne": "Rings held with arms straight close to your body: lower until your elbows are at 90°, then push back up keeping the rings tight.",
+      "conseil1": "Less stable than bars: master regular dips first.",
+      "conseil2": "Rings against your body, arms straight at the top.",
+      "conseil3": "Lower slowly without letting the rings drift apart."
+    },
+    "dips": {
+      "legende1": "Arms straight",
+      "legende2": "Elbows at 90°",
+      "consigne": "Hands gripping the bars, arms straight: lower until your elbows are at 90°, then push back up.",
+      "conseil1": "Hands wrapped around the bars, wrists straight.",
+      "conseil2": "Shoulders down, away from your ears.",
+      "conseil3": "Torso leaning forward = more chest; torso upright = more triceps."
+    },
+    "front-lever": {
+      "legende1": "Position to hold",
+      "consigne": "Hanging with arms straight: body tight and horizontal, face up.",
+      "conseil1": "Arms straight, pull the bar toward your hips.",
+      "conseil2": "Body straight: no sagging hips, no arched back.",
+      "conseil3": "Progression: tucked knees, then one leg straight."
+    },
+    "handstand-push-up": {
+      "legende1": "Arms straight against the wall",
+      "legende2": "Head close to the floor",
+      "consigne": "In a handstand, feet against the wall: lower your head close to the floor by bending your arms, then press back up to straight arms.",
+      "conseil1": "Hands 20–30 cm from the wall, shoulder-width apart.",
+      "conseil2": "Lower slowly, your head just brushes the floor.",
+      "conseil3": "Progression: pike push-ups on a bench."
+    },
+    "handstand": {
+      "legende1": "Position to hold",
+      "consigne": "Hands shoulder-width apart, body tight and stacked, eyes between your hands.",
+      "conseil1": "Start against a wall, facing the wall.",
+      "conseil2": "Arms straight, shoulders pushing up.",
+      "conseil3": "Body stacked: hands, shoulders, hips, feet."
+    },
+    "human-flag": {
+      "legende1": "Position to hold",
+      "consigne": "Hands gripping a vertical pole, arms straight: top arm pulls, bottom arm pushes, body horizontal to the side.",
+      "conseil1": "Hands about one and a half shoulder-widths apart on the pole.",
+      "conseil2": "Top arm pulls, bottom arm pushes, both straight.",
+      "conseil3": "Progression: start with tucked legs, then one leg straight."
+    },
+    "l-sit": {
+      "legende1": "Position to hold",
+      "consigne": "Arms straight, supported on bars, shoulders down: legs straight and horizontal.",
+      "conseil1": "Shoulders down, away from your ears.",
+      "conseil2": "Legs together and straight, toes pointed.",
+      "conseil3": "Progression: one knee bent, then both legs straight."
+    },
+    "montee-de-corde-avec-jambes": {
+      "legende1": "Hands high, feet clamping the rope",
+      "legende2": "Legs push, one hand then the other",
+      "consigne": "Hands gripping high, feet locking the rope: push with your legs, then move one hand above the other.",
+      "conseil1": "Your feet pinch the rope (one ankle over the other).",
+      "conseil2": "Your legs do the climbing, your arms hold on.",
+      "conseil3": "Come down hand over hand, never by sliding."
+    },
+    "montee-de-corde-depart-assis": {
+      "legende1": "Seated on the floor, legs straight, hands on the rope",
+      "legende2": "Lift off, arms only",
+      "consigne": "Seated on the floor, legs straight in front of you, hands on the rope: pull with your arms to lift off, then climb hand over hand without using your legs.",
+      "conseil1": "Seated start: no leg drive to lift off.",
+      "conseil2": "Legs straight in front of you, tight, throughout the climb.",
+      "conseil3": "Come down hand over hand until you’re seated again."
+    },
+    "montee-de-corde": {
+      "legende1": "Right hand high",
+      "legende2": "Left hand high",
+      "consigne": "Arms only, legs slightly raised: climb hand over hand.",
+      "conseil1": "Legs raised in front of you, no swinging.",
+      "conseil2": "One hand after the other, arms pulling.",
+      "conseil3": "Come down hand over hand as well."
+    },
+    "muscle-up": {
+      "legende1": "Arms straight",
+      "legende2": "Explosive pull, chest to the bar",
+      "legende3": "Body above the bar, arms straight",
+      "consigne": "Pull explosively to your chest, roll your wrists over the bar, then press until your arms are straight, body above the bar.",
+      "conseil1": "First master 10 strict pull-ups and some dips.",
+      "conseil2": "Pull the bar toward your lower chest, not your chin.",
+      "conseil3": "At the end, arms straight and hips level with the bar."
+    },
+    "planche": {
+      "legende1": "Position to hold: shoulders ahead of your hands",
+      "consigne": "Feet-on-the-floor version (planche lean): supported on your hands, arms straight, shift your shoulders ahead of your hands while keeping your body tight.",
+      "conseil1": "Arms fully straight, shoulders pushing the floor away.",
+      "conseil2": "Fingers turned out or back to protect your wrists.",
+      "conseil3": "Body tight from start to finish, toes on the floor."
+    },
+    "pompes-archer": {
+      "legende1": "Hands very wide",
+      "legende2": "Lower to the right, left arm straight",
+      "legende3": "Lower to the left, right arm straight",
+      "consigne": "Hands very wide: lower to one side by bending that arm while the other stays straight, push back up, then lower to the other side.",
+      "conseil1": "One side then the other, never both at once.",
+      "conseil2": "The straight arm slides out to the side and helps a little.",
+      "conseil3": "Body tight and straight throughout the movement."
+    },
+    "pompes-diamant": {
+      "legende1": "Arms straight",
+      "legende2": "Chest close to your hands",
+      "legende3": "Hands in a diamond",
+      "legende4": "Elbows tight to your body",
+      "consigne": "Hands together under your chest in a diamond shape: lower keeping your elbows tight to your body, then push up.",
+      "conseil1": "Thumbs and index fingers touch under your chest.",
+      "conseil2": "Elbows against your body, even more than in regular push-ups.",
+      "conseil3": "Harder: start on your knees if needed."
+    },
+    "pompes-pike": {
+      "legende1": "Body in a V, arms straight",
+      "legende2": "Head toward the floor in front of your hands",
+      "consigne": "Hands on the floor, hips high (body in an upside-down V): bend your arms to bring your head toward the floor in front of your hands, then push.",
+      "conseil1": "Hips high: your body makes an upside-down V.",
+      "conseil2": "Your head comes down in front of your hands, not between them.",
+      "conseil3": "The closer your feet are to your hands, the harder it is."
+    },
+    "pompes": {
+      "legende1": "Arms straight",
+      "legende2": "Chest close to the floor",
+      "legende3": "Elbows close to your body",
+      "consigne": "Body tight in a plank, hands slightly wider than your shoulders: lower your chest close to the floor, elbows close to your body, then push.",
+      "conseil1": "Elbows at about 45° from your body, not flared.",
+      "conseil2": "Body straight as a plank: no butt in the air, no sagging belly.",
+      "conseil3": "Too hard? Do them on your knees or with your hands on a bench."
+    },
+    "tractions-australiennes": {
+      "legende1": "Arms straight",
+      "legende2": "Chest to the bar",
+      "consigne": "Under a low bar, body tight and straight, heels on the floor: pull your chest up to the bar, elbows close to your body, then lower.",
+      "conseil1": "Body straight from shoulders to heels.",
+      "conseil2": "Elbows close to your body, chest toward the bar.",
+      "conseil3": "The further away your feet are, the harder it is."
+    },
+    "tractions-lestees": {
+      "consigne": "Dip belt around your hips, weight hanging between your legs: same movement as a regular pull-up.",
+      "conseil1": "Belt tight on your hips, plate hanging between your legs without swinging."
+    },
+    "tractions-supination-chin-up": {
+      "consigne": "Hands shoulder-width apart, palms facing you: pull your chest toward the bar, chin over, then lower."
+    },
+    "tractions": {
+      "consigne": "Hanging with arms straight, hands slightly wider than your shoulders: pull your chest toward the bar until your chin clears it, then lower."
+    },
+    "air-bike": {
+      "legende1": "Front leg up, arm pushed",
+      "legende2": "Front leg down, arm pulled",
+      "consigne": "Pedal and push-pull the handles at the same time: the faster you go, the more the air resists. You count in calories.",
+      "conseil1": "Set the seat: leg almost straight when the pedal is at the bottom.",
+      "conseil2": "Arms and legs work together: push the handle on the same side as the pushing leg.",
+      "conseil3": "Start at a pace you can hold, then speed up toward the end."
+    },
+    "box-jumps": {
+      "legende1": "Load: arms back",
+      "legende2": "Takeoff: legs straight",
+      "legende3": "Jump: knees tucked",
+      "legende4": "Landing on the box",
+      "consigne": "Swing your arms back, jump with both feet while swinging your arms forward, and land softly on the box, knees bent.",
+      "conseil1": "Your arms drive the jump: back as you load, forward at takeoff.",
+      "conseil2": "Land with your whole foot on the box, knees in line.",
+      "conseil3": "Step down rather than jumping down."
+    },
+    "burpees": {
+      "legende1": "Standing",
+      "legende2": "Hands on the floor",
+      "legende3": "Plank",
+      "legende4": "Push-up: chest close to the floor",
+      "legende5": "Jump squat, arms up",
+      "consigne": "Hands on the floor, feet back, chest to the floor, then bring your feet in, stand up and jump with your arms up.",
+      "conseil1": "Your body faces the same way throughout the movement.",
+      "conseil2": "In the plank, body tight: no butt in the air.",
+      "conseil3": "Light jump, soft landing on the balls of your feet."
+    },
+    "clean-and-jerk": {
+      "legende1": "Bar on your shoulders",
+      "legende2": "Split jerk, arms straight",
+      "legende3": "Bar on the floor",
+      "legende4": "Bar in front of your knees",
+      "legende5": "Extension",
+      "legende6": "Clean catch",
+      "legende7": "Standing, bar on your shoulders",
+      "legende8": "Small knee bend (dip)",
+      "legende9": "Jerk: split, arms straight",
+      "legende10": "Feet together, bar overhead",
+      "consigne": "Two parts: bring the bar up to your shoulders (clean), then dip your legs slightly and drive it overhead as you split your feet (jerk).",
+      "conseil1": "On the clean, bar close to your body and elbows forward on the catch.",
+      "conseil2": "For the jerk, your torso stays upright during the dip: your legs launch the bar.",
+      "conseil3": "In the split, arms locked, then bring your front and back feet together."
+    },
+    "clean": {
+      "legende1": "Bar on the floor",
+      "legende2": "Bar caught on your shoulders, elbows forward",
+      "legende3": "Bar in front of your knees",
+      "legende4": "Extension, up on your toes",
+      "legende5": "Catch, elbows forward under the bar",
+      "legende6": "Standing, bar on your shoulders",
+      "consigne": "Bar close to your body: pull from the floor with your legs, then whip your elbows forward to catch it on the front of your shoulders.",
+      "conseil1": "Shoulder-width grip, back flat at the start.",
+      "conseil2": "The bar stays close to your body on the way up.",
+      "conseil3": "Catch with high elbows, bar resting on your collarbones."
+    },
+    "course": {
+      "legende1": "Contact: foot under your hips",
+      "legende2": "Flight phase, arms opposite legs",
+      "consigne": "Torso leaning slightly forward, land your foot under your hips and let your arms swing back and forth.",
+      "conseil1": "Short, quick steps rather than long strides.",
+      "conseil2": "Shoulders relaxed, elbows bent at 90°.",
+      "conseil3": "Eyes ahead, not on your feet."
+    },
+    "double-unders": {
+      "legende1": "On your toes, rope overhead",
+      "legende2": "In the air: the rope passes under your feet twice",
+      "consigne": "One jump, two turns of the rope: jump a little higher than a single under and spin the rope fast with your wrists.",
+      "conseil1": "Elbows close to your body, hands at hip height.",
+      "conseil2": "Your wrists turn the rope, not your arms.",
+      "conseil3": "Stay tight, legs almost straight, and land on your toes."
+    },
+    "farmer-walk": {
+      "legende1": "One step",
+      "legende2": "The next step",
+      "legende3": "Head up, chest open",
+      "consigne": "A heavy weight in each hand, arms straight: walk with short steps, head up and chest open.",
+      "conseil1": "Head up, eyes straight ahead.",
+      "conseil2": "Chest open, shoulders down and back.",
+      "conseil3": "Abs tight, short and steady steps."
+    },
+    "kettlebell-swings": {
+      "consigne": "A hip movement, not an arm movement: kettlebell between your legs, snap your hips forward to swing it to shoulder height.",
+      "conseil1": "Back flat, hips back as if closing a door with your butt.",
+      "conseil2": "Your arms stay straight: your glutes do the swinging.",
+      "conseil3": "At the top, body straight and tight, without leaning back."
+    },
+    "power-clean": {
+      "legende1": "Bar on the floor",
+      "legende2": "Quarter-squat catch, elbows forward",
+      "legende3": "Bar in front of your knees",
+      "legende4": "Extension, up on your toes",
+      "legende5": "Quarter-squat catch",
+      "legende6": "Standing, bar on your shoulders",
+      "consigne": "Like a clean, but you catch the bar high: legs barely bent, without dropping into a full squat.",
+      "conseil1": "Back flat at the start, bar over mid-foot.",
+      "conseil2": "Drive hard through the floor and rise onto your toes before pulling with your arms.",
+      "conseil3": "Catch with hips above knees, elbows high and forward."
+    },
+    "power-snatch": {
+      "legende1": "Bar on the floor, wide grip",
+      "legende2": "Quarter-squat catch, arms straight",
+      "legende3": "Bar in front of your knees",
+      "legende4": "Extension, up on your toes",
+      "legende5": "Pull, elbows high",
+      "legende6": "Quarter-squat catch",
+      "legende7": "Standing, arms straight",
+      "consigne": "Like a snatch, but you catch the bar with arms straight in a quarter squat, without dropping into a full squat.",
+      "conseil1": "Wide grip: the bar sits in your hip crease when you’re standing.",
+      "conseil2": "Bar close to your body, elbows high during the pull.",
+      "conseil3": "Arms locked on the catch, then stand up."
+    },
+    "rameur": {
+      "legende1": "Catch: knees bent, arms straight",
+      "legende2": "Finish: legs straight, handle at your lower ribs",
+      "consigne": "Push with your legs first, then swing your torso back and pull the handle to your lower ribs. On the way back, reverse the order: arms, torso, legs.",
+      "conseil1": "Order matters: legs, torso, arms on the drive; arms, torso, legs on the recovery.",
+      "conseil2": "Back straight throughout the movement.",
+      "conseil3": "The recovery is slower than the drive."
+    },
+    "snatch": {
+      "legende1": "Bar on the floor, wide grip",
+      "legende2": "Bar overhead, arms straight",
+      "legende3": "Bar in front of your knees",
+      "legende4": "Extension, up on your toes",
+      "legende5": "Pull, elbows high",
+      "legende6": "The bar passes in front of your face",
+      "legende7": "Arms straight overhead",
+      "consigne": "Very wide grip: rip the bar from the floor in one movement and catch it with arms straight overhead.",
+      "conseil1": "A technical lift: learn it with a PVC pipe or an empty bar.",
+      "conseil2": "Bar always close to your body on the way up.",
+      "conseil3": "At the finish, arms locked, bar over the back of your neck."
+    },
+    "thrusters": {
+      "legende1": "Squat, bar on your shoulders",
+      "legende2": "Bar overhead",
+      "legende3": "Squat, knees in line with your feet",
+      "legende4": "Arms straight",
+      "consigne": "Bar resting on the front of your shoulders: squat down, then drive up and press the bar overhead in one movement.",
+      "conseil1": "Elbows high in front of you during the squat.",
+      "conseil2": "Knees in line with your feet, heels down.",
+      "conseil3": "Use the drive from your legs to press the bar."
+    },
+    "wall-balls": {
+      "legende1": "Squat, ball against your chest",
+      "legende2": "Throw toward the target",
+      "legende3": "Throw",
+      "legende4": "Ball in the air",
+      "legende5": "Ball on the target",
+      "consigne": "Medicine ball against your chest: squat down, then drive up explosively and throw the ball to the target on the wall. Catch it and go again.",
+      "conseil1": "Full squat on every rep, back straight.",
+      "conseil2": "Your leg drive throws the ball; your arms finish the movement.",
+      "conseil3": "Watch the target, catch the ball and drop straight back into the squat."
+    },
+    "extension-lombaire": {
+      "legende1": "Torso toward the floor",
+      "legende2": "Body in line",
+      "consigne": "On the back extension bench, hips on the pad, feet anchored: lower your torso with a straight back, then come back up until you’re in line.",
+      "conseil1": "The pad sits just below the top of your hips.",
+      "conseil2": "Arms crossed over your chest, back straight.",
+      "conseil3": "Come up until you’re in line, without arching beyond."
+    },
+    "good-morning": {
+      "legende1": "Bar on your shoulders",
+      "legende2": "Torso leaning, back flat",
+      "consigne": "Bar resting on your upper back and shoulders, knees slightly bent: hinge your torso forward keeping your back flat, then stand back up.",
+      "conseil1": "Start light: empty bar or a stick.",
+      "conseil2": "Back flat, knees slightly bent and fixed.",
+      "conseil3": "Go down until you feel the stretch in your hamstrings, no further."
+    },
+    "rowing-barre": {
+      "legende1": "Arms straight",
+      "legende2": "Bar to your belly button, elbows close to your body",
+      "legende3": "Elbows close to your body",
+      "consigne": "Torso leaning at 45°, back flat: row the bar to your belly button keeping your elbows close to your body, then lower it with arms straight.",
+      "conseil1": "Knees slightly bent, torso leaning at about 45°, back flat.",
+      "conseil2": "Elbows close to your body (about 45°), not flared.",
+      "conseil3": "Squeeze your shoulder blades at the top, lower without rounding your back."
+    },
+    "rowing-haltere": {
+      "legende1": "Arm straight",
+      "legende2": "Elbow pulled back",
+      "consigne": "One hand and one knee on the bench, back flat: row the dumbbell to your hip, elbow close to your body, then lower it.",
+      "conseil1": "Back flat, parallel to the floor.",
+      "conseil2": "Drive your elbow toward your hip, not your shoulder.",
+      "conseil3": "Your torso doesn’t twist during the movement."
+    },
+    "rowing-machine": {
+      "legende1": "Arms straight, chest on the pad",
+      "legende2": "Elbows pulled back",
+      "consigne": "Seated, chest against the pad, handles in hand: pull your elbows back while squeezing your shoulder blades, then return with arms straight.",
+      "conseil1": "Adjust the seat so the handles are at chest height.",
+      "conseil2": "Your chest stays against the pad.",
+      "conseil3": "Elbows close to your body, squeeze your shoulder blades at the end."
+    },
+    "rowing-t-bar": {
+      "legende1": "Bar between your legs, arms straight",
+      "legende2": "Handle to your chest",
+      "legende3": "Bar between your legs",
+      "legende4": "Elbows tight",
+      "consigne": "Standing over the bar, which runs between your legs: row the handle to your chest keeping your elbows close to your body, then lower it.",
+      "conseil1": "The bar runs between your legs, V-handle in your hands.",
+      "conseil2": "Torso leaning, back flat, knees slightly bent.",
+      "conseil3": "Elbows tight along your body."
+    },
+    "shrugs": {
+      "legende1": "Shoulders down",
+      "legende2": "Shoulders shrugged",
+      "legende3": "Arms straight",
+      "legende4": "Shoulders toward your ears",
+      "consigne": "Arms straight, weights in hand: raise your shoulders toward your ears, pause, then lower slowly.",
+      "conseil1": "Arms straight: your arms don’t do the pulling.",
+      "conseil2": "Go straight up toward your ears, without rolling your shoulders.",
+      "conseil3": "One-second pause at the top."
+    },
+    "souleve-de-terre-roumain": {
+      "legende1": "Standing, legs straight",
+      "legende2": "Hips back, knees slightly bent",
+      "consigne": "Legs almost straight: push your hips back keeping your back flat, slide the bar down your thighs to just below your knees, then come back up.",
+      "conseil1": "Knees slightly bent and fixed.",
+      "conseil2": "Your hips move back: the bar slides down your thighs.",
+      "conseil3": "Stop when you feel the stretch in your hamstrings, back still flat."
+    },
+    "souleve-de-terre-sumo": {
+      "legende1": "Bar on the floor, torso more upright",
+      "legende2": "Bar in front of your knees",
+      "legende3": "Standing",
+      "legende4": "Very wide stance, hands between your knees",
+      "consigne": "Very wide stance, toes pointed out, hands between your knees: push your knees out and stand up keeping your back flat.",
+      "conseil1": "Feet much wider than your shoulders, toes pointed out.",
+      "conseil2": "Hands inside your knees, arms straight.",
+      "conseil3": "Knees in line with your feet, torso more upright than in a regular deadlift."
+    },
+    "souleve-de-terre": {
+      "legende1": "Bar on the floor, back flat",
+      "legende2": "Bar in front of your knees",
+      "legende3": "Standing, bar against your thighs",
+      "legende4": "Hands just outside your knees",
+      "legende5": "Standing",
+      "consigne": "Bar over mid-foot, back flat: push through the floor with your legs, keeping the bar against your legs, until you’re standing.",
+      "conseil1": "Feet hip-width apart, bar over mid-foot.",
+      "conseil2": "Back flat from start to finish, never rounded.",
+      "conseil3": "Bar against your legs all the way up.",
+      "conseil4": "At the top, squeeze your glutes without leaning back."
+    },
+    "tirage-horizontal": {
+      "legende1": "Arms straight",
+      "legende2": "Handle to your stomach",
+      "consigne": "Seated, feet on the platform, back straight: pull the handle to your stomach while squeezing your shoulder blades, without rocking back.",
+      "conseil1": "Knees slightly bent, back straight.",
+      "conseil2": "Elbows close to your body, handle toward your belly button.",
+      "conseil3": "Your torso stays almost still: your arms and back do the pulling."
+    },
+    "tirage-vertical-prise-serree": {
+      "legende1": "Arms straight",
+      "legende2": "Handle to your upper chest",
+      "legende3": "Close grip",
+      "legende4": "Elbows at your sides",
+      "consigne": "Seated under the pulley, close-grip handle in hand: pull to your upper chest keeping your elbows close to your body, then let it back up.",
+      "conseil1": "Hands close together on the V-handle.",
+      "conseil2": "The pulley is above you, the cable comes straight down.",
+      "conseil3": "Elbows at your sides, chest up."
+    },
+    "tirage-vertical": {
+      "legende1": "Arms straight",
+      "legende2": "Bar to your upper chest",
+      "legende3": "Wide grip",
+      "legende4": "Elbows down",
+      "consigne": "Seated, thighs locked under the pads: pull the bar to your upper chest while squeezing your shoulder blades, then let it back up to straight arms.",
+      "conseil1": "The pulley is right above you: the cable comes straight down.",
+      "conseil2": "Chest up, lean back slightly.",
+      "conseil3": "Drive your elbows down, not back."
+    },
+    "developpe-arnold": {
+      "legende1": "Palms facing you, elbows in front",
+      "legende2": "Arms open to the sides",
+      "legende3": "Palms forward, arms straight",
+      "legende4": "Arms open as your wrists rotate",
+      "legende5": "Press: palms forward, arms straight",
+      "consigne": "Seated, dumbbells in front of your face, palms facing you: press up while rotating your wrists to finish palms forward, then lower while rotating back.",
+      "conseil1": "Seated on a bench, backrest upright.",
+      "conseil2": "At the bottom: palms facing you, elbows in front of your body.",
+      "conseil3": "The rotation happens on the way up: palms forward at the top."
+    },
+    "developpe-militaire": {
+      "legende1": "Dumbbells at shoulder height",
+      "legende2": "Arms straight overhead",
+      "legende3": "Elbows under your wrists",
+      "legende4": "Arms straight",
+      "consigne": "Standing, a dumbbell in each hand at shoulder height, palms forward: press overhead without arching your back, then lower.",
+      "conseil1": "Start: dumbbells at ear height, elbows under your wrists.",
+      "conseil2": "Press until your arms are almost straight, without clanking the dumbbells.",
+      "conseil3": "Abs and glutes tight: your back doesn’t arch."
+    },
+    "elevations-frontales": {
+      "legende1": "Dumbbells in front of your thighs",
+      "legende2": "Arms in front, at shoulder height",
+      "legende3": "Dumbbells horizontal",
+      "legende4": "Arms in front",
+      "consigne": "Dumbbells held horizontally in front of your thighs: raise your almost-straight arms in front of you to shoulder height, then lower slowly.",
+      "conseil1": "Dumbbells held horizontally, palms down.",
+      "conseil2": "Raise to eye height at most.",
+      "conseil3": "No momentum: your torso doesn’t move."
+    },
+    "elevations-laterales-a-la-poulie": {
+      "legende1": "Handle in front of the opposite hip",
+      "legende2": "Arm horizontal",
+      "consigne": "Low pulley beside you, handle held in the opposite hand: raise your arm out to the side until horizontal, then lower slowly.",
+      "conseil1": "The cable runs in front of your body.",
+      "conseil2": "Arm almost straight, raise it to horizontal.",
+      "conseil3": "Do all the reps on one side, then switch."
+    },
+    "elevations-laterales": {
+      "legende1": "Arms by your sides",
+      "legende2": "Arms horizontal out to the sides",
+      "legende3": "Arms horizontal",
+      "consigne": "Arms almost straight: raise the dumbbells out to the sides until horizontal, without shrugging, then lower slowly.",
+      "conseil1": "Light weights, elbows slightly bent.",
+      "conseil2": "Raise to horizontal, no higher.",
+      "conseil3": "Shoulders down: your traps aren’t doing the work."
+    },
+    "face-pull": {
+      "legende1": "Arms straight toward the pulley",
+      "legende2": "Rope to your face, elbows high",
+      "legende3": "Elbows high and wide, hands at your face",
+      "consigne": "Pulley at face height, rope in hand: pull toward your eyes while spreading your hands, elbows high, then return to straight arms.",
+      "conseil1": "Elbows at shoulder height or higher.",
+      "conseil2": "Spread your hands to either side of your head at the end of the movement.",
+      "conseil3": "Light weight, slow movement."
+    },
+    "oiseau-arriere-d-epaule": {
+      "legende1": "Seated and bent over, arms hanging",
+      "legende2": "Arms open to the sides",
+      "legende3": "Arms hanging",
+      "legende4": "Arms horizontal",
+      "consigne": "Seated at the end of a bench, torso bent forward over your thighs, back flat: open your arms out to the sides until horizontal, then lower.",
+      "conseil1": "Torso bent almost onto your thighs (or chest-supported on an incline bench).",
+      "conseil2": "Elbows slightly bent and fixed.",
+      "conseil3": "Light weights: think “spread”, not “pull”."
+    },
+    "push-press": {
+      "legende1": "Bar on your shoulders",
+      "legende2": "Small knee bend",
+      "legende3": "Press overhead",
+      "consigne": "Bar on the front of your shoulders: dip your knees slightly, then drive with your legs and finish with your arms to bring the bar overhead.",
+      "conseil1": "Small knee bend, torso upright.",
+      "conseil2": "Your leg drive launches the bar, your arms finish it.",
+      "conseil3": "Arms locked at the top, bar over the back of your neck."
+    },
+    "rowing-menton": {
+      "legende1": "Bar against your thighs",
+      "legende2": "Bar under your chin, elbows high",
+      "legende3": "Hands shoulder-width apart",
+      "legende4": "Elbows higher than your hands",
+      "consigne": "Bar against your thighs: pull it up along your body by raising your elbows out to the sides, up to your lower chest, then lower.",
+      "conseil1": "Hands shoulder-width apart (not touching).",
+      "conseil2": "Your elbows rise higher than your hands.",
+      "conseil3": "Stop at your lower chest."
+    },
+    "communs-jambes": {
+      "conseil1": "Feet shoulder-width apart, toes slightly out.",
+      "conseil2": "Knees in line with your feet: they don’t cave in or flare out.",
+      "conseil3": "Go down at least until your thighs are parallel to the floor, back straight, heels down.",
+      "conseil4": "Push through your heels to stand up."
+    },
+    "abducteurs-machine": {
+      "legende1": "Knees together",
+      "legende2": "Knees apart",
+      "consigne": "Seated, pads against the outside of your knees: push your legs apart, then bring them back slowly.",
+      "conseil1": "Back against the backrest, hands on the handles.",
+      "conseil2": "Push out smoothly, hold for 1 second, return slowly."
+    },
+    "fentes-bulgares": {
+      "legende1": "Back foot on the bench",
+      "legende2": "Back knee toward the floor",
+      "consigne": "Top of your back foot on a bench: lower your back knee toward the floor, front knee over your ankle, then come back up.",
+      "conseil1": "Bench at knee height, top of your back foot resting on it.",
+      "conseil2": "Front foot far enough from the bench to keep your knee over your ankle.",
+      "conseil3": "Torso upright, go straight down."
+    },
+    "fentes": {
+      "legende1": "Standing",
+      "legende2": "Right leg forward",
+      "legende3": "Left leg forward",
+      "consigne": "Big step forward: lower your back knee close to the floor, front knee over your ankle, come back up, then switch legs.",
+      "conseil1": "One leg, then the other.",
+      "conseil2": "Front knee over your ankle, in line with your foot.",
+      "conseil3": "Torso upright, back knee just brushing the floor."
+    },
+    "front-squat": {
+      "legende1": "Bar on the front of your shoulders",
+      "legende2": "Torso upright, thighs parallel",
+      "legende3": "Bar on the front of your shoulders, elbows high",
+      "legende4": "Knees in line with your feet",
+      "consigne": "Bar resting in front, on top of your shoulders and collarbones, elbows high: squat down keeping your torso upright, then stand up.",
+      "conseil1": "The bar rests on the front of your shoulders, against your throat, not in your hands.",
+      "conseil2": "Elbows high and pointing forward all the way down.",
+      "conseil3": "Knees in line with your feet, torso more upright than in a back squat."
+    },
+    "hack-squat": {
+      "legende1": "Legs almost straight",
+      "legende2": "Thighs parallel to the platform",
+      "consigne": "Back against the backrest, shoulders under the pads, feet on the platform: lower the sled by bending your knees, then push.",
+      "conseil1": "Back and hips against the backrest.",
+      "conseil2": "Feet shoulder-width apart in the middle of the platform.",
+      "conseil3": "Don’t lock your knees at the top."
+    },
+    "hip-thrust": {
+      "legende1": "Hips low",
+      "legende2": "Body horizontal",
+      "consigne": "Upper back on a bench, bar across your hips, feet flat: drive your hips up while squeezing your glutes, then lower.",
+      "conseil1": "The bottom of your shoulder blades on the edge of a bench.",
+      "conseil2": "Bar in your hip crease, with a pad.",
+      "conseil3": "At the top, shins vertical and body flat like a table.",
+      "conseil4": "Chin tucked, eyes toward your knees."
+    },
+    "leg-curl": {
+      "legende1": "Legs straight",
+      "legende2": "Heels toward your glutes",
+      "consigne": "Lying face down, pad behind your ankles: curl your heels toward your glutes, then lower slowly.",
+      "conseil1": "Hips against the bench throughout the movement.",
+      "conseil2": "Pad just above your heels.",
+      "conseil3": "Lower slowly, without dropping the weight."
+    },
+    "leg-extension": {
+      "legende1": "Knees at 90°",
+      "legende2": "Legs straight",
+      "consigne": "Back against the backrest, pad on your lower shins: straighten your legs fully, then lower under control.",
+      "conseil1": "Adjust the backrest so your knees are at the edge of the seat.",
+      "conseil2": "Pad resting on your lower shins.",
+      "conseil3": "Hold the handles and keep your butt on the seat."
+    },
+    "mollets-assis": {
+      "legende1": "Heels down",
+      "legende2": "Heels up",
+      "consigne": "Seated, pad on your knees, balls of your feet on the step: raise your heels as high as you can, then lower them slowly.",
+      "conseil1": "Only the balls of your feet are on the step, heels hanging off.",
+      "conseil2": "Pad snug on your lower thighs.",
+      "conseil3": "Slow movement, pause at the top."
+    },
+    "mollets-debout": {
+      "legende1": "Heels below the step",
+      "legende2": "On your toes",
+      "consigne": "Balls of your feet on the edge of a step, heels hanging off: rise onto your toes as high as you can, then lower slowly.",
+      "conseil1": "Only the balls of your feet are on the step.",
+      "conseil2": "Drop your heels below the step before rising again.",
+      "conseil3": "Hold on to something for balance."
+    },
+    "overhead-squat": {
+      "legende1": "Standing, bar overhead",
+      "legende2": "Squat, bar over your feet",
+      "consigne": "Bar locked out overhead, wide grip: squat down while keeping the bar stacked over mid-foot.",
+      "conseil1": "Wide grip, elbows locked and shoulders active (push the bar toward the ceiling).",
+      "conseil2": "Torso as upright as possible, eyes forward.",
+      "conseil3": "Start with a PVC pipe or an empty bar: it's as much a mobility move as a strength one."
+    },
+    "pistol-squat": {
+      "legende1": "On one leg, the other in front",
+      "legende2": "Lowering on one leg, the other straight",
+      "consigne": "On one leg, the other straight out in front: lower as far as you can with your heel down, then stand back up.",
+      "conseil1": "Arms straight out in front for balance.",
+      "conseil2": "Standing-leg heel down, knee tracking over your foot.",
+      "conseil3": "To learn it: lower onto a bench or hold on to something."
+    },
+    "pont-fessier": {
+      "legende1": "Lying down, shoulders on the floor",
+      "legende2": "Hips up",
+      "consigne": "Lying on your back, shoulders on the floor, feet flat: drive your hips up while squeezing your glutes, then lower.",
+      "conseil1": "Shoulders and head stay on the floor (no bench, unlike the hip thrust).",
+      "conseil2": "Feet flat, heels close to your butt.",
+      "conseil3": "At the top, knees, hips and shoulders in line; squeeze your glutes for 1 second."
+    },
+    "presse-a-cuisses": {
+      "legende1": "Knees bent",
+      "legende2": "Legs almost straight",
+      "consigne": "Back and hips pressed into the seat, feet on the platform: push without locking your knees, then lower slowly.",
+      "conseil1": "Feet hip-width apart in the middle of the platform.",
+      "conseil2": "Lower until your knees reach 90°, without your hips lifting off.",
+      "conseil3": "Don't lock your knees at the top."
+    },
+    "squat-goblet": {
+      "legende1": "Dumbbell against your chest",
+      "legende2": "Elbows between your knees",
+      "legende3": "Standing",
+      "legende4": "Knees tracking over your feet",
+      "consigne": "Dumbbell held with both hands against your chest: squat down between your knees with your torso upright and knees tracking over your feet, then stand up.",
+      "conseil1": "Dumbbell held vertically against your chest, elbows down.",
+      "conseil2": "Feet slightly wider than your shoulders, knees tracking over your feet.",
+      "conseil3": "At the bottom, your elbows go between your knees."
+    },
+    "squat": {
+      "legende1": "Standing, bar on your upper back",
+      "legende2": "Thighs parallel to the floor",
+      "legende3": "Standing, elbows under the bar",
+      "legende4": "Knees tracking over your feet",
+      "consigne": "Bar on your upper back, back straight: sit your hips down until your thighs are parallel to the floor, knees tracking over your feet, then drive through your heels."
+    },
+    "squats-poids-du-corps": {
+      "legende1": "Standing, arms in front",
+      "legende2": "Thighs parallel to the floor",
+      "legende3": "Standing",
+      "legende4": "Knees tracking over your feet",
+      "consigne": "Arms out in front for balance: sit your hips down until your thighs are parallel to the floor, knees tracking over your feet, heels down, then stand up."
+    },
+    "step-up": {
+      "legende1": "One foot on the box",
+      "legende2": "Standing tall over your knee",
+      "consigne": "Place your whole foot on the box: drive through that foot until you're standing tall over that knee, then step down under control.",
+      "conseil1": "Box around knee height, whole foot on it.",
+      "conseil2": "Drive through the heel of the foot on the box, without pushing off the other leg.",
+      "conseil3": "Stand all the way up, then lower slowly."
+    },
+    "communs-pectoraux": {
+      "conseil1": "Feet flat on the floor, butt and shoulder blades pressed into the bench.",
+      "conseil2": "Elbows at about 45° from your torso, not flared out to 90°.",
+      "conseil3": "At the bottom, forearms vertical and elbows at a right angle (90°).",
+      "conseil4": "Beginner: start with just the bar and use a spotter."
+    },
+    "developpe-couche-halteres": {
+      "legende1": "Dumbbells at chest level",
+      "legende2": "Arms straight",
+      "legende3": "Elbows at 90°",
+      "legende4": "Dumbbells over your shoulders",
+      "consigne": "Lying on a flat bench, a dumbbell in each hand: lower them to the sides of your chest, then press up.",
+      "conseil1": "Flat bench, feet planted on the floor.",
+      "conseil2": "Start with arms straight, palms facing your feet.",
+      "conseil3": "Lower until your elbows reach 90°, elbows at about 45° from your torso.",
+      "conseil4": "Press back up bringing the dumbbells together, without clanking them."
+    },
+    "developpe-couche-prise-serree": {
+      "legende1": "Bar at lower chest, elbows tucked",
+      "legende2": "Arms straight",
+      "legende3": "Hands shoulder-width apart, elbows tucked",
+      "consigne": "Hands shoulder-width apart on the bar: lower it to your lower chest keeping your elbows tucked, then press.",
+      "conseil1": "Hands shoulder-width apart, no narrower.",
+      "conseil2": "Elbows close to your body on the way down.",
+      "conseil3": "Mainly works the triceps."
+    },
+    "developpe-couche": {
+      "legende1": "Bar at lower chest",
+      "legende2": "Arms straight",
+      "legende3": "Forearms vertical, elbows at 90°",
+      "consigne": "Lying on a flat bench, shoulder blades squeezed, feet on the floor: lower the bar to your lower chest, then press up."
+    },
+    "developpe-decline": {
+      "legende1": "Bar at lower chest",
+      "legende2": "Arms straight",
+      "consigne": "On a decline bench, feet hooked under the pads: lower the bar to your lower chest, then press up.",
+      "conseil1": "Head lower than your hips (15–30°), feet hooked.",
+      "conseil2": "Bar lowered to your lower chest.",
+      "conseil3": "Get a spotter to help you unrack and rack the bar."
+    },
+    "developpe-incline-halteres": {
+      "legende1": "Dumbbells at upper chest",
+      "legende2": "Arms straight",
+      "legende3": "Elbows at 90°",
+      "consigne": "On a bench inclined to 30–45°, a dumbbell in each hand: lower them to your upper chest, then press up.",
+      "conseil1": "Backrest raised to 30–45°.",
+      "conseil2": "Palms facing your feet, elbows at about 45° from your torso.",
+      "conseil3": "Lower until your elbows reach 90°, press back up bringing the dumbbells together."
+    },
+    "developpe-incline": {
+      "legende1": "Bar at upper chest",
+      "legende2": "Arms straight",
+      "legende3": "Elbows at 90°",
+      "consigne": "On a bench inclined to 30–45°: lower the bar to your upper chest, then press up.",
+      "conseil1": "Backrest raised to 30–45° (2 or 3 notches).",
+      "conseil2": "Bar lowered to your upper chest, just below the collarbones.",
+      "conseil3": "Elbows at about 45° from your torso; at the bottom, elbows at 90°."
+    },
+    "ecarte-halteres": {
+      "legende1": "Arms open",
+      "legende2": "Dumbbells over your chest",
+      "legende3": "Arms open, elbows slightly bent",
+      "legende4": "Hands coming together",
+      "consigne": "Lying down, elbows slightly bent: open your arms out to the sides without going below the bench, then bring them back together over your chest.",
+      "conseil1": "Elbows slightly bent and fixed.",
+      "conseil2": "Open until you feel a stretch in your chest, no lower than the bench.",
+      "conseil3": "Close as if you were hugging a tree trunk."
+    },
+    "ecarte-poulie-basse": {
+      "legende1": "Arms open toward the low pulleys",
+      "legende2": "Hands meeting at face height",
+      "legende3": "Arms down",
+      "legende4": "Hands in front of your face",
+      "consigne": "Pulleys set low: bring your hands up and forward until they meet at chin height. Targets the upper chest.",
+      "conseil1": "Torso upright, one foot in front of the other.",
+      "conseil2": "Elbows slightly bent, move in an arc.",
+      "conseil3": "Low pulley = upper chest."
+    },
+    "ecarte-poulie-haute": {
+      "legende1": "Arms open toward the high pulleys",
+      "legende2": "Hands meeting in front of your hips",
+      "legende3": "Arms up",
+      "legende4": "Hands in front of your hips",
+      "consigne": "Pulleys set high: bring your hands down and forward until they meet in front of your hips. Targets the lower chest.",
+      "conseil1": "One foot in front of the other, torso leaning slightly forward.",
+      "conseil2": "Elbows slightly bent and fixed.",
+      "conseil3": "High pulley = lower chest."
+    },
+    "ecarte-poulie-moyenne": {
+      "legende1": "Arms open at shoulder height",
+      "legende2": "Hands meeting in front of your chest",
+      "legende3": "Arms open",
+      "legende4": "Hands in front of your chest",
+      "consigne": "Pulleys at shoulder height: bring your hands together in front of your chest, keeping your arms horizontal. Targets the middle chest.",
+      "conseil1": "Arms at shoulder height throughout the movement.",
+      "conseil2": "Elbows slightly bent and fixed.",
+      "conseil3": "Mid pulley = middle chest."
+    },
+    "pec-deck-butterfly": {
+      "legende1": "Forearms against the pads",
+      "legende2": "Pads touching",
+      "consigne": "Seated on the machine, back flat against the pad, forearms against the pads: bring your arms together in front of you until the pads touch, then open slowly.",
+      "conseil1": "Adjust the seat so your elbows are at shoulder height.",
+      "conseil2": "Arms bent at 90° against the pads.",
+      "conseil3": "Open slowly without going too far back."
+    },
+    "presse-pectoraux": {
+      "legende1": "Handles at your chest",
+      "legende2": "Arms straight out in front",
+      "legende3": "Elbows at chest height",
+      "legende4": "Arms extended forward",
+      "consigne": "Seated on the machine, back flat against the pad, handles at chest height: press forward without locking your elbows, then return slowly.",
+      "conseil1": "Adjust the seat so the handles are at mid-chest height.",
+      "conseil2": "Back and head against the backrest.",
+      "conseil3": "Press until your arms are almost straight."
+    },
+    "pull-over": {
+      "legende1": "Dumbbell behind your head",
+      "legende2": "Dumbbell over your chest",
+      "consigne": "Lying down, a dumbbell held with both hands, arms almost straight: lower it behind your head, then bring it back over your chest.",
+      "conseil1": "Elbows slightly bent and fixed.",
+      "conseil2": "Lower until you feel a stretch, with no shoulder pain.",
+      "conseil3": "Hips and lower back stay on the bench."
+    }
+  },
+  "pagesLegales": {
+    "retour": "‹ Back to the app",
+    "maj": "Last updated: {date}",
+    "note": "This translation is provided for convenience only: in case of any discrepancy, the French version prevails.",
+    "conditions": {
+      "titre": "Terms of Use",
+      "pied": "© 2026 AS Sport · <a href=\"confidentialite.html\">Privacy Policy</a>",
+      "corps": "<p class=\"lead\">By creating an account, you agree to these rules. They're here to keep the app a friendly, safe place for everyone.</p>\n\n  <h2>1. The app</h2>\n  <p>AS Sport is a free app to log your workouts, track your progress and share with your friends. It is provided “as is”: the publisher does their best to keep it running smoothly, but cannot guarantee it will always be available or error-free.</p>\n\n  <h2>2. Your account</h2>\n  <ul>\n    <li>You must be <b>at least 15 years old</b> (or have a parent’s consent).</li>\n    <li>One account per person. You are responsible for what is done with your account: keep your password to yourself.</li>\n    <li>Choose an appropriate username and photo: other users can see them.</li>\n  </ul>\n\n  <h2>3. Community rules</h2>\n  <p><b>Zero tolerance</b> for abusive content or behavior. You may not post (username, photo, message, comment, challenge name…):</p>\n  <ul>\n    <li>insults, harassment, threats or body shaming;</li>\n    <li>hateful, racist, sexist, homophobic or discriminatory content;</li>\n    <li>sexual, violent or shocking content;</li>\n    <li>scams, advertising, spam or dangerous links;</li>\n    <li>promotion of performance-enhancing drugs or practices that are dangerous to health;</li>\n    <li>someone else’s personal information without their consent;</li>\n    <li>any illegal content or content that doesn’t belong to you.</li>\n  </ul>\n\n  <h2>4. Reporting and blocking</h2>\n  <p>You can <b>report</b> a message, a conversation, a comment, a profile or a challenge, and <b>block</b> someone at any time. Reports are reviewed by the publisher, usually within 24 hours. The content in question may be removed and its author <b>suspended</b> from social features or banned, without notice.</p>\n\n  <h2>5. Your content</h2>\n  <p>You keep ownership of what you post. You simply allow the app to store it and show it to the people you share it with (your friends, challenge participants). You can delete your workouts and your account at any time.</p>\n\n  <h2>6. Health</h2>\n  <p>The app does not replace the advice of a doctor or a certified coach. Programs, workout ideas and tips are for guidance only: adapt them to your level, warm up, and stop if you feel pain. You train at your own risk.</p>\n\n  <h2>7. Ownership of the app</h2>\n  <p>The name, design, texts and code of AS Sport belong to its publisher. <b>All rights reserved</b>: you may not copy, reproduce or republish them without permission.</p>\n\n  <h2>8. Personal data</h2>\n  <p>Everything is explained in the <a href=\"confidentialite.html\">privacy policy</a>.</p>\n\n  <h2>9. Changes and contact</h2>\n  <p>These terms may change; if there is a significant change, you will be notified in the app. For any question: the app’s <b>Contact</b> page. These terms are governed by French law.</p>"
+    },
+    "confidentialite": {
+      "titre": "Privacy Policy",
+      "pied": "© 2026 AS Sport · <a href=\"conditions.html\">Terms of Use</a>",
+      "corps": "<p class=\"lead\">This page explains, in plain words, what data the app stores, why, who can see it and how to delete it. The app is free, ad-free, and <b>your data is never sold</b>.</p>\n\n  <h2>1. Who is responsible for your data?</h2>\n  <p>The publisher of AS Sport. For any question or request, write to them from the app’s <b>Contact</b> page: your message goes straight to them.</p>\n\n  <h2>2. Data stored</h2>\n  <ul>\n    <li><b>Your account</b>: email address and password (the password is encrypted by Google Firebase; nobody can read it, not even the publisher).</li>\n    <li><b>Your profile</b>: username (required) and, if you choose, first name, last name, age, height, weight, goal and profile photo.</li>\n    <li><b>Your workouts</b>: sessions, exercises, sets, weights, running times, how you felt, notes, records, routines, current program and workout photos.</li>\n    <li><b>Your nutrition</b>: supplements and creatine intake.</li>\n    <li><b>The social side</b>: your friends, your private messages, your reactions, your comments, your challenges and the reports you send.</li>\n    <li><b>Messages sent from the Contact page</b>.</li>\n    <li><b>A few usage statistics</b>: date of your last visit, number of visits, number of workouts (for running the app).</li>\n  </ul>\n  <p>The app does <b>not</b> collect your location, your contacts or your Apple Health data, and uses <b>no advertising trackers</b>.</p>\n\n  <h2>3. Why?</h2>\n  <ul>\n    <li>To make the app work: save your workouts, calculate your records and progress, and sync across all your devices.</li>\n    <li>For the friend features you choose to use.</li>\n    <li>For safety and moderation: handling reports and blocking abuse.</li>\n    <li>To reply to your messages and improve the app.</li>\n  </ul>\n  <p>Legal basis: performance of the service you request by creating an account, and the publisher’s legitimate interest in keeping the app secure.</p>\n\n  <h2>4. Who can see your data?</h2>\n  <ul>\n    <li><b>You</b>, on all your devices.</li>\n    <li><b>Any signed-in user</b> can find your <b>username, friend code, profile photo and goal</b> by searching for you, in order to add you as a friend.</li>\n    <li><b>Your accepted friends</b> see your workouts (if sharing is on; you can turn it off in Friends), your records, your stats, and the reactions and comments on your workouts. Your workout photos stay private.</li>\n    <li><b>Challenge participants</b> see your username and your score in that challenge.</li>\n    <li><b>The publisher</b> (administrator) can see profiles, workouts and statistics for support and moderation, as well as reported content. They do not read your private messages, except those reported to them.</li>\n  </ul>\n\n  <h2>5. Where is it stored?</h2>\n  <p>With <b>Google Firebase</b> (Google Cloud), which hosts the database and accounts. Servers may be located outside the European Union; Google covers these transfers with the European Commission’s standard contractual clauses. Fonts are loaded from Google Fonts. A copy of your data is also kept on your phone so the app works offline.</p>\n\n  <h2>6. How long?</h2>\n  <p>As long as your account exists. When you delete it, your profile, workouts, nutrition, photos, routines, the reactions and comments you received and your friendships are erased immediately. Messages and comments you wrote on your friends’ content remain visible to them; ask for their deletion via the Contact page if you wish. Reports are deleted once handled.</p>\n\n  <h2>7. Your rights</h2>\n  <ul>\n    <li><b>Access and download your data</b>: Profile › “Download my data”.</li>\n    <li><b>Correct it</b>: Profile › “Edit”.</li>\n    <li><b>Erase it</b>: Profile › “Delete my account and data”, or delete a workout at any time.</li>\n    <li><b>Stop sharing</b> your workouts with your friends: Friends › “My workouts are shared”.</li>\n    <li>For any other request (objection, restriction…), write from the Contact page. You can also contact the French data protection authority, the <b>CNIL</b> (cnil.fr).</li>\n  </ul>\n\n  <h2>8. Minimum age</h2>\n  <p>The app is intended for people <b>aged 15 and over</b>. Below that age, a parent’s consent is required.</p>\n\n  <h2>9. Security</h2>\n  <p>Connections are encrypted (HTTPS). Security rules prevent anyone from reading or changing another user’s data without permission. Keep your password to yourself.</p>\n\n  <h2>10. Changes</h2>\n  <p>If this policy changes, the date at the top of the page is updated and, if the change is significant, you will be notified in the app.</p>"
+    }
+  }
+}

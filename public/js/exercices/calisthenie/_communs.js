@@ -1,5 +1,6 @@
 // Fonctions communes du groupe Calisthénie : positions et matériel partagés par ses fiches.
 // Ce fichier n'importe que la silhouette et d'autres fichiers communs : il peut être évalué à tout moment.
+import { t } from "../../commun/i18n.js";
 import { front, merge, onToes, side } from "../_communs.js";
 import { GROUND, fpullbar, pullbar } from "../../silhouette/index.js";
 
@@ -10,9 +11,9 @@ export const pullTop = (o = {}) => merge({ hip: [117, BY + 60], torso: -100, nec
 // En haut : épaules à hauteur de la barre, coudes sous les mains, écartés et dirigés vers le bas (vers les hanches).
 export const pullF = (grip, top, o = {}) => ({ view: "front", torso: -90, neck: -90, hip: [120, top ? BY + 56 : BY + 116], R: { wristAt: [120 + grip, BY + 5.5], hand: -90, elbowBend: top ? -1 : 1, th: 91, sh: 90 }, eq: [fpullbar(BY)], ...o });
 export const pullViews = (grip, extraSide = [], extraFront = []) => [
-  side([hang({ eq: [pullbar(120, BY), ...extraSide] }), pullTop({ eq: [pullbar(120, BY), ...extraSide] })], ["Bras tendus", "Poitrine vers la barre"]),
-  front([pullF(grip, 0, { eq: [fpullbar(BY), ...extraFront] }), pullF(grip, 1, { eq: [fpullbar(BY), ...extraFront] })], ["Bras tendus", "Menton au-dessus de la barre"])];
-export const PULL_TIPS = ["Pars bras complètement tendus, épaules basses.", "Tête droite, regard devant : c’est la poitrine qui monte vers la barre, la tête ne passe pas sous la barre.", "Tire les coudes vers le bas et vers l’arrière, sans balancer les jambes.", "Redescends lentement jusqu’aux bras tendus."];
+  side([hang({ eq: [pullbar(120, BY), ...extraSide] }), pullTop({ eq: [pullbar(120, BY), ...extraSide] })], [t("fiches.communs-calisthenie.legende1"), t("fiches.communs-calisthenie.legende2")]),
+  front([pullF(grip, 0, { eq: [fpullbar(BY), ...extraFront] }), pullF(grip, 1, { eq: [fpullbar(BY), ...extraFront] })], [t("fiches.communs-calisthenie.legende1"), t("fiches.communs-calisthenie.legende3")])];
+export const PULL_TIPS = [t("fiches.communs-calisthenie.conseil1"), t("fiches.communs-calisthenie.conseil2"), t("fiches.communs-calisthenie.conseil3"), t("fiches.communs-calisthenie.conseil4")];
 // Pompes : mains sous les épaules, pieds en appui sur la pointe.
 export const TOES = onToes(-14, 75);
 export const plank = (shX, shY, wristX, o = {}, toes = TOES) => {

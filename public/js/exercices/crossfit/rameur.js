@@ -1,4 +1,5 @@
 // Fiche « Comment faire » : Rameur (ergomètre).
+import { t } from "../../commun/i18n.js";
 import { side } from "../_communs.js";
 import { GROUND, raw } from "../../silhouette/index.js";
 
@@ -15,6 +16,6 @@ const feet = { ankleAt: [166, 184], ft: -52 };
 export default { views: [side([
       { hip: [104, 178], torso: -60, neck: -66, box: BOX, near: { ...feet, kneeBend: 1, wristAt: [176, 150], hand: 0 }, eq: [erg] },
       { hip: [74, 178], torso: -112, neck: -100, box: BOX, near: { ...feet, wristAt: [104, 136], elbowBend: 1, hand: 0 }, eq: [erg] }],
-      ["Attaque : genoux pliés, bras tendus", "Fin de tirage : jambes tendues, poignée au bas des côtes"], [0, 1])],
-    cue: "Pousse d’abord avec les jambes, puis bascule le buste en arrière et tire la poignée vers le bas des côtes. Au retour, dans l’ordre inverse : bras, buste, jambes.",
-    tips: ["L’ordre compte : jambes, buste, bras à l’aller ; bras, buste, jambes au retour.", "Dos droit pendant tout le mouvement.", "Le retour est plus lent que la poussée."] };
+      [t("fiches.rameur.legende1"), t("fiches.rameur.legende2")], [0, 1])],
+    cue: t("fiches.rameur.consigne"),
+    tips: [t("fiches.rameur.conseil1"), t("fiches.rameur.conseil2"), t("fiches.rameur.conseil3")] };

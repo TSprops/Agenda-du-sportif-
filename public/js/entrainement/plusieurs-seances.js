@@ -1,5 +1,6 @@
 // Entraînement : plusieurs séances le même jour (onglets).
 import { S, dayMeta, dayOf, esc, isEmpty, sessionsOn } from "../commun/core.js";
+import { t } from "../commun/i18n.js";
 
 /* ============================================================
    Plusieurs séances par jour
@@ -18,8 +19,8 @@ export function sessTabsHTML(c, k) {
   const list = [...new Set([...sessionsOn(dayOf(k)), k])].sort();
   const others = list.filter(x => x !== k && S.days[x] && !isEmpty(S.days[x]));
   if (!others.length && isEmpty(c)) return "";
-  return `<div class="sess-tabs" role="tablist" aria-label="Séances du jour">${list.filter(x => x === k || (S.days[x] && !isEmpty(S.days[x]))).map((x, i) => {
+  return `<div class="sess-tabs" role="tablist" aria-label="${esc(t("seances.duJour"))}">${list.filter(x => x === k || (S.days[x] && !isEmpty(S.days[x]))).map((x, i) => {
     const d = x === k ? c : S.days[x], mt = d && d.disc ? dayMeta(d) : null;
-    return `<button type="button" role="tab" data-a="sess" data-k="${x}" aria-selected="${x === k}" style="--tc:${mt ? mt.color : "var(--muted)"}"><i class="dot"></i>Séance ${i + 1}${mt ? " · " + esc(mt.short) : ""}</button>`;
-  }).join("")}${isEmpty(c) ? "" : `<button type="button" class="sess-add" data-a="sess-new">+ Autre séance</button>`}</div>`;
+    return `<button type="button" role="tab" data-a="sess" data-k="${x}" aria-selected="${x === k}" style="--tc:${mt ? mt.color : "var(--muted)"}"><i class="dot"></i>${t("seances.numero", { n: i + 1 })}${mt ? " · " + esc(mt.short) : ""}</button>`;
+  }).join("")}${isEmpty(c) ? "" : `<button type="button" class="sess-add" data-a="sess-new">${t("seances.autre")}</button>`}</div>`;
 }

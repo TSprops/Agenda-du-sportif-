@@ -4,7 +4,8 @@ import { blocLeft, refreshBloc } from "./fiche-course.js";
 import { hyroxSumHTML } from "./fiche-hyrox.js";
 import { addPhotos, dropPhoto, openViewer } from "./photos.js";
 import { activeSet, exStats, finishEx, fmtRest, isDone, jumpToSet, refreshAllSets, refreshSets, restOf, validateSet } from "./series.js";
-import { $, BENCH, S, armed, blocDone, clone, dayOf, isEmpty, numOr, parseClock, runCalcHTML } from "../commun/core.js";
+import { $, BENCH, S, armed, blocDone, clone, dayOf, isEmpty, nomEx, numOr, parseClock, runCalcHTML } from "../commun/core.js";
+import { canon, t } from "../commun/i18n.js";
 import { norm } from "../pages/faq.js";
 import { startIntervals, startRest } from "../commun/timer.js";
 import { addExercise, announcePRs, calisPlan, cordesOf, cordesPlan, departSummary, freshKey, openLib, saveRoutineFromSession, sessionPRs, toast } from "../entrainement/index.js";
@@ -14,7 +15,7 @@ const newBloc = c => ({ rep: "", eff: "", unit: c.runType === "seuil" ? "min" : 
 // Résumé (nombre de départs, total) et bouton « Lancer » mis à jour pendant la saisie.
 function refreshDepart(i) {
   const ex = S.cur.exercises[i], cd = ex.kind === "cordes", pl = cd ? cordesPlan(ex) : calisPlan(ex.dep);
-  const sum = $((cd ? "cd" : "dp") + "-sum-" + i); if (sum) sum.innerHTML = departSummary(pl, cd ? "corde" : "rep");
+  const sum = $((cd ? "cd" : "dp") + "-sum-" + i); if (sum) sum.innerHTML = departSummary(pl, cd ? "cordes" : "reps");
   const g = $((cd ? "cd" : "dp") + "go-" + i); if (g) g.disabled = !pl;
 }
 // Après un changement de séries : chiffres, couleurs, sauvegarde et records.
@@ -32,35 +33,35 @@ $("sheet").addEventListener("focusin", e => {
 });
 $("sheet").addEventListener("input", e => {
   const f = e.target.dataset.f; if (!f || !S.cur || f === "photo") return;
-  const c = S.cur, i = +e.target.dataset.ex, j = +e.target.dataset.s, v = e.target.value, t = v.trim();
+  const c = S.cur, i = +e.target.dataset.ex, j = +e.target.dataset.s, v = e.target.value, tv = v.trim();
   if (f === "title") c.title = v; else if (f === "note") c.note = v;
-  else if (f === "ex-name") { if (!c.exercises[i].lock) c.exercises[i].name = v; } else if (f === "ex-note") c.exercises[i].note = v;
+  else if (f === "ex-name") { if (!c.exercises[i].lock) c.exercises[i].name = canon("exercices.noms", v) === v.trim() ? v : canon("exercices.noms", v); } else if (f === "ex-note") c.exercises[i].note = v;
   else if (/^(cd|dp)-(per|every|dur|kg|ok)$/.test(f)) {
     // Départs réguliers : cordes (champs sur l'exercice) ou callisthénie (champs dans ex.dep).
     const ex = c.exercises[i], cd = f.startsWith("cd-"), o = cd ? ex : (ex.dep = ex.dep || {}), fld = f.slice(3);
-    o[fld === "per" ? (cd ? "ropes" : "reps") : fld] = t === "" ? "" : fld === "per" || fld === "ok" ? intOr(v) : numOr(v);
+    o[fld === "per" ? (cd ? "ropes" : "reps") : fld] = tv === "" ? "" : fld === "per" || fld === "ok" ? intOr(v) : numOr(v);
     refreshDepart(i);
   }
-  else if (f === "reps" || f === "kg") { c.exercises[i].sets[j][f] = t === "" ? "" : numOr(v); $("st-" + i).textContent = exStats(c.exercises[i], c.disc); refreshAllSets(); }
+  else if (f === "reps" || f === "kg") { c.exercises[i].sets[j][f] = tv === "" ? "" : numOr(v); $("st-" + i).textContent = exStats(c.exercises[i], c.disc); refreshAllSets(); }
   else if (f === "hx-amt" || f === "hx-kg" || f === "hx-cal" || f === "hx-time") {
-    const ex = c.exercises[i], fld = f.slice(3); ex[fld] = fld === "time" ? v : t === "" ? "" : fld === "amt" || fld === "cal" ? intOr(v) : numOr(v);
+    const ex = c.exercises[i], fld = f.slice(3); ex[fld] = fld === "time" ? v : tv === "" ? "" : fld === "amt" || fld === "cal" ? intOr(v) : numOr(v);
     const sm = $("hxSum"); if (sm) sm.innerHTML = hyroxSumHTML(c);
   }
   else if (f.startsWith("run-")) {
     const r = c.run = c.run || { blocks: [] }, fld = f.slice(4);
-    r[fld] = t === "" ? "" : fld === "dist" ? numOr(v) : intOr(v);
+    r[fld] = tv === "" ? "" : fld === "dist" ? numOr(v) : intOr(v);
     $("runCalc").innerHTML = runCalcHTML(r);
   }
   else if (f.startsWith("bl-")) {
     const b = c.run.blocks[+e.target.dataset.b], fld = f.slice(3);
-    b[fld] = fld === "rep" ? (t === "" ? "" : intOr(v)) : fld === "eff" ? (t === "" ? "" : numOr(v)) : v;
+    b[fld] = fld === "rep" ? (tv === "" ? "" : intOr(v)) : fld === "eff" ? (tv === "" ? "" : numOr(v)) : v;
     refreshBloc(c, +e.target.dataset.b);
   }
-  else if (f.startsWith("wod-")) { c.wod[f.slice(4)] = f === "wod-cap" ? (t === "" ? "" : intOr(v)) : v; }
-  else if (f.startsWith("mv-")) { const m = c.wod.moves[+e.target.dataset.m], fld = f.slice(3); m[fld] = fld === "kg" ? (t === "" ? "" : numOr(v)) : v; }
+  else if (f.startsWith("wod-")) { c.wod[f.slice(4)] = f === "wod-cap" ? (tv === "" ? "" : intOr(v)) : v; }
+  else if (f.startsWith("mv-")) { const m = c.wod.moves[+e.target.dataset.m], fld = f.slice(3); m[fld] = fld === "kg" ? (tv === "" ? "" : numOr(v)) : v; }
   else if (f.startsWith("sc-")) {
     const map = { "sc-min": "sMin", "sc-sec": "sSec", "sc-rounds": "rounds", "sc-reps": "reps", "sc-kg": "kg" };
-    c.wod[map[f]] = t === "" ? "" : f === "sc-kg" ? numOr(v) : intOr(v);
+    c.wod[map[f]] = tv === "" ? "" : f === "sc-kg" ? numOr(v) : intOr(v);
   }
   changed();
 });
@@ -70,7 +71,7 @@ $("sheet").addEventListener("click", e => {
   if (a === "close") return closeSheet();
   if (a === "disc") { setDisc(c, b.dataset.id); renderSheet(); $("sheet").scrollTop = 0; return; }
   if (a === "change-disc") {
-    if (!isEmpty(c) && !armed(b, "Toucher à nouveau : le contenu sera effacé")) return;
+    if (!isEmpty(c) && !armed(b, t("seances.toucherEfface"))) return;
     const keep = { title: c.title, mood: c.mood, note: c.note, photos: c.photos };
     S.cur = { ...EMPTY_DAY(), ...keep }; changed(); renderSheet(); $("sheet").scrollTop = 0; return;
   }
@@ -85,7 +86,7 @@ $("sheet").addEventListener("click", e => {
   else if (a === "mood") { c.mood = c.mood === b.dataset.v ? null : b.dataset.v; }
   else if (a === "add-ex") { openLib(name => addExercise(name), c.disc); return; }
   else if (a === "calis-add" || a === "cd-add") { addExercise(b.dataset.name, !!b.dataset.hold); return; }
-  else if (a === "save-routine") { saveRoutineFromSession(c); b.textContent = "✓ Routine enregistrée"; b.disabled = true; return; }
+  else if (a === "save-routine") { saveRoutineFromSession(c); b.textContent = t("routines.enregistree"); b.disabled = true; return; }
   else if (a === "sess") { flush(); openDay(b.dataset.k); return; }
   else if (a === "sess-new") { flush(); openDay(freshKey(dayOf(S.open))); return; }
   else if (a === "hold") { c.exercises[i].hold = !c.exercises[i].hold; }
@@ -99,10 +100,10 @@ $("sheet").addEventListener("click", e => {
   else if (a === "dp-mode") { const ex = c.exercises[i]; ex.mode = b.dataset.v || ""; if (ex.mode) ex.dep = ex.dep || { reps: "", every: "", unit: "min", dur: "", durUnit: "min", lest: false, kg: "", ok: "" }; }
   else if (a === "cd-go" || a === "dp-go") {
     const ex = c.exercises[i], pl = a === "cd-go" ? cordesPlan(ex) : calisPlan(ex.dep);
-    if (!pl) { toast("Indique le temps entre deux départs et la durée."); return; }
-    startIntervals(pl.every, pl.n, ex.name || (a === "cd-go" ? "Corde" : "Départ"), !!pl.dur); return;
+    if (!pl) { toast(t("minuteur.indiqueTempsDuree")); return; }
+    startIntervals(pl.every, pl.n, nomEx(ex.name) || t(a === "cd-go" ? "minuteur.corde" : "minuteur.depart"), !!pl.dur); return;
   }
-  else if (a === "del-ex") { if (!armed(b, "Confirmer")) return; c.exercises.splice(i, 1); }
+  else if (a === "del-ex") { if (!armed(b, t("commun.confirmer"))) return; c.exercises.splice(i, 1); }
   else if (a === "add-set") { c.exercises[i].fini = false; const s = c.exercises[i].sets, l = s[s.length - 1]; s.push(l ? { reps: "", kg: l.kg, target: l.reps !== "" && l.reps != null ? l.reps : (l.target ?? "") } : { reps: "", kg: "" }); }
   else if (a === "kg-up") { const kg = +b.dataset.kg, from = +b.dataset.from; c.exercises[i].sets.forEach(st => { if (!st.done && (st.kg === "" || st.kg == null || +st.kg === from)) st.kg = kg; }); }
   else if (a === "del-set") { c.exercises[i].sets.splice(+b.dataset.s, 1); }
@@ -120,7 +121,7 @@ $("sheet").addEventListener("click", e => {
       $("st-" + i).textContent = exStats(ex, c.disc); changed();
       announcePRs(sessionPRs(c, S.open), S.open);
     }
-    c.focus = i; startRest(restOf(ex), ex.name, { day: S.open, ex: i }); refreshAllSets(); return;
+    c.focus = i; startRest(restOf(ex), nomEx(ex.name), { day: S.open, ex: i }); refreshAllSets(); return;
   }
   else if (a === "set-toggle") {
     const ex = c.exercises[i], j = +b.dataset.s, st = ex.sets[j];
@@ -141,13 +142,13 @@ $("sheet").addEventListener("click", e => {
     const bl = c.run.blocks, l = bl[bl.length - 1], { left, ...cp } = l || {};
     bl.push(l ? { ...cp, unit: c.runType === "seuil" ? "min" : cp.unit === "km" ? "m" : cp.unit, fini: false } : newBloc(c));
   }
-  else if (a === "bl-del") { if (!armed(b, "Confirmer ?")) return; c.run.blocks.splice(+b.dataset.b, 1); }
+  else if (a === "bl-del") { if (!armed(b, t("commun.confirmerQ"))) return; c.run.blocks.splice(+b.dataset.b, 1); }
   else if (a === "bl-unit") { const bl = c.run.blocks[+b.dataset.b], u = ["m", "s", "min"]; bl.unit = b.dataset.u || u[(u.indexOf(bl.unit || "m") + 1) % u.length]; }
   // Récup : une série de moins. À la dernière, « Terminer » valide sans récup.
   else if (a === "bl-go" || a === "bl-fini") {
     const bl = c.run.blocks[+b.dataset.b], n = blocLeft(bl);
     if (a === "bl-fini" || n <= 1) { bl.fini = true; delete bl.left; changed(); renderSheet(); announcePRs(sessionPRs(c, S.open), S.open); return; }
-    bl.left = n - 1; changed(); renderSheet(); startRest(parseClock(bl.rec) || 60, "Récup"); return;
+    bl.left = n - 1; changed(); renderSheet(); startRest(parseClock(bl.rec) || 60, t("course.recup")); return;
   }
   else if (a === "bl-open") { const bl = c.run.blocks[+b.dataset.b]; bl.fini = false; delete bl.left; }
   else if (a === "wf") { c.wod.format = c.wod.format === b.dataset.v ? "" : b.dataset.v; }
@@ -169,7 +170,7 @@ $("sheet").addEventListener("click", e => {
     if (!String(c.title).trim()) c.title = src.title || "";
   }
   else if (a === "del-session") {
-    if (!armed(b, "Toucher à nouveau pour supprimer")) return;
+    if (!armed(b, t("seances.toucherSupprimer"))) return;
     const gone = (c.photos || []).map(p => p.pid).filter(Boolean);
     S.cur = EMPTY_DAY();
     forceFlush(); gone.forEach(dropPhoto); return closeSheet();
@@ -183,7 +184,7 @@ $("sheet").addEventListener("change", e => {
   const bm = BENCH.find(x => norm(x.name).trim() === norm(e.target.value).trim()); if (!bm) return;
   const w = S.cur.wod;
   if (!(w.moves || []).some(m => m.name)) w.moves = clone(bm.moves);
-  if (!w.format) w.format = bm.type === "amrap" ? "AMRAP" : "For Time";
+  if (!w.format) w.format = bm.type === "amrap" ? "AMRAP" : "For Time"; // i18n-ignore (identifiants de format)
   if (!w.cap && bm.cap) w.cap = bm.cap;
   w.name = bm.name; changed(); renderSheet();
 });

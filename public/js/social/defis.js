@@ -7,9 +7,16 @@ import { SOC, dirOf, refreshSocial, reportContent } from "../amis/index.js";
 import { addDays, counts } from "../pages/accueil.js";
 import { shortDate } from "../idees/index.js";
 import { go } from "../commun/store.js";
+import { t } from "../commun/i18n.js";
 
 /* ---------- Défis entre amis ---------- */
-const METRICS = { seances: ["Séances", v => v > 1 ? "séances" : "séance", v => String(v)], jours: ["Jours actifs", v => v > 1 ? "jours" : "jour", v => String(v)], km: ["Km courus", () => "km", v => nf.format(v)], volume: ["Volume soulevé", () => "t", v => nf.format(Math.round(v / 100) / 10)] };
+// Mesures d'un défi : [nom, unité selon la valeur, valeur affichée]. Noms : « defis.mesures.<id> ».
+const METRICS = {
+  seances: [t("defis.mesures.seances"), v => t("classements.unites.seances", { n: v }), v => String(v)],
+  jours: [t("defis.mesures.jours"), v => t("classements.unites.jours", { n: v }), v => String(v)],
+  km: [t("defis.mesures.km"), () => "km", v => nf.format(v)],
+  volume: [t("defis.mesures.volume"), () => "t", v => nf.format(Math.round(v / 100) / 10)]
+};
 function myScore(ch) {
   const ks = Object.keys(S.days).filter(k => dayOf(k) >= ch.start && dayOf(k) <= ch.end && counts(S.days[k]));
   if (ch.metric === "seances") return ks.length;
@@ -41,25 +48,27 @@ export function subscribeChallenges() {
   }, () => {}));
 }
 const daysLeft = ch => Math.round((parse(ch.end) - parse(todayK())) / 864e5);
-function ranking(ch) { return (ch.members || []).map(u => ({ u, v: (ch.scores || {})[u] || 0, name: u === S.uid ? "Toi" : (SOC.dir[u] || {}).pseudo || (ch.names || {})[u] || "Ami" })).sort((a, b) => b.v - a.v); }
+function ranking(ch) { return (ch.members || []).map(u => ({ u, v: (ch.scores || {})[u] || 0, name: u === S.uid ? t("social.toi") : (SOC.dir[u] || {}).pseudo || (ch.names || {})[u] || t("social.ami") })).sort((a, b) => b.v - a.v); }
+const resteTxt = dl => dl > 0 ? t("defis.joursRestants", { n: dl }) : t(dl === 0 ? "defis.dernierJour" : "defis.termine");
 export function renderChallenges() {
   markChallengesSeen();
   const all = SOC.challenges || [], live = all.filter(c => c.end >= todayK()), done = all.filter(c => c.end < todayK()), fr = acceptedFriends(), NC = SOC.newCh;
   const card = ch => { const r = ranking(ch), me = r.findIndex(x => x.u === S.uid), m = METRICS[ch.metric] || METRICS.seances, dl = daysLeft(ch);
-    return `<button class="menu-card" data-chopen="${ch.id}"><span class="mark${me === 0 ? " ok" : ""}">${me === 0 ? "🥇" : me + 1}</span><span class="mc"><b>${esc(ch.name)}</b><span class="s">${esc(m[0])} · ${r.length} participant${r.length > 1 ? "s" : ""} · ${dl > 0 ? dl + " jour" + (dl > 1 ? "s" : "") + " restant" + (dl > 1 ? "s" : "") : dl === 0 ? "dernier jour !" : "terminé"}</span></span><span class="arrow" aria-hidden="true">›</span></button>`; };
+    return `<button class="menu-card" data-chopen="${ch.id}"><span class="mark${me === 0 ? " ok" : ""}">${me === 0 ? "🥇" : me + 1}</span><span class="mc"><b>${esc(ch.name)}</b><span class="s">${esc(m[0])} · ${t("defis.participants", { n: r.length })} · ${resteTxt(dl)}</span></span><span class="arrow" aria-hidden="true">›</span></button>`; };
   $("chBody").innerHTML = `${NC ? `<form class="card" id="chForm" autocomplete="off">
-      <div class="lbl">Nouveau défi</div>
-      <div class="field"><span>Ce qu’on compte</span><div class="chips">${Object.entries(METRICS).map(([id, m]) => `<button type="button" class="chip" data-chm="${id}" style="--tc:var(--red)" aria-pressed="${NC.metric === id}">${m[0]}</button>`).join("")}</div></div>
-      <div class="field"><span>Durée (à partir d’aujourd’hui)</span><div class="chips">${[[7, "1 semaine"], [14, "2 semaines"], [30, "1 mois"]].map(([d, n]) => `<button type="button" class="chip" data-chd="${d}" style="--tc:var(--red)" aria-pressed="${NC.days === d}">${n}</button>`).join("")}</div></div>
-      <label class="field"><span>Nom du défi</span><input id="chName" maxlength="60" value="${esc(NC.name)}" placeholder="${esc(chPlaceholder(NC))}"></label>
-      <div class="field"><span>Amis invités</span>${fr.length ? `<div class="chips">${fr.map(u => `<button type="button" class="chip" data-chf="${u}" style="--tc:var(--red)" aria-pressed="${NC.friends.includes(u)}">${esc((SOC.dir[u] || {}).pseudo || "…")}</button>`).join("")}</div>` : `<p class="hint">Ajoute d’abord des amis pour les défier.</p>`}</div>
+      <div class="lbl">${t("defis.nouveau")}</div>
+      <div class="field"><span>${t("defis.quoi")}</span><div class="chips">${Object.entries(METRICS).map(([id, m]) => `<button type="button" class="chip" data-chm="${id}" style="--tc:var(--red)" aria-pressed="${NC.metric === id}">${m[0]}</button>`).join("")}</div></div>
+      <div class="field"><span>${t("defis.duree")}</span><div class="chips">${[7, 14, 30].map(d => `<button type="button" class="chip" data-chd="${d}" style="--tc:var(--red)" aria-pressed="${NC.days === d}">${t("defis.durees.j" + d)}</button>`).join("")}</div></div>
+      <label class="field"><span>${t("defis.nom")}</span><input id="chName" maxlength="60" value="${esc(NC.name)}" placeholder="${esc(chPlaceholder(NC))}"></label>
+      <div class="field"><span>${t("defis.invites")}</span>${fr.length ? `<div class="chips">${fr.map(u => `<button type="button" class="chip" data-chf="${u}" style="--tc:var(--red)" aria-pressed="${NC.friends.includes(u)}">${esc((SOC.dir[u] || {}).pseudo || "…")}</button>`).join("")}</div>` : `<p class="hint">${t("defis.ajouteAmis")}</p>`}</div>
       <p class="err" id="chErr" hidden></p>
-      <div class="grid2"><button type="button" class="btn" data-chcancel="1">Annuler</button><button class="btn primary" type="submit">Lancer le défi</button></div>
-    </form>` : `<button class="btn primary" data-chnew="1">+ Nouveau défi</button>`}
-    <section><h2 class="h2">En cours</h2>${live.length ? `<div class="menu">${live.map(card).join("")}</div>` : `<div class="empty">Aucun défi en cours. Lance-en un contre tes amis : séances, km, volume…</div>`}</section>
-    ${done.length ? `<section><h2 class="h2">Terminés</h2><div class="menu">${done.slice(0, 10).map(card).join("")}</div></section>` : ""}`;
+      <div class="grid2"><button type="button" class="btn" data-chcancel="1">${t("commun.annuler")}</button><button class="btn primary" type="submit">${t("defis.lancer")}</button></div>
+    </form>` : `<button class="btn primary" data-chnew="1">${t("defis.nouveauBouton")}</button>`}
+    <section><h2 class="h2">${t("defis.enCours")}</h2>${live.length ? `<div class="menu">${live.map(card).join("")}</div>` : `<div class="empty">${t("defis.aucun")}</div>`}</section>
+    ${done.length ? `<section><h2 class="h2">${t("defis.termines")}</h2><div class="menu">${done.slice(0, 10).map(card).join("")}</div></section>` : ""}`;
 }
-function chPlaceholder(nc) { return { seances: "Le plus de séances", jours: "Le plus de jours actifs", km: "Le plus de km", volume: "Le plus gros volume" }[nc.metric] + (nc.days === 7 ? " de la semaine" : nc.days === 30 ? " du mois" : " en 2 semaines"); }
+// Nom proposé, ex. « Le plus de séances de la semaine » : « defis.noms.<mesure>_<durée> ».
+function chPlaceholder(nc) { return t(`defis.noms.${nc.metric}.j${nc.days}`); }
 $("chBody").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   const NC = SOC.newCh;
@@ -73,35 +82,35 @@ $("chBody").addEventListener("click", e => {
 $("chBody").addEventListener("submit", async e => {
   e.preventDefault(); const NC = SOC.newCh; if (!NC) return;
   if (bannedStop()) return;
-  if (!NC.friends.length) { show($("chErr"), "Invite au moins un ami."); return; }
+  if (!NC.friends.length) { show($("chErr"), t("defis.inviteAmi")); return; }
   const members = [S.uid, ...NC.friends].slice(0, 20), names = {};
-  members.forEach(u => { names[u] = u === S.uid ? S.profile.pseudo : (SOC.dir[u] || {}).pseudo || "Ami"; });
+  members.forEach(u => { names[u] = u === S.uid ? S.profile.pseudo : (SOC.dir[u] || {}).pseudo || t("social.ami"); });
   const data = { name: ($("chName").value.trim() || chPlaceholder(NC)).slice(0, 60), metric: NC.metric, start: todayK(), end: key(addDays(new Date(), NC.days - 1)), owner: S.uid, members, names, scores: {}, at: Date.now() };
   data.scores[S.uid] = myScore(data);
-  try { const ref = await addDoc(collection(db, "challenges"), data); SOC.newCh = null; SOC.chId = ref.id; toast("🏁 Défi lancé !"); go("challenge"); }
-  catch (x) { show($("chErr"), "Impossible de créer le défi. Vérifie ta connexion."); }
+  try { const ref = await addDoc(collection(db, "challenges"), data); SOC.newCh = null; SOC.chId = ref.id; toast(t("defis.lance")); go("challenge"); }
+  catch (x) { show($("chErr"), t("defis.erreur")); }
 });
 export function renderChallenge() {
-  const ch = (SOC.challenges || []).find(c => c.id === SOC.chId); if (!ch) { $("chdBody").innerHTML = `<p class="hint">Chargement…</p>`; return; }
+  const ch = (SOC.challenges || []).find(c => c.id === SOC.chId); if (!ch) { $("chdBody").innerHTML = `<p class="hint">${t("commun.chargementPoints")}</p>`; return; }
   const m = METRICS[ch.metric] || METRICS.seances, r = ranking(ch), max = Math.max(1, ...r.map(x => x.v)), dl = daysLeft(ch);
   $("chdTitle").textContent = ch.name;
-  $("chdBody").innerHTML = `<p class="hint" style="margin-top:-10px">${esc(m[0])} · du ${esc(shortDate(ch.start))} au ${esc(shortDate(ch.end))} · ${dl > 0 ? dl + " jour" + (dl > 1 ? "s" : "") + " restant" + (dl > 1 ? "s" : "") : dl === 0 ? "dernier jour !" : "terminé"}</p>
-    <section class="card"><div class="lbl">Classement</div>
+  $("chdBody").innerHTML = `<p class="hint" style="margin-top:-10px">${esc(m[0])} · ${esc(t("defis.duAu", { debut: shortDate(ch.start), fin: shortDate(ch.end) }))} · ${resteTxt(dl)}</p>
+    <section class="card"><div class="lbl">${t("social.classement")}</div>
       ${r.map((x, i) => `<div class="rank-row${x.u === S.uid ? " me" : ""}"><span class="rk">${["🥇", "🥈", "🥉"][i] || i + 1}</span><span class="main"><b>${esc(x.name)}</b><span class="track"><span class="fill" style="width:${x.v / max * 100}%"></span></span></span><b class="rv">${esc(m[2](x.v))} <small>${esc(m[1](x.v))}</small></b></div>`).join("")}
-      <p class="hint">Les scores se mettent à jour quand chacun ouvre l’app.</p>
+      <p class="hint">${t("defis.scoresMaj")}</p>
     </section>
-    ${ch.owner === S.uid ? `<button class="danger" data-chdel="1">Supprimer le défi</button>` : `<div class="grid2"><button class="btn ghost-danger" data-chrep="1">⚑ Signaler</button><button class="btn ghost-danger" data-chleave="1">Quitter le défi</button></div>`}`;
+    ${ch.owner === S.uid ? `<button class="danger" data-chdel="1">${t("defis.supprimer")}</button>` : `<div class="grid2"><button class="btn ghost-danger" data-chrep="1">${t("defis.signaler")}</button><button class="btn ghost-danger" data-chleave="1">${t("defis.quitter")}</button></div>`}`;
   (ch.members || []).forEach(u => { if (!SOC.dir[u] && u !== S.uid) dirOf(u).then(() => { if (S.screen === "challenge") renderChallenge(); }); });
 }
 $("chdBody").addEventListener("click", async e => {
   const b = e.target.closest("button"); if (!b) return;
   const ch = (SOC.challenges || []).find(c => c.id === SOC.chId); if (!ch) return;
-  if (b.dataset.chdel) { if (!armed(b, "Toucher à nouveau pour supprimer")) return; await deleteDoc(doc(db, "challenges", ch.id)).catch(() => {}); go("challenges"); }
+  if (b.dataset.chdel) { if (!armed(b, t("seances.toucherSupprimer"))) return; await deleteDoc(doc(db, "challenges", ch.id)).catch(() => {}); go("challenges"); }
   if (b.dataset.chrep) {
-    if (!armed(b, "Confirmer")) return;
-    try { await reportContent({ target: ch.owner, targetPseudo: (ch.names || {})[ch.owner] || "", kind: "challenge", text: "Défi « " + ch.name + " »", ref: "challenges/" + ch.id }); b.textContent = "Signalé ✓"; b.disabled = true; }
-    catch (x) { toast("Signalement impossible. Réessaie."); }
+    if (!armed(b, t("commun.confirmer"))) return;
+    try { await reportContent({ target: ch.owner, targetPseudo: (ch.names || {})[ch.owner] || "", kind: "challenge", text: t("defis.signalementTexte", { nom: ch.name }), ref: "challenges/" + ch.id }); b.textContent = t("defis.signale"); b.disabled = true; }
+    catch (x) { toast(t("commentaires.signalementImpossible")); }
     return;
   }
-  if (b.dataset.chleave) { if (!armed(b, "Toucher à nouveau pour quitter")) return; await updateDoc(doc(db, "challenges", ch.id), { members: arrayRemove(S.uid) }).catch(() => {}); go("challenges"); }
+  if (b.dataset.chleave) { if (!armed(b, t("defis.toucherQuitter"))) return; await updateDoc(doc(db, "challenges", ch.id), { members: arrayRemove(S.uid) }).catch(() => {}); go("challenges"); }
 });

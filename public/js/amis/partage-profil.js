@@ -1,7 +1,8 @@
 // Amis : page « Partager mon profil » (code ami, QR code, lien d'invitation) et scanner de QR code.
 import { SOC } from "./etat.js";
 import { searchUsers } from "./liste.js";
-import { $, S, avatarHTML, esc, plural } from "../commun/core.js";
+import { $, S, avatarHTML, esc } from "../commun/core.js";
+import { t } from "../commun/i18n.js";
 import { go } from "../commun/store.js";
 import { lsGet, lsSet } from "../commun/install.js";
 import { toast } from "../entrainement/index.js";
@@ -45,24 +46,24 @@ export function renderShare() {
   $("shareBody").innerHTML = `<section class="card share-card">
       ${avatarHTML(p, 72)}
       <b class="share-name">${esc(p.pseudo || "")}</b>
-      <span class="hint">${plural(n, "activité")} · ${plural(friends, "ami")}</span>
-      ${code ? `<div class="qr-box" role="img" aria-label="QR code de mon profil">${qrSVG(inviteLink(code))}</div>` : ""}
-      <span class="lbl">Mon code ami</span>
+      <span class="hint">${t("partage.compteurs", { activites: t("partage.activites", { n }), amis: t("partage.amis", { n: friends }) })}</span>
+      ${code ? `<div class="qr-box" role="img" aria-label="${esc(t("partage.qrAria"))}">${qrSVG(inviteLink(code))}</div>` : ""}
+      <span class="lbl">${t("amis.monCode")}</span>
       <b class="share-code" id="shareCode">${esc(code || "…")}</b>
-      <div class="grid2"><button class="btn" id="shareCopy">📋 Copier</button><button class="btn primary" id="shareLink">📤 Envoyer le lien</button></div>
-      <p class="hint">Ton ami prend le QR code en photo avec son téléphone (ou le bouton « Scanner » de l’app) et arrive directement sur ton profil.</p>
+      <div class="grid2"><button class="btn" id="shareCopy">${t("partage.copier")}</button><button class="btn primary" id="shareLink">${t("partage.envoyerLien")}</button></div>
+      <p class="hint">${t("partage.aide")}</p>
     </section>
-    <button class="seance-tile hl" id="scanBtn"><span class="disc-ico" aria-hidden="true" style="--tc:var(--red-hi)"><svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><circle cx="12" cy="12" r="3.2"/></svg></span><span class="mc"><b>Scanner le code d’un ami</b><span>Ouvre l’appareil photo</span></span><span class="arrow" aria-hidden="true">›</span></button>`;
+    <button class="seance-tile hl" id="scanBtn"><span class="disc-ico" aria-hidden="true" style="--tc:var(--red-hi)"><svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><circle cx="12" cy="12" r="3.2"/></svg></span><span class="mc"><b>${t("partage.scanner")}</b><span>${t("partage.ouvrePhoto")}</span></span><span class="arrow" aria-hidden="true">›</span></button>`;
 }
 function copy(txt, btn) {
-  (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => { btn.textContent = "Copié ✓"; }, () => toast("Copie impossible : " + txt));
+  (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => { btn.textContent = t("nouveautes.copie"); }, () => toast(esc(t("partage.copieImpossible", { texte: txt }))));
 }
 $("shareBody").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   const code = (S.profile || {}).friendCode; if (b.id !== "scanBtn" && !code) return;
   if (b.id === "shareCopy") copy(code, b);
   else if (b.id === "shareLink") {
-    const url = inviteLink(code), text = "Ajoute-moi sur AS Sport ! Mon code ami : " + code;
+    const url = inviteLink(code), text = t("partage.message", { code });
     if (navigator.share) navigator.share({ title: "AS Sport", text, url }).catch(() => {});
     else copy(url, b);
   } else if (b.id === "scanBtn") openScanner();
@@ -74,31 +75,31 @@ $("shareBody").addEventListener("click", e => {
 let scan = null;
 function closeScanner() {
   if (!scan) return;
-  clearTimeout(scan.timer); (scan.stream ? scan.stream.getTracks() : []).forEach(t => t.stop());
+  clearTimeout(scan.timer); (scan.stream ? scan.stream.getTracks() : []).forEach(tr => tr.stop());
   scan.el.remove(); scan = null; document.body.classList.remove("scan-open");
 }
 export async function openScanner() {
   closeScanner();
   const el = document.createElement("div");
-  el.className = "scan-sheet"; el.setAttribute("role", "dialog"); el.setAttribute("aria-label", "Scanner un QR code");
+  el.className = "scan-sheet"; el.setAttribute("role", "dialog"); el.setAttribute("aria-label", t("partage.scannerAria"));
   el.innerHTML = `<div class="scan-box"><video playsinline muted></video><i class="scan-frame" aria-hidden="true"></i></div>
-    <p class="scan-msg">Vise le QR code de ton ami.</p>
-    <div class="grid2"><button class="btn" data-scan="code">Taper le code</button><button class="btn primary" data-scan="close">Fermer</button></div>`;
+    <p class="scan-msg">${t("partage.vise")}</p>
+    <div class="grid2"><button class="btn" data-scan="code">${t("partage.taperCode")}</button><button class="btn primary" data-scan="close">${t("commun.fermer")}</button></div>`;
   document.body.appendChild(el); document.body.classList.add("scan-open");
   scan = { el };
   el.addEventListener("click", e => {
     const b = e.target.closest("[data-scan]"); if (!b) return;
     closeScanner(); if (b.dataset.scan === "code") { go("friends"); $("fsInput").focus(); }
   });
-  const msg = t => { const m = el.querySelector(".scan-msg"); if (m) m.textContent = t; };
+  const msg = txt => { const m = el.querySelector(".scan-msg"); if (m) m.textContent = txt; };
   if (!("BarcodeDetector" in window) || !navigator.mediaDevices) {
-    msg("Ton navigateur ne sait pas lire les QR codes. Ouvre l’appareil photo de ton téléphone et vise le QR code : le lien s’ouvre tout seul. Ou tape le code ami.");
+    msg(t("partage.navigateurIncompatible"));
     el.querySelector(".scan-box").hidden = true; return;
   }
   const me = scan;
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
-    if (scan !== me) { stream.getTracks().forEach(t => t.stop()); return; }
+    if (scan !== me) { stream.getTracks().forEach(tr => tr.stop()); return; }
     scan.stream = stream;
     const v = el.querySelector("video"); v.srcObject = stream; await v.play();
     const det = new window.BarcodeDetector({ formats: ["qr_code"] });
@@ -106,11 +107,11 @@ export async function openScanner() {
       if (scan !== me) return;
       try {
         const r = await det.detect(v), c = r.map(x => codeFrom(x.rawValue)).find(Boolean);
-        if (c) { closeScanner(); if (c === (S.profile || {}).friendCode) toast("C’est ton propre code 😉"); else searchCode(c); return; }
-        if (r.length) msg("Ce QR code ne vient pas d’AS Sport.");
+        if (c) { closeScanner(); if (c === (S.profile || {}).friendCode) toast(t("partage.tonCode")); else searchCode(c); return; }
+        if (r.length) msg(t("partage.pasAsSport"));
       } catch (x) { /* image pas prête */ }
       me.timer = setTimeout(tick, 250);
     };
     tick();
-  } catch (x) { msg("Accès à l’appareil photo refusé. Autorise-le dans les réglages, ou tape le code ami."); el.querySelector(".scan-box").hidden = true; }
+  } catch (x) { msg(t("partage.accesRefuse")); el.querySelector(".scan-box").hidden = true; }
 }

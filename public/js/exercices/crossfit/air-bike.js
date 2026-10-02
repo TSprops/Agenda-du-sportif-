@@ -1,4 +1,5 @@
 // Fiche « Comment faire » : Air bike.
+import { t } from "../../commun/i18n.js";
 import { side } from "../_communs.js";
 import { GROUND, raw } from "../../silhouette/index.js";
 
@@ -12,6 +13,6 @@ const bike = raw(P => `<g class="fg-eq"><circle class="fg-plate" cx="${FAN[0]}" 
   <rect class="fg-pad" x="80" y="134" width="30" height="7" rx="3"/><circle class="fg-hub" cx="${CRANK[0]}" cy="${CRANK[1]}" r="4"/>
   <line class="fg-frame-l" x1="${f(P.near.grip[0])}" y1="${f(P.near.grip[1])}" x2="${FAN[0] - 22}" y2="${FAN[1] - 2}"/></g>`);
 const ride = (a, wrist) => ({ box: [64, 50, 226, GROUND], hip: [96, 128], torso: -66, neck: -76, near: { ankleAt: pedal(a), ft: 10, wristAt: wrist, hand: -60 }, far: { ankleAt: pedal(a + 180), ft: 10, wristAt: [wrist[0] - 8, wrist[1] + 2] }, eq: [bike] });
-export default { views: [side([ride(-60, [160, 98]), ride(120, [148, 106])], ["Jambe avant en haut, bras poussé", "Jambe avant en bas, bras tiré"], [0, 1])],
-    cue: "Pédale et pousse-tire les poignées en même temps : plus tu vas vite, plus l’air résiste. On compte en calories.",
-    tips: ["Règle la selle : jambe presque tendue quand la pédale est en bas.", "Bras et jambes travaillent ensemble : pousse la poignée du côté de la jambe qui pousse.", "Pars à une allure que tu peux tenir, puis accélère sur la fin."] };
+export default { views: [side([ride(-60, [160, 98]), ride(120, [148, 106])], [t("fiches.air-bike.legende1"), t("fiches.air-bike.legende2")], [0, 1])],
+    cue: t("fiches.air-bike.consigne"),
+    tips: [t("fiches.air-bike.conseil1"), t("fiches.air-bike.conseil2"), t("fiches.air-bike.conseil3")] };

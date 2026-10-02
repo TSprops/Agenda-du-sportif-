@@ -1,5 +1,6 @@
 // Fonctions communes du groupe Bras : positions et matériel partagés par ses fiches.
 // Ce fichier n'importe que la silhouette et d'autres fichiers communs : il peut être évalué à tout moment.
+import { t } from "../../commun/i18n.js";
 import { ANK, merge, stand, standF } from "../_communs.js";
 import { rad } from "../jambes/_communs.js";
 import { BT, benchLie } from "../pectoraux/_communs.js";
@@ -25,5 +26,5 @@ export const pushdownF = down => standF({ R: down ? { ua: 92, fa: 96, hand: 96 }
   eq: [raw(P => `<line class="fg-cable" x1="120" y1="-40" x2="120" y2="${(P.R.grip[1] - 8).toFixed(1)}"/><path class="fg-rope" d="M120 ${(P.R.grip[1] - 8).toFixed(1)}L${P.R.grip[0].toFixed(1)} ${P.R.grip[1].toFixed(1)}M120 ${(P.R.grip[1] - 8).toFixed(1)}L${P.L.grip[0].toFixed(1)} ${P.L.grip[1].toFixed(1)}"/>`, { top: true })] });
 export const kickback = up => ({ hip: [112, 114], torso: -10, neck: -14, near: { th: 96, sh: 88, ft: 0, ua: 172, fa: up ? 172 : 90, hand: up ? 172 : 90 },
   far: { ua: 97, fa: 93, hand: 0, h: "flat", th: 92, sh: 180, ft: 160 }, farWorks: false, eq: [bench(62, 196, 167), db(P => [P.near.grip, up ? 172 : 90], "side", { mid: true })] });
-export const HAMMER = { cue: "Coudes collés au corps, pouces vers le haut : monte les haltères sans balancer, puis redescends lentement.",
-  tips: ["Prise marteau : pouces vers le haut pendant tout le mouvement.", "Coudes fixes le long du corps.", "Sans élan : si tu balances, allège les charges."] };
+export const HAMMER = { cue: t("fiches.communs-bras.consigne"),
+  tips: [t("fiches.communs-bras.conseil1"), t("fiches.communs-bras.conseil2"), t("fiches.communs-bras.conseil3")] };

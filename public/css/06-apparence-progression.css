@@ -46,9 +46,9 @@
 
 /* Idées de séances */
 .idea{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--tc);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:8px}
-.idea-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.idea-top b{font-family:var(--display);font-weight:800;font-size:22px;line-height:1.05;text-transform:uppercase}
-.idea-top .tag{flex:none}
+.idea-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px}
+.idea-top b{min-width:0;overflow-wrap:anywhere;font-family:var(--display);font-weight:800;font-size:22px;line-height:1.05;text-transform:uppercase}
+.idea-top .tag{flex:none;max-width:100%;white-space:normal}
 .idea-meta{font-size:13px;color:var(--muted)}
 .idea ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px;font-size:14px}
 .idea ul li::marker{color:var(--tc)}

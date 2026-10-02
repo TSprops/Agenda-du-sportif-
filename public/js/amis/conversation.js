@@ -6,6 +6,7 @@ import { $, S, addDoc, armed, avatarHTML, collection, db, doc, esc, key, limitTo
 import { shortDate } from "../idees/index.js";
 import { bannedStop } from "../social/index.js";
 import { go } from "../commun/store.js";
+import { heure, t } from "../commun/i18n.js";
 
 /* ---------- Messages ---------- */
 export function openChat(uid) {
@@ -18,7 +19,7 @@ export function openChat(uid) {
     SOC.msgs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderChatMsgs(true);
     if (S.screen === "chat") setDoc(doc(db, "chats", pid), { read: { [S.uid]: Date.now() } }, { merge: true }).catch(() => {});
-  }, () => { $("chatMsgs").innerHTML = `<p class="hint" style="text-align:center">Conversation indisponible.</p>`; });
+  }, () => { $("chatMsgs").innerHTML = `<p class="hint" style="text-align:center">${t("conversation.indisponible")}</p>`; });
 }
 export function renderChat() {
   const d = SOC.dir[SOC.chatUid] || { pseudo: "…" };
@@ -30,10 +31,10 @@ function renderChatMsgs(scroll) {
   const box = $("chatMsgs"); if (!box) return;
   let lastDay = "";
   box.innerHTML = SOC.msgs.length ? SOC.msgs.map(m => {
-    const k = key(new Date(m.at)), day = k !== lastDay ? `<p class="chat-day">${esc(k === todayK() ? "Aujourd’hui" : shortDate(k))}</p>` : ""; lastDay = k;
-    const mine = m.from === S.uid, t = new Date(m.at);
-    return `${day}<div class="bubble ${mine ? "me" : "bot"}" data-mid="${m.id}">${esc(m.text)}<small>${pad(t.getHours())}:${pad(t.getMinutes())}</small></div>${!mine && SOC.reportMid === m.id ? `<button type="button" class="report-btn" data-report="${m.id}">Signaler ce message</button>` : ""}`;
-  }).join("") : `<p class="hint" style="text-align:center;margin-top:30px">Dis bonjour 👋<br>Les messages ne sont visibles que par vous deux.</p>`;
+    const k = key(new Date(m.at)), day = k !== lastDay ? `<p class="chat-day">${esc(k === todayK() ? t("commun.aujourdhui") : shortDate(k))}</p>` : ""; lastDay = k;
+    const mine = m.from === S.uid;
+    return `${day}<div class="bubble ${mine ? "me" : "bot"}" data-mid="${m.id}">${esc(m.text)}<small>${esc(heure(m.at))}</small></div>${!mine && SOC.reportMid === m.id ? `<button type="button" class="report-btn" data-report="${m.id}">${t("conversation.signalerMessage")}</button>` : ""}`;
+  }).join("") : `<p class="hint" style="text-align:center;margin-top:30px">${t("conversation.vide")}</p>`;
   if (scroll) box.scrollTop = box.scrollHeight;
 }
 // Signalement envoyé à l'administrateur. ref = chemin du contenu, pour pouvoir le supprimer.
@@ -49,26 +50,26 @@ $("chatForm").addEventListener("submit", async e => {
   try {
     await addDoc(collection(db, "chats", pid, "messages"), { from: S.uid, text: text.slice(0, 1000), at });
     await setDoc(doc(db, "chats", pid), { users: pairOf(S.uid, SOC.chatUid), last: { text: text.slice(0, 80), from: S.uid, at }, read: { [S.uid]: at } }, { merge: true });
-  } catch (x) { inp.value = text; $("chatMsgs").insertAdjacentHTML("beforeend", `<p class="err" style="text-align:center">Message non envoyé : vous n’êtes peut-être plus amis.</p>`); }
+  } catch (x) { inp.value = text; $("chatMsgs").insertAdjacentHTML("beforeend", `<p class="err" style="text-align:center">${t("conversation.nonEnvoye")}</p>`); }
 });
 $("chatBack").onclick = () => go(["messages", "friend", "friends", "feed"].includes(SOC.chatFrom) ? SOC.chatFrom : "friends");
 $("v-chat").addEventListener("click", async e => {
   const b = e.target.closest("[data-mid]");
   if (b && !b.classList.contains("me")) { SOC.reportMid = SOC.reportMid === b.dataset.mid ? null : b.dataset.mid; renderChatMsgs(false); return; }
-  const t = e.target.closest("button"); if (!t) return;
-  if (t.id === "chatMore") { SOC.menu = !SOC.menu; $("chatMenu").hidden = !SOC.menu; return; }
-  if (t.id === "chatWho") { openFriend(SOC.chatUid); return; }
-  if (t.dataset.report) {
-    const m = SOC.msgs.find(x => x.id === t.dataset.report); if (!m) return;
-    try { await reportContent({ target: SOC.chatUid, kind: "message", text: m.text, ref: `chats/${pairId(S.uid, SOC.chatUid)}/messages/${m.id}` }); t.textContent = "Signalé ✓ Merci"; t.disabled = true; } catch (x) { t.textContent = "Échec, réessaie"; }
+  const btn = e.target.closest("button"); if (!btn) return;
+  if (btn.id === "chatMore") { SOC.menu = !SOC.menu; $("chatMenu").hidden = !SOC.menu; return; }
+  if (btn.id === "chatWho") { openFriend(SOC.chatUid); return; }
+  if (btn.dataset.report) {
+    const m = SOC.msgs.find(x => x.id === btn.dataset.report); if (!m) return;
+    try { await reportContent({ target: SOC.chatUid, kind: "message", text: m.text, ref: `chats/${pairId(S.uid, SOC.chatUid)}/messages/${m.id}` }); btn.textContent = t("conversation.signale"); btn.disabled = true; } catch (x) { btn.textContent = t("commun.echecReessaie"); }
     return;
   }
-  if (t.dataset.cm === "profile") { openFriend(SOC.chatUid); return; }
-  if (t.dataset.cm === "report") {
-    const last = SOC.msgs.filter(m => m.from !== S.uid).slice(-10).map(m => "« " + m.text + " »").join("\n");
-    try { await reportContent({ target: SOC.chatUid, kind: "conversation", text: last || "(conversation vide)", ref: `chats/${pairId(S.uid, SOC.chatUid)}` }); t.textContent = "Conversation signalée ✓"; t.disabled = true; } catch (x) { t.textContent = "Échec, réessaie"; }
+  if (btn.dataset.cm === "profile") { openFriend(SOC.chatUid); return; }
+  if (btn.dataset.cm === "report") {
+    const last = SOC.msgs.filter(m => m.from !== S.uid).slice(-10).map(m => t("conversation.citation", { texte: m.text })).join("\n");
+    try { await reportContent({ target: SOC.chatUid, kind: "conversation", text: last || t("conversation.videSignalement"), ref: `chats/${pairId(S.uid, SOC.chatUid)}` }); btn.textContent = t("conversation.signalee"); btn.disabled = true; } catch (x) { btn.textContent = t("commun.echecReessaie"); }
     return;
   }
-  if (t.dataset.cm === "block") { if (!armed(t, "Toucher à nouveau pour bloquer")) return; await blockUser(SOC.chatUid); go("friends"); }
+  if (btn.dataset.cm === "block") { if (!armed(btn, t("conversation.toucherBloquer"))) return; await blockUser(SOC.chatUid); go("friends"); }
 });
 export function leaveChat() { if (SOC.chatUnsub) { SOC.chatUnsub(); SOC.chatUnsub = null; } }

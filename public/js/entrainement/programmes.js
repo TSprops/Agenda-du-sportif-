@@ -3,6 +3,7 @@ import { toast } from "./records.js";
 import { startWorkout } from "./routines.js";
 import { $, PROGRAMS, S, armed, esc, todayK } from "../commun/core.js";
 import { refresh, saveProfile } from "../commun/store.js";
+import { t } from "../commun/i18n.js";
 
 // Programme suivi : { id, start, done } dans le profil.
 export function programState() {
@@ -16,10 +17,10 @@ export function programCardHTML(ps, compact) {
   if (!ps) return "";
   const pct = Math.min(100, Math.round(ps.done / ps.total * 100));
   return `<section class="prog-now" style="--tc:${ps.pg.color}">
-    <div class="pn-top"><span class="tag">Mon programme</span><b>${esc(ps.pg.name)}</b></div>
+    <div class="pn-top"><span class="tag">${t("programmes.monProgramme")}</span><b>${esc(ps.pg.name)}</b></div>
     <div class="pn-bar"><i style="width:${pct}%"></i></div>
-    <span class="hint">${ps.finished ? "Programme terminé, bravo ! 🎉" : `Semaine ${ps.week} / ${ps.pg.weeks} · séance ${ps.inWeek} / ${ps.pg.perWeek}`}</span>
-    ${ps.finished ? `<button class="btn" data-pgstop="1">Choisir un autre programme</button>` : `<button class="btn primary" data-pgnext="1">▶ Lancer : ${esc(ps.next.name)}</button>`}
+    <span class="hint">${ps.finished ? t("programmes.termine") : t("programmes.avancement", { semaine: ps.week, semaines: ps.pg.weeks, seance: ps.inWeek, seances: ps.pg.perWeek })}</span>
+    ${ps.finished ? `<button class="btn" data-pgstop="1">${t("programmes.autre")}</button>` : `<button class="btn primary" data-pgnext="1">${esc(t("programmes.lancer", { seance: ps.next.name }))}</button>`}
     ${compact ? "" : `<p class="hint">${esc(ps.pg.tip)}</p>`}
   </section>`;
 }
@@ -31,23 +32,23 @@ function launchProgram() {
 export function renderPrograms() {
   const ps = programState();
   $("programsBody").innerHTML = `${programCardHTML(ps)}
-    ${ps ? `<button class="linkish" data-pgstop="1">Arrêter ce programme</button>` : `<p class="hint" style="margin-top:-8px">Choisis un programme : l’app te propose la bonne séance à chaque fois, avec tes poids de la dernière fois.</p>`}
+    ${ps ? `<button class="linkish" data-pgstop="1">${t("programmes.arreter")}</button>` : `<p class="hint" style="margin-top:-8px">${t("programmes.intro")}</p>`}
     <div class="list">${PROGRAMS.map(pg => {
       const cur = ps && ps.pg.id === pg.id, names = [...new Set(pg.plan(1).map(w => w.name))];
       return `<article class="idea" style="--tc:${pg.color}">
         <div class="idea-top"><b>${esc(pg.name)}</b><span class="tag">${esc(pg.level)}</span></div>
-        <span class="idea-meta">${pg.weeks} semaines · ${pg.perWeek} séances par semaine</span>
+        <span class="idea-meta">${t("programmes.duree", { n: pg.weeks })} · ${t("programmes.parSemaine", { n: pg.perWeek })}</span>
         <p style="margin:0;font-size:14px">${esc(pg.desc)}</p>
         <ul>${names.map(n => `<li>${esc(n)}</li>`).join("")}</ul>
-        ${cur ? `<span class="tag done" style="align-self:flex-start">Programme en cours</span>` : `<button class="btn primary idea-go" data-pgstart="${pg.id}">Suivre ce programme</button>`}
+        ${cur ? `<span class="tag done" style="align-self:flex-start">${t("programmes.enCours")}</span>` : `<button class="btn primary idea-go" data-pgstart="${pg.id}">${t("programmes.suivre")}</button>`}
       </article>`; }).join("")}</div>`;
 }
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-pgstart],[data-pgnext],[data-pgstop]"); if (!b) return;
   if (b.dataset.pgstart) {
-    if (S.profile.program && !armed(b, "Remplacer ton programme actuel ?")) return;
-    saveProfile({ program: { id: b.dataset.pgstart, start: todayK(), done: 0 } }); toast("✓ Programme choisi : c’est parti !"); refresh(); window.scrollTo(0, 0); return;
+    if (S.profile.program && !armed(b, t("programmes.remplacer"))) return;
+    saveProfile({ program: { id: b.dataset.pgstart, start: todayK(), done: 0 } }); toast(t("programmes.choisi")); refresh(); window.scrollTo(0, 0); return;
   }
   if (b.dataset.pgnext) { launchProgram(); return; }
-  if (b.dataset.pgstop) { if (!armed(b, "Toucher à nouveau pour arrêter")) return; saveProfile({ program: null }); refresh(); }
+  if (b.dataset.pgstop) { if (!armed(b, t("programmes.toucherArreter"))) return; saveProfile({ program: null }); refresh(); }
 });
