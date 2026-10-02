@@ -136,6 +136,9 @@ function traduireDom(racine = document) {
 }
 document.documentElement.lang = LANGUE;
 traduireDom();
+// Manifeste (nom de l'app installée) dans la langue choisie : généré par scripts/liste-hors-ligne.cjs.
+const manifeste = document.querySelector('link[rel="manifest"]');
+if (manifeste && LANGUE !== DEFAUT) manifeste.href = "manifest." + LANGUE + ".webmanifest";
 // Textes du filet de secours de index.html (affichés avant le chargement des modules, la fois suivante).
 try { localStorage.setItem("secours", JSON.stringify({ lent: t("secours.lent"), reparer: t("secours.reparer"), donnees: t("secours.donnees") })); } catch (e) { /* stockage bloqué */ }
 

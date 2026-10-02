@@ -26,9 +26,12 @@ async function uidOf(email) {
   const r = await req(AUTH + "projects/demo-agenda/accounts:query", { method: "POST", headers: OWNER, body: JSON.stringify({ returnUserInfo: true }) });
   return (r.body.userInfo || []).find(u => u.email === email).localId;
 }
+// Lit un document en contournant les règles.
+const get = path => req(FS + path, { headers: OWNER });
 // Crée un compte depuis l'app (inscription + profil + tutoriel passé) et renvoie la page.
-async function signupPage(browser, pseudo) {
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, acceptDownloads: true });
+// Langue de l'appareil : français par défaut (les textes attendus par les tests sont en français).
+async function signupPage(browser, pseudo, locale = "fr-FR") {
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, acceptDownloads: true, locale });
   const p = await ctx.newPage(); p.errs = [];
   p.on("pageerror", e => p.errs.push(e.message));
   await p.goto(BASE); await p.waitForSelector("#v-login:not([hidden])");
@@ -45,4 +48,4 @@ async function signupPage(browser, pseudo) {
 }
 const screen = p => p.evaluate(() => [...document.querySelectorAll(".view")].find(v => !v.hidden)?.id);
 const home = async p => { await p.goto(BASE); await p.waitForSelector("#v-home:not([hidden])"); await p.waitForTimeout(600); };
-module.exports = { BASE, FS, req, put, del, fields, newUser, uidOf, signupPage, screen, home };
+module.exports = { BASE, FS, req, get, put, del, fields, newUser, uidOf, signupPage, screen, home };

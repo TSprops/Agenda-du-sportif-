@@ -1,5 +1,6 @@
 // Fichiers de l'app : le mode hors connexion (service worker) connaît tous les fichiers js/ et css/,
-// et index.html charge toutes les feuilles de style de css/ dans l'ordre de leur numéro.
+// index.html charge toutes les feuilles de style de css/ dans l'ordre de leur numéro,
+// et les traductions sont complètes (scripts/verifier-traductions.cjs).
 const fs = require("fs"), path = require("path");
 const PUB = path.join(__dirname, "..", "public");
 const list = (dir, ext) => fs.readdirSync(path.join(PUB, dir), { recursive: true }).filter(f => f.endsWith(ext)).map(f => dir + "/" + f.split(path.sep).join("/")).sort();
@@ -14,4 +15,13 @@ module.exports = async function fileTests(t) {
   const html = fs.readFileSync(path.join(PUB, "index.html"), "utf8");
   const links = [...html.matchAll(/<link rel="stylesheet" href="(css\/[^"?]+)/g)].map(m => m[1]);
   t("index.html charge toutes les feuilles de style, dans l'ordre", links, css);
+  // Langues : chaque fichier langues/<code>.json est proposé dans l'app et a son manifeste.
+  const codes = list("langues", ".json").map(f => path.basename(f, ".json")).sort();
+  const proposees = JSON.parse(fs.readFileSync(path.join(PUB, "js/commun/langues.js"), "utf8").match(/LANGUES = (\[.*\]);/)[1]).map(l => l.code).sort();
+  t("langues : toutes proposées dans l'app (node scripts/liste-hors-ligne.cjs)", proposees, codes);
+  t("langues : un manifeste par langue", codes.filter(c => !fs.existsSync(path.join(PUB, c === "fr" ? "manifest.webmanifest" : `manifest.${c}.webmanifest`))), []);
+  const r = require("../scripts/verifier-traductions.cjs")();
+  const NOMS = { manquantes: "aucune clé manquante", enTrop: "aucune clé en trop", variables: "mêmes variables et balises", inconnues: "aucune clé inconnue dans le code",
+    inutiles: "aucune clé inutilisée", enDur: "aucun texte en dur" };
+  for (const [k, v] of Object.entries(r)) t("traductions : " + (NOMS[k] || k), v, []);
 };

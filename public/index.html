@@ -17,19 +17,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Figtree:wght@400;500;600;700&display=swap">
 <!-- Styles : dossier css/, chargés dans cet ordre (l'ordre compte). -->
-<link rel="stylesheet" href="css/01-theme.css?v=67">
-<link rel="stylesheet" href="css/02-accueil-seances.css?v=67">
-<link rel="stylesheet" href="css/03-nutrition-contact.css?v=67">
-<link rel="stylesheet" href="css/04-general.css?v=67">
-<link rel="stylesheet" href="css/05-course-crossfit.css?v=67">
-<link rel="stylesheet" href="css/06-apparence-progression.css?v=67">
-<link rel="stylesheet" href="css/07-amis.css?v=67">
-<link rel="stylesheet" href="css/08-bibliotheque-corps.css?v=67">
-<link rel="stylesheet" href="css/09-accueil-social.css?v=67">
-<link rel="stylesheet" href="css/10-comment-faire.css?v=67">
-<link rel="stylesheet" href="css/11-nouveautes-tutoriel.css?v=67">
-<link rel="stylesheet" href="css/12-barre-onglets.css?v=67">
-<link rel="stylesheet" href="css/13-accueil-profil-social.css?v=67">
+<link rel="stylesheet" href="css/01-theme.css?v=68">
+<link rel="stylesheet" href="css/02-accueil-seances.css?v=68">
+<link rel="stylesheet" href="css/03-nutrition-contact.css?v=68">
+<link rel="stylesheet" href="css/04-general.css?v=68">
+<link rel="stylesheet" href="css/05-course-crossfit.css?v=68">
+<link rel="stylesheet" href="css/06-apparence-progression.css?v=68">
+<link rel="stylesheet" href="css/07-amis.css?v=68">
+<link rel="stylesheet" href="css/08-bibliotheque-corps.css?v=68">
+<link rel="stylesheet" href="css/09-accueil-social.css?v=68">
+<link rel="stylesheet" href="css/10-comment-faire.css?v=68">
+<link rel="stylesheet" href="css/11-nouveautes-tutoriel.css?v=68">
+<link rel="stylesheet" href="css/12-barre-onglets.css?v=68">
+<link rel="stylesheet" href="css/13-accueil-profil-social.css?v=68">
 <script>
   // Déménagement : l'ancienne adresse (GitHub) renvoie vers la nouvelle (Firebase) quand MOVED vaut true.
   window.NEW_HOME = "https://agenda-du-sportif.web.app/";
@@ -44,7 +44,7 @@
     });
   }
   // Version de la page : doit correspondre à APP_VERSION dans js/commun/boot.js.
-  window.APP_PAGE_VERSION = "67";
+  window.APP_PAGE_VERSION = "68";
   // Comme une vraie application : pas de zoom avec deux doigts ni en tapant deux fois (Safari ignore parfois la balise viewport).
   ["gesturestart", "gesturechange", "gestureend"].forEach(function (t) { document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
   document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -75,7 +75,7 @@
     setTimeout(showRescue, 8000);
   })();
 </script>
-<script type="module" src="app.js?v=67"></script>
+<script type="module" src="app.js?v=68"></script>
 </head>
 <body>
 <!-- ============ CONFIGURATION MANQUANTE ============ -->
@@ -209,7 +209,7 @@
   <div class="stats" id="creaStats"></div>
   <section class="cal" aria-label="Calendrier créatine" data-i18n-aria-label="creatine.calendrier">
     <div class="top" style="padding:0 4px 10px;align-items:center">
-      <b id="creaMonth" style="font-family:var(--display);font-size:22px;text-transform:uppercase;white-space:nowrap"></b>
+      <b id="creaMonth" style="font-family:var(--display);font-size:clamp(18px,6vw,22px);text-transform:uppercase;min-width:0;line-height:1.05;text-wrap:balance"></b>
       <div class="nav"><button id="crPrev" aria-label="Mois précédent" data-i18n-aria-label="commun.moisPrecedent">‹</button><button id="crNext" aria-label="Mois suivant" data-i18n-aria-label="commun.moisSuivant">›</button></div>
     </div>
     <div class="dow"><span data-i18n="commun.joursCourts.lun">Lun</span><span data-i18n="commun.joursCourts.mar">Mar</span><span data-i18n="commun.joursCourts.mer">Mer</span><span data-i18n="commun.joursCourts.jeu">Jeu</span><span data-i18n="commun.joursCourts.ven">Ven</span><span data-i18n="commun.joursCourts.sam">Sam</span><span data-i18n="commun.joursCourts.dim">Dim</span></div>

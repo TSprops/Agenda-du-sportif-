@@ -40,10 +40,20 @@ PWA en JavaScript sans framework (modules ES), Firebase (Auth + Firestore). Rép
 - **Partager mon profil** (QR code, code ami, lien `?ami=CODE`, scanner) : `js/amis/partage-profil.js`, avec `vendor/qrcode.js`.
 - **Styles** : « Comment faire » dans `css/10-comment-faire.css`, Nouveautés et tutoriel dans `css/11-nouveautes-tutoriel.css`.
 
+## Langues (français, anglais, espagnol)
+
+- **Aucun texte visible en dur** : tout passe par `t("ecran.element")` (`js/commun/i18n.js`), avec les textes dans `langues/fr.json`, `en.json`, `es.json` (clés rangées par écran). HTML : `data-i18n`, `data-i18n-html`, `data-i18n-placeholder`, `data-i18n-aria-label`, `data-i18n-title`.
+- Variables `{nom}` et pluriels (`cle_one` / `cle_other`, choisis par `{n}`) : jamais de concaténation. Dates et nombres : `dateFormat`, `dateLongue`, `nombre`… de `i18n.js` (ou `fmtJour`, `fmtCourt`… de `core.js`).
+- Valeurs enregistrées en base (noms d'exercices, objectifs, types…) : **gardées en français**, traduites à l'affichage avec `valeur("exercices.noms", nom)` (ou `nomEx`, `nomType`), et ramenées au français avant d'enregistrer avec `canon(...)`. Contenu écrit en plusieurs langues : `{ fr, en, es }` lu avec `texteLocal()`.
+- Ajouter un texte : la même clé dans les trois fichiers. Ajouter une langue : copier `fr.json` en `<code>.json`, traduire (y compris `_langue`), puis `node scripts/liste-hors-ligne.cjs`.
+- `node scripts/verifier-traductions.cjs` : clés manquantes ou inutilisées, variables différentes, texte français en dur (`// i18n-ignore` en fin de ligne pour une exception voulue). Les tests le lancent.
+- Fiches « Comment faire » : textes sous `fiches.<nom-du-fichier>.consigne|conseilN|legendeN`.
+- Pages légales : section `pagesLegales` (la version française fait foi).
+
 ## Ajouter ou renommer un fichier
 
 1. Nouvel exercice : créer sa fiche, puis l'enregistrer dans `js/exercices/index.js` (un `import` et une ligne `HOW["Nom"] = …`).
-2. Lancer `node scripts/liste-hors-ligne.cjs` pour mettre à jour la liste hors connexion de `sw.js`. Un test le vérifie.
+2. Lancer `node scripts/liste-hors-ligne.cjs` pour mettre à jour la liste hors connexion de `sw.js` (et la liste des langues, et les manifestes par langue). Un test le vérifie.
 
 ## Mise en ligne
 
