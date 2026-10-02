@@ -192,3 +192,12 @@
 /* Célébration : confettis au-dessus de tout, sans gêner les touchers */
 .confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:200}
 .tfam-row.six{grid-template-columns:repeat(3,1fr);gap:10px 4px}
+/* Départs réguliers (cordes, callisthénie) : X par départ, toutes les Y, pendant Z */
+.dep-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.dep-grid .field>span{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dep-grid .cd-every{gap:4px}
+.dep-grid .unit{min-width:34px;padding-inline:6px}
+.dep-sum{font-size:13.5px;border-radius:12px;padding:10px 12px;background:color-mix(in srgb,var(--tc) 12%,var(--surface-2));border:1px solid color-mix(in srgb,var(--tc) 40%,var(--line))}
+.dep-sum:empty{display:none}
+.dep-sum b{color:var(--tc)}
+.ex>.seg{margin-top:2px}

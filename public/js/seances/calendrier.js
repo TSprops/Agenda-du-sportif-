@@ -2,6 +2,7 @@
 import { flush, openDay } from "./feuille.js";
 import { dropPhoto } from "./photos.js";
 import { renderTypes } from "./types.js";
+import { hyroxTotal } from "./fiche-hyrox.js";
 import { $, DAYS, DISC, MONTHS, RUN_TYPES, S, cap, dayMeta, dayVolume, esc, fmtDur, key, nf, pad, parse, runKm, runPace, runSecs, sessionsOn, titleOf, todayK, wodScore } from "../commun/core.js";
 import { persistDay } from "../commun/store.js";
 import { toast } from "../entrainement/index.js";
@@ -22,7 +23,7 @@ export function renderMain() {
   $("grid").innerHTML = h;
   $("legend").innerHTML = S.types.filter(t => t.id !== "cordes").map(t => `<span style="--tc:${t.color}"><i class="dot"></i>${esc(t.name)}</span>`).join("")
     + `<span class="legend-sep">Autres activités</span>`
-    + [["CrossFit", DISC.crossfit.color], ["Callisthénie", DISC.calis.color], ["Cordes", DISC.cordes.color], ...RUN_TYPES.map(r => [r.name, r.color])]
+    + [["CrossFit", DISC.crossfit.color], ["Callisthénie", DISC.calis.color], ["Cordes", DISC.cordes.color], ["Hyrox", DISC.hyrox.color], ...RUN_TYPES.map(r => [r.name, r.color])]
       .map(([n, c]) => `<span style="--tc:${c}"><i class="dot"></i>${esc(n)}</span>`).join("");
   const ks = Object.keys(S.days).filter(k => k.startsWith(y + "-" + pad(m + 1))).sort().reverse();
   const vol = ks.reduce((a, k) => a + dayVolume(S.days[k]), 0);
@@ -49,6 +50,10 @@ export function sessionSummary(s, types) {
     if (w.format) parts.push(w.format);
     const sc = wodScore(w); if (sc) parts.push(sc + (w.rx === false ? " (Scaled)" : w.rx ? " (Rx)" : ""));
     return parts.join(" · ");
+  }
+  if (disc === "hyrox") {
+    const n = (s.exercises || []).filter(x => String(x.name || "").trim()).length, t = hyroxTotal(s);
+    return `Hyrox · ${n} atelier${n > 1 ? "s" : ""}${t ? " · " + fmtDur(t) : ""}`;
   }
   const n = (s.exercises || []).length;
   return `${disc === "calis" ? "Callisthénie" : mt.name} · ${n} exercice${n > 1 ? "s" : ""}${dayVolume(s) ? " · " + nf.format(dayVolume(s)) + " kg" : ""}`;

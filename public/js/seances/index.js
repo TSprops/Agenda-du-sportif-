@@ -16,6 +16,7 @@ import "./fiche-muscu-calis.js";
 export { normCordes } from "./fiche-cordes.js";
 import "./fiche-course.js";
 import "./fiche-crossfit.js";
+export { hyroxEx, hyroxStation, hyroxText } from "./fiche-hyrox.js";
 export { renderSheet, EMPTY_DAY, setDisc, openDay, setSave, changed, forceFlush, intOr } from "./feuille.js";
 import "./feuille-actions.js";
 export { compress, blobToData } from "./photos.js";

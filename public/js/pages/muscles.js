@@ -1,7 +1,7 @@
 // Carte musculaire.
 import { $, MUSCLES, S, dayOf, discOf, esc, isEmpty, key, nf } from "../commun/core.js";
 import { doneSet } from "../idees/index.js";
-import { musclesOf } from "../entrainement/index.js";
+import { calisPlan, cordesTotal, musclesOf } from "../entrainement/index.js";
 import { addDays } from "./accueil.js";
 
 /* ============================================================
@@ -15,7 +15,7 @@ function muscleLoad(ks) {
     const s = S.days[k]; if (!s || isEmpty(s)) return;
     const disc = discOf(s);
     if (disc === "muscu" || disc === "calis" || disc === "cordes") (s.exercises || []).forEach(ex => {
-      const n = ex.kind === "cordes" ? Math.ceil((+ex.ropes || 0) / 2) : (ex.sets || []).filter(st => st.done === true || doneSet(st)).length; if (n) add(musclesOf(ex.name), n);
+      const n = ex.kind === "cordes" ? Math.ceil(cordesTotal(ex) / 2) : ex.mode === "dep" ? Math.ceil(((calisPlan(ex.dep) || {}).n || 0) / 3) : (ex.sets || []).filter(st => st.done === true || doneSet(st)).length; if (n) add(musclesOf(ex.name), n);
     });
     else if (disc === "crossfit") ((s.wod || {}).moves || []).forEach(m => { if (m.name) add(musclesOf(m.name), 2); });
     else if (disc === "course" && +((s.run || {}).dist)) add({ p: ["quadriceps", "mollets"], s: ["ischios", "fessiers"] }, 3);

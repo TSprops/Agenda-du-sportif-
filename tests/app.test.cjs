@@ -193,7 +193,38 @@ module.exports = async function appTests(t) {
     t("corde : rien de proposé avant « Ajouter un exercice »", await A.$$eval("#sheet [data-a=cd-add]", x => x.length), 0);
     await A.click("#sheet [data-a=add-ex]"); await A.waitForSelector("#libSheet.open");
     t("corde : liste des exercices", await A.$$eval("#libList [data-lib]", x => x.map(e => e.dataset.lib).join(" | ")), "Montée de corde | Montée de corde avec jambes | Montée de corde départ assis");
-    await A.click("#libClose"); await A.click("#sheet [data-a=close]");
+    // Corde : X cordes par départ, toutes les Y, pendant Z → nombre de départs calculé.
+    await A.click('#libList [data-lib="Montée de corde"]'); await A.waitForSelector("#cd-per-0");
+    await A.fill("#cd-per-0", "1"); await A.fill("#cd-every-0", "5"); await A.fill("#cd-dur-0", "1");
+    t("corde : 1 corde toutes les 5 s pendant 1 min", (await A.textContent("#cd-sum-0")).trim(), "12 départs · 12 cordes au total · 1:00");
+    await A.click("#sheet [data-a=close]");
+
+    // Callisthénie en départs : 5 tractions toutes les minutes pendant 10 min.
+    await home(A); await A.click("[data-tab=seances]"); await A.click("[data-gonew]"); await A.click("#sheet [data-a=disc][data-id=calis]");
+    await A.click('#sheet [data-a=calis-add][data-name="Tractions"]'); await A.click('#sheet [data-a=dp-mode][data-v=dep]');
+    await A.fill("#dp-per-0", "5"); await A.fill("#dp-every-0", "1"); await A.fill("#dp-dur-0", "10");
+    t("callisthénie : départs calculés", (await A.textContent("#dp-sum-0")).trim(), "10 départs · 50 reps au total · 10:00");
+    t("callisthénie : bouton « Lancer les départs » actif", await A.$eval("#dpgo-0", b => b.disabled), false);
+    await A.click("#sheet [data-a=close]");
+
+    // Hyrox libre : « Ajouter un exercice » propose les ateliers ; temps total calculé.
+    await home(A); await A.click("[data-tab=seances]"); await A.click("[data-gonew]"); await A.click("#sheet [data-a=disc][data-id=hyrox]");
+    await A.click("#sheet [data-a=add-ex]"); await A.waitForSelector("#libSheet.open");
+    t("hyrox : liste des ateliers", await A.$$eval("#libList [data-lib]", x => x.map(e => e.dataset.lib).join(" | ")), "Course | SkiErg | Sled push | Sled pull | Burpees sautés | RowErg | Farmers carry | Fentes sandbag | Wall balls");
+    await A.click('#libList [data-lib="SkiErg"]'); await A.waitForSelector("#hx-time-0"); await A.fill("#hx-time-0", "4:12");
+    t("hyrox : distance pré-remplie et total", (await A.inputValue("#hx-amt-0")) + "|" + (await A.textContent("#hxSum")).trim(), "1000|Total : 4:12 · 1 km");
+    await A.click("#sheet [data-a=close]");
+
+    // Idées · Hyrox (Double mixte) et explications des WOD CrossFit.
+    await home(A); await A.click("[data-tab=seances]"); await A.click(".seance-tile[data-go=types]"); await A.click('[data-cat="ideas:hyrox"]');
+    await A.click('#v-hub [data-tab=double]'); await A.click('#v-hub [data-sub=x]');
+    t("idées hyrox : double mixte", (await A.textContent("#v-hub .idea-top b")) + "|" + await A.$$eval("#v-hub .hx-st", x => x.length), "Hyrox Double · Mixte|8");
+    await A.click("#v-hub [data-try]"); await A.waitForSelector("#sheet.open"); await A.waitForTimeout(300);
+    t("idées hyrox : séance du jour avec 16 exercices", await A.$$eval("#sheet .ex.hyrox", x => x.length), 16);
+    await A.click("#sheet [data-a=close]");
+    await home(A); await A.click("[data-tab=seances]"); await A.click(".seance-tile[data-go=types]"); await A.click('[data-cat="ideas:crossfit"]');
+    await A.click('#cfBench [data-cfhow=fran]');
+    t("crossfit : explication de Fran", /21 thrusters, puis 21 tractions/.test(await A.textContent("#cfBench .wod-how")), true);
 
     // Texte non sélectionnable, sauf les zones de saisie (écrire, tout sélectionner).
     await home(A); await A.click("#homeLinks [data-go=contact]"); await A.click("[data-go=contactform]");

@@ -11,7 +11,7 @@ import "../pages/muscles.js";
 import "../comment-faire/index.js";
 export { freshKey, sessTabsHTML } from "./plusieurs-seances.js";
 export { exKey, lastLineHTML, prefillKg, addExercise, kgSuggestHTML } from "./derniere-fois.js";
-export { cordesOf, cordesText, cordesExHTML } from "./cordes.js";
+export { cordesOf, cordesText, cordesExHTML, cordesPlan, cordesTotal, calisPlan, calisDepText, departFields, departSummary } from "./cordes.js";
 export { musclesOf, openLib } from "./bibliotheque.js";
 export { bestSets, sessionPRs, announcePRs, toast } from "./records.js";
 export { toTuple, routines, saveRoutineFromSession, startWorkout, renderRoutines, renderRoutine } from "./routines.js";

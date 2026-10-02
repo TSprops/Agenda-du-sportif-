@@ -1,22 +1,35 @@
 // Séances, fiche du jour : réactions aux saisies et aux boutons.
 import { EMPTY_DAY, changed, closeSheet, flush, forceFlush, intOr, openDay, renderSheet, setDisc } from "./feuille.js";
+import { hyroxSumHTML } from "./fiche-hyrox.js";
 import { addPhotos, dropPhoto, openViewer } from "./photos.js";
 import { activeSet, exStats, fmtRest, isDone, refreshAllSets, refreshSets, restOf } from "./series.js";
 import { $, BENCH, S, armed, clone, dayOf, isEmpty, numOr, parseClock, runCalcHTML } from "../commun/core.js";
 import { norm } from "../pages/faq.js";
 import { startIntervals, startRest } from "../commun/timer.js";
-import { addExercise, announcePRs, cordesOf, freshKey, openLib, saveRoutineFromSession, sessionPRs } from "../entrainement/index.js";
+import { addExercise, announcePRs, calisPlan, cordesOf, cordesPlan, departSummary, freshKey, openLib, saveRoutineFromSession, sessionPRs, toast } from "../entrainement/index.js";
 
+// Résumé (nombre de départs, total) et bouton « Lancer » mis à jour pendant la saisie.
+function refreshDepart(i) {
+  const ex = S.cur.exercises[i], cd = ex.kind === "cordes", pl = cd ? cordesPlan(ex) : calisPlan(ex.dep);
+  const sum = $((cd ? "cd" : "dp") + "-sum-" + i); if (sum) sum.innerHTML = departSummary(pl, cd ? "corde" : "rep");
+  const g = $((cd ? "cd" : "dp") + "go-" + i); if (g) g.disabled = !pl;
+}
 $("sheet").addEventListener("input", e => {
   const f = e.target.dataset.f; if (!f || !S.cur || f === "photo") return;
   const c = S.cur, i = +e.target.dataset.ex, j = +e.target.dataset.s, v = e.target.value, t = v.trim();
   if (f === "title") c.title = v; else if (f === "note") c.note = v;
   else if (f === "ex-name") { if (!c.exercises[i].lock) c.exercises[i].name = v; } else if (f === "ex-note") c.exercises[i].note = v;
-  else if (f === "cd-ropes" || f === "cd-every" || f === "cd-kg") {
-    const ex = c.exercises[i]; ex[f.slice(3)] = t === "" ? "" : f === "cd-ropes" ? intOr(v) : numOr(v);
-    const g = $("cdgo-" + i); if (g) g.disabled = !(+ex.ropes && +ex.every);
+  else if (/^(cd|dp)-(per|every|dur|kg|ok)$/.test(f)) {
+    // Départs réguliers : cordes (champs sur l'exercice) ou callisthénie (champs dans ex.dep).
+    const ex = c.exercises[i], cd = f.startsWith("cd-"), o = cd ? ex : (ex.dep = ex.dep || {}), fld = f.slice(3);
+    o[fld === "per" ? (cd ? "ropes" : "reps") : fld] = t === "" ? "" : fld === "per" || fld === "ok" ? intOr(v) : numOr(v);
+    refreshDepart(i);
   }
   else if (f === "reps" || f === "kg") { c.exercises[i].sets[j][f] = t === "" ? "" : numOr(v); $("st-" + i).textContent = exStats(c.exercises[i], c.disc); refreshAllSets(); }
+  else if (f === "hx-amt" || f === "hx-kg" || f === "hx-time") {
+    const ex = c.exercises[i], fld = f.slice(3); ex[fld] = fld === "time" ? v : t === "" ? "" : fld === "amt" ? intOr(v) : numOr(v);
+    const sm = $("hxSum"); if (sm) sm.innerHTML = hyroxSumHTML(c);
+  }
   else if (f.startsWith("run-")) {
     const r = c.run = c.run || { blocks: [] }, fld = f.slice(4);
     r[fld] = t === "" ? "" : fld === "dist" ? numOr(v) : intOr(v);
@@ -57,9 +70,19 @@ $("sheet").addEventListener("click", e => {
   else if (a === "sess") { flush(); openDay(b.dataset.k); return; }
   else if (a === "sess-new") { flush(); openDay(freshKey(dayOf(S.open))); return; }
   else if (a === "hold") { c.exercises[i].hold = !c.exercises[i].hold; }
-  else if (a === "cd-unit") { const ex = c.exercises[i]; ex.unit = ex.unit === "min" ? "s" : "min"; }
-  else if (a === "cd-lest") { c.exercises[i].lest = b.dataset.v === "1"; }
-  else if (a === "cd-go") { const ex = c.exercises[i]; startIntervals((+ex.every || 0) * (ex.unit === "min" ? 60 : 1), +ex.ropes || 1, ex.name || "Corde"); return; }
+  else if (/^(cd|dp)-(unit|durunit|lest)$/.test(a)) {
+    const ex = c.exercises[i], o = a.startsWith("cd-") ? ex : (ex.dep = ex.dep || {});
+    if (a.endsWith("-lest")) o.lest = b.dataset.v === "1";
+    else if (a.endsWith("-durunit")) o.durUnit = (o.durUnit || "min") === "min" ? "s" : "min";
+    else o.unit = o.unit === "min" ? "s" : "min";
+  }
+  else if (a === "hx-unit") { const ex = c.exercises[i]; ex.unit = ex.unit === "reps" ? "m" : "reps"; }
+  else if (a === "dp-mode") { const ex = c.exercises[i]; ex.mode = b.dataset.v || ""; if (ex.mode) ex.dep = ex.dep || { reps: "", every: "", unit: "min", dur: "", durUnit: "min", lest: false, kg: "", ok: "" }; }
+  else if (a === "cd-go" || a === "dp-go") {
+    const ex = c.exercises[i], pl = a === "cd-go" ? cordesPlan(ex) : calisPlan(ex.dep);
+    if (!pl) { toast("Indique le temps entre deux départs et la durée."); return; }
+    startIntervals(pl.every, pl.n, ex.name || (a === "cd-go" ? "Corde" : "Départ"), !!pl.dur); return;
+  }
   else if (a === "del-ex") { if (!armed(b, "Confirmer")) return; c.exercises.splice(i, 1); }
   else if (a === "add-set") { const s = c.exercises[i].sets, l = s[s.length - 1]; s.push(l ? { reps: "", kg: l.kg, target: l.reps !== "" && l.reps != null ? l.reps : (l.target ?? "") } : { reps: "", kg: "" }); }
   else if (a === "kg-up") { const kg = +b.dataset.kg, from = +b.dataset.from; c.exercises[i].sets.forEach(st => { if (!st.done && (st.kg === "" || st.kg == null || +st.kg === from)) st.kg = kg; }); }
@@ -98,7 +121,7 @@ $("sheet").addEventListener("click", e => {
   else if (a === "rx") { const v = b.dataset.v === "rx"; c.wod.rx = c.wod.rx === v ? null : v; }
   else if (a === "copy") {
     const src = S.days[b.dataset.k];
-    c.exercises = clone(src.exercises || []).map(x => ({ name: x.name, hold: !!x.hold, lock: true, ...cordesOf(x), sets: (x.sets || []).map(s => ({ reps: "", kg: s.kg, target: s.reps !== "" && s.reps != null ? s.reps : (s.target ?? "") })), rpe: 0, note: "", rest: restOf(x) }));
+    c.exercises = clone(src.exercises || []).map(x => ({ name: x.name, hold: !!x.hold, lock: true, ...cordesOf(x), ...(x.mode === "dep" && x.dep ? { mode: "dep", dep: { ...x.dep, ok: "" } } : {}), sets: (x.sets || []).map(s => ({ reps: "", kg: s.kg, target: s.reps !== "" && s.reps != null ? s.reps : (s.target ?? "") })), rpe: 0, note: "", rest: restOf(x) }));
     if (!String(c.title).trim()) c.title = src.title || "";
   }
   else if (a === "del-session") {

@@ -132,6 +132,18 @@ export const EXERCISES = [
 // Mots-clés : pour reconnaître les muscles d'un exercice tapé à la main.
 // Exercices proposés dans une séance « Corde » (bouton « Ajouter un exercice »).
 export const CORDES_EX = ["Montée de corde", "Montée de corde avec jambes", "Montée de corde départ assis"];
+// Ateliers proposés dans une séance « Hyrox » : [nom, unité (m ou reps), quantité d'une course officielle, muscles principaux, secondaires, avec charge ?]
+export const HYROX_EX = [
+  ["Course", "m", 1000, ["quadriceps", "mollets"], ["ischios", "fessiers"]],
+  ["SkiErg", "m", 1000, ["dorsaux", "triceps"], ["abdos", "epaules"]],
+  ["Sled push", "m", 50, ["quadriceps", "fessiers"], ["mollets", "epaules"], 1],
+  ["Sled pull", "m", 50, ["dorsaux", "biceps"], ["avantbras", "ischios"], 1],
+  ["Burpees sautés", "m", 80, ["quadriceps", "pecs"], ["fessiers", "epaules"]],
+  ["RowErg", "m", 1000, ["dorsaux", "quadriceps"], ["biceps", "lombaires"]],
+  ["Farmers carry", "m", 200, ["avantbras", "trapezes"], ["abdos", "fessiers"], 1],
+  ["Fentes sandbag", "m", 100, ["quadriceps", "fessiers"], ["ischios", "abdos"], 1],
+  ["Wall balls", "reps", 100, ["quadriceps", "epaules"], ["fessiers"], 1]
+];
 // Anciens noms retirés de la bibliothèque : plus proposés, mais les séances déjà enregistrées gardent leurs muscles.
 export const LEGACY_EX = [["Montée de corde sans jambes", ["dorsaux", "biceps"], ["avantbras", "abdos"]]];
 

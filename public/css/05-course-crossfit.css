@@ -61,3 +61,18 @@ body.sheet-open .help-hint{display:none}
 @keyframes hintIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion: reduce){.help-hint{animation:none}}
 
+/* WOD de référence : « Comment ça marche » */
+.bench .wod-how-btn{display:block;color:var(--cf-ink);text-decoration:none;padding:0 0 12px;margin-top:-4px;font-weight:700}
+.wod-how{display:flex;flex-direction:column;gap:6px;font-size:14px;border-top:1px solid var(--line);padding:12px 0 14px}
+.wod-how h4{margin:6px 0 0;font-family:var(--display);font-weight:700;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--cf-ink)}
+.wod-how h4:first-child{margin-top:0}
+.wod-how p{margin:0}
+.wod-how ol,.wod-how ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:3px}
+.wod-lv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;text-align:center}
+.wod-lv div{background:var(--surface-2);border-radius:10px;padding:7px 4px;font-size:12px;color:var(--muted)}
+.wod-lv b{display:block;color:var(--ink);font-size:14px;font-variant-numeric:tabular-nums}
+/* Idées · Hyrox : 1 km de course + 1 atelier, huit fois */
+.hx-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;font-size:14px}
+.hx-run{color:var(--muted);font-size:12.5px;padding:3px 0 3px 14px;border-left:2px dotted var(--line);margin-left:4px}
+.hx-st{display:flex;justify-content:space-between;gap:10px;padding:5px 0;font-weight:600}
+.hx-st b{color:var(--tc);font-variant-numeric:tabular-nums;flex:none}

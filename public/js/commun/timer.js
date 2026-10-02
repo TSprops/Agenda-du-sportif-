@@ -53,8 +53,13 @@ function drawRest() {
   $("rtFill").style.width = (RT.total ? left / RT.total * 100 : 0) + "%";
   if (left !== RT.lastLeft && left > 0 && left <= 3 && soundPrefs().countdown) playSound("tick");
   RT.lastLeft = left;
-  if (left <= 0 && RT.iv && RT.iv.rep + 1 < RT.iv.n) {
-    // Départ suivant (cordes) : on relance tout de suite le même intervalle.
+  // Avec une durée (« pendant ») : le dernier départ a lui aussi son intervalle, et le temps restant s'affiche.
+  if (RT.iv && RT.iv.full && left > 0) {
+    const rest = Math.max(0, Math.ceil(((RT.iv.n - RT.iv.rep) * RT.total * 1000 + RT.end - Date.now()) / 1000));
+    $("rtLbl").textContent = `Départ ${RT.iv.rep}/${RT.iv.n} · reste ${Math.floor(rest / 60)}:${pad(rest % 60)}`;
+  }
+  if (left <= 0 && RT.iv && RT.iv.rep + (RT.iv.full ? 0 : 1) < RT.iv.n) {
+    // Départ suivant (cordes, callisthénie) : on relance tout de suite le même intervalle.
     RT.iv.rep++; RT.end = Date.now() + RT.total * 1000; RT.lastLeft = null;
     $("rtLbl").textContent = `Départ ${RT.iv.rep} / ${RT.iv.n} · ${RT.iv.name}`;
     playSound(); if (navigator.vibrate) navigator.vibrate([200, 80, 200]);
@@ -62,18 +67,19 @@ function drawRest() {
   }
   if (left <= 0) {
     clearInterval(RT.tick); RT.tick = null;
-    $("restTimer").classList.add("done"); $("rtLbl").textContent = RT.iv ? `Départ ${RT.iv.n} / ${RT.iv.n} · le dernier !` : "C’est reparti !"; RT.iv = null; $("rtTime").textContent = "0:00"; $("rtSkip").textContent = "OK";
+    $("restTimer").classList.add("done"); $("rtLbl").textContent = RT.iv ? (RT.iv.full ? `Terminé · ${RT.iv.n} départs` : `Départ ${RT.iv.n} / ${RT.iv.n} · le dernier !`) : "C’est reparti !"; RT.iv = null; $("rtTime").textContent = "0:00"; $("rtSkip").textContent = "OK";
     playSound(); if (navigator.vibrate) navigator.vibrate([300, 120, 300, 120, 300]);
     const ei = RT.ex; RT.ex = null; if (S.open && S.open === RT.day) advanceAfterRest(ei);
     setTimeout(() => { if (!RT.tick) $("restTimer").hidden = true; }, 6000);
   }
 }
-// Départs réguliers (ex. 10 cordes, départ toutes les 60 s) : le minuteur se relance à chaque départ.
-function startIntervals(every, n, name) {
+// Départs réguliers (ex. 1 corde toutes les 5 s pendant 1 min) : le minuteur se relance à chaque départ.
+// « full » : le minuteur tourne jusqu'au bout de la durée (sinon il s'arrête au dernier départ).
+function startIntervals(every, n, name, full) {
   if (!every) { toast("Indique le temps entre deux départs."); return; }
   startRest(every, name);
-  if (n < 2) { $("rtLbl").textContent = "Départ · " + name; return; }
-  RT.iv = { rep: 1, n, name };
+  if (n < 2 && !full) { $("rtLbl").textContent = "Départ · " + name; return; }
+  RT.iv = { rep: 1, n, name, full: !!full };
   $("rtLbl").textContent = `Départ 1 / ${n} · ${name}`;
 }
 $("rtPlus").onclick = () => { if (RT.tick) { RT.end += 15000; RT.total += 15; drawRest(); } else startRest(15); };

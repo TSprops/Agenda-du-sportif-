@@ -3,9 +3,9 @@ import { openChat, reportContent } from "./conversation.js";
 import { REACTS, SOC, dirOf } from "./etat.js";
 import { blockUser } from "./liste.js";
 import { $, DAYS, DEFAULT_TYPES, S, armed, avatarHTML, collection, dayMeta, dayOf, db, discOf, doc, esc, fmtDur, getDoc, getDocs, isEmpty, limit, nf, orderBy, parse, query, runPace, runSecs, titleOf, where, wodScore } from "../commun/core.js";
-import { cordesText, toast } from "../entrainement/index.js";
+import { calisDepText, cordesText, toast } from "../entrainement/index.js";
 import { MONTHS_S } from "../idees/index.js";
-import { sessionSummary } from "../seances/index.js";
+import { hyroxText, sessionSummary } from "../seances/index.js";
 import { commentsHTML, toggleReact, trySession } from "../social/index.js";
 import { go } from "../commun/store.js";
 
@@ -39,6 +39,8 @@ export function friendSessionDetail(s, types) {
   }
   return `<ul class="fs-list">${(s.exercises || []).filter(x => x.name).map(x => {
     if (x.kind === "cordes") return `<li><b>${esc(x.name)}</b> — ${esc(cordesText(x))}</li>`;
+    if (x.kind === "hyrox") return `<li><b>${esc(x.name)}</b> — ${esc(hyroxText(x))}</li>`;
+    if (x.mode === "dep") return `<li><b>${esc(x.name)}</b> — ${esc(calisDepText(x))}</li>`;
     const sets = (x.sets || []).filter(st => st.reps !== "" && st.reps != null);
     return `<li><b>${esc(x.name)}</b> — ${sets.length ? sets.map(st => esc(st.reps) + (x.hold ? " s" : "") + (st.kg ? " × " + nf.format(st.kg) + " kg" : "")).join(", ") : (x.sets || []).length + " séries"}</li>`;
   }).join("")}</ul>`;

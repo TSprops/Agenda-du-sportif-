@@ -5,7 +5,7 @@ import { moveOf } from "../comment-faire/index.js";
 import { $, S, esc, nf } from "../commun/core.js";
 import { norm } from "../pages/faq.js";
 import { doneSet, shortDate } from "../idees/index.js";
-import { changed, renderSheet, restOf } from "../seances/index.js";
+import { changed, hyroxEx, hyroxStation, renderSheet, restOf } from "../seances/index.js";
 
 /* ============================================================
    « La dernière fois » : historique d'un exercice
@@ -33,7 +33,7 @@ export function lastLineHTML(ex) {
 // +2,5 kg à partir de 20 kg, +1 kg en dessous (haltères légers). Rien si une série est déjà faite aujourd'hui.
 export const kgStep = kg => kg >= 20 ? 2.5 : 1;
 export function kgSuggestion(ex) {
-  if (!S.open || ex.hold || ex.kind === "cordes" || !String(ex.name || "").trim()) return null;
+  if (!S.open || ex.hold || ex.kind || ex.mode === "dep" || !String(ex.name || "").trim()) return null;
   if ((ex.sets || []).some(st => st.done)) return null;
   const h = exHistory(ex.name, S.open); if (!h || h.ex.hold) return null;
   const sets = h.ex.sets.filter(doneSet).filter(st => +st.kg > 0); if (!sets.length) return null;
@@ -68,7 +68,10 @@ const blankSets = n => Array.from({ length: n }, () => ({ reps: "", kg: "" }));
 export function addExercise(name, hold) {
   const c = S.cur; if (!c) return;
   const lib = libFind(name), ex = { name, hold: !!(hold || (lib && lib.hold)), sets: blankSets(3), rpe: 0, note: "", rest: 90 };
-  if (c.disc === "cordes") {
+  if (c.disc === "hyrox") {
+    const st = hyroxStation(name), h = Object.keys(S.days).filter(x => x < S.open).sort().reverse().map(x => (S.days[x].exercises || []).find(e => e.kind === "hyrox" && exKey(e.name || "") === exKey(name))).find(Boolean);
+    Object.assign(ex, hyroxEx(name, h ? h.amt : st ? st[2] : "", h ? h.kg : ""));
+  } else if (c.disc === "cordes") {
     const h = lastCordes(name, S.open);
     Object.assign(ex, { kind: "cordes", sets: [], ropes: "", every: "", unit: "s", lest: false, kg: "" }, h ? cordesOf(h.ex) : {});
   } else prefillFromLast(ex, S.open);
@@ -78,7 +81,7 @@ export function addExercise(name, hold) {
 // Nom tapé à la main : si l'exercice est connu et encore vide, on reprend la dernière fois.
 $("sheet").addEventListener("change", e => {
   if (e.target.dataset.f !== "ex-name" || !S.cur) return;
-  const i = +e.target.dataset.ex, ex = S.cur.exercises[i]; if (!ex || ex.lock || ex.kind === "cordes") return;
+  const i = +e.target.dataset.ex, ex = S.cur.exercises[i]; if (!ex || ex.lock || ex.kind) return;
   const blank = (ex.sets || []).every(st => (st.reps === "" || st.reps == null) && (st.kg === "" || st.kg == null) && !st.done);
   if (blank && prefillFromLast(ex, S.open)) { changed(); renderSheet(); }
   else if (!!moveOf(ex.name) !== !!document.querySelector(`[data-how="${i}"]`)) renderSheet(); // bouton « ? » à ajouter ou retirer

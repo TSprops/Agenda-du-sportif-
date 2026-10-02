@@ -5,7 +5,7 @@ import { $, DAYS, DEFAULT_TYPES, S, cap, clone, collection, dayMeta, dayOf, db, 
 import { cordesOf, toast } from "../entrainement/index.js";
 import { REACTS, SOC, dirOf, friendSessionDetail, who } from "../amis/index.js";
 import { MONTHS_S, tryIdea } from "../idees/index.js";
-import { restOf, sessionSummary } from "../seances/index.js";
+import { hyroxEx, restOf, sessionSummary } from "../seances/index.js";
 
 /* ---------- Fil d'actualité ---------- */
 async function loadFeedFor(uid) {
@@ -87,9 +87,10 @@ export function trySession(btn, uid, s, types) {
   const disc = discOf(s);
   tryIdea(btn, disc, c => {
     c.title = titleOf(s, types) + " · " + (SOC.dir[uid] || {}).pseudo;
-    if (disc === "muscu" || disc === "calis" || disc === "cordes") {
+    if (disc === "hyrox") c.exercises = (s.exercises || []).filter(x => x.name).map(x => ({ ...hyroxEx(x.name, x.amt, x.kg), unit: x.unit || "m" }));
+    else if (disc === "muscu" || disc === "calis" || disc === "cordes") {
       if (disc === "muscu") c.typeId = S.types.some(x => x.id === s.typeId) ? s.typeId : null;
-      c.exercises = (s.exercises || []).map(x => ({ name: x.name, hold: !!x.hold, rpe: 0, note: "", rest: restOf(x), ...cordesOf(x), sets: (x.sets || []).map(st => ({ reps: "", kg: "", target: st.reps !== "" && st.reps != null ? st.reps : (st.target ?? "") })) }));
+      c.exercises = (s.exercises || []).map(x => ({ name: x.name, hold: !!x.hold, rpe: 0, note: "", rest: restOf(x), ...cordesOf(x), ...(x.mode === "dep" && x.dep ? { mode: "dep", dep: { ...x.dep, ok: "" } } : {}), sets: (x.sets || []).map(st => ({ reps: "", kg: "", target: st.reps !== "" && st.reps != null ? st.reps : (st.target ?? "") })) }));
     } else if (disc === "course") { c.runType = s.runType || null; c.run = { blocks: clone((s.run || {}).blocks || []) }; }
     else if (disc === "crossfit") { const w = s.wod || {}; Object.assign(c.wod, { name: w.name || "", format: w.format || "", cap: w.cap || "", moves: clone(w.moves || []), strength: w.strength || "" }); }
   });

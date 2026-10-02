@@ -97,7 +97,9 @@ const DISC = {
   course: { name: "Course à pied", color: "#5AC8FA", desc: "Endurance fondamentale, seuil, fractionné",
     icon: '<circle cx="14.5" cy="4.5" r="2"/><path d="M7 21l3.5-6 3 2.5V22M5.5 11.5l3.5-3 4 1 2.5 3.5h3.5M10.5 15l-1.5-4.5"/>' },
   cordes: { name: "Cordes", color: "#FF5FA2", desc: "Montées de corde : nombre, départs, lest",
-    icon: '<path d="M8 2h8"/><path d="M12 2c-3 2.5 3 4.5 0 7s3 4.5 0 7 3 4.5 0 6"/>' }
+    icon: '<path d="M8 2h8"/><path d="M12 2c-3 2.5 3 4.5 0 7s3 4.5 0 7 3 4.5 0 6"/>' },
+  hyrox: { name: "Hyrox", color: "#2EE6C5", desc: "Course + SkiErg, RowErg, sled, fentes, wall balls…",
+    icon: '<path d="M5 4v16M19 4v16M5 12h14"/><path d="M9 8l6 8M15 8l-6 8"/>' }
 };
 // Activités qui ont leurs pages Idées, Records et Progression.
 const MAIN_DISC = ["muscu", "crossfit", "calis", "course"];
@@ -151,12 +153,13 @@ function dayMeta(d, types) {
   if (disc === "course") { const r = RUN_TYPES.find(x => x.id === d.runType); return { disc, name: r ? r.name : "Course à pied", short: r ? r.short : "Course", color: r ? r.color : DISC.course.color }; }
   if (disc === "crossfit") return { disc, name: "CrossFit", short: "CrossFit", color: DISC.crossfit.color };
   if (disc === "calis") return { disc, name: "Callisthénie", short: "Calis", color: DISC.calis.color };
+  if (disc === "hyrox") return { disc, name: "Hyrox", short: "Hyrox", color: DISC.hyrox.color };
   if (disc === "cordes" || d.typeId === "cordes") return { disc: "cordes", name: "Cordes", short: "Cordes", color: DISC.cordes.color };
   const t = (types || S.types).find(x => x.id === d.typeId);
   return { disc, name: t ? t.name : "Musculation", short: t ? t.name : "Muscu", color: t ? t.color : "#8A847E" };
 }
 function nameColor(n) {
-  const all = [...DEFAULT_TYPES.map(t => [t.name, t.color]), ...RUN_TYPES.map(r => [r.name, r.color]), ["CrossFit", DISC.crossfit.color], ["Callisthénie", DISC.calis.color], ["Cordes", DISC.cordes.color]];
+  const all = [...DEFAULT_TYPES.map(t => [t.name, t.color]), ...RUN_TYPES.map(r => [r.name, r.color]), ["CrossFit", DISC.crossfit.color], ["Callisthénie", DISC.calis.color], ["Cordes", DISC.cordes.color], ["Hyrox", DISC.hyrox.color]];
   const f = all.find(x => x[0] === n); return f ? f[1] : "#8A847E";
 }
 function exVolume(ex) { return (ex.sets || []).reduce((a, s) => a + ((+s.reps || 0) * (+s.kg || 0)), 0); }

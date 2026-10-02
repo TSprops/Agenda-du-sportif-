@@ -3,6 +3,7 @@ import { renderMain } from "./calendrier.js";
 import { cordesHTML, normCordes } from "./fiche-cordes.js";
 import { courseHTML } from "./fiche-course.js";
 import { crossfitHTML } from "./fiche-crossfit.js";
+import { hyroxHTML } from "./fiche-hyrox.js";
 import { calisHTML, choiceHTML, muscuHTML, photoTile } from "./fiche-muscu-calis.js";
 import { loadPhotos } from "./photos.js";
 import { $, DAYS, DISC, MONTHS, MOODS, S, cap, clone, dayMeta, esc, isEmpty, parse, typeOf } from "../commun/core.js";
@@ -22,7 +23,7 @@ export function renderSheet() {
   let body;
   if (!disc) body = `${sessTabsHTML(c, k)}<p class="eyebrow">${dateTxt}</p>${choiceHTML()}`;
   else {
-    const specific = disc === "muscu" ? muscuHTML(c, k) : disc === "calis" ? calisHTML(c, k) : disc === "cordes" ? cordesHTML(c, k) : disc === "course" ? courseHTML(c) : crossfitHTML(c);
+    const specific = disc === "muscu" ? muscuHTML(c, k) : disc === "calis" ? calisHTML(c, k) : disc === "cordes" ? cordesHTML(c, k) : disc === "course" ? courseHTML(c) : disc === "hyrox" ? hyroxHTML(c) : crossfitHTML(c);
     const ph = disc === "muscu" && mt && typeOf(c.typeId) ? mt.name : disc === "course" && c.runType ? mt.name : disc === "crossfit" ? "WOD du jour" : DISC[disc].name;
     body = `${sessTabsHTML(c, k)}<div class="disc-line"><p class="eyebrow">${dateTxt} · ${DISC[disc].name}</p><button class="linkish" data-a="change-disc">Changer d’activité</button></div>
     <div class="my-reacts" id="myReacts">${myReactsHTML(k)}</div>
