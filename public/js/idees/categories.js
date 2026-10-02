@@ -66,7 +66,7 @@ $("v-hub").addEventListener("click", e => {
     const idea = RUN_IDEAS[key][+idx];
     tryIdea(go2, "course", c => {
       c.runType = key; c.title = idea.name; c.note = idea.note || "";
-      c.run = { blocks: (idea.blocks || []).map(([rep, eff, unit, pace, rec]) => ({ rep, eff, unit, pace, rec })), h: idea.h || "", m: idea.m || "", s: "" };
+      c.run = { blocks: (idea.blocks || []).map(([rep, eff, unit, pace, rec]) => ({ rep, eff, unit, pace, rec, fini: false })), h: idea.h || "", m: idea.m || "", s: "" };
     });
   }
 });

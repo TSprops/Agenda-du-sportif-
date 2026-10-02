@@ -1,7 +1,7 @@
 // Progression : courbes SVG par exercice et par activité.
 import { benchEntries, cfData, shortDate } from "./crossfit.js";
 import { fmtTime } from "./idees-seances.js";
-import { $, BENCH, DISC, LIFTS, RUN_TYPES, S, discOf, esc, nf, runSecs, typeOf } from "../commun/core.js";
+import { $, BENCH, DISC, LIFTS, RUN_TYPES, S, discOf, esc, nf, runKm, runSecs, sortieKm, typeOf } from "../commun/core.js";
 import { norm } from "../pages/faq.js";
 import { est1RM } from "./records.js";
 
@@ -124,8 +124,8 @@ export function renderProg() {
     const tab = S.progTab || "all";
     const sel = days.filter(k => tab === "all" || S.days[k].runType === tab);
     const col = tab === "all" ? DISC.course.color : RUN_TYPES.find(r => r.id === tab).color;
-    const pace = sel.map(k => { const r = S.days[k].run || {}, t = runSecs(r), dist = +r.dist || 0; return t && dist ? { k, v: Math.round(t / dist) } : null; }).filter(Boolean);
-    const dist = sel.map(k => { const r = S.days[k].run || {}; return +r.dist ? { k, v: +r.dist } : null; }).filter(Boolean);
+    const pace = sel.map(k => { const t = runSecs(S.days[k].run), dist = sortieKm(S.days[k]); return t && dist ? { k, v: Math.round(t / dist) } : null; }).filter(Boolean);
+    const dist = sel.map(k => { const v = runKm(S.days[k]); return v ? { k, v } : null; }).filter(Boolean);
     h = `<div class="chips"><button class="chip" data-ptab="all" style="--tc:${DISC.course.color}" aria-pressed="${tab === "all"}">Toutes</button>${RUN_TYPES.map(r => `<button class="chip" data-ptab="${r.id}" style="--tc:${r.color}" aria-pressed="${r.id === tab}"><i class="dot"></i>${r.name}</button>`).join("")}</div>
       ${pace.length ? `<div class="list">
         ${chartCard("rp", "Allure moyenne", pace, { fmt: v => fmtTime(v) + " /km", tickFmt: v => fmtTime(v), diffFmt: v => fmtTime(v) + " /km", color: col, better: "down", time: true, bestLabel: "Meilleure" })}

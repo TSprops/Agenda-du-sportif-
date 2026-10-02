@@ -204,6 +204,40 @@ module.exports = async function appTests(t) {
     t("bloc supprimé aussi dans la séance enregistrée", await blocs(), "6");
     await A.click("#sheet [data-a=close]");
 
+    // Course, seuil / fractionné : « Ma sortie » masquée, format lisible, décompte des séries, validation, distance calculée.
+    await home(A); await A.click("[data-tab=seances]"); await A.click("[data-gonew]"); await A.click("#sheet [data-a=disc][data-id=course]");
+    await A.click("#sheet [data-a=runtype][data-id=ef]");
+    t("endurance fondamentale : « Ma sortie » affichée", await A.isVisible("#rn-dist"), true);
+    await A.click("#sheet [data-a=runtype][data-id=frac]");
+    t("fractionné : « Ma sortie » masquée, unités m / s / min", (await A.isVisible("#rn-dist")) + "|" + (await A.$$eval("#sheet [data-a=bl-unit]", x => x.map(e => e.dataset.u).join())), "false|m,s,min");
+    await A.fill("#bl-rep-0", "3"); await A.fill("#bl-eff-0", "200");
+    const cnt = async () => (await A.innerText("#bl-count-0")).replace(/\s+/g, " ").trim();
+    t("fractionné : aperçu et décompte", (await A.textContent("#bl-prev-0")) + "|" + (await cnt()), "Aperçu : 3 × 200 m|3 séries restantes ⏱ Lancer la récup");
+    await A.click('#sheet [data-a=bl-go][data-b="0"]');
+    t("récup : une série de moins, minuteur lancé", (await cnt()) + "|" + (await A.isVisible("#restTimer")), "2 séries restantes ⏱ Lancer la récup|true");
+    await A.click("#rtSkip"); await A.click('#sheet [data-a=bl-go][data-b="0"]'); await A.click("#rtSkip");
+    t("dernière série : bouton « Terminer »", await cnt(), "1 série restante ✓ Terminer");
+    await A.click('#sheet [data-a=bl-go][data-b="0"]');
+    t("terminer : sans récup, 0, validé, distance calculée", (await cnt()) + "|" + (await A.isVisible("#restTimer")) + "|" + (await A.textContent("#bl-dist-0")), "0 exercice validé ✓|false|Distance parcourue 600 m");
+    t("format enregistré inchangé", await A.inputValue("#bl-rep-0"), "3");
+    await A.click("#sheet [data-a=bl-add]"); await A.fill("#bl-rep-1", "5"); await A.fill("#bl-eff-1", "400"); await A.click('#sheet [data-a=bl-fini][data-b="1"]');
+    t("valider l'exercice d'un coup + total", (await A.textContent("#bl-dist-1")) + "|" + (await A.textContent("#bl-total")), "Distance parcourue 2 km|Total parcouru 2,6 km");
+    await A.click("#sheet [data-a=runtype][data-id=frac]"); await A.click("#sheet [data-a=runtype][data-id=seuil]");
+    t("seuil : « min » fixe, sans sélecteur", (await A.$$eval("#sheet [data-a=bl-unit]", x => x.length)) + "|" + (await A.isVisible("#rn-dist")), "0|false");
+    await A.click("#sheet [data-a=close]"); await A.waitForTimeout(800);
+    t("distance comptée dans le mois", await A.textContent("#list .row:has-text('Seuil') .me"), "Seuil · 2,6 km");
+    // Anciennes séances : distance de « Ma sortie » gardée, sinon calculée depuis les blocs (km, ou durée avec l'allure).
+    const km = await A.evaluate(async () => { const { runKm } = await import("/js/commun/core.js"); return [
+      { disc: "course", runType: "frac", run: { dist: 8, blocks: [{ rep: 10, eff: 400, unit: "m" }] } },
+      { disc: "course", runType: "frac", run: { blocks: [{ rep: 5, eff: 1, unit: "km" }, { rep: 10, eff: 200 }] } },
+      { disc: "course", runType: "seuil", run: { blocks: [{ rep: 3, eff: 10, unit: "min", pace: "4:00 /km" }] } },
+      { disc: "course", runType: "seuil", run: { blocks: [{ rep: 3, eff: 10, unit: "min", pace: "allure semi" }] } },
+      { disc: "course", runType: "frac", run: { dist: 8, blocks: [{ rep: 10, eff: 400, unit: "m", fini: false }] } }].map(runKm).join(); });
+    t("anciennes séances : distances prises en compte", km, "8,7,7.5,0,0");
+    await A.click(`#list .row:has-text("Seuil")`); await A.waitForTimeout(400);
+    t("séance rouverte : blocs validés gardés", await A.$$eval("#sheet .bloc.fini", x => x.length), 2);
+    await A.click("#sheet [data-a=close]");
+
     // Corde : plus de propositions directes ; « Ajouter un exercice » donne exactement les trois montées de corde.
     await home(A); await A.click("[data-tab=seances]"); await A.click("[data-gonew]"); await A.click("#sheet [data-a=disc][data-id=cordes]");
     t("corde : rien de proposé avant « Ajouter un exercice »", await A.$$eval("#sheet [data-a=cd-add]", x => x.length), 0);

@@ -3,7 +3,7 @@ import { flush, openDay } from "./feuille.js";
 import { dropPhoto } from "./photos.js";
 import { renderTypes } from "./types.js";
 import { hyroxTotal } from "./fiche-hyrox.js";
-import { $, DAYS, DISC, MONTHS, RUN_TYPES, S, cap, dayMeta, dayVolume, esc, fmtDur, key, nf, pad, parse, runKm, runPace, runSecs, sessionsOn, titleOf, todayK, wodScore } from "../commun/core.js";
+import { $, DAYS, DISC, MONTHS, RUN_TYPES, S, cap, dayMeta, dayVolume, esc, fmtDur, fmtKm, key, nf, pad, parse, runKm, runPace, runSecs, sessionsOn, sortieKm, titleOf, todayK, wodScore } from "../commun/core.js";
 import { persistDay } from "../commun/store.js";
 import { toast } from "../entrainement/index.js";
 
@@ -40,9 +40,9 @@ export function sessionSummary(s, types) {
   const mt = dayMeta(s, types), disc = mt.disc;
   if (disc === "course") {
     const r = s.run || {}, parts = [mt.name];
-    if (r.dist) parts.push(nf.format(r.dist) + " km");
+    if (runKm(s)) parts.push(fmtKm(runKm(s)));
     if (runSecs(r)) parts.push(fmtDur(runSecs(r)));
-    if (runPace(r)) parts.push(runPace(r) + " /km");
+    if (sortieKm(s) && runPace(r)) parts.push(runPace(r) + " /km");
     return parts.join(" · ");
   }
   if (disc === "crossfit") {

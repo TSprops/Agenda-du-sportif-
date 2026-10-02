@@ -2,7 +2,7 @@
 import { openChat, reportContent } from "./conversation.js";
 import { REACTS, SOC, dirOf } from "./etat.js";
 import { blockUser } from "./liste.js";
-import { $, DAYS, DEFAULT_TYPES, S, armed, avatarHTML, collection, dayMeta, dayOf, db, discOf, doc, esc, fmtDur, getDoc, getDocs, isEmpty, limit, nf, orderBy, parse, query, runPace, runSecs, titleOf, where, wodScore } from "../commun/core.js";
+import { $, DAYS, DEFAULT_TYPES, S, armed, avatarHTML, collection, dayMeta, dayOf, db, discOf, doc, esc, fmtDur, fmtKm, getDoc, getDocs, isEmpty, limit, nf, orderBy, parse, query, runKm, runPace, runSecs, sortieKm, titleOf, where, wodScore } from "../commun/core.js";
 import { calisDepText, cordesText, toast } from "../entrainement/index.js";
 import { MONTHS_S } from "../idees/index.js";
 import { hyroxText, sessionSummary } from "../seances/index.js";
@@ -31,7 +31,8 @@ export function friendSessionDetail(s, types) {
   const disc = discOf(s);
   if (disc === "course") {
     const r = s.run || {};
-    return `<ul class="fs-list">${r.dist ? `<li>${nf.format(r.dist)} km${runSecs(r) ? " en " + fmtDur(runSecs(r)) : ""}${runPace(r) ? " · " + runPace(r) + " /km" : ""}</li>` : ""}${(r.blocks || []).filter(b => b.rep || b.eff).map(b => `<li>${esc(b.rep || 1)} × ${esc(b.eff)} ${esc(b.unit || "")}${b.pace ? " · " + esc(b.pace) : ""}${b.rec ? " · récup " + esc(b.rec) : ""}</li>`).join("")}</ul>`;
+    const km = runKm(s), sk = sortieKm(s);
+    return `<ul class="fs-list">${km ? `<li>${fmtKm(km)}${sk && runSecs(r) ? " en " + fmtDur(runSecs(r)) : ""}${sk && runPace(r) ? " · " + runPace(r) + " /km" : ""}</li>` : ""}${(r.blocks || []).filter(b => b.rep || b.eff).map(b => `<li>${esc(b.rep || 1)} × ${esc(b.eff)} ${esc(b.unit || "")}${b.pace ? " · " + esc(b.pace) : ""}${b.rec ? " · récup " + esc(b.rec) : ""}</li>`).join("")}</ul>`;
   }
   if (disc === "crossfit") {
     const w = s.wod || {};

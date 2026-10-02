@@ -37,7 +37,7 @@ export function startWorkout(w, extra) {
   S.cur = EMPTY_DAY(); setDisc(S.cur, w.disc || "muscu"); S.cur.title = w.name || "";
   if (w.disc === "course") {
     S.cur.runType = w.runType || null; S.cur.note = w.note || "";
-    S.cur.run = { blocks: (w.blocks || []).map(([rep, eff, unit, pace, rec]) => ({ rep, eff, unit, pace, rec })), h: "", m: w.m || "", s: "" };
+    S.cur.run = { blocks: (w.blocks || []).map(([rep, eff, unit, pace, rec]) => ({ rep, eff, unit, pace, rec, fini: false })), h: "", m: w.m || "", s: "" };
   } else {
     if (w.disc === "muscu") S.cur.typeId = S.types.some(x => x.id === w.typeId) ? w.typeId : null;
     S.cur.exercises = ideaExercises(w.ex).map((e, j) => ({ ...e, lock: true, ...(w.ex[j][5] ? { ...w.ex[j][5], kind: "cordes", sets: [] } : {}) }));

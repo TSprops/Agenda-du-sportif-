@@ -1,5 +1,5 @@
 // Carte musculaire.
-import { $, MUSCLES, S, dayOf, discOf, esc, isEmpty, key, nf } from "../commun/core.js";
+import { $, MUSCLES, S, dayOf, discOf, esc, isEmpty, key, nf, runKm } from "../commun/core.js";
 import { doneSet } from "../idees/index.js";
 import { calisPlan, cordesTotal, musclesOf } from "../entrainement/index.js";
 import { addDays } from "./accueil.js";
@@ -18,7 +18,7 @@ function muscleLoad(ks) {
       const n = ex.kind === "cordes" ? Math.ceil(cordesTotal(ex) / 2) : ex.mode === "dep" ? Math.ceil(((calisPlan(ex.dep) || {}).n || 0) / 3) : (ex.sets || []).filter(st => st.done === true || doneSet(st)).length; if (n) add(musclesOf(ex.name), n);
     });
     else if (disc === "crossfit") ((s.wod || {}).moves || []).forEach(m => { if (m.name) add(musclesOf(m.name), 2); });
-    else if (disc === "course" && +((s.run || {}).dist)) add({ p: ["quadriceps", "mollets"], s: ["ischios", "fessiers"] }, 3);
+    else if (disc === "course" && runKm(s)) add({ p: ["quadriceps", "mollets"], s: ["ischios", "fessiers"] }, 3);
   });
   return out;
 }

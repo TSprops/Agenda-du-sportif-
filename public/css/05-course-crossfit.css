@@ -8,12 +8,34 @@
 .run-calc{display:flex;flex-wrap:wrap;gap:8px 16px;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--tc) 10%,var(--surface-2));border:1px solid color-mix(in srgb,var(--tc) 35%,transparent);font-size:13.5px;color:var(--muted)}
 .run-calc b{font-family:var(--display);font-weight:800;font-size:22px;color:var(--ink);font-variant-numeric:tabular-nums}
 .bloc{display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line);border-left:3px solid var(--tc)}
-.bloc-top{display:flex;align-items:center;gap:6px}
-.bloc-top .num{height:42px}
-.bloc-top .bl-rep{width:58px;flex:none}
-.bloc-top .times{font-weight:800;color:var(--muted)}
-.bloc-top .num:not(.bl-rep){flex:1;min-width:0}
-.seg.bl-units button{min-height:34px;font-variant-numeric:tabular-nums}
+.bloc.fini{border-left-color:#2FBF71}
+.bloc-top{display:flex;align-items:center;gap:8px}
+.bl-old{font-size:11px;font-weight:700;padding:2px 7px;border-radius:8px;color:#FFD60A;background:color-mix(in srgb,#FFD60A 16%,transparent)}
+/* Format : [séries] × [valeur] [unité], libellé sous chaque champ */
+.bl-fmt{display:grid;grid-template-columns:62px auto minmax(0,1fr) auto;gap:6px;align-items:start}
+.bl-cell{display:flex;flex-direction:column;gap:4px;min-width:0}
+.bl-cell small{font-size:11px;color:var(--muted);text-align:center}
+.bl-fmt .num{height:42px;width:100%;text-align:center}
+.bl-fmt .num:disabled{opacity:.6}
+.bl-fmt .times{font-weight:800;color:var(--muted);line-height:42px}
+.seg.bl-units{height:42px}
+.seg.bl-units button{min-height:34px;min-width:38px;padding-inline:6px;font-variant-numeric:tabular-nums}
+.seg.bl-units button.old{text-decoration:line-through}
+.bl-fixed{height:42px;min-width:54px;display:flex;align-items:center;justify-content:center;border-radius:11px;border:1.5px dashed var(--line);font-weight:700;color:var(--muted)}
+.bl-prev{font-size:13px;color:var(--muted)}
+.bl-prev b{color:var(--ink);font-size:15px}
+/* Décompte des séries restantes */
+.bl-count{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--surface)}
+.bl-n{font-family:var(--display);font-size:36px;font-weight:800;line-height:1;color:var(--tc);font-variant-numeric:tabular-nums}
+.bloc.fini .bl-n{color:#2FBF71}
+.bl-left{font-size:12.5px;line-height:1.25;color:var(--muted)}
+.bl-count .rest-go{margin-left:auto}
+.rest-go.bl-end{background:#2FBF71;color:#0A0A0B;box-shadow:none}
+.bl-dist{border-top:1px dashed var(--line);padding-top:10px;font-size:13.5px;color:var(--muted)}
+.bl-dist b{font-family:var(--display);font-size:22px;font-weight:800;color:#2FBF71;margin-left:4px}
+.bl-total{font-size:13.5px;color:var(--muted);text-align:right}
+.bl-total:empty{display:none}
+.bl-total b{font-family:var(--display);font-size:20px;font-weight:800;color:var(--ink);margin-left:4px}
 .unit{flex:none;height:42px;min-width:48px;padding-inline:10px;border-radius:11px;background:var(--surface);border:1.5px solid var(--line);font-weight:700}
 
 /* CrossFit */
@@ -83,3 +105,4 @@ body.sheet-open .help-hint{display:none}
 .hx-run{color:var(--muted);font-size:12.5px;padding:3px 0 3px 14px;border-left:2px dotted var(--line);margin-left:4px}
 .hx-st{display:flex;justify-content:space-between;gap:10px;padding:5px 0;font-weight:600}
 .hx-st b{color:var(--tc);font-variant-numeric:tabular-nums;flex:none}
+.bloc-foot .bl-del{margin-left:auto}

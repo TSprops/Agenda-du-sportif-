@@ -1,13 +1,16 @@
 // Séances, fiche du jour : réactions aux saisies et aux boutons.
 import { EMPTY_DAY, changed, closeSheet, flush, forceFlush, intOr, openDay, renderSheet, setDisc } from "./feuille.js";
+import { blocLeft, refreshBloc } from "./fiche-course.js";
 import { hyroxSumHTML } from "./fiche-hyrox.js";
 import { addPhotos, dropPhoto, openViewer } from "./photos.js";
 import { activeSet, exStats, finishEx, fmtRest, isDone, jumpToSet, refreshAllSets, refreshSets, restOf, validateSet } from "./series.js";
-import { $, BENCH, S, armed, clone, dayOf, isEmpty, numOr, parseClock, runCalcHTML } from "../commun/core.js";
+import { $, BENCH, S, armed, blocDone, clone, dayOf, isEmpty, numOr, parseClock, runCalcHTML } from "../commun/core.js";
 import { norm } from "../pages/faq.js";
 import { startIntervals, startRest } from "../commun/timer.js";
 import { addExercise, announcePRs, calisPlan, cordesOf, cordesPlan, departSummary, freshKey, openLib, saveRoutineFromSession, sessionPRs, toast } from "../entrainement/index.js";
 
+// Nouveau bloc de course, à valider.
+const newBloc = c => ({ rep: "", eff: "", unit: c.runType === "seuil" ? "min" : "m", pace: "", rec: "", fini: false });
 // Résumé (nombre de départs, total) et bouton « Lancer » mis à jour pendant la saisie.
 function refreshDepart(i) {
   const ex = S.cur.exercises[i], cd = ex.kind === "cordes", pl = cd ? cordesPlan(ex) : calisPlan(ex.dep);
@@ -51,6 +54,7 @@ $("sheet").addEventListener("input", e => {
   else if (f.startsWith("bl-")) {
     const b = c.run.blocks[+e.target.dataset.b], fld = f.slice(3);
     b[fld] = fld === "rep" ? (t === "" ? "" : intOr(v)) : fld === "eff" ? (t === "" ? "" : numOr(v)) : v;
+    refreshBloc(c, +e.target.dataset.b);
   }
   else if (f.startsWith("wod-")) { c.wod[f.slice(4)] = f === "wod-cap" ? (t === "" ? "" : intOr(v)) : v; }
   else if (f.startsWith("mv-")) { const m = c.wod.moves[+e.target.dataset.m], fld = f.slice(3); m[fld] = fld === "kg" ? (t === "" ? "" : numOr(v)) : v; }
@@ -74,7 +78,9 @@ $("sheet").addEventListener("click", e => {
   else if (a === "runtype") {
     c.runType = c.runType === b.dataset.id ? null : b.dataset.id;
     const r = c.run = c.run || { blocks: [] }; r.blocks = r.blocks || [];
-    if (c.runType && c.runType !== "ef" && !r.blocks.length) r.blocks.push({ rep: "", eff: "", unit: c.runType === "seuil" ? "min" : "m", pace: "", rec: "" });
+    if (c.runType && c.runType !== "ef" && !r.blocks.length) r.blocks.push(newBloc(c));
+    // Au seuil, les blocs en cours passent en minutes (les blocs déjà faits gardent leur unité).
+    if (c.runType === "seuil") r.blocks.forEach(x => { if (!blocDone(x)) x.unit = "min"; });
   }
   else if (a === "mood") { c.mood = c.mood === b.dataset.v ? null : b.dataset.v; }
   else if (a === "add-ex") { openLib(name => addExercise(name), c.disc); return; }
@@ -131,10 +137,19 @@ $("sheet").addEventListener("click", e => {
   }
   else if (a === "rpe") { const v = +b.dataset.v; c.exercises[i].rpe = c.exercises[i].rpe === v ? 0 : v; }
   else if (a === "srpe") { const v = +b.dataset.v; c.rpe = c.rpe === v ? 0 : v; }
-  else if (a === "bl-add") { const bl = c.run.blocks, l = bl[bl.length - 1]; bl.push(l ? { ...l } : { rep: "", eff: "", unit: c.runType === "seuil" ? "min" : "m", pace: "", rec: "" }); }
+  else if (a === "bl-add") {
+    const bl = c.run.blocks, l = bl[bl.length - 1], { left, ...cp } = l || {};
+    bl.push(l ? { ...cp, unit: c.runType === "seuil" ? "min" : cp.unit === "km" ? "m" : cp.unit, fini: false } : newBloc(c));
+  }
   else if (a === "bl-del") { if (!armed(b, "Confirmer ?")) return; c.run.blocks.splice(+b.dataset.b, 1); }
-  else if (a === "bl-unit") { const bl = c.run.blocks[+b.dataset.b], u = ["m", "km", "min", "s"]; bl.unit = b.dataset.u || u[(u.indexOf(bl.unit || "m") + 1) % u.length]; }
-  else if (a === "bl-go") { const bl = c.run.blocks[+b.dataset.b]; startRest(parseClock(bl.rec) || 60, "Récup"); return; }
+  else if (a === "bl-unit") { const bl = c.run.blocks[+b.dataset.b], u = ["m", "s", "min"]; bl.unit = b.dataset.u || u[(u.indexOf(bl.unit || "m") + 1) % u.length]; }
+  // Récup : une série de moins. À la dernière, « Terminer » valide sans récup.
+  else if (a === "bl-go" || a === "bl-fini") {
+    const bl = c.run.blocks[+b.dataset.b], n = blocLeft(bl);
+    if (a === "bl-fini" || n <= 1) { bl.fini = true; delete bl.left; changed(); renderSheet(); announcePRs(sessionPRs(c, S.open), S.open); return; }
+    bl.left = n - 1; changed(); renderSheet(); startRest(parseClock(bl.rec) || 60, "Récup"); return;
+  }
+  else if (a === "bl-open") { const bl = c.run.blocks[+b.dataset.b]; bl.fini = false; delete bl.left; }
   else if (a === "wf") { c.wod.format = c.wod.format === b.dataset.v ? "" : b.dataset.v; }
   // Mouvement du WOD : choisi dans la bibliothèque, comme un exercice (recherche, filtres, fiche « ? »).
   else if (a === "mv-add" || a === "mv-pick") {

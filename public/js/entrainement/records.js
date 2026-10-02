@@ -1,6 +1,6 @@
 // Entraînement : records battus en direct et petit message (toast).
 import { exKey } from "./derniere-fois.js";
-import { $, S, discOf, esc, nf, runPace, runSecs } from "../commun/core.js";
+import { $, S, discOf, esc, fmtKm, nf, runKm, runPace, runSecs, sortieKm } from "../commun/core.js";
 import { doneSet } from "../idees/index.js";
 import { isDone } from "../seances/index.js";
 import { celebrate } from "../commun/fete.js";
@@ -36,13 +36,14 @@ export function sessionPRs(c, k) {
       else if (!cur.kg && !h.kg && cur.reps > h.reps) { seen.add(nk); out.push({ ex: name, txt: cur.reps + (ex.hold ? " s" : " reps") }); }
     });
   } else if (disc === "course") {
-    const r = c.run || {}, dist = +r.dist || 0, t = runSecs(r); if (!dist) return out;
-    const prev = Object.keys(S.days).filter(x => x < k && discOf(S.days[x]) === "course" && S.days[x].run && +S.days[x].run.dist);
+    // Distance : sortie ou blocs validés. Allure : seulement « Ma sortie » (distance et durée saisies).
+    const r = c.run || {}, km = runKm(c), dist = sortieKm(c), t = runSecs(r); if (!km) return out;
+    const prev = Object.keys(S.days).filter(x => x < k && discOf(S.days[x]) === "course" && runKm(S.days[x]));
     if (!prev.length) return out;
-    const maxD = Math.max(...prev.map(x => +S.days[x].run.dist));
-    if (dist > maxD) out.push({ ex: "Plus longue sortie", txt: nf.format(dist) + " km" });
+    const maxD = Math.max(...prev.map(x => runKm(S.days[x])));
+    if (km > maxD) out.push({ ex: "Plus longue sortie", txt: fmtKm(km) });
     if (t && dist >= 3) {
-      const paces = prev.map(x => S.days[x].run).filter(p => +p.dist >= 3 && runSecs(p)).map(p => runSecs(p) / +p.dist);
+      const paces = prev.map(x => S.days[x]).filter(p => sortieKm(p) >= 3 && runSecs(p.run)).map(p => runSecs(p.run) / sortieKm(p));
       if (paces.length && t / dist < Math.min(...paces)) out.push({ ex: "Meilleure allure", txt: runPace(r) + " /km" });
     }
   }

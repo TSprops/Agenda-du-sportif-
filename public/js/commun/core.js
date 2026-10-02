@@ -163,7 +163,30 @@ function nameColor(n) {
 function exVolume(ex) { return (ex.sets || []).reduce((a, s) => a + ((+s.reps || 0) * (+s.kg || 0)), 0); }
 function dayVolume(d) { return discOf(d) !== "muscu" ? 0 : (d.exercises || []).reduce((a, e) => a + exVolume(e), 0); }
 function runSecs(r) { return r ? (+r.h || 0) * 3600 + (+r.m || 0) * 60 + (+r.s || 0) : 0; }
-function runKm(d) { return discOf(d) === "course" && d.run ? (+d.run.dist || 0) : 0; }
+// Course, blocs (seuil, fractionné) : distance d'un bloc en km. Mètres et km directs ;
+// une durée (min, s) se convertit avec l'allure cible (« 4:30 »), sinon 0.
+function blocKm(b, runType) {
+  const n = +b.rep || 1, e = +b.eff || 0, u = b.unit || (runType === "seuil" ? "min" : "m");
+  if (u === "m") return n * e / 1000; if (u === "km") return n * e;
+  const p = String(b.pace || "").match(/(\d+)\s*[:']\s*(\d{1,2})/), sec = p ? +p[1] * 60 + +p[2] : 0;
+  return sec ? n * e * (u === "min" ? 60 : 1) / sec : 0;
+}
+// Un bloc compte une fois validé. Les blocs d'avant la validation (sans « fini ») sont déjà réalisés.
+const blocDone = b => b.fini !== false;
+const blocsRun = d => !!d.runType && d.runType !== "ef";
+// Anciennes séances seuil / fractionné : la distance saisie dans « Ma sortie » reste prioritaire.
+const blocsLegacy = r => !(r.blocks || []).some(b => "fini" in b);
+function blocsKm(d) { return (d.run.blocks || []).filter(blocDone).reduce((a, b) => a + blocKm(b, d.runType), 0); }
+// Distance de « Ma sortie » (avec sa durée) : seule base des allures et vitesses.
+function sortieKm(d) { const r = d.run || {}; return blocsRun(d) && !blocsLegacy(r) ? 0 : +r.dist || 0; }
+function runKm(d) {
+  if (discOf(d) !== "course" || !d.run) return 0;
+  const r = d.run, dist = +r.dist || 0;
+  if (!blocsRun(d) || (dist && blocsLegacy(r))) return dist;
+  return Math.round(blocsKm(d) * 1000) / 1000;
+}
+// 800 m, 1 km, 6,4 km
+function fmtKm(km) { const m = Math.round(km * 1000); return m < 1000 ? m + " m" : nf.format(Math.round(m / 100) / 10) + " km"; }
 function fmtDur(sec) { const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = Math.round(sec % 60); return h ? `${h} h ${pad(m)}` : `${m}:${pad(s)}`; }
 function runPace(r) { const t = runSecs(r), dist = +r.dist || 0; if (!t || !dist) return ""; const p = t / dist; return Math.floor(p / 60) + ":" + pad(Math.round(p % 60)); }
 function runCalcHTML(r) {
@@ -221,5 +244,5 @@ export { $, BENCH, CALIS_MOVES, CF_MOVES, DAYS, DEFAULT_SUPPS, DEFAULT_TYPES, DI
   createUserWithEmailAndPassword, dayMeta, dayOf, dayVolume, db, deleteDoc, deleteUser, discOf, doc, documentId, esc, exVolume,
   fmtDate, fmtDur, getDoc, getDocs, getDocsFromCache, hm, isEmpty, key, limit, limitToLast, nameColor, nf, numOr,
   onAuthStateChanged, onSnapshot, orderBy, pad, parse, parseClock, plural, query, reauthenticateWithCredential, runCalcHTML,
-  runKm, runPace, runSecs, sendPasswordResetEmail, sessionsOn, setDoc, show, signInWithEmailAndPassword, signOut, titleOf,
+  blocDone, blocKm, blocsLegacy, blocsRun, fmtKm, runKm, sortieKm, runPace, runSecs, sendPasswordResetEmail, sessionsOn, setDoc, show, signInWithEmailAndPassword, signOut, titleOf,
   todayK, typeOf, updateDoc, where, wodScore, writeBatch };
