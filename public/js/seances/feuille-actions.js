@@ -2,7 +2,7 @@
 import { EMPTY_DAY, changed, closeSheet, flush, forceFlush, intOr, openDay, renderSheet, setDisc } from "./feuille.js";
 import { hyroxSumHTML } from "./fiche-hyrox.js";
 import { addPhotos, dropPhoto, openViewer } from "./photos.js";
-import { activeSet, exStats, fmtRest, isDone, refreshAllSets, refreshSets, restOf } from "./series.js";
+import { activeSet, exStats, finishEx, fmtRest, isDone, jumpToSet, refreshAllSets, refreshSets, restOf, validateSet } from "./series.js";
 import { $, BENCH, S, armed, clone, dayOf, isEmpty, numOr, parseClock, runCalcHTML } from "../commun/core.js";
 import { norm } from "../pages/faq.js";
 import { startIntervals, startRest } from "../commun/timer.js";
@@ -14,6 +14,19 @@ function refreshDepart(i) {
   const sum = $((cd ? "cd" : "dp") + "-sum-" + i); if (sum) sum.innerHTML = departSummary(pl, cd ? "corde" : "rep");
   const g = $((cd ? "cd" : "dp") + "go-" + i); if (g) g.disabled = !pl;
 }
+// Après un changement de séries : chiffres, couleurs, sauvegarde et records.
+function afterSetsMoved(i) {
+  const c = S.cur, ex = c.exercises[i];
+  (ex.sets || []).forEach((st, j) => { const r = $("r-" + i + "-" + j); if (r && r !== document.activeElement) r.value = st.reps ?? ""; });
+  $("st-" + i).textContent = exStats(ex, c.disc); refreshAllSets(); changed();
+  announcePRs(sessionPRs(c, S.open), S.open);
+}
+// Toucher une case (répétitions ou kilos) d'une série plus loin : on passe à cette série.
+$("sheet").addEventListener("focusin", e => {
+  const f = e.target.dataset && e.target.dataset.f; if ((f !== "reps" && f !== "kg") || !S.cur) return;
+  const i = +e.target.dataset.ex, j = +e.target.dataset.s, ex = S.cur.exercises[i];
+  if (ex && jumpToSet(ex, i, j)) afterSetsMoved(i);
+});
 $("sheet").addEventListener("input", e => {
   const f = e.target.dataset.f; if (!f || !S.cur || f === "photo") return;
   const c = S.cur, i = +e.target.dataset.ex, j = +e.target.dataset.s, v = e.target.value, t = v.trim();
@@ -84,7 +97,7 @@ $("sheet").addEventListener("click", e => {
     startIntervals(pl.every, pl.n, ex.name || (a === "cd-go" ? "Corde" : "Départ"), !!pl.dur); return;
   }
   else if (a === "del-ex") { if (!armed(b, "Confirmer")) return; c.exercises.splice(i, 1); }
-  else if (a === "add-set") { const s = c.exercises[i].sets, l = s[s.length - 1]; s.push(l ? { reps: "", kg: l.kg, target: l.reps !== "" && l.reps != null ? l.reps : (l.target ?? "") } : { reps: "", kg: "" }); }
+  else if (a === "add-set") { c.exercises[i].fini = false; const s = c.exercises[i].sets, l = s[s.length - 1]; s.push(l ? { reps: "", kg: l.kg, target: l.reps !== "" && l.reps != null ? l.reps : (l.target ?? "") } : { reps: "", kg: "" }); }
   else if (a === "kg-up") { const kg = +b.dataset.kg, from = +b.dataset.from; c.exercises[i].sets.forEach(st => { if (!st.done && (st.kg === "" || st.kg == null || +st.kg === from)) st.kg = kg; }); }
   else if (a === "del-set") { c.exercises[i].sets.splice(+b.dataset.s, 1); }
   else if (a === "photo") { openViewer(+b.dataset.i); return; }
@@ -95,8 +108,7 @@ $("sheet").addEventListener("click", e => {
   else if (a === "rest-go" || a === "set-go") {
     const ex = c.exercises[i], cur = activeSet(ex, i);
     if (a === "set-go" && cur !== -1) {
-      const st = ex.sets[cur]; st.done = true;
-      if ((st.reps === "" || st.reps == null) && st.target !== undefined && st.target !== "") st.reps = st.target;
+      const st = ex.sets[cur]; validateSet(st);
       const nx = ex.sets.findIndex(x => !isDone(x)); ex.cur = nx === -1 ? null : nx;
       const rIn = $("r-" + i + "-" + cur); if (rIn) rIn.value = st.reps ?? "";
       $("st-" + i).textContent = exStats(ex, c.disc); changed();
@@ -106,8 +118,16 @@ $("sheet").addEventListener("click", e => {
   }
   else if (a === "set-toggle") {
     const ex = c.exercises[i], j = +b.dataset.s, st = ex.sets[j];
-    st.done = !isDone(st); if (!st.done) { ex.cur = j; c.focus = i; }
-    $("st-" + i).textContent = exStats(ex, c.disc); refreshAllSets(); changed(); return;
+    // Exercice fini : toucher un numéro le rouvre.
+    if (ex.fini) { ex.fini = false; if (!isDone(st)) ex.cur = j; c.focus = i; refreshAllSets(); changed(); return; }
+    // Une série plus loin que celle en cours : les précédentes se valident, sans repos.
+    if (!isDone(st) && j !== activeSet(ex, i)) jumpToSet(ex, i, j);
+    else { st.done = !isDone(st); if (!st.done) { ex.cur = j; c.focus = i; } }
+    afterSetsMoved(i); return;
+  }
+  else if (a === "ex-fini") {
+    const ex = c.exercises[i]; finishEx(ex); if (c.focus === i) c.focus = null;
+    afterSetsMoved(i); $("fini-" + i)?.closest(".ex")?.nextElementSibling?.scrollIntoView({ block: "start", behavior: "smooth" }); return;
   }
   else if (a === "rpe") { const v = +b.dataset.v; c.exercises[i].rpe = c.exercises[i].rpe === v ? 0 : v; }
   else if (a === "srpe") { const v = +b.dataset.v; c.rpe = c.rpe === v ? 0 : v; }

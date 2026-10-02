@@ -30,7 +30,6 @@ export function lastComparable(c, before) {
   const same = k => disc === "cordes" ? dayMeta(S.days[k]).disc === "cordes" : discOf(S.days[k]) === disc && (disc === "calis" || S.days[k].typeId === c.typeId);
   return Object.keys(S.days).filter(k => k < before && same(k) && (S.days[k].exercises || []).length).sort().pop();
 }
-// Progression des séries : une série est « faite » si elle est cochée ou si ses répétitions sont remplies.
 // Une série n'est « faite » que si on la valide (bouton « Série finie » ou toucher sur son numéro).
 // Pour les séances des jours passés notées avant cette règle, une série remplie compte comme faite.
 export function isDone(st) {
@@ -40,7 +39,7 @@ export function isDone(st) {
 }
 export const resting = i => !!(RT.tick && RT.ex === i && RT.day === S.open);
 export function activeSet(ex, i) {
-  if (resting(i)) return -1;
+  if (resting(i) || ex.fini) return -1;
   const sets = ex.sets || [];
   if (typeof ex.cur === "number" && sets[ex.cur] && !isDone(sets[ex.cur])) return ex.cur;
   return sets.findIndex(st => !isDone(st));
@@ -49,10 +48,33 @@ export function activeSet(ex, i) {
 function focusEx() {
   const L = (S.cur && S.cur.exercises) || [];
   if (RT.tick && RT.day === S.open && RT.ex != null && L[RT.ex]) return RT.ex;
-  if (typeof S.cur.focus === "number" && L[S.cur.focus] && (L[S.cur.focus].sets || []).some(st => !isDone(st))) return S.cur.focus;
-  return L.findIndex(ex => (ex.sets || []).some(st => !isDone(st)));
+  const open = ex => !ex.fini && (ex.sets || []).some(st => !isDone(st));
+  if (typeof S.cur.focus === "number" && L[S.cur.focus] && open(L[S.cur.focus])) return S.cur.focus;
+  return L.findIndex(open);
 }
+// Valide une série : sans répétitions saisies, on reprend l'objectif.
+export function validateSet(st) {
+  st.done = true;
+  if ((st.reps === "" || st.reps == null) && st.target !== undefined && st.target !== "") st.reps = st.target;
+}
+// Passer à la série j (toucher son numéro ou une de ses cases) : les séries d'avant se valident
+// toutes seules, sans lancer de repos. Renvoie vrai si quelque chose a changé.
+export function jumpToSet(ex, i, j) {
+  const sets = ex.sets || []; if (!sets[j] || isDone(sets[j]) || ex.fini) return false;
+  let moved = false;
+  sets.forEach((st, k) => { if (k < j && !isDone(st)) { validateSet(st); moved = true; } });
+  if (ex.cur !== j) { ex.cur = j; moved = true; }
+  if (S.cur.focus !== i) { S.cur.focus = i; moved = true; }
+  return moved;
+}
+// « Exercice fini » : les séries remplies sont validées, l'exercice repasse au gris.
+export function finishEx(ex) {
+  (ex.sets || []).forEach(st => { if (!isDone(st) && st.reps !== "" && st.reps != null) validateSet(st); });
+  ex.fini = true; ex.cur = null;
+}
+export const canFinish = ex => !ex.fini && (ex.sets || []).length > 0;
 export function setState(ex, j, i) {
+  if (ex.fini) return "";
   if (isDone(ex.sets[j])) return "done";
   if (j === activeSet(ex, i) && i === focusEx()) return "cur";
   if (resting(i) && j === (ex.sets || []).findIndex(st => !isDone(st))) return "next";
@@ -60,6 +82,7 @@ export function setState(ex, j, i) {
 }
 export function setNowText(ex, i) {
   const sets = ex.sets || [], n = sets.length; if (!n) return "";
+  if (ex.fini) return `<span class="ok">✓ Toutes les séries sont faites</span>`;
   if (resting(i)) { const nx = sets.findIndex(st => !isDone(st)); return nx === -1 ? `<span class="ok">✓ Dernière série faite · repos</span>` : `⏸ Repos · série <b>${nx + 1}</b> ensuite`; }
   const a = activeSet(ex, i);
   if (a === -1) return `<span class="ok">✓ Toutes les séries sont faites</span>`;
@@ -75,7 +98,8 @@ export function refreshSets(i) {
   const ex = S.cur && S.cur.exercises && S.cur.exercises[i]; if (!ex) return;
   ex.sets.forEach((_, j) => { const r = $("row-" + i + "-" + j); if (r) r.className = setState(ex, j, i); });
   const sn = $("sn-" + i); if (sn) sn.innerHTML = setNowText(ex, i);
-  const g = $("go-" + i); if (g) { g.textContent = goLabel(ex, i); g.disabled = resting(i); }
+  const g = $("go-" + i); if (g) { g.textContent = goLabel(ex, i); g.disabled = resting(i); g.hidden = !!ex.fini; }
+  const f = $("fini-" + i); if (f) f.hidden = !canFinish(ex);
 }
 // Fin du repos : la série suivante s'allume et l'écran défile jusqu'à elle (ou jusqu'à l'exercice suivant).
 export function advanceAfterRest(i) {

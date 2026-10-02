@@ -173,6 +173,22 @@ module.exports = async function appTests(t) {
     t("tutoriels remis à zéro (?reset-tutoriels)", await tourState(), "1/5,Suivant,hidden");
     await A.click("#tourSkip"); await A.evaluate(() => localStorage.setItem("tours-off", "1"));
 
+    // Séries : toucher une série plus loin (numéro ou case vide) valide les précédentes, sans repos ; « Exercice fini » remet au gris.
+    await home(A); await A.click("[data-tab=seances]"); await A.click("[data-gonew]"); await A.click("#sheet [data-a=disc][data-id=muscu]"); await A.click("#sheet [data-a=type][data-id=push]");
+    await A.click("#sheet [data-a=add-ex]"); await A.fill("#libQ", "couch"); await A.waitForTimeout(200); await A.click('#libList [data-lib="Développé couché"]');
+    while ((await A.$$("#sheet tr[id^=row-0-]")).length < 3) await A.click("#sheet [data-a=add-set][data-ex='0']");
+    const rows = () => A.$$eval("#sheet tr[id^=row-0-]", x => x.slice(0, 3).map(e => e.className || "-").join());
+    t("séries : « Exercice fini » proposé dès le début", await A.isVisible("#fini-0"), true);
+    await A.click('#sheet [data-a=set-toggle][data-ex="0"][data-s="1"]');
+    t("séries : toucher la série 2 valide la 1, sans repos", (await rows()) + "|" + (await A.isVisible("#restTimer")), "done,cur,-|false");
+    await A.click("#r-0-2");
+    t("séries : toucher une case vide de la série 3 valide la 2", await rows(), "done,done,cur");
+    await A.fill("#r-0-2", "6"); await A.click("#fini-0");
+    t("séries : exercice fini, tout au gris, phrase gardée", (await rows()) + "|" + (await A.textContent("#sn-0")) + "|" + (await A.isVisible("#go-0")), "-,-,-|✓ Toutes les séries sont faites|false");
+    await A.click('#sheet [data-a=set-toggle][data-ex="0"][data-s="0"]');
+    t("séries : toucher un numéro rouvre l'exercice", (await A.isVisible("#fini-0")) + "|" + (await A.isVisible("#go-0")), "true|true");
+    await A.click("#sheet [data-a=close]");
+
     // Course : supprimer un bloc (fractionné puis seuil), avec confirmation ; la séance garde les bons blocs.
     await home(A); await A.click("[data-tab=seances]"); await A.click("[data-gonew]"); await A.click("#sheet [data-a=disc][data-id=course]");
     await A.click("#sheet [data-a=runtype][data-id=frac]"); await A.click("#sheet [data-a=bl-add]"); await A.click("#sheet [data-a=bl-add]");

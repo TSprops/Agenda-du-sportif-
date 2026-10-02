@@ -31,7 +31,7 @@ export async function loadFeed(force) {
   if (F && !force && Date.now() - F.at < 180000) { renderFeed(); return; }
   SOC.feed = { ...(F || { by: {}, items: [] }), loading: true }; renderFeed();
   const uids = acceptedFriends(), res = await Promise.all(uids.map(loadFeedFor)), by = {};
-  uids.forEach((u, i) => { by[u] = res[i]; dirOf(u); });
+  uids.forEach((u, i) => { by[u] = res[i]; dirOf(u, true); });
   SOC.feed = { by, at: Date.now(), loading: false };
   renderFeed();
 }

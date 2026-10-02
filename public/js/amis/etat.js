@@ -17,18 +17,24 @@ export const pairId = (a, b) => pairOf(a, b).join("_");
 export const SOC = { friends: {}, chats: {}, chatSubs: {}, dir: {}, results: null, searchMsg: "", friendUid: null, friendData: null, chatUid: null, chatUnsub: null, msgs: [], reportMid: null, myReacts: [], menu: false };
 export const otherOf = f => f.users[0] === S.uid ? f.users[1] : f.users[0];
 function makeCode(pseudo) { const base = norm(pseudo).replace(/[^a-z]/g, "").toUpperCase().slice(0, 6) || "SPORT"; return base + "-" + (1000 + Math.floor(Math.random() * 9000)); }
-export async function dirOf(uid) {
-  if (SOC.dir[uid]) return SOC.dir[uid];
+// Fiche publique d'un utilisateur. « fresh » la relit : si la photo ou le pseudo ont changé, l'écran se met à jour.
+export async function dirOf(uid, fresh) {
+  const old = SOC.dir[uid];
+  if (old && !fresh) return old;
   try { const s = await getDoc(doc(db, "directory", uid)); SOC.dir[uid] = s.exists() ? s.data() : { uid, pseudo: "Utilisateur" }; }
-  catch (e) { SOC.dir[uid] = { uid, pseudo: "Utilisateur" }; }
-  return SOC.dir[uid];
+  catch (e) { if (!old) SOC.dir[uid] = { uid, pseudo: "Utilisateur" }; }
+  const d = SOC.dir[uid];
+  if (old && (old.photo !== d.photo || old.pseudo !== d.pseudo)) refreshSocial();
+  return d;
 }
 // Fiche publique (annuaire) + ce que voient les amis (share), mises à jour à chaque connexion et modification.
 export async function ensureSocialProfile() {
   if (!S.profile || S.banned) return;
   if (!S.profile.friendCode) await saveProfile({ friendCode: makeCode(S.profile.pseudo) }).catch(() => {});
   const p = S.profile;
-  setDoc(doc(db, "directory", S.uid), { uid: S.uid, pseudo: p.pseudo, pseudoLower: norm(p.pseudo).trim(), code: p.friendCode, photo: p.photo || null, objectif: p.objectif || "" }).catch(() => {});
+  const entry = { uid: S.uid, pseudo: p.pseudo, pseudoLower: norm(p.pseudo).trim(), code: p.friendCode, photo: p.photo || null, objectif: p.objectif || "" };
+  SOC.dir[S.uid] = entry;
+  setDoc(doc(db, "directory", S.uid), entry).catch(() => {});
   syncShare();
 }
 function recordsSummary() {
@@ -95,4 +101,5 @@ export function refreshSocial() {
   if (S.screen === "messages") renderMessages();
   if (S.screen === "social") renderSocial();
 }
-export const who = (uid, size) => { const d = SOC.dir[uid] || { pseudo: "…" }; return { d, av: avatarHTML({ pseudo: d.pseudo, photo: d.photo }, size || 44) }; };
+// Pour soi, toujours le profil actuel : une nouvelle photo apparaît partout, même sur les anciennes séances.
+export const who = (uid, size) => { const d = uid === S.uid && S.profile ? S.profile : SOC.dir[uid] || { pseudo: "…" }; return { d, av: avatarHTML({ pseudo: d.pseudo, photo: d.photo }, size || 44) }; };

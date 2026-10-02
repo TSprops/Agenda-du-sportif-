@@ -1,5 +1,5 @@
 // Séances, fiche du jour : exercices de musculation et de calisthénie, photos, ressenti, choix de l'activité.
-import { effortLabel, exStats, fmtRest, goLabel, lastComparable, restOf, resting, rpeColor, rpeLabel, setNowText, setState } from "./series.js";
+import { canFinish, effortLabel, exStats, fmtRest, goLabel, lastComparable, restOf, resting, rpeColor, rpeLabel, setNowText, setState } from "./series.js";
 import { howBtnHTML } from "../comment-faire/index.js";
 import { CALIS_MOVES, DISC, MONTHS, S, esc, pad, parse, typeOf } from "../commun/core.js";
 import { calisPlan, departFields, departSummary, kgSuggestHTML, lastLineHTML } from "../entrainement/index.js";
@@ -15,9 +15,10 @@ function exHTML(ex, i, disc) {
   ${dep ? departsCalisHTML(ex, i) : `<div class="ex-stats" id="st-${i}">${exStats(ex, disc)}</div>
   <div class="set-now" id="sn-${i}">${setNowText(ex, i)}</div>
   <table class="sets"><thead><tr><th style="text-align:center">Série</th><th>${col1}</th><th>${col2}</th><th></th></tr></thead><tbody>
-  ${(ex.sets || []).map((s, j) => `<tr id="row-${i}-${j}" class="${setState(ex, j, i)}"><td class="n"><button class="set-n" data-a="set-toggle" data-ex="${i}" data-s="${j}" aria-label="Cocher ou décocher la série ${j + 1}">${j + 1}</button></td><td><input id="r-${i}-${j}" class="num" inputmode="numeric" data-f="reps" data-ex="${i}" data-s="${j}" value="${esc(s.reps)}" placeholder="${s.target !== undefined && s.target !== "" ? esc(s.target) : "–"}" aria-label="${col1} série ${j + 1}"></td><td><input id="k-${i}-${j}" class="num" inputmode="decimal" data-f="kg" data-ex="${i}" data-s="${j}" value="${esc(s.kg)}" placeholder="${calis ? "0" : "–"}" aria-label="${col2} série ${j + 1}"></td><td class="x"><button class="icon-btn" data-a="del-set" data-ex="${i}" data-s="${j}" aria-label="Supprimer la série ${j + 1}">−</button></td></tr>`).join("")}
+  ${(ex.sets || []).map((s, j) => `<tr id="row-${i}-${j}" class="${setState(ex, j, i)}"><td class="n"><button class="set-n" data-a="set-toggle" data-ex="${i}" data-s="${j}" aria-label="Passer à la série ${j + 1}, ou la cocher">${j + 1}</button></td><td><input id="r-${i}-${j}" class="num" inputmode="numeric" data-f="reps" data-ex="${i}" data-s="${j}" value="${esc(s.reps)}" placeholder="${s.target !== undefined && s.target !== "" ? esc(s.target) : "–"}" aria-label="${col1} série ${j + 1}"></td><td><input id="k-${i}-${j}" class="num" inputmode="decimal" data-f="kg" data-ex="${i}" data-s="${j}" value="${esc(s.kg)}" placeholder="${calis ? "0" : "–"}" aria-label="${col2} série ${j + 1}"></td><td class="x"><button class="icon-btn" data-a="del-set" data-ex="${i}" data-s="${j}" aria-label="Supprimer la série ${j + 1}">−</button></td></tr>`).join("")}
   </tbody></table>
-  <button class="btn primary set-go" id="go-${i}" data-a="set-go" data-ex="${i}"${resting(i) ? " disabled" : ""}>${goLabel(ex, i)}</button>
+  <button class="btn primary set-go" id="go-${i}" data-a="set-go" data-ex="${i}"${resting(i) ? " disabled" : ""}${ex.fini ? " hidden" : ""}>${goLabel(ex, i)}</button>
+  <button class="btn ex-fini" id="fini-${i}" data-a="ex-fini" data-ex="${i}"${canFinish(ex) ? "" : " hidden"}>✓ Exercice fini</button>
   <button class="add-set" data-a="add-set" data-ex="${i}">+ Ajouter une série</button>
   <div class="rest-row"><div class="lbl">Repos entre les séries</div><div class="rest-ctl"><button class="step" data-a="rest-dec" data-ex="${i}" aria-label="Moins de repos">−</button><span class="rest-val" id="rv-${i}">${fmtRest(restOf(ex))}</span><button class="step" data-a="rest-inc" data-ex="${i}" aria-label="Plus de repos">+</button></div></div>`}
   <div><div class="lbl">Difficulté (RPE) <em>${r ? r + "/10 · " : ""}${rpeLabel(r)}</em></div>
