@@ -8,7 +8,7 @@ import {
   arrayRemove, documentId, getDocsFromCache
 } from "../../vendor/firebase.js";
 import { firebaseConfig } from "../../firebase-config.js";
-import { MUSCLES, GROUPS, EQUIP, EXERCISES, KEYWORDS, PROGRAMS } from "../../data.js";
+import { CF_LIB, MUSCLES, GROUPS, EQUIP, EXERCISES, KEYWORDS, PROGRAMS } from "../../data.js";
 /* ============================================================
    Constantes
    ============================================================ */
@@ -119,9 +119,7 @@ const WOD_HINTS = {
 };
 const CALIS_MOVES = [["Tractions"], ["Dips"], ["Pompes"], ["Muscle-up"], ["Squats"], ["Pistol squat"], ["Tractions australiennes"], ["Handstand push-up"],
   ["Front lever", 1], ["Back lever", 1], ["Planche", 1], ["Handstand", 1], ["L-sit", 1], ["Human flag", 1], ["Gainage", 1]];
-const CF_MOVES = ["Thrusters", "Tractions", "Burpees", "Wall balls", "Kettlebell swings", "Box jumps", "Double unders", "Toes to bar", "Muscle-ups",
-  "Handstand push-ups", "Clean", "Power clean", "Snatch", "Power snatch", "Clean & jerk", "Soulevé de terre", "Front squat", "Back squat",
-  "Overhead squat", "Push press", "Rameur (m)", "Course (m)", "Air bike (cal)", "Sit-ups", "Pompes", "Air squats", "Lunges", "Rope climb"];
+const CF_MOVES = CF_LIB.map(x => x[0]);
 // WOD de référence (« Girls » et « Hero WODs ») : charges homme / femme.
 const BENCH = [
   { id: "fran", name: "Fran", type: "time", desc: "21-15-9 : Thrusters (43/29 kg), Tractions",

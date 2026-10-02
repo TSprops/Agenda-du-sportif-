@@ -26,8 +26,8 @@ $("sheet").addEventListener("input", e => {
     refreshDepart(i);
   }
   else if (f === "reps" || f === "kg") { c.exercises[i].sets[j][f] = t === "" ? "" : numOr(v); $("st-" + i).textContent = exStats(c.exercises[i], c.disc); refreshAllSets(); }
-  else if (f === "hx-amt" || f === "hx-kg" || f === "hx-time") {
-    const ex = c.exercises[i], fld = f.slice(3); ex[fld] = fld === "time" ? v : t === "" ? "" : fld === "amt" ? intOr(v) : numOr(v);
+  else if (f === "hx-amt" || f === "hx-kg" || f === "hx-cal" || f === "hx-time") {
+    const ex = c.exercises[i], fld = f.slice(3); ex[fld] = fld === "time" ? v : t === "" ? "" : fld === "amt" || fld === "cal" ? intOr(v) : numOr(v);
     const sm = $("hxSum"); if (sm) sm.innerHTML = hyroxSumHTML(c);
   }
   else if (f.startsWith("run-")) {
@@ -113,10 +113,19 @@ $("sheet").addEventListener("click", e => {
   else if (a === "srpe") { const v = +b.dataset.v; c.rpe = c.rpe === v ? 0 : v; }
   else if (a === "bl-add") { const bl = c.run.blocks, l = bl[bl.length - 1]; bl.push(l ? { ...l } : { rep: "", eff: "", unit: c.runType === "seuil" ? "min" : "m", pace: "", rec: "" }); }
   else if (a === "bl-del") { if (!armed(b, "Confirmer ?")) return; c.run.blocks.splice(+b.dataset.b, 1); }
-  else if (a === "bl-unit") { const bl = c.run.blocks[+b.dataset.b], u = ["m", "km", "min", "s"]; bl.unit = u[(u.indexOf(bl.unit || "m") + 1) % u.length]; }
+  else if (a === "bl-unit") { const bl = c.run.blocks[+b.dataset.b], u = ["m", "km", "min", "s"]; bl.unit = b.dataset.u || u[(u.indexOf(bl.unit || "m") + 1) % u.length]; }
   else if (a === "bl-go") { const bl = c.run.blocks[+b.dataset.b]; startRest(parseClock(bl.rec) || 60, "Récup"); return; }
   else if (a === "wf") { c.wod.format = c.wod.format === b.dataset.v ? "" : b.dataset.v; }
-  else if (a === "mv-add") { (c.wod.moves = c.wod.moves || []).push({ reps: "", name: "", kg: "" }); changed(); renderSheet(); const n = $("mv-name-" + (c.wod.moves.length - 1)); n && n.focus(); return; }
+  // Mouvement du WOD : choisi dans la bibliothèque, comme un exercice (recherche, filtres, fiche « ? »).
+  else if (a === "mv-add" || a === "mv-pick") {
+    const j = a === "mv-pick" ? +b.dataset.m : -1;
+    openLib(name => {
+      const mv = c.wod.moves = c.wod.moves || [];
+      if (j >= 0 && mv[j]) mv[j].name = name; else mv.push({ reps: "", name, kg: "" });
+      changed(); renderSheet(); const r = $("mv-reps-" + (j >= 0 ? j : mv.length - 1)); r && !r.value && r.focus();
+    }, "crossfit");
+    return;
+  }
   else if (a === "mv-del") { c.wod.moves.splice(+b.dataset.m, 1); }
   else if (a === "rx") { const v = b.dataset.v === "rx"; c.wod.rx = c.wod.rx === v ? null : v; }
   else if (a === "copy") {

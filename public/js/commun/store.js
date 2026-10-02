@@ -87,6 +87,7 @@ function go(v) {
   if (v === "creatine" && !S.crView) { const t = new Date(); S.crView = new Date(t.getFullYear(), t.getMonth(), 1); }
   if (v === "contactform") { $("ctForm").hidden = false; $("ctDone").hidden = true; $("ctErr").hidden = true; renderObjets(); }
   S.screen = v;
+  window.scrollTo(0, 0); // avant de changer de page : sur iPhone, une page qui raccourcit en étant défilée décale la barre du bas
   document.querySelectorAll(".view").forEach(el => { el.hidden = el.id !== "v-" + v; });
   RENDER[v] && RENDER[v]();
   window.scrollTo(0, 0);
