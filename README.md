@@ -127,7 +127,7 @@ Réglage à faire une seule fois :
    puis ajouter au même compte les rôles « Administrateur Cloud Functions », « Administrateur Cloud Run », « Utilisateur du compte de service »,
    « Administrateur Artifact Registry », « Éditeur Cloud Build », « Administrateur Eventarc » et, pour la première mise en ligne, « Administrateur IAM de projet ».
    La région des fonctions (`europe-west1`, dans `functions/index.js` et `public/js/commun/core.js`) doit être compatible avec l’emplacement de la base Firestore.
-6. Une seule fois, après la première mise en ligne : `node scripts/remplir-recherche.cjs` (avec la clé du compte de service) pour ajouter les comptes déjà inscrits à la recherche.
+6. Une seule fois, après la première mise en ligne : GitHub › Actions › « Remplir la recherche » › « Run workflow » (ou `node scripts/remplir-recherche.cjs` avec la clé du compte de service) pour ajouter les comptes déjà inscrits à la recherche.
 
 Pendant la transition, l'ancienne adresse GitHub Pages reste en ligne ; passer `window.MOVED` à `true`
 dans `public/index.html` y affiche la page « L'app déménage ».
