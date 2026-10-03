@@ -3,8 +3,10 @@
 // (Ensuite, le serveur les tient à jour tout seul.)
 //   npm ci --prefix functions
 //   GOOGLE_APPLICATION_CREDENTIALS=cle-compte-de-service.json node scripts/remplir-recherche.cjs
-const { initializeApp } = require("../functions/node_modules/firebase-admin/app");
-const { getFirestore } = require("../functions/node_modules/firebase-admin/firestore");
+// Les modules viennent de functions/ (même firebase-admin que le serveur).
+const requireFonctions = require("module").createRequire(require("path").join(__dirname, "..", "functions", "package.json"));
+const { initializeApp } = requireFonctions("firebase-admin/app");
+const { getFirestore } = requireFonctions("firebase-admin/firestore");
 initializeApp({ projectId: process.env.GCLOUD_PROJECT || "agenda-du-sportif" });
 const R = require("../functions/recherche.js");
 
