@@ -122,8 +122,10 @@ Réglage à faire une seule fois :
 2. Paramètres du projet › Comptes de service › « Générer une nouvelle clé privée ».
 3. Google Cloud › IAM : donner au compte `firebase-adminsdk-…` les rôles « Administrateur Firebase » et « Consommateur Service Usage ».
 4. GitHub › Settings › Secrets and variables › Actions › secret `FIREBASE_SERVICE_ACCOUNT` = contenu du fichier JSON.
-5. Fonctions serveur (recherche d’utilisateurs) : passer le projet au forfait **Blaze**, puis ajouter au même compte les rôles
-   « Administrateur Cloud Functions », « Utilisateur du compte de service », « Administrateur Artifact Registry », « Éditeur Cloud Build » et « Administrateur Eventarc ».
+5. Fonctions serveur (recherche d’utilisateurs) : passer le projet au forfait **Blaze**, activer les API
+   (https://console.cloud.google.com/flows/enableapi?apiid=cloudfunctions.googleapis.com,cloudbuild.googleapis.com,artifactregistry.googleapis.com,run.googleapis.com,eventarc.googleapis.com,pubsub.googleapis.com&project=agenda-du-sportif),
+   puis ajouter au même compte les rôles « Administrateur Cloud Functions », « Administrateur Cloud Run », « Utilisateur du compte de service »,
+   « Administrateur Artifact Registry », « Éditeur Cloud Build », « Administrateur Eventarc » et, pour la première mise en ligne, « Administrateur IAM de projet ».
    La région des fonctions (`europe-west1`, dans `functions/index.js` et `public/js/commun/core.js`) doit être compatible avec l’emplacement de la base Firestore.
 6. Une seule fois, après la première mise en ligne : `node scripts/remplir-recherche.cjs` (avec la clé du compte de service) pour ajouter les comptes déjà inscrits à la recherche.
 
