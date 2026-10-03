@@ -15,7 +15,7 @@ import { go, saveProfile } from "../commun/store.js";
 export const REACTS = [["muscle", "💪"], ["fire", "🔥"], ["clap", "👏"]];
 export const pairOf = (a, b) => a < b ? [a, b] : [b, a];
 export const pairId = (a, b) => pairOf(a, b).join("_");
-export const SOC = { friends: {}, chats: {}, chatSubs: {}, dir: {}, results: null, searchMsg: "", friendUid: null, friendData: null, chatUid: null, chatUnsub: null, msgs: [], reportMid: null, myReacts: [], menu: false };
+export const SOC = { friends: {}, chats: {}, chatSubs: {}, dir: {}, friendUid: null, friendData: null, chatUid: null, chatUnsub: null, msgs: [], reportMid: null, myReacts: [], menu: false };
 export const otherOf = f => f.users[0] === S.uid ? f.users[1] : f.users[0];
 function makeCode(pseudo) { const base = norm(pseudo).replace(/[^a-z]/g, "").toUpperCase().slice(0, 6) || "SPORT"; return base + "-" + (1000 + Math.floor(Math.random() * 9000)); }
 // Fiche publique d'un utilisateur. « fresh » la relit : si la photo ou le pseudo ont changé, l'écran se met à jour.
@@ -90,7 +90,7 @@ export function subscribeSocial() {
   S.unsubs.push(onSnapshot(collection(db, "reacts", S.uid, "items"), snap => { SOC.myReacts = snap.docs.map(x => x.data()); SOC.myReacts.forEach(r => dirOf(r.from)); refreshSocial(); if (S.open) { const el = $("myReacts"); if (el) el.innerHTML = myReactsHTML(S.open); } }, () => {}));
   subscribeChallenges();
 }
-export function resetSocial() { Object.assign(SOC, { friends: {}, chats: {}, chatSubs: {}, dir: {}, results: null, searchMsg: "", friendUid: null, friendData: null, chatUid: null, msgs: [], myReacts: [], menu: false, myComments: [], challenges: [], feed: null, shares: {}, sharesAt: 0, newCh: null, openCmt: null, feedOpen: null }); if (SOC.chatUnsub) { SOC.chatUnsub(); SOC.chatUnsub = null; } }
+export function resetSocial() { Object.assign(SOC, { friends: {}, chats: {}, chatSubs: {}, dir: {}, friendUid: null, friendData: null, chatUid: null, msgs: [], myReacts: [], menu: false, myComments: [], challenges: [], feed: null, shares: {}, sharesAt: 0, newCh: null, openCmt: null, feedOpen: null }); if (SOC.chatUnsub) { SOC.chatUnsub(); SOC.chatUnsub = null; } }
 export const unreadOf = pid => { const c = SOC.chats[pid]; return !!(c && c.last && c.last.from !== S.uid && c.last.at > ((c.read || {})[S.uid] || 0)); };
 export function socialCounts() {
   const F = Object.entries(SOC.friends);

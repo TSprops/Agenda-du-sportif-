@@ -56,6 +56,7 @@ function fieldsHTML(px, p) {
   return `<div style="display:flex;flex-direction:column;gap:12px">
   <label class="avatar-pick" for="${px}-photo"><span id="${px}-av">${avatarHTML(p, 64)}</span><span><b>${t("profil.champs.photo")}</b><span class="hint">${t(p.photo ? "profil.champs.photoChanger" : "profil.champs.photoAjouter")}</span></span><input id="${px}-photo" type="file" accept="image/*" data-px="${px}"></label>
   <label class="field"><span>${t("profil.champs.pseudo")}</span><input id="${px}-pseudo" value="${esc(p.pseudo)}" placeholder="${esc(t("profil.champs.pseudoExemple"))}" required maxlength="30"></label>
+  <label class="field"><span>${t("profil.champs.nomAffiche")}</span><input id="${px}-nomAffiche" value="${esc(p.nomAffiche)}" placeholder="${esc(t("profil.champs.nomAfficheExemple"))}" maxlength="30"><small class="hint">${t("profil.champs.nomAfficheAide")}</small></label>
   <div class="grid2"><label class="field"><span>${t("profil.champs.prenom")}</span><input id="${px}-prenom" value="${esc(p.prenom)}" maxlength="40"></label><label class="field"><span>${t("profil.champs.nom")}</span><input id="${px}-nom" value="${esc(p.nom)}" maxlength="40"></label></div>
   <div class="grid3"><label class="field"><span>${t("profil.champs.age")}</span><input id="${px}-age" inputmode="numeric" value="${esc(p.age)}" placeholder="${esc(t("profil.champs.ans"))}"></label><label class="field"><span>${t("profil.champs.taille")}</span><input id="${px}-taille" inputmode="numeric" value="${esc(p.taille)}" placeholder="cm"></label><label class="field"><span>${t("profil.champs.poids")}</span><input id="${px}-poids" inputmode="decimal" value="${esc(p.poids)}" placeholder="kg"></label></div>
   <div class="field"><span>${t("profil.champs.objectif")}</span><div class="chips" id="${px}-obj">${OBJECTIFS.map(o => `<button type="button" class="chip" data-obj="${esc(o)}" aria-pressed="${p.objectif === o}">${esc(valeur("valeurs.objectifs", o))}</button>`).join("")}</div></div>
@@ -64,7 +65,7 @@ function fieldsHTML(px, p) {
 function readFields(px) {
   const v = id => $(px + "-" + id).value.trim();
   const sel = document.querySelector(`#${px}-obj [aria-pressed="true"]`);
-  const out = { pseudo: v("pseudo"), prenom: v("prenom"), nom: v("nom"), age: numOr(v("age")), taille: numOr(v("taille")), poids: numOr(v("poids")), objectif: sel ? sel.dataset.obj : "" };
+  const out = { pseudo: v("pseudo"), nomAffiche: v("nomAffiche"), prenom: v("prenom"), nom: v("nom"), age: numOr(v("age")), taille: numOr(v("taille")), poids: numOr(v("poids")), objectif: sel ? sel.dataset.obj : "" };
   if (S.formPhoto[px] !== undefined) out.photo = S.formPhoto[px];
   return out;
 }
@@ -132,7 +133,14 @@ function renderProfile() {
   $("pfEmail").textContent = S.email ? t("profil.connecteAvec", { email: S.email }) : t("profil.connecteAvecEmail");
   $("pwMsg").hidden = true; $("delForm").hidden = true; $("delAccount").hidden = false; $("delErr").hidden = true;
   $("adminBtn").hidden = !S.admin;
+  $("hideSearch").setAttribute("aria-pressed", String(!!(S.profile && S.profile.masquerRecherche)));
 }
+// Confidentialité : ne pas apparaître dans la recherche d'utilisateurs (le code ami et le QR code marchent toujours).
+$("hideSearch").onclick = () => {
+  const masque = !(S.profile && S.profile.masquerRecherche);
+  $("hideSearch").setAttribute("aria-pressed", String(masque));
+  saveProfile({ masquerRecherche: masque }).catch(() => { $("hideSearch").setAttribute("aria-pressed", String(!masque)); });
+};
 $("pfForm").addEventListener("submit", e => {
   e.preventDefault();
   const f = readFields("pf");

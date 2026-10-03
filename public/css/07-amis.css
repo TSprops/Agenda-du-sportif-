@@ -10,6 +10,16 @@
 .search-row input{flex:1;min-width:0;height:46px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface-2);padding-inline:12px;font-size:16px}
 .search-row input:focus{outline:none;border-color:var(--red)}
 .search-row .btn{height:46px}
+/* Recherche d'utilisateurs : suggestions sous la barre */
+#fsInput{width:100%;height:46px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface-2);padding-inline:12px;font-size:16px}
+#fsInput:focus{outline:none;border-color:var(--red)}
+.fs-sugg:empty{display:none}
+.fs-sugg .hint{margin:4px 2px}
+.fs-load{display:flex;align-items:center;gap:8px}
+.fs-spin{width:14px;height:14px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--red);animation:fsSpin .7s linear infinite}
+@keyframes fsSpin{to{transform:rotate(360deg)}}
+.fs-list.stale{opacity:.5}
+@media (prefers-reduced-motion:reduce){.fs-spin{animation-duration:2s}}
 .btn.sm{height:36px;padding-inline:12px;font-size:13.5px;flex:none}
 .frow{display:flex;align-items:center;gap:10px;padding-block:10px;border-bottom:1px solid var(--line)}
 .frow:last-child{border-bottom:0}

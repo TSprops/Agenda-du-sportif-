@@ -893,12 +893,9 @@
     "partagees": "✓ My workouts are shared",
     "nonPartagees": "My workouts aren’t shared",
     "ajouter": "Add a friend",
-    "codeOuPseudo": "Friend code or username",
-    "chercher": "Search",
     "scanner": "📷 Scan a QR code",
     "demandeEnvoyee": "Request sent",
     "accepter": "Accept",
-    "bloque": "Blocked",
     "demandesRecues": "Requests received · {n}",
     "veutAjouter": "wants to add you as a friend",
     "refuser": "Decline",
@@ -909,10 +906,6 @@
     "enAttente": "pending",
     "bloquees": "Blocked people",
     "debloquer": "Unblock",
-    "recherche": "Searching…",
-    "deuxLettres": "Type at least 2 letters.",
-    "aucunResultat": "No results. Check the code or username.",
-    "rechercheEchec": "Search failed. Check your connection.",
     "demandeImpossible": "Couldn’t send the request.",
     "kmEn": "{km} in {duree}",
     "score": "Score: {score}",
@@ -926,6 +919,16 @@
     "signalementObjectif": "goal: {objectif}",
     "signalementPhoto": "with photo",
     "deTesAmis": "from your friends"
+  },
+  "recherche": {
+    "placeholder": "Username, name or friend code",
+    "chargement": "Searching…",
+    "aucun": "No users found",
+    "deuxCaracteres": "Type at least 2 characters.",
+    "limite": "Too many searches at once. Try again in a minute.",
+    "erreur": "Search failed. Check your connection.",
+    "dejaAmi": "Already friends",
+    "ajouterAria": "Add {pseudo} as a friend"
   },
   "partage": {
     "titre": "Share my profile",
@@ -1367,7 +1370,10 @@
       "ans": "yrs",
       "taille": "Height",
       "poids": "Weight",
-      "objectif": "Goal"
+      "objectif": "Goal",
+      "nomAffiche": "Display name",
+      "nomAfficheExemple": "e.g. Theo Martin",
+      "nomAfficheAide": "Shown in friend search. Leave empty to show only your username."
     },
     "activites_one": "activity",
     "activites_other": "activities",
@@ -1385,7 +1391,10 @@
     "echec": "Saving failed. Check your connection and try again.",
     "mdpEnvoye": "Email sent to {email}. Follow the link to choose a new password (check your spam folder too).",
     "suppression": "Deleting…",
-    "suppressionEchec": "Deletion failed. Try again."
+    "suppressionEchec": "Deletion failed. Try again.",
+    "confidentialite": "Privacy",
+    "masquerRecherche": "Don’t show me in search",
+    "masquerRechercheAide": "Others won’t find you by typing your username or name. They can still add you with your friend code or QR code."
   },
   "admin": {
     "badge": "Admin access",
@@ -3629,7 +3638,7 @@
     "confidentialite": {
       "titre": "Privacy Policy",
       "pied": "© 2026 AS Sport · <a href=\"conditions.html\">Terms of Use</a>",
-      "corps": "<p class=\"lead\">This page explains, in plain words, what data the app stores, why, who can see it and how to delete it. The app is free, ad-free, and <b>your data is never sold</b>.</p>\n\n  <h2>1. Who is responsible for your data?</h2>\n  <p>The publisher of AS Sport. For any question or request, write to them from the app’s <b>Contact</b> page: your message goes straight to them.</p>\n\n  <h2>2. Data stored</h2>\n  <ul>\n    <li><b>Your account</b>: email address and password (the password is encrypted by Google Firebase; nobody can read it, not even the publisher).</li>\n    <li><b>Your profile</b>: username (required) and, if you choose, first name, last name, age, height, weight, goal and profile photo.</li>\n    <li><b>Your workouts</b>: sessions, exercises, sets, weights, running times, how you felt, notes, records, routines, current program and workout photos.</li>\n    <li><b>Your nutrition</b>: supplements and creatine intake.</li>\n    <li><b>The social side</b>: your friends, your private messages, your reactions, your comments, your challenges and the reports you send.</li>\n    <li><b>Messages sent from the Contact page</b>.</li>\n    <li><b>A few usage statistics</b>: date of your last visit, number of visits, number of workouts (for running the app).</li>\n  </ul>\n  <p>The app does <b>not</b> collect your location, your contacts or your Apple Health data, and uses <b>no advertising trackers</b>.</p>\n\n  <h2>3. Why?</h2>\n  <ul>\n    <li>To make the app work: save your workouts, calculate your records and progress, and sync across all your devices.</li>\n    <li>For the friend features you choose to use.</li>\n    <li>For safety and moderation: handling reports and blocking abuse.</li>\n    <li>To reply to your messages and improve the app.</li>\n  </ul>\n  <p>Legal basis: performance of the service you request by creating an account, and the publisher’s legitimate interest in keeping the app secure.</p>\n\n  <h2>4. Who can see your data?</h2>\n  <ul>\n    <li><b>You</b>, on all your devices.</li>\n    <li><b>Any signed-in user</b> can find your <b>username, friend code, profile photo and goal</b> by searching for you, in order to add you as a friend.</li>\n    <li><b>Your accepted friends</b> see your workouts (if sharing is on; you can turn it off in Friends), your records, your stats, and the reactions and comments on your workouts. Your workout photos stay private.</li>\n    <li><b>Challenge participants</b> see your username and your score in that challenge.</li>\n    <li><b>The publisher</b> (administrator) can see profiles, workouts and statistics for support and moderation, as well as reported content. They do not read your private messages, except those reported to them.</li>\n  </ul>\n\n  <h2>5. Where is it stored?</h2>\n  <p>With <b>Google Firebase</b> (Google Cloud), which hosts the database and accounts. Servers may be located outside the European Union; Google covers these transfers with the European Commission’s standard contractual clauses. Fonts are loaded from Google Fonts. A copy of your data is also kept on your phone so the app works offline.</p>\n\n  <h2>6. How long?</h2>\n  <p>As long as your account exists. When you delete it, your profile, workouts, nutrition, photos, routines, the reactions and comments you received and your friendships are erased immediately. Messages and comments you wrote on your friends’ content remain visible to them; ask for their deletion via the Contact page if you wish. Reports are deleted once handled.</p>\n\n  <h2>7. Your rights</h2>\n  <ul>\n    <li><b>Access and download your data</b>: Profile › “Download my data”.</li>\n    <li><b>Correct it</b>: Profile › “Edit”.</li>\n    <li><b>Erase it</b>: Profile › “Delete my account and data”, or delete a workout at any time.</li>\n    <li><b>Stop sharing</b> your workouts with your friends: Friends › “My workouts are shared”.</li>\n    <li>For any other request (objection, restriction…), write from the Contact page. You can also contact the French data protection authority, the <b>CNIL</b> (cnil.fr).</li>\n  </ul>\n\n  <h2>8. Minimum age</h2>\n  <p>The app is intended for people <b>aged 15 and over</b>. Below that age, a parent’s consent is required.</p>\n\n  <h2>9. Security</h2>\n  <p>Connections are encrypted (HTTPS). Security rules prevent anyone from reading or changing another user’s data without permission. Keep your password to yourself.</p>\n\n  <h2>10. Changes</h2>\n  <p>If this policy changes, the date at the top of the page is updated and, if the change is significant, you will be notified in the app.</p>"
+      "corps": "<p class=\"lead\">This page explains, in plain words, what data the app stores, why, who can see it and how to delete it. The app is free, ad-free, and <b>your data is never sold</b>.</p>\n\n  <h2>1. Who is responsible for your data?</h2>\n  <p>The publisher of AS Sport. For any question or request, write to them from the app’s <b>Contact</b> page: your message goes straight to them.</p>\n\n  <h2>2. Data stored</h2>\n  <ul>\n    <li><b>Your account</b>: email address and password (the password is encrypted by Google Firebase; nobody can read it, not even the publisher).</li>\n    <li><b>Your profile</b>: username (required) and, if you choose, display name, first name, last name, age, height, weight, goal and profile photo.</li>\n    <li><b>Your workouts</b>: sessions, exercises, sets, weights, running times, how you felt, notes, records, routines, current program and workout photos.</li>\n    <li><b>Your nutrition</b>: supplements and creatine intake.</li>\n    <li><b>The social side</b>: your friends, your private messages, your reactions, your comments, your challenges and the reports you send.</li>\n    <li><b>Messages sent from the Contact page</b>.</li>\n    <li><b>A few usage statistics</b>: date of your last visit, number of visits, number of workouts (for running the app).</li>\n  </ul>\n  <p>The app does <b>not</b> collect your location, your contacts or your Apple Health data, and uses <b>no advertising trackers</b>.</p>\n\n  <h2>3. Why?</h2>\n  <ul>\n    <li>To make the app work: save your workouts, calculate your records and progress, and sync across all your devices.</li>\n    <li>For the friend features you choose to use.</li>\n    <li>For safety and moderation: handling reports and blocking abuse.</li>\n    <li>To reply to your messages and improve the app.</li>\n  </ul>\n  <p>Legal basis: performance of the service you request by creating an account, and the publisher’s legitimate interest in keeping the app secure.</p>\n\n  <h2>4. Who can see your data?</h2>\n  <ul>\n    <li><b>You</b>, on all your devices.</li>\n    <li><b>Any signed-in user</b> can find you by typing your <b>username or display name</b>: they then see your username, display name and profile photo, in order to add you as a friend. Your first name, last name and email are never shown. You can stop appearing in search (Profile › Privacy): people can still add you with your friend code. People who see you in the app (friends, requests, challenges, comments) also see your friend code and goal.</li>\n    <li><b>Your accepted friends</b> see your workouts (if sharing is on; you can turn it off in Friends), your records, your stats, and the reactions and comments on your workouts. Your workout photos stay private.</li>\n    <li><b>Challenge participants</b> see your username and your score in that challenge.</li>\n    <li><b>The publisher</b> (administrator) can see profiles, workouts and statistics for support and moderation, as well as reported content. They do not read your private messages, except those reported to them.</li>\n  </ul>\n\n  <h2>5. Where is it stored?</h2>\n  <p>With <b>Google Firebase</b> (Google Cloud), which hosts the database and accounts. Servers may be located outside the European Union; Google covers these transfers with the European Commission’s standard contractual clauses. Fonts are loaded from Google Fonts. A copy of your data is also kept on your phone so the app works offline.</p>\n\n  <h2>6. How long?</h2>\n  <p>As long as your account exists. When you delete it, your profile, workouts, nutrition, photos, routines, the reactions and comments you received and your friendships are erased immediately. Messages and comments you wrote on your friends’ content remain visible to them; ask for their deletion via the Contact page if you wish. Reports are deleted once handled.</p>\n\n  <h2>7. Your rights</h2>\n  <ul>\n    <li><b>Access and download your data</b>: Profile › “Download my data”.</li>\n    <li><b>Correct it</b>: Profile › “Edit”.</li>\n    <li><b>Erase it</b>: Profile › “Delete my account and data”, or delete a workout at any time.</li>\n    <li><b>Stop sharing</b> your workouts with your friends: Friends › “My workouts are shared”.</li>\n    <li>For any other request (objection, restriction…), write from the Contact page. You can also contact the French data protection authority, the <b>CNIL</b> (cnil.fr).</li>\n  </ul>\n\n  <h2>8. Minimum age</h2>\n  <p>The app is intended for people <b>aged 15 and over</b>. Below that age, a parent’s consent is required.</p>\n\n  <h2>9. Security</h2>\n  <p>Connections are encrypted (HTTPS). Security rules prevent anyone from reading or changing another user’s data without permission. Keep your password to yourself.</p>\n\n  <h2>10. Changes</h2>\n  <p>If this policy changes, the date at the top of the page is updated and, if the change is significant, you will be notified in the app.</p>"
     }
   }
 }

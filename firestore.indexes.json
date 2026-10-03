@@ -1,1 +1,36 @@
-{ "indexes": [], "fieldOverrides": [] }
+{
+  "indexes": [
+    {
+      "collectionGroup": "recherche",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "visible", "order": "ASCENDING" },
+        { "fieldPath": "pseudoNorm", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "recherche",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "visible", "order": "ASCENDING" },
+        { "fieldPath": "nomNorm", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "recherche",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "visible", "order": "ASCENDING" },
+        { "fieldPath": "morceaux", "arrayConfig": "CONTAINS" }
+      ]
+    }
+  ],
+  "fieldOverrides": [
+    { "collectionGroup": "recherche", "fieldPath": "photo", "indexes": [] },
+    { "collectionGroup": "recherche", "fieldPath": "pseudo", "indexes": [] },
+    { "collectionGroup": "recherche", "fieldPath": "nomAffiche", "indexes": [] },
+    { "collectionGroup": "recherche", "fieldPath": "mots", "indexes": [] },
+    { "collectionGroup": "directory", "fieldPath": "photo", "indexes": [] },
+    { "collectionGroup": "reseau", "fieldPath": "amis", "indexes": [] }
+  ]
+}

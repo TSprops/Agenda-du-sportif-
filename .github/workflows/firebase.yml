@@ -1,4 +1,4 @@
-# À chaque modification : tests automatiques, puis mise en ligne sur Firebase (site + règles de sécurité).
+# À chaque modification : tests automatiques, puis mise en ligne sur Firebase (site, règles, index et fonctions serveur).
 # La mise en ligne ne se fait que si les tests passent.
 name: Tests et mise en ligne Firebase
 
@@ -27,6 +27,7 @@ jobs:
           java-version: 21
       - run: npm install --no-save playwright@1.56.1
       - run: npx playwright install --with-deps chromium
+      - run: npm ci --prefix functions
       - run: npm test
 
   deploy:
@@ -44,9 +45,10 @@ jobs:
       - name: Clé Firebase absente
         if: env.FIREBASE_SA == ''
         run: echo "::warning::Ajoute le secret FIREBASE_SERVICE_ACCOUNT pour publier sur Firebase."
-      - name: Mise en ligne (site + règles)
+      - name: Mise en ligne (site, règles, index et fonctions serveur)
         if: env.FIREBASE_SA != ''
         run: |
+          npm ci --prefix functions
           printf '%s' "$FIREBASE_SA" > "$RUNNER_TEMP/sa.json"
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json"
-          npx --yes firebase-tools@15 deploy --only hosting,firestore:rules --project agenda-du-sportif --non-interactive --force
+          npx --yes firebase-tools@15 deploy --only hosting,firestore,functions --project agenda-du-sportif --non-interactive --force

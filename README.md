@@ -6,7 +6,7 @@ L’administrateur voit tous les utilisateurs, leurs statistiques et les message
 
 L’app s’installe sur l’écran d’accueil d’un iPhone ou d’un Android comme une vraie application, et elle s’ouvre même sans réseau.
 
-**Coût : 0 €.** Tout tient dans l’offre gratuite de Firebase (plan « Spark »). Les photos sont compressées et rangées dans la base de données, donc pas besoin du stockage payant.
+**Coût : 0 € en pratique.** La recherche d’utilisateurs utilise des fonctions serveur (Cloud Functions), qui demandent le forfait **Blaze** (paiement à l’usage) : son quota gratuit (2 millions d’appels par mois) suffit largement. Mets une alerte de budget (Google Cloud › Facturation › Budgets et alertes, par exemple 1 €). Les photos sont compressées et rangées dans la base de données, donc pas besoin du stockage payant.
 
 ---
 
@@ -73,6 +73,8 @@ Personne ne peut se nommer administrateur depuis l’app : seul ce document, cr�
 | `public/vendor/firebase.js` | Le SDK Firebase, déjà empaqueté (`npm run build` pour le régénérer) |
 | `public/sw.js`, `public/manifest.webmanifest`, `public/icons/` | Installation sur l’écran d’accueil et fonctionnement hors ligne |
 | `firestore.rules` | Règles de sécurité : chacun ne voit que ses données, l’admin voit tout |
+| `firestore.indexes.json` | Index de la base (recherche d’utilisateurs) |
+| `functions/` | Fonctions serveur : recherche d’utilisateurs (suggestions, limite de requêtes, fiches de recherche tenues à jour) |
 
 ### Organisation des données (Firestore)
 
@@ -82,6 +84,8 @@ Personne ne peut se nommer administrateur depuis l’app : seul ce document, cr�
 - `users/{uid}/photos/{id}` : photos compressées
 - `messages/{id}` : messages de la page Contact (lus par l’admin uniquement)
 - `admins/{uid}` : liste des administrateurs (modifiable seulement depuis la console)
+- `directory/{uid}` : fiche publique (pseudo, photo, code ami), lisible une par une, jamais en liste
+- `recherche/{uid}`, `reseau/{uid}`, `limites/{uid}` : fiches de recherche, listes d’amis et compteurs de requêtes, **lus et écrits uniquement par le serveur**
 
 ## Tester en local (facultatif)
 
@@ -89,6 +93,7 @@ Il faut Java 11 ou plus. Laisse `public/firebase-config.js` vide et lance :
 
 ```bash
 npm install
+npm ci --prefix functions
 npm run emulators
 ```
 
@@ -96,11 +101,12 @@ Puis ouvre http://127.0.0.1:5000 : l’app utilise des serveurs Firebase de test
 
 ## Tests automatiques
 
-Les tests vérifient les règles de sécurité Firestore et les principaux parcours de l'app
-(inscription, séance, record, suppression, export, social, signalement, modération).
+Les tests vérifient les règles de sécurité Firestore, la recherche d'utilisateurs côté serveur et les principaux parcours de l'app
+(inscription, séance, record, suppression, export, social, recherche, signalement, modération).
 
 ```bash
 npm install --no-save playwright@1.56.1 && npx playwright install chromium
+npm ci --prefix functions
 npm test   # démarre les émulateurs Firebase, lance les tests, puis les arrête
 ```
 
@@ -116,6 +122,10 @@ Réglage à faire une seule fois :
 2. Paramètres du projet › Comptes de service › « Générer une nouvelle clé privée ».
 3. Google Cloud › IAM : donner au compte `firebase-adminsdk-…` les rôles « Administrateur Firebase » et « Consommateur Service Usage ».
 4. GitHub › Settings › Secrets and variables › Actions › secret `FIREBASE_SERVICE_ACCOUNT` = contenu du fichier JSON.
+5. Fonctions serveur (recherche d’utilisateurs) : passer le projet au forfait **Blaze**, puis ajouter au même compte les rôles
+   « Administrateur Cloud Functions », « Utilisateur du compte de service », « Administrateur Artifact Registry », « Éditeur Cloud Build » et « Administrateur Eventarc ».
+   La région des fonctions (`europe-west1`, dans `functions/index.js` et `public/js/commun/core.js`) doit être compatible avec l’emplacement de la base Firestore.
+6. Une seule fois, après la première mise en ligne : `node scripts/remplir-recherche.cjs` (avec la clé du compte de service) pour ajouter les comptes déjà inscrits à la recherche.
 
 Pendant la transition, l'ancienne adresse GitHub Pages reste en ligne ; passer `window.MOVED` à `true`
 dans `public/index.html` y affiche la page « L'app déménage ».

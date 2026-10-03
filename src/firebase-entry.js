@@ -10,3 +10,4 @@ export {
   doc, collection, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, onSnapshot,
   query, where, orderBy, limit, limitToLast, serverTimestamp, writeBatch, documentId, arrayRemove, arrayUnion, getDocsFromCache
 } from "firebase/firestore";
+export { getFunctions, connectFunctionsEmulator, httpsCallable } from "firebase/functions";

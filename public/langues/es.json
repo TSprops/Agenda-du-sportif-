@@ -893,12 +893,9 @@
     "partagees": "✓ Mis sesiones están compartidas",
     "nonPartagees": "Mis sesiones no están compartidas",
     "ajouter": "Añadir a un amigo",
-    "codeOuPseudo": "Código de amigo o nombre de usuario",
-    "chercher": "Buscar",
     "scanner": "📷 Escanear un código QR",
     "demandeEnvoyee": "Solicitud enviada",
     "accepter": "Aceptar",
-    "bloque": "Bloqueado",
     "demandesRecues": "Solicitudes recibidas · {n}",
     "veutAjouter": "quiere añadirte como amigo",
     "refuser": "Rechazar",
@@ -909,10 +906,6 @@
     "enAttente": "pendiente",
     "bloquees": "Personas bloqueadas",
     "debloquer": "Desbloquear",
-    "recherche": "Buscando…",
-    "deuxLettres": "Escribe al menos 2 letras.",
-    "aucunResultat": "Sin resultados. Comprueba el código o el nombre de usuario.",
-    "rechercheEchec": "La búsqueda ha fallado. Comprueba tu conexión.",
     "demandeImpossible": "No se ha podido enviar la solicitud.",
     "kmEn": "{km} en {duree}",
     "score": "Marca: {score}",
@@ -926,6 +919,16 @@
     "signalementObjectif": "objetivo: {objectif}",
     "signalementPhoto": "con foto",
     "deTesAmis": "de tus amigos"
+  },
+  "recherche": {
+    "placeholder": "Usuario, nombre o código de amigo",
+    "chargement": "Buscando…",
+    "aucun": "No se ha encontrado ningún usuario",
+    "deuxCaracteres": "Escribe al menos 2 caracteres.",
+    "limite": "Demasiadas búsquedas seguidas. Vuelve a intentarlo dentro de un minuto.",
+    "erreur": "La búsqueda ha fallado. Comprueba tu conexión.",
+    "dejaAmi": "Ya sois amigos",
+    "ajouterAria": "Añadir a {pseudo} como amigo"
   },
   "partage": {
     "titre": "Compartir mi perfil",
@@ -1367,7 +1370,10 @@
       "ans": "años",
       "taille": "Altura",
       "poids": "Peso",
-      "objectif": "Objetivo"
+      "objectif": "Objetivo",
+      "nomAffiche": "Nombre visible",
+      "nomAfficheExemple": "p. ej. Teo Martín",
+      "nomAfficheAide": "Se muestra en la búsqueda de amigos. Déjalo vacío para mostrar solo tu nombre de usuario."
     },
     "activites_one": "actividad",
     "activites_other": "actividades",
@@ -1385,7 +1391,10 @@
     "echec": "No se ha podido guardar. Comprueba tu conexión e inténtalo de nuevo.",
     "mdpEnvoye": "Correo enviado a {email}. Sigue el enlace para elegir una nueva contraseña (revisa también el spam).",
     "suppression": "Eliminando…",
-    "suppressionEchec": "No se ha podido eliminar. Inténtalo de nuevo."
+    "suppressionEchec": "No se ha podido eliminar. Inténtalo de nuevo.",
+    "confidentialite": "Privacidad",
+    "masquerRecherche": "No aparecer en la búsqueda",
+    "masquerRechercheAide": "Los demás ya no te encontrarán escribiendo tu nombre de usuario o tu nombre. Podrán seguir añadiéndote con tu código de amigo o tu código QR."
   },
   "admin": {
     "badge": "Acceso de administrador",
@@ -3629,7 +3638,7 @@
     "confidentialite": {
       "titre": "Política de privacidad",
       "pied": "© 2026 AS Sport · <a href=\"conditions.html\">Condiciones de uso</a>",
-      "corps": "<p class=\"lead\">Esta página explica, de forma sencilla, qué datos guarda la app, para qué, quién puede verlos y cómo eliminarlos. La app es gratuita, sin publicidad, y <b>tus datos nunca se venden</b>.</p>\n\n  <h2>1. ¿Quién es responsable de tus datos?</h2>\n  <p>El editor de AS Sport. Para cualquier pregunta o solicitud, escríbele desde la página <b>Contacto</b> de la app: tu mensaje le llega directamente.</p>\n\n  <h2>2. Datos guardados</h2>\n  <ul>\n    <li><b>Tu cuenta</b>: correo electrónico y contraseña (Google Firebase cifra la contraseña; nadie puede leerla, ni siquiera el editor).</li>\n    <li><b>Tu perfil</b>: nombre de usuario (obligatorio) y, si quieres, nombre, apellidos, edad, altura, peso, objetivo y foto de perfil.</li>\n    <li><b>Tus entrenamientos</b>: sesiones, ejercicios, series, cargas, tiempos de carrera, sensaciones, notas, récords, rutinas, programa seguido y fotos de las sesiones.</li>\n    <li><b>Tu nutrición</b>: suplementos y tomas de creatina.</li>\n    <li><b>La parte social</b>: tus amigos, tus mensajes privados, tus reacciones, tus comentarios, tus retos y las denuncias que envías.</li>\n    <li><b>Los mensajes enviados desde la página Contacto</b>.</li>\n    <li><b>Algunas estadísticas de uso</b>: fecha de la última visita, número de visitas, número de sesiones (para la administración de la app).</li>\n  </ul>\n  <p>La app <b>no</b> recopila tu ubicación, tus contactos ni tus datos de Salud de Apple, y no utiliza <b>ningún rastreador publicitario</b>.</p>\n\n  <h2>3. ¿Para qué?</h2>\n  <ul>\n    <li>Para que la app funcione: guardar tus sesiones, calcular tus récords y tu progreso, y tenerlo todo en todos tus dispositivos.</li>\n    <li>Para las funciones entre amigos que decidas usar.</li>\n    <li>Para la seguridad y la moderación: gestionar las denuncias y bloquear los abusos.</li>\n    <li>Para responder a tus mensajes y mejorar la app.</li>\n  </ul>\n  <p>Base legal: la prestación del servicio que solicitas al crear una cuenta y el interés legítimo del editor en proteger la app.</p>\n\n  <h2>4. ¿Quién puede ver tus datos?</h2>\n  <ul>\n    <li><b>Tú</b>, en todos tus dispositivos.</li>\n    <li><b>Cualquier usuario conectado</b> puede encontrar tu <b>nombre de usuario, tu código de amigo, tu foto de perfil y tu objetivo</b> al buscarte, para añadirte como amigo.</li>\n    <li><b>Tus amigos aceptados</b> ven tus sesiones (si compartir está activado; puedes desactivarlo en Amigos), tus récords, tus estadísticas y las reacciones y comentarios de tus sesiones. Las fotos de tus sesiones son privadas.</li>\n    <li><b>Los participantes de un reto</b> ven tu nombre de usuario y tu puntuación en ese reto.</li>\n    <li><b>El editor</b> (administrador) puede ver los perfiles, las sesiones y las estadísticas para el soporte y la moderación, así como los contenidos denunciados. No lee tus mensajes privados, salvo los que se le denuncian.</li>\n  </ul>\n\n  <h2>5. ¿Dónde se guardan?</h2>\n  <p>En <b>Google Firebase</b> (Google Cloud), que aloja la base de datos y las cuentas. Los servidores pueden estar fuera de la Unión Europea; Google regula estas transferencias con las cláusulas contractuales tipo de la Comisión Europea. Las fuentes tipográficas se cargan desde Google Fonts. También se guarda una copia de tus datos en tu teléfono para que la app funcione sin conexión.</p>\n\n  <h2>6. ¿Durante cuánto tiempo?</h2>\n  <p>Mientras exista tu cuenta. Cuando la eliminas, tu perfil, tus sesiones, tu nutrición, tus fotos, tus rutinas, las reacciones y comentarios que has recibido y tus amistades se borran de inmediato. Los mensajes y comentarios que escribiste en las publicaciones de tus amigos siguen visibles para ellos; si lo deseas, pide que se eliminen desde la página Contacto. Las denuncias se eliminan una vez tramitadas.</p>\n\n  <h2>7. Tus derechos</h2>\n  <ul>\n    <li><b>Acceder a tus datos y descargarlos</b>: Perfil › «Descargar mis datos».</li>\n    <li><b>Corregirlos</b>: Perfil › «Editar».</li>\n    <li><b>Borrarlos</b>: Perfil › «Eliminar mi cuenta y mis datos», o eliminar una sesión en cualquier momento.</li>\n    <li><b>Dejar de compartir</b> tus sesiones con tus amigos: Amigos › «Mis sesiones están compartidas».</li>\n    <li>Para cualquier otra solicitud (oposición, limitación…), escribe desde la página Contacto. También puedes acudir a la autoridad francesa de protección de datos, la <b>CNIL</b> (cnil.fr).</li>\n  </ul>\n\n  <h2>8. Edad mínima</h2>\n  <p>La app está destinada a personas <b>de 15 años o más</b>. Por debajo de esa edad, se necesita el consentimiento de un padre, madre o tutor.</p>\n\n  <h2>9. Seguridad</h2>\n  <p>Las comunicaciones están cifradas (HTTPS). Hay reglas de seguridad que impiden que alguien lea o modifique los datos de otro usuario sin autorización. No compartas tu contraseña.</p>\n\n  <h2>10. Cambios</h2>\n  <p>Si esta política cambia, se actualiza la fecha de la parte superior de la página y, si el cambio es importante, se te informa en la app.</p>"
+      "corps": "<p class=\"lead\">Esta página explica, de forma sencilla, qué datos guarda la app, para qué, quién puede verlos y cómo eliminarlos. La app es gratuita, sin publicidad, y <b>tus datos nunca se venden</b>.</p>\n\n  <h2>1. ¿Quién es responsable de tus datos?</h2>\n  <p>El editor de AS Sport. Para cualquier pregunta o solicitud, escríbele desde la página <b>Contacto</b> de la app: tu mensaje le llega directamente.</p>\n\n  <h2>2. Datos guardados</h2>\n  <ul>\n    <li><b>Tu cuenta</b>: correo electrónico y contraseña (Google Firebase cifra la contraseña; nadie puede leerla, ni siquiera el editor).</li>\n    <li><b>Tu perfil</b>: nombre de usuario (obligatorio) y, si quieres, nombre visible, nombre, apellidos, edad, altura, peso, objetivo y foto de perfil.</li>\n    <li><b>Tus entrenamientos</b>: sesiones, ejercicios, series, cargas, tiempos de carrera, sensaciones, notas, récords, rutinas, programa seguido y fotos de las sesiones.</li>\n    <li><b>Tu nutrición</b>: suplementos y tomas de creatina.</li>\n    <li><b>La parte social</b>: tus amigos, tus mensajes privados, tus reacciones, tus comentarios, tus retos y las denuncias que envías.</li>\n    <li><b>Los mensajes enviados desde la página Contacto</b>.</li>\n    <li><b>Algunas estadísticas de uso</b>: fecha de la última visita, número de visitas, número de sesiones (para la administración de la app).</li>\n  </ul>\n  <p>La app <b>no</b> recopila tu ubicación, tus contactos ni tus datos de Salud de Apple, y no utiliza <b>ningún rastreador publicitario</b>.</p>\n\n  <h2>3. ¿Para qué?</h2>\n  <ul>\n    <li>Para que la app funcione: guardar tus sesiones, calcular tus récords y tu progreso, y tenerlo todo en todos tus dispositivos.</li>\n    <li>Para las funciones entre amigos que decidas usar.</li>\n    <li>Para la seguridad y la moderación: gestionar las denuncias y bloquear los abusos.</li>\n    <li>Para responder a tus mensajes y mejorar la app.</li>\n  </ul>\n  <p>Base legal: la prestación del servicio que solicitas al crear una cuenta y el interés legítimo del editor en proteger la app.</p>\n\n  <h2>4. ¿Quién puede ver tus datos?</h2>\n  <ul>\n    <li><b>Tú</b>, en todos tus dispositivos.</li>\n    <li><b>Cualquier usuario conectado</b> puede encontrarte escribiendo tu <b>nombre de usuario o tu nombre visible</b>: verá entonces tu nombre de usuario, tu nombre visible y tu foto de perfil, para añadirte como amigo. Tu nombre, tus apellidos y tu correo nunca se muestran. Puedes dejar de aparecer en la búsqueda (Perfil › Privacidad): podrán seguir añadiéndote con tu código de amigo. Las personas que te ven en la app (amigos, solicitudes, retos, comentarios) también ven tu código de amigo y tu objetivo.</li>\n    <li><b>Tus amigos aceptados</b> ven tus sesiones (si compartir está activado; puedes desactivarlo en Amigos), tus récords, tus estadísticas y las reacciones y comentarios de tus sesiones. Las fotos de tus sesiones son privadas.</li>\n    <li><b>Los participantes de un reto</b> ven tu nombre de usuario y tu puntuación en ese reto.</li>\n    <li><b>El editor</b> (administrador) puede ver los perfiles, las sesiones y las estadísticas para el soporte y la moderación, así como los contenidos denunciados. No lee tus mensajes privados, salvo los que se le denuncian.</li>\n  </ul>\n\n  <h2>5. ¿Dónde se guardan?</h2>\n  <p>En <b>Google Firebase</b> (Google Cloud), que aloja la base de datos y las cuentas. Los servidores pueden estar fuera de la Unión Europea; Google regula estas transferencias con las cláusulas contractuales tipo de la Comisión Europea. Las fuentes tipográficas se cargan desde Google Fonts. También se guarda una copia de tus datos en tu teléfono para que la app funcione sin conexión.</p>\n\n  <h2>6. ¿Durante cuánto tiempo?</h2>\n  <p>Mientras exista tu cuenta. Cuando la eliminas, tu perfil, tus sesiones, tu nutrición, tus fotos, tus rutinas, las reacciones y comentarios que has recibido y tus amistades se borran de inmediato. Los mensajes y comentarios que escribiste en las publicaciones de tus amigos siguen visibles para ellos; si lo deseas, pide que se eliminen desde la página Contacto. Las denuncias se eliminan una vez tramitadas.</p>\n\n  <h2>7. Tus derechos</h2>\n  <ul>\n    <li><b>Acceder a tus datos y descargarlos</b>: Perfil › «Descargar mis datos».</li>\n    <li><b>Corregirlos</b>: Perfil › «Editar».</li>\n    <li><b>Borrarlos</b>: Perfil › «Eliminar mi cuenta y mis datos», o eliminar una sesión en cualquier momento.</li>\n    <li><b>Dejar de compartir</b> tus sesiones con tus amigos: Amigos › «Mis sesiones están compartidas».</li>\n    <li>Para cualquier otra solicitud (oposición, limitación…), escribe desde la página Contacto. También puedes acudir a la autoridad francesa de protección de datos, la <b>CNIL</b> (cnil.fr).</li>\n  </ul>\n\n  <h2>8. Edad mínima</h2>\n  <p>La app está destinada a personas <b>de 15 años o más</b>. Por debajo de esa edad, se necesita el consentimiento de un padre, madre o tutor.</p>\n\n  <h2>9. Seguridad</h2>\n  <p>Las comunicaciones están cifradas (HTTPS). Hay reglas de seguridad que impiden que alguien lea o modifique los datos de otro usuario sin autorización. No compartas tu contraseña.</p>\n\n  <h2>10. Cambios</h2>\n  <p>Si esta política cambia, se actualiza la fecha de la parte superior de la página y, si el cambio es importante, se te informa en la app.</p>"
     }
   }
 }

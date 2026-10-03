@@ -27,7 +27,16 @@ module.exports = async function rulesTests(t) {
   await patch(`directory/${a.uid}`, a, { uid: a.uid, pseudo: "A", pseudoLower: "a", code: "A-1234" });
   t("annuaire : fiche lisible", (await get(`directory/${a.uid}`, x)).status, 200);
   t("annuaire : liste sans limite refusée", (await listDir(x)).status, 403);
-  t("annuaire : recherche limitée autorisée", (await listDir(x, 10)).status, 200);
+  t("annuaire : liste limitée refusée aussi (la recherche passe par le serveur)", (await listDir(x, 5)).status, 403);
+  // Recherche : collections réservées au serveur.
+  await put(`recherche/${a.uid}`, { uid: a.uid, pseudo: "A", visible: true });
+  for (const col of ["recherche", "reseau", "limites"]) {
+    t(`${col} : lecture refusée`, (await get(`${col}/${a.uid}`, a)).status, 403);
+    t(`${col} : écriture refusée`, (await patch(`${col}/${a.uid}`, a, { uid: a.uid })).status, 403);
+  }
+  t("profil : nom affiché accepté", (await patch(`users/${x.uid}`, x, { pseudo: "X", nomAffiche: "Xavier", masquerRecherche: true })).status, 200);
+  t("profil : nom affiché trop long refusé", (await patch(`users/${x.uid}`, x, { pseudo: "X", nomAffiche: "x".repeat(31) })).status, 403);
+  t("profil : option de recherche non booléenne refusée", (await patch(`users/${x.uid}`, x, { pseudo: "X", masquerRecherche: "oui" })).status, 403);
   // Défis
   const ch = await post("challenges", a, { name: "Defi", metric: "seances", start: "2026-09-29", end: "2026-10-05", owner: a.uid, members: [a.uid, c.uid], scores: {} });
   t("création d'un défi", ch.status, 200);
