@@ -38,6 +38,7 @@ PWA en JavaScript sans framework (modules ES), Firebase (Auth + Firestore). Rép
 - **Barre du bas** : `js/commun/barre-onglets.js` (Accueil, Séances, « + » = séance du jour, Social, Vous).
 - **Accueil (tableau de bord) et page Séances** : `js/pages/accueil.js`. Styles avec Social et profil dans `css/13-accueil-profil-social.css`.
 - **Partager mon profil** (QR code, code ami, lien `?ami=CODE`, scanner) : `js/amis/partage-profil.js`, avec `vendor/qrcode.js`.
+- **Recherche d'utilisateurs** (suggestions pendant la frappe) : `js/amis/recherche.js` côté app, `functions/recherche.js` côté serveur (Cloud Functions : `rechercherUtilisateurs`, fiches `recherche/`, `reseau/`, limites `limites/`). Option « Ne pas apparaître dans la recherche » et « Nom affiché » dans `js/pages/compte.js`.
 - **Styles** : « Comment faire » dans `css/10-comment-faire.css`, Nouveautés et tutoriel dans `css/11-nouveautes-tutoriel.css`.
 
 ## Langues (français, anglais, espagnol)

@@ -893,12 +893,9 @@
     "partagees": "✓ Mes séances sont partagées",
     "nonPartagees": "Mes séances ne sont pas partagées",
     "ajouter": "Ajouter un ami",
-    "codeOuPseudo": "Code ami ou pseudo",
-    "chercher": "Chercher",
     "scanner": "📷 Scanner un QR code",
     "demandeEnvoyee": "Demande envoyée",
     "accepter": "Accepter",
-    "bloque": "Bloqué",
     "demandesRecues": "Demandes reçues · {n}",
     "veutAjouter": "veut t’ajouter en ami",
     "refuser": "Refuser",
@@ -909,10 +906,6 @@
     "enAttente": "en attente",
     "bloquees": "Personnes bloquées",
     "debloquer": "Débloquer",
-    "recherche": "Recherche…",
-    "deuxLettres": "Tape au moins 2 lettres.",
-    "aucunResultat": "Aucun résultat. Vérifie le code ou le pseudo.",
-    "rechercheEchec": "La recherche a échoué. Vérifie ta connexion.",
     "demandeImpossible": "Impossible d’envoyer la demande.",
     "kmEn": "{km} en {duree}",
     "score": "Score : {score}",
@@ -926,6 +919,16 @@
     "signalementObjectif": "objectif : {objectif}",
     "signalementPhoto": "avec photo",
     "deTesAmis": "de tes amis"
+  },
+  "recherche": {
+    "placeholder": "Pseudo, nom ou code ami",
+    "chargement": "Recherche…",
+    "aucun": "Aucun utilisateur trouvé",
+    "deuxCaracteres": "Tape au moins 2 caractères.",
+    "limite": "Trop de recherches d’un coup. Réessaie dans une minute.",
+    "erreur": "La recherche a échoué. Vérifie ta connexion.",
+    "dejaAmi": "Déjà ami",
+    "ajouterAria": "Ajouter {pseudo} en ami"
   },
   "partage": {
     "titre": "Partager mon profil",
@@ -1367,7 +1370,10 @@
       "ans": "ans",
       "taille": "Taille",
       "poids": "Poids",
-      "objectif": "Objectif"
+      "objectif": "Objectif",
+      "nomAffiche": "Nom affiché",
+      "nomAfficheExemple": "ex. Théo Martin",
+      "nomAfficheAide": "Visible dans la recherche d’amis. Laisse vide pour n’afficher que ton pseudo."
     },
     "activites_one": "activité",
     "activites_other": "activités",
@@ -1385,7 +1391,10 @@
     "echec": "Échec de l’enregistrement. Vérifie ta connexion et réessaie.",
     "mdpEnvoye": "E-mail envoyé à {email}. Suis le lien pour choisir un nouveau mot de passe (regarde aussi dans tes spams).",
     "suppression": "Suppression…",
-    "suppressionEchec": "La suppression a échoué. Réessaie."
+    "suppressionEchec": "La suppression a échoué. Réessaie.",
+    "confidentialite": "Confidentialité",
+    "masquerRecherche": "Ne pas apparaître dans la recherche",
+    "masquerRechercheAide": "Les autres ne te trouveront plus en tapant ton pseudo ou ton nom. Ils pourront toujours t’ajouter avec ton code ami ou ton QR code."
   },
   "admin": {
     "badge": "Accès administrateur",
@@ -3629,7 +3638,7 @@
     "confidentialite": {
       "titre": "Politique de confidentialité",
       "pied": "© 2026 AS Sport · <a href=\"conditions.html\">Conditions d’utilisation</a>",
-      "corps": "<p class=\"lead\">Cette page explique, simplement, quelles données l’app enregistre, pourquoi, qui peut les voir et comment les supprimer. L’app est gratuite, sans publicité, et <b>tes données ne sont jamais vendues</b>.</p>\n\n  <h2>1. Qui est responsable de tes données ?</h2>\n  <p>L’éditeur d’AS Sport. Pour toute question ou demande, écris-lui depuis la page <b>Contact</b> de l’app : ton message lui arrive directement.</p>\n\n  <h2>2. Les données enregistrées</h2>\n  <ul>\n    <li><b>Ton compte</b> : adresse e-mail et mot de passe (le mot de passe est chiffré par Google Firebase, personne ne peut le lire, pas même l’éditeur).</li>\n    <li><b>Ton profil</b> : pseudo (obligatoire), et si tu le souhaites prénom, nom, âge, taille, poids, objectif et photo de profil.</li>\n    <li><b>Tes entraînements</b> : séances, exercices, séries, charges, temps de course, ressentis, notes, records, routines, programme suivi et photos de séance.</li>\n    <li><b>Ta nutrition</b> : compléments et prises de créatine.</li>\n    <li><b>Le côté social</b> : tes amis, tes messages privés, tes réactions, tes commentaires, tes défis et les signalements que tu envoies.</li>\n    <li><b>Les messages envoyés depuis la page Contact</b>.</li>\n    <li><b>Quelques statistiques d’usage</b> : date de dernière visite, nombre de visites, nombre de séances (pour l’administration de l’app).</li>\n  </ul>\n  <p>L’app ne collecte <b>pas</b> ta position, tes contacts ni tes données de santé Apple, et n’utilise <b>aucun traceur publicitaire</b>.</p>\n\n  <h2>3. Pourquoi ?</h2>\n  <ul>\n    <li>Pour faire fonctionner l’app : enregistrer tes séances, calculer tes records et ta progression, te retrouver sur tous tes appareils.</li>\n    <li>Pour les fonctions entre amis que tu choisis d’utiliser.</li>\n    <li>Pour la sécurité et la modération : traiter les signalements et bloquer les abus.</li>\n    <li>Pour répondre à tes messages et améliorer l’app.</li>\n  </ul>\n  <p>Base légale : l’exécution du service que tu demandes en créant un compte, et l’intérêt légitime de l’éditeur à sécuriser l’app.</p>\n\n  <h2>4. Qui peut voir tes données ?</h2>\n  <ul>\n    <li><b>Toi</b>, sur tous tes appareils.</li>\n    <li><b>Tout utilisateur connecté</b> peut trouver ton <b>pseudo, ton code ami, ta photo de profil et ton objectif</b> en te cherchant, pour t’ajouter en ami.</li>\n    <li><b>Tes amis acceptés</b> voient tes séances (si le partage est activé, tu peux le couper dans Amis), tes records, tes statistiques, et les réactions et commentaires sur tes séances. Tes photos de séance restent privées.</li>\n    <li><b>Les participants d’un défi</b> voient ton pseudo et ton score dans ce défi.</li>\n    <li><b>L’éditeur</b> (administrateur) peut voir les profils, les séances et les statistiques pour le support et la modération, ainsi que les contenus signalés. Il ne lit pas tes messages privés, sauf ceux qui lui sont signalés.</li>\n  </ul>\n\n  <h2>5. Où sont-elles stockées ?</h2>\n  <p>Chez <b>Google Firebase</b> (Google Cloud), qui héberge la base de données et les comptes. Les serveurs peuvent être situés hors de l’Union européenne ; Google encadre ces transferts par les clauses contractuelles types de la Commission européenne. Les polices d’écriture sont chargées depuis Google Fonts. Une copie de tes données est aussi gardée sur ton téléphone pour que l’app marche hors connexion.</p>\n\n  <h2>6. Combien de temps ?</h2>\n  <p>Tant que ton compte existe. Quand tu le supprimes, ton profil, tes séances, ta nutrition, tes photos, tes routines, tes réactions reçues, tes commentaires reçus et tes liens d’amitié sont effacés immédiatement. Les messages et commentaires que tu as écrits chez tes amis restent visibles chez eux ; demande leur suppression via la page Contact si tu le souhaites. Les signalements sont supprimés une fois traités.</p>\n\n  <h2>7. Tes droits</h2>\n  <ul>\n    <li><b>Accéder et récupérer tes données</b> : Profil › « Télécharger mes données ».</li>\n    <li><b>Les corriger</b> : Profil › « Modifier ».</li>\n    <li><b>Les effacer</b> : Profil › « Supprimer mon compte et mes données », ou supprimer une séance à tout moment.</li>\n    <li><b>Arrêter le partage</b> de tes séances avec tes amis : Amis › « Mes séances sont partagées ».</li>\n    <li>Pour toute autre demande (opposition, limitation…), écris depuis la page Contact. Tu peux aussi saisir la <b>CNIL</b> (cnil.fr).</li>\n  </ul>\n\n  <h2>8. Âge minimum</h2>\n  <p>L’app est destinée aux personnes de <b>15 ans et plus</b>. En dessous, l’accord d’un parent est nécessaire.</p>\n\n  <h2>9. Sécurité</h2>\n  <p>Les échanges sont chiffrés (HTTPS). Des règles de sécurité empêchent quiconque de lire ou modifier les données d’un autre utilisateur sans y être autorisé. Garde ton mot de passe pour toi.</p>\n\n  <h2>10. Changements</h2>\n  <p>Si cette politique change, la date en haut de page est mise à jour et, en cas de changement important, tu en es informé dans l’app.</p>"
+      "corps": "<p class=\"lead\">Cette page explique, simplement, quelles données l’app enregistre, pourquoi, qui peut les voir et comment les supprimer. L’app est gratuite, sans publicité, et <b>tes données ne sont jamais vendues</b>.</p>\n\n  <h2>1. Qui est responsable de tes données ?</h2>\n  <p>L’éditeur d’AS Sport. Pour toute question ou demande, écris-lui depuis la page <b>Contact</b> de l’app : ton message lui arrive directement.</p>\n\n  <h2>2. Les données enregistrées</h2>\n  <ul>\n    <li><b>Ton compte</b> : adresse e-mail et mot de passe (le mot de passe est chiffré par Google Firebase, personne ne peut le lire, pas même l’éditeur).</li>\n    <li><b>Ton profil</b> : pseudo (obligatoire), et si tu le souhaites nom affiché, prénom, nom, âge, taille, poids, objectif et photo de profil.</li>\n    <li><b>Tes entraînements</b> : séances, exercices, séries, charges, temps de course, ressentis, notes, records, routines, programme suivi et photos de séance.</li>\n    <li><b>Ta nutrition</b> : compléments et prises de créatine.</li>\n    <li><b>Le côté social</b> : tes amis, tes messages privés, tes réactions, tes commentaires, tes défis et les signalements que tu envoies.</li>\n    <li><b>Les messages envoyés depuis la page Contact</b>.</li>\n    <li><b>Quelques statistiques d’usage</b> : date de dernière visite, nombre de visites, nombre de séances (pour l’administration de l’app).</li>\n  </ul>\n  <p>L’app ne collecte <b>pas</b> ta position, tes contacts ni tes données de santé Apple, et n’utilise <b>aucun traceur publicitaire</b>.</p>\n\n  <h2>3. Pourquoi ?</h2>\n  <ul>\n    <li>Pour faire fonctionner l’app : enregistrer tes séances, calculer tes records et ta progression, te retrouver sur tous tes appareils.</li>\n    <li>Pour les fonctions entre amis que tu choisis d’utiliser.</li>\n    <li>Pour la sécurité et la modération : traiter les signalements et bloquer les abus.</li>\n    <li>Pour répondre à tes messages et améliorer l’app.</li>\n  </ul>\n  <p>Base légale : l’exécution du service que tu demandes en créant un compte, et l’intérêt légitime de l’éditeur à sécuriser l’app.</p>\n\n  <h2>4. Qui peut voir tes données ?</h2>\n  <ul>\n    <li><b>Toi</b>, sur tous tes appareils.</li>\n    <li><b>Tout utilisateur connecté</b> peut te trouver en tapant ton <b>pseudo ou ton nom affiché</b> : il voit alors ton pseudo, ton nom affiché et ta photo de profil, pour t’ajouter en ami. Ton prénom, ton nom et ton e-mail ne sont jamais montrés. Tu peux ne plus apparaître dans la recherche (Profil › Confidentialité) : on peut toujours t’ajouter avec ton code ami. Les personnes qui te voient dans l’app (amis, demandes, défis, commentaires) voient aussi ton code ami et ton objectif.</li>\n    <li><b>Tes amis acceptés</b> voient tes séances (si le partage est activé, tu peux le couper dans Amis), tes records, tes statistiques, et les réactions et commentaires sur tes séances. Tes photos de séance restent privées.</li>\n    <li><b>Les participants d’un défi</b> voient ton pseudo et ton score dans ce défi.</li>\n    <li><b>L’éditeur</b> (administrateur) peut voir les profils, les séances et les statistiques pour le support et la modération, ainsi que les contenus signalés. Il ne lit pas tes messages privés, sauf ceux qui lui sont signalés.</li>\n  </ul>\n\n  <h2>5. Où sont-elles stockées ?</h2>\n  <p>Chez <b>Google Firebase</b> (Google Cloud), qui héberge la base de données et les comptes. Les serveurs peuvent être situés hors de l’Union européenne ; Google encadre ces transferts par les clauses contractuelles types de la Commission européenne. Les polices d’écriture sont chargées depuis Google Fonts. Une copie de tes données est aussi gardée sur ton téléphone pour que l’app marche hors connexion.</p>\n\n  <h2>6. Combien de temps ?</h2>\n  <p>Tant que ton compte existe. Quand tu le supprimes, ton profil, tes séances, ta nutrition, tes photos, tes routines, tes réactions reçues, tes commentaires reçus et tes liens d’amitié sont effacés immédiatement. Les messages et commentaires que tu as écrits chez tes amis restent visibles chez eux ; demande leur suppression via la page Contact si tu le souhaites. Les signalements sont supprimés une fois traités.</p>\n\n  <h2>7. Tes droits</h2>\n  <ul>\n    <li><b>Accéder et récupérer tes données</b> : Profil › « Télécharger mes données ».</li>\n    <li><b>Les corriger</b> : Profil › « Modifier ».</li>\n    <li><b>Les effacer</b> : Profil › « Supprimer mon compte et mes données », ou supprimer une séance à tout moment.</li>\n    <li><b>Arrêter le partage</b> de tes séances avec tes amis : Amis › « Mes séances sont partagées ».</li>\n    <li>Pour toute autre demande (opposition, limitation…), écris depuis la page Contact. Tu peux aussi saisir la <b>CNIL</b> (cnil.fr).</li>\n  </ul>\n\n  <h2>8. Âge minimum</h2>\n  <p>L’app est destinée aux personnes de <b>15 ans et plus</b>. En dessous, l’accord d’un parent est nécessaire.</p>\n\n  <h2>9. Sécurité</h2>\n  <p>Les échanges sont chiffrés (HTTPS). Des règles de sécurité empêchent quiconque de lire ou modifier les données d’un autre utilisateur sans y être autorisé. Garde ton mot de passe pour toi.</p>\n\n  <h2>10. Changements</h2>\n  <p>Si cette politique change, la date en haut de page est mise à jour et, en cas de changement important, tu en es informé dans l’app.</p>"
     }
   }
 }

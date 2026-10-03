@@ -311,6 +311,34 @@ module.exports = async function appTests(t) {
     await home(B); await B.click("[data-tab=social]");
     t("le banni voit la suspension", await B.$(".ban-card") !== null, true);
 
+    // Recherche d'utilisateurs : suggestions sous la barre pendant la frappe (fonction serveur).
+    await put("users/romane-test", { pseudo: "Romane" }); await put("users/romain-test", { pseudo: "Romain", nomAffiche: "Romain Petit" }); await put("users/romeo-test", { pseudo: "SuperRomeo" });
+    for (let i = 0; i < 80 && (await get("recherche/romeo-test")).status !== 200; i++) await A.waitForTimeout(250);
+    await home(A); await A.click("[data-tab=social]"); await A.click("[data-go=friends]");
+    const sugg = () => A.$$eval("#fsSugg .fs-list:not(.stale) .frow b", x => x.map(b => b.textContent));
+    const attendreSugg = n => A.waitForFunction(n => document.querySelectorAll("#fsSugg .fs-list:not(.stale) .frow").length === n && !document.querySelector("#fsSugg .fs-load"), n, { timeout: 10000 });
+    const avant = +((await get("limites/" + A.uid)).body?.fields?.nJour?.integerValue || 0);
+    await A.type("#fsInput", "rom", { delay: 60 });
+    t("recherche : chargement affiché", await A.$("#fsSugg .fs-load") !== null, true);
+    await attendreSugg(3);
+    t("recherche : suggestions (commence par, puis contient)", await sugg(), ["Romain", "Romane", "SuperRomeo"]);
+    t("recherche : une seule requête pour une frappe rapide", +(await get("limites/" + A.uid)).body.fields.nJour.integerValue - avant, 1);
+    await A.type("#fsInput", "a", { delay: 60 }); await attendreSugg(2);
+    t("recherche : la liste se resserre", await sugg(), ["Romain", "Romane"]);
+    await A.fill("#fsInput", "ROMAÎ"); await attendreSugg(1);
+    t("recherche : nom affiché, majuscules et accents ignorés", await A.textContent("#fsSugg .frow .main"), "RomainRomain Petit");
+    await A.click("#fsSugg [data-fadd]");
+    await A.waitForFunction(() => /Demande envoyée/.test(document.getElementById("fsSugg").textContent), null, { timeout: 8000 });
+    t("recherche : bouton « Demande envoyée »", /Demande envoyée/.test(await A.textContent("#fsSugg")), true);
+    const amiR = [A.uid, "romane-test"].sort(); await put(`friends/${amiR.join("_")}`, { users: amiR, from: A.uid, to: "romane-test", status: "accepted" });
+    await A.fill("#fsInput", "romane"); await attendreSugg(1); await A.waitForSelector("#fsSugg .frow .tag", { timeout: 8000 });
+    t("recherche : bouton « Déjà ami »", await A.textContent("#fsSugg .frow .tag"), "Déjà ami");
+    await A.fill("#fsInput", "zzqx"); await A.waitForSelector("#fsSugg .hint:not(.fs-load)", { timeout: 10000 });
+    t("recherche : aucun utilisateur trouvé", await A.textContent("#fsSugg"), "Aucun utilisateur trouvé");
+    // Confidentialité : ne pas apparaître dans la recherche.
+    await A.click("[data-tab=profile]"); await A.click("#hideSearch"); await A.waitForTimeout(800);
+    t("confidentialité : option enregistrée", (await get("users/" + A.uid)).body.fields.masquerRecherche?.booleanValue, true);
+
     // Langues : celle de l'appareil au premier lancement, repli sur le français.
     const ouvrir = async locale => {
       const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, locale });

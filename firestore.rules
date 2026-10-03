@@ -42,7 +42,10 @@ service cloud.firestore {
       allow read: if isSelf(uid) || isAdmin();
       allow create, update: if isSelf(uid) && request.resource.data.pseudo is string
                             && request.resource.data.pseudo.size() > 0
-                            && request.resource.data.pseudo.size() <= 30;
+                            && request.resource.data.pseudo.size() <= 30
+                            && (!('nomAffiche' in request.resource.data)
+                                || (request.resource.data.nomAffiche is string && request.resource.data.nomAffiche.size() <= 30))
+                            && (!('masquerRecherche' in request.resource.data) || request.resource.data.masquerRecherche is bool);
       allow delete: if isSelf(uid);
 
       // séances, nutrition, photos
@@ -54,15 +57,20 @@ service cloud.firestore {
       }
     }
 
-    // Annuaire : pseudo, code ami et photo, pour pouvoir se trouver.
+    // Annuaire : pseudo, code ami et photo d'un utilisateur connu (ami, auteur d'un commentaire…).
+    // Pas de liste : la recherche passe par le serveur (fonction rechercherUtilisateurs), limitée par utilisateur.
     match /directory/{uid} {
       allow get: if signedIn();
-      allow list: if signedIn() && request.query.limit <= 10;
       allow write: if isSelf(uid) && !banned() && request.resource.data.uid == uid
                    && request.resource.data.pseudo is string && request.resource.data.pseudo.size() <= 30
                    && request.resource.data.code is string && request.resource.data.code.size() <= 12;
       allow delete: if isSelf(uid) || isAdmin();
     }
+
+    // Recherche d'utilisateurs : fiches, réseau d'amis et compteurs de requêtes, réservés au serveur.
+    match /recherche/{uid} { allow read, write: if false; }
+    match /reseau/{uid} { allow read, write: if false; }
+    match /limites/{uid} { allow read, write: if false; }
 
     // Ce que les amis peuvent voir : records, statistiques, partage des séances.
     match /share/{uid} {

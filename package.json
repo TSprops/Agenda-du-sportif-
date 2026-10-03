@@ -6,9 +6,9 @@
   "type": "module",
   "scripts": {
     "build": "esbuild src/firebase-entry.js --bundle --format=esm --minify --target=es2020 --outfile=public/vendor/firebase.js",
-    "emulators": "npx firebase-tools emulators:start --only auth,firestore,hosting --project demo-agenda",
-    "deploy": "npx firebase-tools deploy --only hosting,firestore",
-    "test": "npx --yes firebase-tools@15 emulators:exec --only auth,firestore,hosting --project demo-agenda \"node tests/run.cjs\""
+    "emulators": "npx firebase-tools emulators:start --only auth,firestore,functions,hosting --project demo-agenda",
+    "deploy": "npx firebase-tools deploy --only hosting,firestore,functions",
+    "test": "npx --yes firebase-tools@15 emulators:exec --only auth,firestore,functions,hosting --project demo-agenda \"node tests/run.cjs\""
   },
   "devDependencies": {
     "esbuild": "^0.25.0",

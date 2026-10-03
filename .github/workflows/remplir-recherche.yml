@@ -1,0 +1,24 @@
+# À lancer une seule fois, à la main (onglet Actions › « Remplir la recherche » › Run workflow),
+# après la première mise en ligne des fonctions serveur : ajoute les comptes déjà inscrits à la recherche.
+name: Remplir la recherche
+
+on:
+  workflow_dispatch:
+
+jobs:
+  remplir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      FIREBASE_SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci --prefix functions
+      - name: Fiches de recherche et listes d'amis des comptes existants
+        run: |
+          printf '%s' "$FIREBASE_SA" > "$RUNNER_TEMP/sa.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json"
+          node scripts/remplir-recherche.cjs

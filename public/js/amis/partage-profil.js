@@ -1,6 +1,6 @@
 // Amis : page « Partager mon profil » (code ami, QR code, lien d'invitation) et scanner de QR code.
 import { SOC } from "./etat.js";
-import { searchUsers } from "./liste.js";
+import { searchUsers } from "./recherche.js";
 import { $, S, avatarHTML, esc } from "../commun/core.js";
 import { t } from "../commun/i18n.js";
 import { go } from "../commun/store.js";
@@ -26,7 +26,7 @@ function codeFrom(txt) {
   if (c) lsSet("ami-invite", c);
   u.searchParams.delete("ami"); history.replaceState(null, "", u.pathname + u.search + u.hash);
 })();
-function searchCode(code) { go("friends"); $("fsInput").value = code; searchUsers(code); }
+function searchCode(code) { go("friends"); searchUsers(code); }
 // Appelé en arrivant sur l'accueil : ouvre la page Amis avec le profil de l'invitation.
 export function maybeFriendInvite() {
   const c = lsGet("ami-invite"); if (!c || !S.profile) return false;

@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword, signOut, sendPasswordResetEmail, deleteUser, reauthenticateWithCredential, EmailAuthProvider,
   initializeFirestore, connectFirestoreEmulator, persistentLocalCache, persistentMultipleTabManager,
   doc, collection, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, onSnapshot, query, where, orderBy, limit, limitToLast, writeBatch,
-  arrayRemove, documentId, getDocsFromCache
+  arrayRemove, documentId, getDocsFromCache, getFunctions, connectFunctionsEmulator, httpsCallable
 } from "../../vendor/firebase.js";
 import { firebaseConfig } from "../../firebase-config.js";
 import { LANGUE, LOCALE, dateFormat, dateLongue, majuscule, relatif, t, tFr, valeur } from "./i18n.js";
@@ -50,6 +50,10 @@ if (EMU) {
   connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true });
   connectFirestoreEmulator(db, "127.0.0.1", 8080);
 }
+// Fonctions serveur (functions/index.js), même région que leur déclaration.
+const fonctions = getFunctions(fbApp, "europe-west1");
+if (EMU) connectFunctionsEmulator(fonctions, "127.0.0.1", 5001);
+const appelerServeur = (nom, data) => httpsCallable(fonctions, nom)(data).then(r => r.data);
 
 /* ============================================================
    État et utilitaires
@@ -244,7 +248,7 @@ function show(el, text) { el.textContent = text; el.hidden = false; }
 
 export { $, BENCH, CALIS_MOVES, CF_MOVES, DEFAULT_SUPPS, DEFAULT_TYPES, DISC, EQUIP, EXERCISES, EmailAuthProvider, GROUPS,
   KEYWORDS, LIFTS, LOCAL, MAIN_DISC, MOODS, MUSCLES, OBJECTIFS, OBJETS, PALETTE, PROGRAMS, RUN_TYPES, S, TERMS_V,
-  TYPES_V, WOD_FORMATS, WOD_HINTS, addDoc, ago, armed, arrayRemove, auth, avatarHTML, cap, clone, collection,
+  TYPES_V, WOD_FORMATS, WOD_HINTS, addDoc, ago, appelerServeur, armed, arrayRemove, auth, avatarHTML, cap, clone, collection,
   createUserWithEmailAndPassword, dayMeta, dayOf, dayVolume, db, deleteDoc, deleteUser, discOf, doc, documentId, esc, exVolume,
   fmtCourt, fmtDate, fmtDur, fmtJour, fmtJourAn, fmtJourMois, fmtMois, fmtMoisAn, getDoc, getDocs, getDocsFromCache, hm, isEmpty, key, limit, limitToLast, nameColor, nf, numOr,
   jourCourt, nomEx, nomFormat, prTexte, nomRef, nomType, onAuthStateChanged, onSnapshot, orderBy, pad, parse, parseClock, query, reauthenticateWithCredential, runCalcHTML,
